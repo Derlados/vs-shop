@@ -1,0 +1,138 @@
+@import './general//colors.scss';
+
+.header {
+    justify-content: space-between !important;
+    padding: 25px;
+
+
+    &__logo {
+     
+    }
+
+    &__nav-list {
+
+    }
+
+    &__nav-item {
+        display: inline;
+        padding: 0px 20px 0px 20px;
+        cursor: pointer;
+    }
+
+    &__nav-link {
+        display: inline;
+        position: relative;
+        padding-bottom: 5px;
+        font-size: 16px;
+        font-weight: 700;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scale(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: black;
+            transform-origin: bottom center;
+            transition: transform 0.3s ease-out;
+        }
+
+        &:hover::after, &:focus::after {
+            transform: scale(1);
+            transform-origin: bottom center;
+        }
+    }
+
+    &__action-area {
+        flex: 1;
+        max-width: 600px;
+    }
+
+    &__search {
+        width: 100%;
+        height: 100%;
+        border-radius: 25px;
+        border: solid 2px $primary;
+    }
+
+    &__search-line {
+        width: 100%;
+        padding-left: 10px;
+    }
+
+    &__search-input {
+        flex: 1;
+        padding-left: 10px;
+        outline: none;
+        border: none;
+        color: #494949;
+    }   
+
+    &__icon_search {
+        width: 18px !important;
+        height: 18px !important;
+        cursor: pointer;
+        background-color: #757575 !important;
+    }
+
+    &__search-find {
+        height: 100%;
+        color: white;
+        border-radius: 0px 25px 25px 0px;
+        padding: 10px;
+        background-color: $primary;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &:hover {
+           background-color: $hover-primary;
+        }
+    }
+
+    &__favorite, &__cart {
+        position: relative;
+        padding: 12px;
+        cursor: pointer;
+
+        &:hover > .header__icon {
+            background-color: $primary;
+        }
+    }
+
+    &__icon {
+        mask-size: contain;
+        width: 24px;
+        height: 24px;
+        transition: 0.4s;
+
+        &_search {
+            background-color: black;
+            mask-image: url('../assets/header/search.svg');
+        }
+
+        &_favorite {
+            background-color: black;
+            mask-image: url('../assets/header/favorite.svg');
+        }
+
+        &_cart {
+            background-color: black;
+            mask-image: url('../assets/header/shopping-bag.svg');
+        }
+    }
+
+    &__item-count {
+        right: 2px;
+        bottom: 5px;
+        position: absolute;
+        width: 21px;
+        height: 21px;
+        border-radius: 50%;
+        background-color: $primary;
+        font-weight: 400;
+        color: white;
+    }
+}
+

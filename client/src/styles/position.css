@@ -1,0 +1,60 @@
+/* Аббривиатуры состоят из 3 символов
+* 1 - row и column направление флекс контейнера
+* 2 - left, center, right - позиционирование контейнера по горизонтали
+* 3 - left, center, right - позиционирование контейнера по вертикали
+*/ 
+
+/* Позиционирование елементов в строку */
+.rlt,.rlc,.rlb,
+.rct, .rcc, .rcb,
+.rrt, .rrc,.rrb {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Позиционирование елементов в столбец */
+.clt,.clc,.clb,
+.cct,.ccc,.ccb,
+.crt,.crc,.crb {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Позиционирование к левой стороне по горизонтали */
+.rlt, .rlc, .rlb, .cct, .crt, .clt {
+    justify-content: flex-start;
+}
+.rlc, .cct { 
+    align-items: center;
+}
+.rlb, .crt {
+    align-items: flex-end;
+}
+
+/* Позиционирование по центру по горизонтали */
+.rct, .rcc, .rcb, .clc, .ccc, .crc {
+    justify-content: center;
+}
+.rct, .clc {
+    align-items: flex-start;
+}
+.rcc, .ccc {
+    align-items: center;
+}
+.rcb, .crc {
+    align-items: flex-end;
+}
+
+/* Позиционирование к правой стороне по горизонтали */
+.rrt, .rrc, .rrb, .clb, .ccb, .crb {
+    justify-content: flex-end;
+}
+.rrt, .clb {
+    align-items: flex-start;
+}
+.rrc, .ccb {
+    align-items: center;
+}
+.rrb, .crb {
+    align-items: flex-end;
+}
