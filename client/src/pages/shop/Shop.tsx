@@ -9,11 +9,14 @@ import '../../styles/shop/pagination.scss';
 
 const Shop = () => {
     return (
-        <div className='shop rcc'>
+        <div className='shop rct'>
             <Filters />
-            <div className='shop__content ccc'>
+            <div className='shop__content сcc'>
+                <div className='shop__sort'>
+
+                </div>
                 <ProductsGrid />
-                <Pagination />
+                <Pagination maxPages={16} currentPage={5} />
             </div>
         </div>
     )
