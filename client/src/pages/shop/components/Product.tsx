@@ -1,34 +1,57 @@
-import React from 'react'
+import { observer } from 'mobx-react-lite';
+import React, { FC } from 'react'
+import { IProduct } from '../../../types/types'
 
-const Product = () => {
+interface ProductProps {
+    product: IProduct;
+}
+
+const Product: FC<ProductProps> = observer(({ product }) => {
+
+    const openFullView = () => {
+
+    }
+
+    const openQuickView = () => {
+
+    }
+
+    const addToCart = () => {
+
+    }
+
+    const addToFavorite = () => {
+
+    }
+
     return (
         <div className='product ccc'>
             <div className='product__labels ccc'>
-                <div className='product__label product__label_green'>New</div>
-                <div className='product__label product__label_red'>-5 %</div>
+                {product.isNew && <div className='product__label product__label_green'>New</div>}
+                {product.discountPercent != 0 && <div className='product__label product__label_red'>-{product.discountPercent} %</div>}
             </div>
             <div className='product__actions ccc'>
                 <div className='product__action-mask'>
-                    <img className='product__quick-view' />
+                    <div className='product__quick-view' onClick={openQuickView}></div>
                 </div>
                 <div className='product__action-mask'>
-                    <img className='product__favorite' />
+                    <div className='product__favorite' onClick={addToFavorite}></div>
                 </div>
             </div>
 
-            <img className='product__img' src='https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg' />
+            <img className='product__img' src={product.img} onClick={openFullView} />
             <span className='product__brand'>STUDIO DESIGN</span>
-            <span className='product__name'>Originals Kaval Windbr</span>
+            <span className='product__name' onClick={openFullView}>{product.title}</span>
             <div className='product__price rlc'>
-                <span className='product__old-price'>19.99 ₴</span>
-                <span className='product__current-price'>18.99 ₴</span>
+                {product.discountPercent != 0 && <span className='product__old-price'>{product.oldPrice}</span>}
+                <span className='product__current-price'>{product.price}</span>
             </div>
-            <div className='product__cart rlc'>
-                <img className='product__cart-img' />
+            <div className='product__cart rlc' onClick={addToCart}>
+                <div className='product__cart-img' ></div>
                 <span className='product__cart-btn'>ADD TO CART</span>
             </div>
         </div>
     )
-}
+});
 
 export default Product

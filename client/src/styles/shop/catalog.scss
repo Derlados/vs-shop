@@ -1,0 +1,160 @@
+@import '../general/colors.scss';
+
+.catalog {
+    padding: 0px 15px 0px 15px;
+
+    &__products {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    &__settings {
+        justify-content: space-between;
+        height: 57px;
+        width: 100%;
+    }
+
+    &__view-modes {
+        width: 100%;
+    }
+
+    &__mask-container {
+        height: 37px;
+        width: 37px;
+        padding: 9px;
+        margin-right: 10px;
+        border: solid 1px $primary;
+        transition: 0.4s;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $primary;
+        }
+
+        &:hover > .catalog__view-mode {
+            background-color: white;
+        }
+
+        &_selected {
+            background-color: $primary;
+        }
+
+        &_selected > .catalog__view-mode {
+            background-color: white;
+        }
+    }
+
+    &__view-mode {
+        width: 100%;
+        height: 100%;
+        mask-size: contain;
+        background-color: white;
+    }
+
+    &__view-grid {
+        background-color: $primary;
+        mask-image: url('../../assets/images/grid.svg');
+    }
+
+    &__view-list {
+         background-color: $primary;
+        mask-image: url('../../assets/images/list.svg');
+    }
+
+    &__sort {
+        position: relative;
+
+    }
+
+    &__selected-sort {
+        width: 200px;
+        font-size: 12px;
+        border-radius: 5px;
+        border: solid 1px $primary-gray;
+        padding: 10px;
+        transition: 0.4s;
+        cursor: pointer;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+
+        &:hover {
+            border: solid 1px rgb(201, 201, 201);
+        }
+        
+        &::after {
+            width: 3px;
+            height: 3px;
+            content: '';
+            display: block;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            border-bottom: 2px solid gray;
+            border-right: 2px solid gray;
+            margin-top: -3px;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transition: 0.25s;
+        }
+
+        &_open {
+            border: solid 1px $primary;
+
+            &::after {
+                transform: rotate(225deg);
+                -webkit-transform: rotate(225deg);
+                -ms-transform: rotate(225deg); 
+            }
+
+            &:hover {
+                border: solid 1px $primary;
+            }
+        }
+    }
+
+    &__sort-list {
+        width: 200px;
+        transform-origin: top;
+        transform: scale(0.5);
+        opacity: 0;
+        pointer-events: none;
+        overflow-y: hidden;
+        position: absolute;
+        top: 40px;
+        left: 0;
+        list-style-type: none;
+        font-size: 12px;
+        border: solid 1px $primary-gray;
+        background-color: white;
+        z-index: 5;
+        transition: 0.25s;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+
+        &_open {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+    }  
+
+    &__sort-item {
+        padding: 10px;
+        cursor: pointer;
+        transition: 0.5s;
+
+        &:hover {
+            background-color: $primary-gray;
+        }
+    }
+}
+

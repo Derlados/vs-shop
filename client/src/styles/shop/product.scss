@@ -1,11 +1,5 @@
 @import '../general/colors.scss';
 
-.products {
-    width: 100%;
-    flex-wrap: wrap;
-    padding: 0px 15px 0px 15px;
-}
-
 .product {
     width: 25%;
     position: relative;
@@ -102,7 +96,7 @@
     }
 
     &__name {
-        
+        cursor: pointer;
     }
 
     &__price {

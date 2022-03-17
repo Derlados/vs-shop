@@ -1,10 +1,11 @@
 import React from 'react'
 import Filters from './components/Filters'
 import Pagination from './components/Pagination'
-import ProductsGrid from './components/ProductsGrid'
+import Catalog from './components/Catalog'
 import '../../styles/shop/shop.scss';
 import '../../styles/shop/filters.scss';
-import '../../styles/shop/products.scss';
+import '../../styles/shop/product.scss';
+import '../../styles/shop/catalog.scss';
 import '../../styles/shop/pagination.scss';
 
 const Shop = () => {
@@ -12,11 +13,7 @@ const Shop = () => {
         <div className='shop rct'>
             <Filters />
             <div className='shop__content сcc'>
-                <div className='shop__sort'>
-
-                </div>
-                <ProductsGrid />
-                <Pagination maxPages={16} currentPage={5} />
+                <Catalog />
             </div>
         </div>
     )
