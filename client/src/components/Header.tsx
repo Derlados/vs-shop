@@ -1,10 +1,27 @@
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 import { routes } from '../navigation/routes';
-import '../styles/header.scss';
+import cart from '../store/cart';
+import '../styles/header/header.scss';
+import CartQuickView from './CartQuickView';
 
-const Header = () => {
+interface LocalStore {
+    isCartOpen: boolean;
+}
 
+const Header = observer(() => {
+    const localStore = useLocalObservable<LocalStore>(() => ({
+        isCartOpen: false
+    }));
+
+    const onOpenCart = () => {
+        localStore.isCartOpen = true;
+    }
+
+    const onCloseCart = () => {
+        localStore.isCartOpen = false;
+    }
 
     return (
         <div className='header rcc'>
@@ -28,13 +45,14 @@ const Header = () => {
                     <div className='header__icon header__icon_favorite' />
                     <div className='header__item-count ccc'>2</div>
                 </div>
-                <div className='header__cart'>
+                <div className='header__cart' onClick={onOpenCart}>
                     <div className='header__icon header__icon_cart' />
-                    <div className='header__item-count ccc'>2</div>
+                    <div className='header__item-count ccc'>{cart.cartProducts.length}</div>
                 </div>
             </div>
+            <CartQuickView isOpen={localStore.isCartOpen} onClose={onCloseCart} />
         </div>
     )
-}
+})
 
 export default Header

@@ -1,9 +1,8 @@
-@import './general/colors.scss';
+@import '../general/colors.scss';
 
 .header {
     justify-content: space-between !important;
     padding: 25px;
-
 
     &__logo {
      
@@ -111,15 +110,15 @@
         background-color: black;
 
         &_search {
-            mask-image: url('../assets/images/search.svg');
+            mask-image: url('../../assets/images/search.svg');
         }
 
         &_favorite {
-            mask-image: url('../assets/images/favorite.svg');
+            mask-image: url('../../assets/images/favorite.svg');
         }
 
         &_cart {
-            mask-image: url('../assets/images/shopping-bag.svg');
+            mask-image: url('../../assets/images/shopping-bag.svg');
         }
     }
 

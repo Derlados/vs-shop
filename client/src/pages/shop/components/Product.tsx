@@ -43,8 +43,8 @@ const Product: FC<ProductProps> = observer(({ product }) => {
             <span className='product__brand'>STUDIO DESIGN</span>
             <span className='product__name' onClick={openFullView}>{product.title}</span>
             <div className='product__price rlc'>
-                {product.discountPercent != 0 && <span className='product__old-price'>{product.oldPrice}</span>}
-                <span className='product__current-price'>{product.price}</span>
+                {product.discountPercent != 0 && <span className='product__old-price'>{product.oldPrice} ₴</span>}
+                <span className='product__current-price'>{product.price} ₴</span>
             </div>
             <div className='product__cart rlc' onClick={addToCart}>
                 <div className='product__cart-img' ></div>

@@ -1,16 +1,16 @@
 import classNames from 'classnames';
 import { observer, useLocalStore } from 'mobx-react-lite';
-import React from 'react'
+import React, { FC } from 'react'
 import shop, { SortType } from '../../../store/shop';
-
-enum ViewMode {
-    GRID,
-    LIST
-}
+import { ViewMode } from './Catalog';
 
 interface LocalStore {
     isOpenSort: boolean;
+}
+
+interface CatalogSettingsProps {
     selectedViewMode: ViewMode;
+    onSelectViewMode: (viewMode: ViewMode) => void;
 }
 
 const sortTypes: Map<SortType, string> = new Map([
@@ -20,9 +20,7 @@ const sortTypes: Map<SortType, string> = new Map([
     [SortType.NEW, "Новинки"]
 ]);
 
-const CatalogSettings = observer(() => {
-    console.log("render");
-
+const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, onSelectViewMode }) => {
     const localStore = useLocalStore<LocalStore>(() => ({
         isOpenSort: false,
         selectedViewMode: ViewMode.GRID
@@ -37,21 +35,17 @@ const CatalogSettings = observer(() => {
         shop.setSortType(sortType)
     }
 
-    const selectViewMode = (viewMode: ViewMode) => {
-        localStore.selectedViewMode = viewMode;
-    }
-
     return (
         <div className='catalog__settings rcc'>
             <div className='catalog__view-modes rlc'>
                 <div className={classNames('catalog__mask-container',
-                    { 'catalog__mask-container_selected': localStore.selectedViewMode == ViewMode.GRID })}
-                    onClick={() => selectViewMode(ViewMode.GRID)}>
+                    { 'catalog__mask-container_selected': selectedViewMode == ViewMode.GRID })}
+                    onClick={() => onSelectViewMode(ViewMode.GRID)}>
                     <div className='catalog__view-mode catalog__view-grid'></div>
                 </div>
                 <div className={classNames('catalog__mask-container',
-                    { 'catalog__mask-container_selected': localStore.selectedViewMode == ViewMode.LIST })}
-                    onClick={() => selectViewMode(ViewMode.LIST)}>
+                    { 'catalog__mask-container_selected': selectedViewMode == ViewMode.LIST })}
+                    onClick={() => onSelectViewMode(ViewMode.LIST)}>
                     <div className='catalog__view-mode catalog__view-list'></div>
                 </div>
             </div>
