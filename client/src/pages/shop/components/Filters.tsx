@@ -1,6 +1,7 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import MultiRangeSlider from '../../../lib/MultiRangeSlider/MultiRangeSlider';
+import shop from '../../../store/shop';
 import { IAttribute, ICkeckValue } from '../../../types/types'
 
 
@@ -69,6 +70,10 @@ const Filters = observer(() => {
         attrValue.checked = !attrValue.checked;
     }
 
+    const onAcceptRange = (min: number, max: number) => {
+        shop.setPriceRange(min, max);
+    }
+
 
     return (
         <div className='filters'>
@@ -79,9 +84,9 @@ const Filters = observer(() => {
                 <div className='filters__price'>
                     <MultiRangeSlider
                         min={0}
-                        max={1000}
-                        onChange={({ min, max }) => console.log(`min = ${min}, max = ${max}`)}
-                        onAccept={() => console.log("Not yet implemented")} />
+                        max={Math.ceil(shop.priceRange.max)}
+                        onChange={({ min, max }) => { }}
+                        onAccept={onAcceptRange} />
                 </div>
                 {testData.attributes.map(attr => (
                     <div key={attr.name} className='filters__attr'>

@@ -1,5 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react'
+import cart from '../../../store/cart';
+import shop from '../../../store/shop';
 import { IProduct } from '../../../types/types'
 
 interface ProductProps {
@@ -17,7 +19,7 @@ const Product: FC<ProductProps> = observer(({ product }) => {
     }
 
     const addToCart = () => {
-
+        cart.addToCart(product, 1);
     }
 
     const addToFavorite = () => {
@@ -46,10 +48,18 @@ const Product: FC<ProductProps> = observer(({ product }) => {
                 {product.discountPercent != 0 && <span className='product__old-price'>{product.oldPrice} ₴</span>}
                 <span className='product__current-price'>{product.price} ₴</span>
             </div>
-            <div className='product__cart rlc' onClick={addToCart}>
-                <div className='product__cart-img' ></div>
-                <span className='product__cart-btn'>ADD TO CART</span>
-            </div>
+            {!cart.findById(product.id)
+                ?
+                <div className='product__cart rlc' onClick={addToCart}>
+                    <div className='product__cart-img' ></div>
+                    <span className='product__cart-btn'>ADD TO CART</span>
+                </div>
+                :
+                <div className='product__cart product__cart_added rlc'>
+                    <div className='product__cart-img' ></div>
+                    <span className='product__cart-btn '>IN CART</span>
+                </div>
+            }
         </div>
     )
 });

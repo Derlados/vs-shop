@@ -1,19 +1,36 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React from 'react'
+import React, { ChangeEvent, KeyboardEvent } from 'react'
 import { NavLink } from 'react-router-dom';
 import { routes } from '../navigation/routes';
 import cart from '../store/cart';
+import shop from '../store/shop';
 import '../styles/header/header.scss';
 import CartQuickView from './CartQuickView';
 
 interface LocalStore {
     isCartOpen: boolean;
+    searchString: string;
 }
 
 const Header = observer(() => {
     const localStore = useLocalObservable<LocalStore>(() => ({
-        isCartOpen: false
+        isCartOpen: false,
+        searchString: ''
     }));
+
+    const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            findBySearch();
+        }
+    }
+
+    const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        localStore.searchString = e.target.value;
+    }
+
+    const findBySearch = () => {
+        shop.setSearchString(localStore.searchString);
+    }
 
     const onOpenCart = () => {
         localStore.isCartOpen = true;
@@ -37,9 +54,9 @@ const Header = observer(() => {
                 <div className='header__search rcc'>
                     <div className='header__search-line rcc'>
                         <div className='header__icon header__icon_search' />
-                        <input className='header__search-input' placeholder='Хочу знайти ...' />
+                        <input className='header__search-input' placeholder='Хочу знайти ...' onChange={onChangeSearch} onKeyPress={handleKeyPress} />
                     </div>
-                    <span className='header__search-find'>Пошук</span>
+                    <span className='header__search-find' onClick={findBySearch}>Пошук</span>
                 </div>
                 <div className='header__favorite'>
                     <div className='header__icon header__icon_favorite' />

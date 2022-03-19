@@ -123,6 +123,21 @@
         margin-top: 10px;
         transition: 0.4s;
 
+        
+        &_added {
+            cursor: default;
+            background-color: $primary;
+        }
+
+        &_added > .product__cart-btn {
+            color: white;
+        }
+
+        &_added > .product__cart-img {
+            background-color: white;
+        }
+
+
         &:hover {
             background-color: $primary;
         }

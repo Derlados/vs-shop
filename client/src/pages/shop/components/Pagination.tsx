@@ -52,7 +52,7 @@ const Pagination: FC<PaginationProps> = observer(({ window = 9, maxPages, curren
 
 
         setPages(pages);
-    }, [currentPage]);
+    }, [currentPage, maxPages]);
 
     const onClickPage = (page: string) => {
         if (page != '...') {

@@ -30,7 +30,7 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
                     <div className='cart-quick__content'>
                         <ul className='cart-quick__product-list'>
                             {cart.cartProducts.map(cp => (
-                                <li className='cart-quick__product rlt'>
+                                <li key={cp.product.id} className='cart-quick__product rlt'>
                                     <img className='cart-quick__product-img' src={cp.product.img} />
                                     <div className='cart-quick__product-desc'>
                                         <div className='cart-quick__product-head rcc'>

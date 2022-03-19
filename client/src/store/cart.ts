@@ -65,9 +65,12 @@ class Cart {
     }
 
     deleteFromCart(id: number) {
-        console.log(id);
         this.cartProducts = this.cartProducts.filter(cp => cp.product.id != id);
 
+    }
+
+    findById(id: number) {
+        return this.cartProducts.find(cp => cp.product.id == id);
     }
 
 }

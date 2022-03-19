@@ -15,6 +15,8 @@ class ShopStore {
     public filters: IFilters;
     public currentPage: number;
     public selectedSort: SortType;
+    public selectedPriceRange: IRange;
+    public searchString: string;
 
     constructor() {
         makeAutoObservable(this);
@@ -80,11 +82,14 @@ class ShopStore {
         }
         this.currentPage = 1;
         this.selectedSort = SortType.NOT_SELECTED;
+        this.selectedPriceRange = this.priceRange;
+        this.searchString = '';
     }
 
     get filteredProducts(): IProduct[] {
         let products = [...this.products];
-
+        products = this.filterProducts(products);
+        products = this.sortProducts(products);
         return products;
     }
 
@@ -96,7 +101,7 @@ class ShopStore {
         return maxPages;
     }
 
-    private getPriceRange(): IRange {
+    get priceRange(): IRange {
         const range: IRange = {
             min: Number.MAX_VALUE,
             max: 0
@@ -118,6 +123,48 @@ class ShopStore {
 
     }
 
+    private filterProducts(products: IProduct[]) {
+        let filteredProducts = [];
+
+        // По цене 
+        filteredProducts = products.filter(p => p.price >= this.selectedPriceRange.min && p.price <= this.selectedPriceRange.max);
+
+        // По ключевому слову
+        if (this.searchString) {
+            filteredProducts = filteredProducts.filter(p => p.title.toLowerCase().includes(this.searchString))
+        }
+
+        return filteredProducts;
+    }
+
+    private sortProducts(products: IProduct[]): IProduct[] {
+        switch (this.selectedSort) {
+            case SortType.NOT_SELECTED: {
+                return products;
+            }
+            case SortType.PRICE_ASC: {
+                return products.sort((p1, p2) => {
+                    return p1.price > p2.price ? 1 : -1;
+                });
+            }
+            case SortType.PRICE_DESC: {
+                return products.sort((p1, p2) => {
+                    return p1.price < p2.price ? 1 : -1;
+                })
+            }
+            case SortType.NEW: {
+                return products.sort((p1, p2) => {
+                    return (!p1.isNew && p2.isNew) ? 1 : -1;
+                })
+            }
+            case SortType.DISCOUNT: {
+                return products.sort((p1, p2) => {
+                    return (p1.discountPercent == 0 && p2.discountPercent != 0) ? 1 : -1;
+                })
+            }
+        }
+    }
+
     private testGenProducts(): IProduct[] {
         const products: IProduct[] = [];
         for (let i = 0; i < 48; ++i) {
@@ -133,6 +180,14 @@ class ShopStore {
         }
 
         return products;
+    }
+
+    public setSearchString(searchString: string) {
+        this.searchString = searchString.replace(/\s+/, ' ').toLowerCase();
+    }
+
+    public setPriceRange(min: number, max: number) {
+        this.selectedPriceRange = { min: min, max: max };
     }
 
     public setSortType(sortType: SortType) {

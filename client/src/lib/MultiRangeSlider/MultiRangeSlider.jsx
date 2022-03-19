@@ -50,8 +50,10 @@ const MultiRangeSlider = ({ min, max, onChange, onAccept }) => {
 
     const tryAccept = () => {
         if (inputMin <= inputMax) {
-            onChange({ min: inputMin, max: inputMax });
+            onAccept(inputMin, inputMax);
         }
+        setMinVal(inputMin);
+        setMaxVal(inputMax);
     }
 
     return (
@@ -101,7 +103,7 @@ const MultiRangeSlider = ({ min, max, onChange, onAccept }) => {
                     <input type="number" className="slider__input" value={inputMax} onChange={(event) => setInputMax(event.target.value)} />
                 </div>
                 <div className={classnames("slider__accept ccc", {
-                    "slider__accept_disable": inputMin > inputMax
+                    "slider__accept_disable": (inputMin > inputMax || inputMax > max || inputMax === '' || inputMin === '')
                 })} onClick={tryAccept}>OK</div>
             </div>
         </div>
