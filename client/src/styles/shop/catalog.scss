@@ -4,6 +4,7 @@
     padding: 0px 15px 0px 15px;
 
     &__products {
+        justify-content: space-between !important;
         width: 100%;
         flex-wrap: wrap;
     }
