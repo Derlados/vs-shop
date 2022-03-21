@@ -1,0 +1,39 @@
+@import '../general/colors.scss';
+
+.cart-button {
+    border-radius: 5px;
+    padding: 15px;
+    background-color: $primary;
+    transition: 0.4s;
+    cursor: pointer;
+    transition: 0.4s;
+
+        
+    &_added {
+        cursor: default;
+        background-color: $primary-dark;
+    }
+
+    &:hover {
+        background-color: $primary-dark;
+    }
+
+    &__img {
+        width: 20px;
+        height: 21px;
+        mask-size: contain;
+        mask-image: url('../../assets/images/shopping-bag.svg');
+        mask-repeat: no-repeat;
+        background-color: white;
+        transition: 0.4s;
+    }
+
+    &__btn {
+        font-size: 14px;
+        line-height: 18px;
+        margin-left: 10px;
+        transition: 0.4s;
+        color: white;
+    }
+}
+        

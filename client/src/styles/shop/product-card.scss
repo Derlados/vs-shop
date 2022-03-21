@@ -1,6 +1,6 @@
 @import '../general/colors.scss';
 
-.product {
+.product-card {
     width: calc(25% - 20px);
     position: relative;
     border: solid 1px rgb(236, 236, 236);
@@ -62,8 +62,7 @@
             border: solid 1px $primary;
         }
 
-        
-        &:hover > .product__quick-view, &:hover > .product__favorite {
+        &:hover > .product-card__quick-view, &:hover > .product-card__favorite {
             background-color: white;
         }
     }
@@ -113,43 +112,5 @@
     &__current-price {
         margin-left: 5px;
         font-size: 18px;
-    }
-
-    &__cart {
-        border-radius: 5px;
-        padding: 15px;
-        background-color: $primary;
-        transition: 0.4s;
-        cursor: pointer;
-        margin-top: 10px;
-        transition: 0.4s;
-
-        
-        &_added {
-            cursor: default;
-            background-color: $primary-dark;
-        }
-
-        &:hover {
-            background-color: $primary-dark;
-        }
-    }
-
-    &__cart-img {
-        width: 20px;
-        height: 21px;
-        mask-size: contain;
-        mask-image: url('../../assets/images/shopping-bag.svg');
-        mask-repeat: no-repeat;
-        background-color: white;
-        transition: 0.4s;
-    }
-
-    &__cart-btn {
-        font-size: 14px;
-        line-height: 18px;
-        margin-left: 10px;
-        transition: 0.4s;
-        color: white;
     }
 }

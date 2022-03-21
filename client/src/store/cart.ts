@@ -17,10 +17,11 @@ class Cart {
                     id: 1,
                     isNew: true,
                     title: "Originals Kaval Windbr",
-                    img: 'https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg',
+                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
                     price: 18.99,
                     oldPrice: 19.99,
-                    discountPercent: 5
+                    discountPercent: 5,
+                    count: 300
                 },
                 count: 2
             },
@@ -29,10 +30,11 @@ class Cart {
                     id: 2,
                     isNew: true,
                     title: "Originals Kaval Windbr",
-                    img: 'https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg',
+                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
                     price: 18.99,
                     oldPrice: 19.99,
-                    discountPercent: 5
+                    discountPercent: 5,
+                    count: 300
                 },
                 count: 1
             },
@@ -41,10 +43,11 @@ class Cart {
                     id: 3,
                     isNew: true,
                     title: "Originals Kaval Windbr",
-                    img: 'https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg',
+                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
                     price: 18.99,
                     oldPrice: 19.99,
-                    discountPercent: 5
+                    discountPercent: 5,
+                    count: 300
                 },
                 count: 4
             }

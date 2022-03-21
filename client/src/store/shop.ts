@@ -172,10 +172,16 @@ class ShopStore {
                 id: i,
                 isNew: i < 9,
                 title: "Originals Kaval Windbr",
-                img: 'https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg',
+                imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg',
+                    'https://template.hasthemes.com/melani/melani/assets/img/product/product-details-img2.jpg',
+                    'https://template.hasthemes.com/melani/melani/assets/img/product/product-details-img5.jpg',
+                    'https://template.hasthemes.com/melani/melani/assets/img/product/product-details-img3.jpg',
+                    'https://template.hasthemes.com/melani/melani/assets/img/product/product-details-img3.jpg'
+                ],
                 price: 18.99,
                 oldPrice: 19.99,
-                discountPercent: 5
+                discountPercent: 5,
+                count: 300
             })
         }
 

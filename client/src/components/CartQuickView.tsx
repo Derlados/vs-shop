@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import cart from '../store/cart';
 import '../styles/header/cart-quick.scss';
 import { IProduct } from '../types/types';
@@ -11,16 +11,23 @@ interface CartQuickViewProps {
 }
 
 const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => {
+    const wrapperRef = useRef(null);
 
     const onDeleteProduct = (product: IProduct) => {
         cart.deleteFromCart(product.id);
     }
 
+    const handleClickOutside = (event: React.MouseEvent) => {
+        if (wrapperRef.current && !(wrapperRef.current as any).contains(event.target)) {
+            onClose();
+        }
+    }
+
     return (
         <div className={classNames("cart-quick", {
             "cart-quick_hide": !isOpen
-        })}>
-            <div className='cart-quick__container'>
+        })} onClick={handleClickOutside}>
+            <div className='cart-quick__container' ref={wrapperRef} >
                 <div className='cart-quick__head rcc'>
                     <div className='cart-quick__head-text'>Кошик</div>
                     <div className='cart-quick__close cart-quick__close_anim' onClick={onClose}></div>
@@ -31,7 +38,7 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
                         <ul className='cart-quick__product-list'>
                             {cart.cartProducts.map(cp => (
                                 <li key={cp.product.id} className='cart-quick__product rlt'>
-                                    <img className='cart-quick__product-img' src={cp.product.img} />
+                                    <img className='cart-quick__product-img' src={cp.product.imgs[0]} />
                                     <div className='cart-quick__product-desc'>
                                         <div className='cart-quick__product-head rcc'>
                                             <div className='cart-quick__product-title'>{cp.product.title}</div>

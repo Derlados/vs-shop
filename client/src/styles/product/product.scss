@@ -1,6 +1,6 @@
 @import '../general/colors.scss';
 
-.product-quick-modal {
+.product {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -45,7 +45,7 @@
         position: relative;
         margin-bottom: 15px;
 
-        &:hover > .product-quick-modal__arrow {
+        &:hover > .product__arrow {
             opacity: 1;;
         }
     }
@@ -54,7 +54,7 @@
         position: relative;
         max-width: 100%;
         
-        &:hover > .product-quick-modal__arrow {
+        &:hover > .product__arrow {
             opacity: 1;;
         }
     }
@@ -162,9 +162,11 @@
     }
 
     &__count-actions {
+        height: 100%;
         border: solid 1px $primary-gray;
         padding: 0px 12px 0px 12px;
         line-height: 46px;
+        margin-right: 15px;
     }
 
     &__count {

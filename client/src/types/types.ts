@@ -16,11 +16,12 @@ export interface IAttribute {
 export interface IProduct {
     id: number;
     isNew: boolean;
-    img: string;
+    imgs: string[];
     title: string;
     price: number;
     oldPrice: number;
     discountPercent: number;
+    count: number;
 }
 
 export interface IFilters {
