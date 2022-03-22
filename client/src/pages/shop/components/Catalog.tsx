@@ -4,7 +4,7 @@ import shop from '../../../store/shop'
 import { IProduct } from '../../../types/types';
 import CatalogSettings from './CatalogSettings';
 import Pagination from './Pagination';
-import ProductCard from './product-card/ProductCard';
+import Product from './product-card/Product';
 import ProductQuickModal from './product-card/ProductQuickModal';
 
 const MAX_PRODUCTS_BY_PAGE = 16;
@@ -36,18 +36,6 @@ const Catalog = observer(() => {
         localStore.isOpenQuick = true;
     }
 
-    //TODO
-    const openFullView = (product: IProduct) => {
-
-    }
-
-    const addToCart = (product: IProduct, count: number = 1) => {
-        cart.addToCart(product, count);
-    }
-
-    const addToFavorite = (product: IProduct) => {
-
-    }
 
     const closeQuickView = () => {
         localStore.isOpenQuick = false;
@@ -57,18 +45,18 @@ const Catalog = observer(() => {
 
     return (
         <div className='catalog ccc'>
-            <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} addToCart={addToCart} addToFavorite={addToFavorite} onCloseQuickView={closeQuickView} />
+            <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />
             <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} />
             <div className='catalog__products rlt'>
+
                 {products.map(product =>
-                    <ProductCard
-                        key={product.id}
-                        type={'small'}
-                        product={product}
-                        addToCart={addToCart}
-                        addToFavorite={addToFavorite}
-                        openFullView={openFullView}
-                        onOpenQuickView={openQuickView} />
+                    <div className='catalog__product-container'>
+                        <Product
+                            key={product.id}
+                            type={'small'}
+                            product={product}
+                            onOpenQuickView={openQuickView} />
+                    </div>
                 )}
             </div>
             <Pagination

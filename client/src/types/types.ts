@@ -13,6 +13,9 @@ export interface IAttribute {
     values: ICkeckValue[];
 }
 
+/**
+ * EAV
+ */
 export interface IProduct {
     id: number;
     isNew: boolean;

@@ -6,7 +6,12 @@
     &__products {
         justify-content: space-between !important;
         width: 100%;
+        flex: 4;
         flex-wrap: wrap;
+    }
+
+    &__product-container {
+        width: calc(25% - 20px);
     }
 
     &__settings {

@@ -1,0 +1,70 @@
+@import '../general/colors.scss';
+
+.product-quick-modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.26);
+    z-index: -1;
+    opacity: 0;
+
+    &_open {
+        z-index: 10;
+        opacity: 1;
+    }
+
+    &__container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        opacity: 0;
+        height: max-content;
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        transition: 0.25s;
+
+        &_open {
+            opacity: 1;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 18px;
+            height: 3px;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+            background-color: $primary;
+            transition: 0.4s;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 18px;
+            height: 3px;
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            background-color: $primary;
+            transition: 0.4s;
+        }
+
+        &:hover::after, &:hover::before {
+            background-color: $hover-primary;
+        }
+    }
+}

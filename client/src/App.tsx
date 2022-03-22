@@ -3,6 +3,7 @@ import Header from './components/Header';
 import './styles/app.scss';
 import './styles/position.css'
 import { Routes } from 'react-router-dom';
+import ProductInfo from './pages/product/ProductInfo';
 import Shop from './pages/shop/Shop';
 
 const App = () => {
@@ -11,7 +12,7 @@ const App = () => {
       <Header />
       <div className='app__content ccc'>
         <div className='app__page'>
-          <Shop />
+          <ProductInfo />
           <Routes>
 
           </Routes>
