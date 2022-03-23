@@ -1,0 +1,93 @@
+@import '../general/colors.scss';
+
+.selector {
+    width: 100%;
+
+    &__hint {
+        font-size: 14px;
+        padding-bottom: 5px;
+        color: gray;
+    }
+
+    &__container {
+        position: relative;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    &__selected-value {
+        font-size: 14px;
+        padding: 10px;
+        border: solid 1px $primary-gray;
+        border-radius: 5px;
+
+        &::after {
+            width: 3px;
+            height: 3px;
+            content: '';
+            display: block;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            border-bottom: 3px solid gray;
+            border-right: 3px solid gray;
+            margin-top: -3px;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transition: 0.25s;
+        }
+
+        &_open {
+            &::after {
+                transform: rotate(225deg);
+                -webkit-transform: rotate(225deg);
+                -ms-transform: rotate(225deg); 
+            }
+        }
+    }
+
+    &__values {
+        width: 100%;
+        transform-origin: top left;
+        transform: scale(0.5);
+        opacity: 0;
+        pointer-events: none;
+        overflow-y: hidden;
+        position: absolute;
+        top: 45px;
+        left: 0;
+        list-style-type: none;
+        font-size: 14px;
+        border: solid 1px $primary-gray;
+        background-color: white;
+        z-index: 5;
+        transition: 0.25s;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+
+        &_open {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+
+    &__value {
+        padding: 10px;
+        transition: 0.2s;
+
+
+        &:hover {
+            background-color: $primary-gray;
+        }
+
+        &_selected {
+            color: $primary;
+        }
+    }
+}

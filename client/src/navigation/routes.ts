@@ -9,12 +9,8 @@ export const routes: ILink[] = [
         to: '/home'
     },
     {
-        title: 'Shop 1',
-        to: '/shop-1'
-    },
-    {
-        title: 'Shop 2',
-        to: '/shop-2'
+        title: 'Shop',
+        to: '/shop'
     },
     {
         title: 'Contacts',
@@ -23,5 +19,6 @@ export const routes: ILink[] = [
     {
         title: 'About',
         to: '/about'
-    }
+    },
 ]
+

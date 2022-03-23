@@ -1,0 +1,18 @@
+@import '../general/colors.scss';
+
+.input {
+    width: 100%;
+
+    &__hint {
+        font-size: 14px;
+        padding-bottom: 5px;
+        color: gray;
+    }
+
+    &__field {
+        width: 100%;
+        padding: 10px;
+        outline: none;
+        border: solid 1px $primary-gray;
+    }
+}

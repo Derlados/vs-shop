@@ -1,0 +1,126 @@
+@import '../general/colors.scss';
+
+.checkout {
+    margin-top: 50px;
+
+    &__details {
+        width: 60%;
+    }
+
+    &__title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: black;
+    }
+
+    &__inputs-row {
+        margin-bottom: 20px;
+    }
+
+    &__input:first-child {
+        margin-right: 30px;
+    }
+
+    &__selector {
+        margin-top: 20px;
+    }
+
+    &__additional-head {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    &__additional-info {
+        margin-top: 40px;
+    }
+
+    &__additional-area {
+        width: 100%;
+        min-height: 200px;
+        outline: none;
+        border: solid 1px $primary-gray;
+        padding: 20px;
+        font-size: 16px;
+    }
+
+    &__order {
+        width: 40%;
+        margin-left: 30px;
+    }
+
+    &__order-container {
+        padding: 45px;
+        background-color: rgb(247, 247, 247);
+
+    }
+
+    &__order-head {
+        position: relative;
+        width: 100%;
+        justify-content: space-between !important;
+        padding-bottom: 30px;
+        border-bottom: 1px solid $secondary-gray;
+    }
+
+    &__order-text {
+
+
+        &_bold {
+            font-weight: bold;
+        }
+
+        &_primary {
+            color: $primary;
+        }
+
+        &_large {
+            font-size: 18px;
+        }
+    }
+
+    &__order-product-list {
+        position: relative;
+        width: 100%;
+        padding: 20px 0px 20px 0px;
+        border-bottom: 1px solid $secondary-gray;
+        margin-bottom: 25px;
+    }
+
+    &__order-product {
+        width: 100%;
+        justify-content: space-between !important;
+        color: $secondary-gray;
+        padding: 5px 0px 5px 0px;
+      
+    }
+
+    &__order-delivery {
+        width: 100%;
+        justify-content: space-between !important;
+        padding-bottom: 30px;
+        border-bottom: 1px solid $secondary-gray;
+        margin-bottom: 20px;
+    }
+
+    &__total {
+        width: 100%;
+        justify-content: space-between !important;
+         
+    }
+
+    &__order-accept {
+        color: white;
+        padding: 15px;
+        border-radius: 50px;
+        background-color: $primary;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &:hover {
+            background-color: $hover-primary;
+        }
+    }
+}

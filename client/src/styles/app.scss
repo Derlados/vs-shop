@@ -20,6 +20,15 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+textarea {
+    overflow-y:auto;
+    resize: vertical;
+}
+
+li {
+    list-style-type: none;
+}
+
 body {
     background-color: white;
 }
