@@ -12,6 +12,10 @@
 
     &__product-container {
         width: calc(25% - 20px);
+
+        &_large {
+            width: 100%;
+        }
     }
 
     &__settings {
@@ -109,16 +113,10 @@
         }
 
         &_open {
-            border: solid 1px $primary;
-
-            &::after {
+             &::after {
                 transform: rotate(225deg);
                 -webkit-transform: rotate(225deg);
                 -ms-transform: rotate(225deg); 
-            }
-
-            &:hover {
-                border: solid 1px $primary;
             }
         }
     }

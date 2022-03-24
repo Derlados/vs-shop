@@ -126,7 +126,7 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
                         <input className='product__count ccc' value={localStore.selectedCount} onChange={handleCountChange} type="number" maxLength={3} />
                         <span className='product__count-btn ccc' onClick={incrementCount}>+</span>
                     </div>}
-                    <CartButton isActive={cart.findById(product.id) === undefined} onClick={onAddToCart} />
+                    <CartButton color="primary" isActive={cart.findById(product.id) === undefined} onClick={onAddToCart} />
                 </div>
                 <span className='product__avalibility'>Availibility: <span className='product__avalibility-status product__avalibility-status_green'>{product.count} available</span></span>
                 <div className='product__share-actions rlc'>

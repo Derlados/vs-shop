@@ -18,6 +18,13 @@
         margin-bottom: 20px;
     }
 
+    &__input {
+
+        &_invalid input {
+            border-color: rgb(252, 157, 157);
+        }
+    }
+
     &__input:first-child {
         margin-right: 30px;
     }

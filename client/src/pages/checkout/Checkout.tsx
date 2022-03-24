@@ -1,7 +1,9 @@
+import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
 import Input from '../../components/Input';
 import Selector from '../../components/Selector';
+import cart from '../../store/cart';
 import '../../styles/checkout/checkout.scss';
 
 interface LocalStore {
@@ -9,6 +11,7 @@ interface LocalStore {
     lastName: string;
     phone: string;
     email: string;
+    isEmailInvalid: boolean;
     city: string;
 }
 
@@ -19,14 +22,37 @@ const addresses = [
     'Address 4'
 ]
 
+const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const Checkout = observer(() => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         firstName: '',
         lastName: '',
-        phone: '',
+        phone: '+38 ',
         email: '',
-        city: ''
+        city: '',
+        isEmailInvalid: false
     }))
+
+    const onChangeEmail = (email: string) => {
+        localStore.isEmailInvalid = !EMAIL_REGEX.test(email)
+        localStore.email = email;
+    }
+
+    const onChangePhone = (phone: string) => {
+        phone = phone.replaceAll(' ', '');
+        if (phone.length <= 13) {
+            phone = phone.slice(3, phone.length)
+            localStore.phone = "+38 ";
+            localStore.phone += `${phone.substring(0, 3)} ${phone.substring(3, 6)} ${phone.substring(6, 8)} ${phone.substring(8, phone.length)}`.replace(/\s+$/, '');
+        }
+    }
+
+    const tryPlaceOrder = () => {
+        if (localStore.firstName && localStore.lastName && localStore.phone.length == 17
+            && localStore.email && !localStore.isEmailInvalid && localStore.city) {
+
+        }
+    }
 
     return (
         <div className='checkout rlt'>
@@ -37,8 +63,10 @@ const Checkout = observer(() => {
                     <Input className='checkout__input' hint="Призвіще" value={localStore.lastName} onChange={(v) => localStore.lastName = v.target.value} />
                 </div>
                 <div className='checkout__inputs-row rlc'>
-                    <Input className='checkout__input' hint='Номер телефону' value={localStore.phone} onChange={(v) => localStore.phone = v.target.value} />
-                    <Input className='checkout__input' hint='Електронна пошта' value={localStore.email} onChange={(v) => localStore.email = v.target.value} />
+                    <Input className='checkout__input' hint='Номер телефону' value={localStore.phone} onChange={(v) => onChangePhone(v.target.value)} />
+                    <Input className={classNames('checkout__input', {
+                        'checkout__input_invalid': localStore.isEmailInvalid
+                    })} hint='Електронна пошта' value={localStore.email} onChange={(v) => onChangeEmail(v.target.value)} />
                 </div>
                 <Input hint='Населений пункт України' value={localStore.city} onChange={(v) => localStore.city = v.target.value} />
                 <Selector className='checkout__selector' hint={'Адреса точки видачі'} values={addresses} onChange={() => { }} />
@@ -55,14 +83,12 @@ const Checkout = observer(() => {
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
                     </div>
                     <ul className='checkout__order-product-list'>
-                        <li className='checkout__order-product rlc'>
-                            <div className='checkout__order-text'>Product Name X 1</div>
-                            <div className='checkout__order-text'>$329</div>
-                        </li>
-                        <li className='checkout__order-product rlc'>
-                            <div className='checkout__order-text'>Product Name X 1</div>
-                            <div className='checkout__order-text'>$329</div>
-                        </li>
+                        {cart.cartProducts.map(cp => (
+                            <li key={cp.product.id} className='checkout__order-product rlc'>
+                                <div className='checkout__order-text'>{cp.product.title} X {cp.count}</div>
+                                <div className='checkout__order-text'>{cp.product.price * cp.count} ₴</div>
+                            </li>
+                        ))}
                     </ul>
                     <div className='checkout__order-delivery rlc'>
                         <div className='checkout__order-text checkout__order-text_bold'>Delivery</div>
@@ -70,10 +96,10 @@ const Checkout = observer(() => {
                     </div>
                     <div className='checkout__total rlc'>
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
-                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>$329</div>
+                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cart.totalPrice} ₴</div>
                     </div>
                 </div>
-                <div className='checkout__order-accept ccc'>PLACE ORDER</div>
+                <div className='checkout__order-accept ccc' onClick={tryPlaceOrder}>PLACE ORDER</div>
             </div>
         </div>
     )

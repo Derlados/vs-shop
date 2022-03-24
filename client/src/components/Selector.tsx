@@ -20,7 +20,6 @@ const Selector: FC<SelectorProps> = observer(({ className, hint, values, onChang
         selectedValue: "Не вибрано",
         isOpen: false
     }));
-    console.log(values);
 
     const select = (value: string) => {
         localStore.isOpen = false;

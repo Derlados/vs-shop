@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import cart from '../../../store/cart';
 import shop from '../../../store/shop'
@@ -47,13 +48,18 @@ const Catalog = observer(() => {
         <div className='catalog ccc'>
             <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />
             <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} />
-            <div className='catalog__products rlt'>
+            <div className={classNames('catalog__products', {
+                'rlt': localStore.selectedViewMode == ViewMode.GRID,
+                'clc': localStore.selectedViewMode == ViewMode.LIST
+            })}>
 
                 {products.map(product =>
-                    <div className='catalog__product-container'>
+                    <div className={classNames('catalog__product-container', {
+                        'catalog__product-container_large': localStore.selectedViewMode == ViewMode.LIST
+                    })}>
                         <Product
                             key={product.id}
-                            type={'small'}
+                            type={localStore.selectedViewMode == ViewMode.GRID ? 'small' : 'large'}
                             product={product}
                             onOpenQuickView={openQuickView} />
                     </div>

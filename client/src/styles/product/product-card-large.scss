@@ -1,0 +1,42 @@
+@import '../general/colors.scss';
+
+.product-card-large {
+    width: 100%;
+    border: solid 1px $primary-gray;
+    margin-bottom: 20px;
+    padding: 20px;
+
+    &__img-container {
+        position: relative;
+        width: 250px;
+        margin-right: 20px;
+
+        &:hover > .product-card__actions {
+            opacity: 1;
+        }
+    }
+
+    &__title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 7px;
+    }
+
+    &__img {
+        width: 100%;
+        height: auto;
+        border: solid 1px $primary-gray;
+    }
+
+    &__info {
+        flex: 1;
+    }
+
+    &__desc {
+        margin-bottom: 20px;
+    }
+
+    &__price {
+        font-size: 22px !important;
+    }
+} 
