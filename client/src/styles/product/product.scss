@@ -313,14 +313,17 @@
 .related {
     padding-top: 40px;
     width: 100%;
+
+    &__head {
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 25px;
+    }
     
     &__title {
         position: relative;
         font-size: 28px;
         font-weight: bold;
-        margin-bottom: 20px;
-        padding-bottom: 5px;
-
     }
 
     &__slider-container {
@@ -343,8 +346,23 @@
     &__arrow {
         width: 48px !important;
         height: 48px !important;
-        font-size: 28px !important;
+        font-size: 22px !important;
+        background-color: $primary-gray;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.4s;
+        
+
+        &:hover {
+            color: white;
+            background-color: $primary;
+        }
+
+        &:first-child {
+            margin-right: 15px;
+        }
     }
+    
 }
 
 .comments {

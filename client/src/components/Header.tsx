@@ -13,6 +13,7 @@ interface LocalStore {
 }
 
 const Header = observer(() => {
+
     const localStore = useLocalObservable<LocalStore>(() => ({
         isCartOpen: false,
         searchString: ''
@@ -42,7 +43,9 @@ const Header = observer(() => {
 
     return (
         <div className='header rcc'>
-            <img src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' className='header__logo' />
+            <NavLink to={'/home'}>
+                <img src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' className='header__logo' />
+            </NavLink>
             <ul className='header__nav-list'>
                 {routes.map(route => (
                     <li key={route.title} className='header__nav-item'>

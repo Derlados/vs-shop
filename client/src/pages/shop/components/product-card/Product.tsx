@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react'
+import { useNavigate } from 'react-router-dom';
 import cart from '../../../../store/cart';
 import { IProduct } from '../../../../types/types'
 import ProductMainInfo from '../../../product/components/ProductMainInfo';
@@ -25,9 +26,11 @@ interface CreateProductCardProps {
 }
 
 const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQuickView = () => { } }) => {
+    const navigation = useNavigate();
+
     //TODO
     const openFullView = (product: IProduct) => {
-
+        navigation(`/product/${product.id}`);
     }
 
     const addToCart = (product: IProduct, count: number = 1) => {

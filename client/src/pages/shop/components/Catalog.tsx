@@ -54,7 +54,7 @@ const Catalog = observer(() => {
             })}>
 
                 {products.map(product =>
-                    <div className={classNames('catalog__product-container', {
+                    <div key={product.id} className={classNames('catalog__product-container', {
                         'catalog__product-container_large': localStore.selectedViewMode == ViewMode.LIST
                     })}>
                         <Product

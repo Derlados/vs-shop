@@ -42,7 +42,7 @@ const Selector: FC<SelectorProps> = observer(({ className, hint, values, onChang
                     'selector__values_open': localStore.isOpen
                 })}>
                     {values.map(value => (
-                        <li className={classNames('selector__value ', {
+                        <li key={value} className={classNames('selector__value ', {
                             'selector__value_selected': value == localStore.selectedValue
                         })} onClick={() => select(value)}>{value}</li>
                     ))}

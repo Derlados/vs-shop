@@ -11,6 +11,17 @@ export enum SortType {
 
 class ShopStore {
     private static MAX_PRODUCTS_BY_PAGE = 16;
+    public emptyProduct: IProduct = {
+        id: -1,
+        isNew: false,
+        title: "",
+        imgs: [],
+        price: 0,
+        oldPrice: 0,
+        discountPercent: 0,
+        count: 0
+    }
+
     public products: IProduct[];
     public filters: IFilters;
     public currentPage: number;
@@ -117,6 +128,15 @@ class ShopStore {
         }
 
         return range;
+    }
+
+    public findProductById(id: number): IProduct {
+        let product = this.products.find(p => p.id == id);
+        if (!product) {
+            throw new Error("Producy not found");
+        } else {
+            return product;
+        }
     }
 
     private getFilterAttributes() {

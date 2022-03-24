@@ -18,7 +18,14 @@ const RelatedProducts = observer(() => {
 
     return (
         <div className='related clc'>
-            <div className='related__title'>You Might Also Like</div>
+            <div className='related__head rlc'>
+                <div className='related__title'>You Might Also Like</div>
+                <div className='related__arrows rlc'>
+                    <div className='related__arrow ccc' onClick={() => localStore.swiper.slidePrev()}>{"❮"}</div>
+                    <div className='related__arrow ccc' onClick={() => localStore.swiper.slideNext()}>{"❯"}</div>
+                </div>
+            </div>
+
             <div className='related__slider-container'>
                 <Swiper
                     className='related__slider'
@@ -34,8 +41,6 @@ const RelatedProducts = observer(() => {
                         </SwiperSlide>
                     ))}
                 </Swiper>
-                <div className='related__arrow product__arrow product__arrow_back ccc' onClick={() => localStore.swiper.slidePrev()}>{"❮"}</div>
-                <div className='related__arrow product__arrow product__arrow_next ccc' onClick={() => localStore.swiper.slideNext()}>{"❯"}</div>
             </div>
         </div>
     )
