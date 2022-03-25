@@ -1,8 +1,27 @@
 @import '../general/colors.scss';
 
 .header {
-    justify-content: space-between !important;
-    padding: 25px;
+    width: 100%;
+    height: 100px;
+
+    &__container {
+        justify-content: space-between !important;
+        width: 100%;
+        height: 100px;
+        top: -100px;
+        background-color: white;
+        padding: 25px;
+        transition: 0.4s;
+
+        
+        &_fixed {
+            position: fixed;
+            top: 0;
+            z-index: 15;
+            filter: drop-shadow(0 0 4px gray);
+        }
+    }
+
 
     &__logo {
      
@@ -21,34 +40,22 @@
     &__nav-link {
         display: inline;
         position: relative;
-        padding-bottom: 5px;
-        font-size: 16px;
+        padding-bottom: 7px;
+        font-size: 18px;
         font-weight: 700;
         color: black;
         text-decoration: none;
+        transition: 0.4s;
 
-        &::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            transform: scale(0);
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: black;
-            transform-origin: bottom center;
-            transition: transform 0.3s ease-out;
-        }
 
-        &:hover::after, &:focus::after {
-            transform: scale(1);
-            transform-origin: bottom center;
+        &:hover, &_active {
+            color: $primary;
         }
     }
 
     &__action-area {
         flex: 1;
-        max-width: 600px;
+        max-width: 700px;
     }
 
     &__search {

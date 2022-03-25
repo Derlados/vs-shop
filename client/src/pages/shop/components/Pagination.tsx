@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from 'react'
 import shop from '../../../store/shop';
 
 interface PaginationProps {
-    window?: number;
+    pageWindow?: number;
     maxPages: number;
     currentPage: number;
     back: () => void;
@@ -12,7 +12,7 @@ interface PaginationProps {
     setPage: (page: number) => void;
 }
 
-const Pagination: FC<PaginationProps> = observer(({ window = 9, maxPages, currentPage, back, next, setPage }) => {
+const Pagination: FC<PaginationProps> = observer(({ pageWindow = 9, maxPages, currentPage, back, next, setPage }) => {
     const [pages, setPages] = useState<Array<string>>([]);
 
     useEffect(() => {
@@ -23,8 +23,8 @@ const Pagination: FC<PaginationProps> = observer(({ window = 9, maxPages, curren
         }
 
         const currentPageIndex = pages.findIndex(p => p == currentPage.toString());
-        let leftIndex = currentPageIndex - Math.floor(window / 2);
-        let rightIndex = currentPageIndex + Math.floor(window / 2) + 1;
+        let leftIndex = currentPageIndex - Math.floor(pageWindow / 2);
+        let rightIndex = currentPageIndex + Math.floor(pageWindow / 2) + 1;
 
         if (leftIndex < 0) {
             const correction = Math.abs(leftIndex);
@@ -57,18 +57,36 @@ const Pagination: FC<PaginationProps> = observer(({ window = 9, maxPages, curren
     const onClickPage = (page: string) => {
         if (page != '...') {
             setPage(+page);
+            scrollTop();
         }
+    }
+
+    const onBack = () => {
+        back();
+        scrollTop();
+    }
+
+    const onNext = () => {
+        next();
+        scrollTop();
+    }
+
+    const scrollTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "auto"
+        })
     }
 
     return (
         <ul className='pagination rcc'>
-            <li className='pagination__arrow pagination__item' onClick={back}>{'<'}</li>
+            <li className='pagination__arrow pagination__item' onClick={onBack}>{'<'}</li>
             {pages.map((page, i) => (
                 <li key={i} className={classNames('pagination__arrow pagination__item', {
                     'pagination__item_active': page == currentPage.toString()
                 })} onClick={() => onClickPage(page)}>{page}</li>
             ))}
-            <li className='pagination__arrow pagination__item' onClick={next}>{'>'}</li>
+            <li className='pagination__arrow pagination__item' onClick={onNext}>{'>'}</li>
         </ul>
 
     )

@@ -2,12 +2,13 @@
 
 .filters {
     min-width: 300px;
-    padding: 0px 15px 0px 15px;
+    padding: 0px 15px 0px 0px;
 
     &__title {
-        font-size: 20px;
+        font-weight: bold;
+        font-size: 28px;
         padding: 15px 0px 15px 0px;
-        font-weight: 500;
+        color: black;
     }
 
     &__line {

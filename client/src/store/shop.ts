@@ -28,6 +28,7 @@ class ShopStore {
     public selectedSort: SortType;
     public selectedPriceRange: IRange;
     public searchString: string;
+    public categories: Map<string, string>;
 
     constructor() {
         makeAutoObservable(this);
@@ -95,6 +96,10 @@ class ShopStore {
         this.selectedSort = SortType.NOT_SELECTED;
         this.selectedPriceRange = this.priceRange;
         this.searchString = '';
+        this.categories = new Map<string, string>([
+            ['category1', "Категория 1"],
+            ['category2', "Категория 2"]
+        ])
     }
 
     get filteredProducts(): IProduct[] {

@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite'
+import CatalogNav from '../../../components/CatalogNav';
 import cart from '../../../store/cart';
 import shop from '../../../store/shop'
 import { IProduct } from '../../../types/types';
@@ -21,7 +22,7 @@ interface LocalStore {
     isOpenQuick: boolean
 }
 
-const Catalog = observer(() => {
+const ProductCatalog = observer(() => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedViewMode: ViewMode.GRID,
         selectedProduct: shop.filteredProducts[0],
@@ -75,4 +76,4 @@ const Catalog = observer(() => {
     )
 });
 
-export default Catalog
+export default ProductCatalog

@@ -1,0 +1,36 @@
+@import '../general/colors.scss';
+
+.button-up {
+    position: fixed;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    bottom: 0px;
+    right: 30px;
+    opacity: 0;
+    background-color: $primary;
+    cursor: pointer;
+    transition: 0.25s;
+
+    &__arrow {
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            left: -9px;
+            top: -6px;
+            border-top: solid 6px white;
+            border-left: solid 6px white;
+            transform: rotate(45deg);
+        }
+    }
+
+    &__open {
+        opacity: 1;
+        bottom: 30px;
+    }
+}
+

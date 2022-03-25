@@ -77,7 +77,7 @@ const Filters = observer(() => {
 
     return (
         <div className='filters'>
-            <div className='filters__title'>Filter By</div>
+            <div className='filters__title'>Косметика</div>
             <div className='filters__line'></div>
             <div>
                 <div className='filters__attr-name'>Price</div>

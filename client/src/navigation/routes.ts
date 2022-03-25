@@ -9,8 +9,8 @@ export const routes: ILink[] = [
         to: '/home'
     },
     {
-        title: 'Shop',
-        to: '/shop'
+        title: 'Catalog',
+        to: '/catalog'
     },
     {
         title: 'Contacts',

@@ -1,10 +1,11 @@
 @import '../general/colors.scss';
 
 .product {
-    padding-top: 70px;
+    padding-top: 30px;
     flex: 1;
 
     &__container {
+        padding-top: 20px;
         width: 100%;
     }
 

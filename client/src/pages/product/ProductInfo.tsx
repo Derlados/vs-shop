@@ -9,6 +9,7 @@ import ProductDesc from './components/ProductDesc';
 import RelatedProducts from './components/RelatedProducts';
 import Product from '../shop/components/product-card/Product';
 import { useNavigate, useParams } from 'react-router-dom';
+import CatalogNav from '../../components/CatalogNav';
 
 type ProductParams = {
     id: string;
@@ -29,20 +30,15 @@ const ProductInfo: FC = observer(() => {
     map.values()
 
     useEffect(() => {
-        if (!id || !Number.isInteger(parseInt(id))) {
-            navigation('/shop');
-        } else {
-            try {
-                localStore.product = shop.findProductById(+id);
-            } catch (e) {
-                navigation('/shop');
-            }
+        if (id && Number.isInteger(parseInt(id))) {
+            localStore.product = shop.findProductById(+id);
         }
     }, [id]);
 
 
     return (
         <div className='product ccc'>
+            <CatalogNav />
             <div className='product__container rlc'>
                 <Product product={localStore.product} type="full-view" />
             </div>
