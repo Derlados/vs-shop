@@ -34,14 +34,16 @@ body {
 }
 
 .app {
+    min-height: 100vh;
 
     &__content {
         width: 100%;
+        flex: 1;
     }
 
     &__page {
         width: 100%;
         max-width: 1600px;
-        padding: 20px;
+        padding: 0px 20px 0px 20px;
     }
 }

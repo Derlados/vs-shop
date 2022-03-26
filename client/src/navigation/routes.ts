@@ -10,7 +10,7 @@ export const routes: ILink[] = [
     },
     {
         title: 'Catalog',
-        to: '/catalog'
+        to: '/category1'
     },
     {
         title: 'Contacts',

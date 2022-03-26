@@ -8,12 +8,13 @@ import Checkout from './pages/checkout/Checkout';
 import ButtonUp from './components/ButtonUp';
 import Home from './pages/home/Home';
 import Catalog from './pages/catalog/Catalog';
+import Footer from './components/Footer';
 
 const App = () => {
   return (
-    <div className='app'>
+    <div className='app cct'>
       <Header />
-      <div className='app__content ccc'>
+      <div className='app__content cct'>
         <div className='app__page'>
           <Routes>
             <Route path='*' element={<Navigate to='/home' />} />
@@ -25,6 +26,7 @@ const App = () => {
           </Routes>
         </div>
       </div>
+      <Footer />
       <ButtonUp />
     </div>
   )

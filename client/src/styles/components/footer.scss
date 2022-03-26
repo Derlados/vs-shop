@@ -1,0 +1,70 @@
+@import '../general/colors.scss';
+
+.footer {
+    width: 100%;
+    margin-top: 30px;
+    padding: 40px 0px 40px 0px;
+    background-color: $primary-gray;
+
+    &__container {
+        justify-content: space-between !important;
+        width: 1600px;
+    }
+
+    &__logo {
+
+    }
+
+    &__block {
+
+    }
+
+    &__text {
+        font-size: 18px;
+        padding-right: 10px;
+    }
+
+    &__contacts {
+
+    }
+
+    &__contact-item {
+        
+    }
+
+    &__icon {
+        width: 32px;
+        height: 32px;
+        mask-size: contain;
+        background-color: $primary-dark;
+        margin-right: 10px;
+        mask-repeat: n;
+
+        &_time {
+            mask-image: url('../../assets/images/clock.svg');
+        }
+
+        &_phone {
+            mask-image: url('../../assets/images/phone.svg');
+        }
+
+        &_facebook, &_telegram {
+            width: 24px;
+            height: 24px;
+            transition: 0.4s;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $primary;
+            }
+        }
+
+        &_facebook {
+            mask-image: url('../../assets/images/facebook.svg');
+        }
+
+        &_telegram {
+            mask-image: url('../../assets/images/telegram.svg');
+        }
+    }
+}

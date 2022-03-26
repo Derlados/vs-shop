@@ -1,0 +1,144 @@
+@import '../general/colors.scss';
+
+.home {
+
+    &__board {
+        width: calc(100vw - 20px);
+        height: 65vh;
+        background-color: #f7f1ec;
+    }
+
+    &__board-container {
+        justify-content: space-between !important;
+        width: 1600px;
+        height: 100%;
+    }
+
+    &__board-img {
+        width: auto;
+        height: 100%;
+    }
+
+    &__board-info {
+
+    }
+
+    &__board-title {
+        white-space: pre-line;
+        font-size: 48px;
+        line-height: 52px;
+        padding-bottom: 20px;
+    }
+
+    &__board-subtitle {
+        color: gray;
+        font-size: 18px;
+        padding-bottom: 20px;
+    }
+
+    &__board-btn {
+        border-radius: 25px;
+        padding: 10px 25px 10px 25px;
+        background-color: $primary;
+        color: white;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &:hover {
+            background-color: $hover-primary;
+        }
+    }
+
+    &__features {
+        width: 100%;
+        padding: 30px;
+        border: solid 1px $primary-gray;
+        margin-top: 40px;
+    }
+
+    &__feature-list {
+        justify-content: space-between !important;
+    }
+
+    &__feature-item {
+        
+    }
+
+    &__feature-img {
+        padding-right: 20px;
+    }
+
+    &__feature-text {
+        font-size: 18px;
+    }
+
+    &__feature-text-small {
+        font-size: 14px;
+        color: gray;
+    }
+
+
+    &__category-title {
+        width: 100%;
+        font-size: 28px;
+        font-weight: bold;
+        padding-bottom: 15px;
+    }
+
+    &__categories {
+        width: 100%;
+        justify-content: space-between !important;
+        flex-wrap: wrap;
+    }
+
+    &__category-card {
+        justify-content: space-between !important;
+        width: calc(33% - 15px);
+        height: 150px;
+        background-color: $secondary-gray;
+        margin-bottom: 30px;
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    &__category-text {
+        padding-left: 20px;
+    }
+
+    &__category-name {
+        font-size: 18px;
+        font-weight: bold;
+        padding-bottom: 5px;
+    }
+
+    &__category-count-products {
+        color: gray;
+        padding-bottom: 10px;
+    }
+
+    &__category-img {
+        height: 100%;
+        width: 50%;
+        object-fit: cover;
+        transition: 0.4s;
+
+        &:hover {
+            height: 103%;
+            width: 53%;
+        }
+    }
+
+    &__category-shop-now {
+        transition: 0.4s;
+
+        &:hover {
+            color: $primary;
+            padding-left: 10px;
+        }
+    }
+
+    &__banner {
+        width: 100%;
+        height: auto;
+    }
+}
