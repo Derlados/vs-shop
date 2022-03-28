@@ -2,10 +2,10 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { ChangeEvent, KeyboardEvent, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom';
-import { routes } from '../navigation/routes';
-import cart from '../store/cart';
-import shop from '../store/shop';
-import '../styles/header/header.scss';
+import { routes } from '../../navigation/routes';
+import cart from '../../store/cart';
+import shop from '../../store/shop';
+import '../../styles/header/header.scss';
 import CartQuickView from './CartQuickView';
 
 interface LocalStore {
@@ -57,6 +57,7 @@ const Header = observer(() => {
             <div className={classNames('header__container rcc', {
                 'header__container_fixed': localStore.isFixed
             })}>
+                <div className='home__burger-menu'></div>
                 <NavLink to={'/home'}>
                     <img src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' className='header__logo' />
                 </NavLink>

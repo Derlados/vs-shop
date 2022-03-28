@@ -1,4 +1,4 @@
-import Header from './components/Header';
+import Header from './components/header/Header';
 import './styles/app.scss';
 import './styles/general/position.css'
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -8,7 +8,7 @@ import Checkout from './pages/checkout/Checkout';
 import ButtonUp from './components/ButtonUp';
 import Home from './pages/home/Home';
 import Catalog from './pages/catalog/Catalog';
-import Footer from './components/Footer';
+import Footer from './components/footer/Footer';
 
 const App = () => {
   return (

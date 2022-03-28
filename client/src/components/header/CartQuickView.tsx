@@ -2,9 +2,9 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import cart from '../store/cart';
-import '../styles/header/cart-quick.scss';
-import { IProduct } from '../types/types';
+import cart from '../../store/cart';
+import '../../styles/header/cart-quick.scss';
+import { IProduct } from '../../types/types';
 
 interface CartQuickViewProps {
     isOpen: boolean;

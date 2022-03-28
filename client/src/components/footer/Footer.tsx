@@ -1,11 +1,12 @@
 import React from 'react';
-import '../styles/components/footer.scss';
+import '../../styles/components/footer.scss';
 
 const Footer = () => {
     return (
-        <footer className='footer rcc'>
+        <footer className='footer ccc'>
+            <img className='footer__logo footer__logo_top' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' />
             <div className='footer__container rcc'>
-                <img className='footer__logo' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' />
+                <img className='footer__logo footer__logo_left' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' />
                 <div className='footer__block rcc'>
                     <div className='footer__text'>Соц. мережі:</div>
                     <ul className='footer__contacts rcc'>
@@ -25,9 +26,8 @@ const Footer = () => {
                     <div className='footer__icon footer__icon_phone'></div>
                     <div className='footer__text'>+380 (66) 055-99-72</div>
                 </div>
-                <div className='footer__copyright'>© Copyright 2021. All Rights Reserved.</div>
-
             </div>
+            <div className='footer__text footer__copyright'>© Copyright 2021. All Rights Reserved.</div>
         </footer>
     )
 }

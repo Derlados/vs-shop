@@ -1,27 +1,55 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .footer {
-    width: 100%;
+    width: 100vw;
     margin-top: 30px;
-    padding: 40px 0px 40px 0px;
+    padding: 40px 0px 20px 0px;
     background-color: $primary-gray;
 
     &__container {
         justify-content: space-between !important;
-        width: 1600px;
+        width: 100%;
+        max-width: 1600px;
+        padding: 0px 20px 30px 20px;
+
+        @media(max-width: $mobile-vertical) {
+            flex-direction: column !important;
+        }
     }
 
     &__logo {
+        &_top {
+            display: none;
+            padding-bottom: 30px;
 
+            @media(max-width: $tablet-horizontal) {
+                display: block;
+            }
+        }
+
+        &_left {
+            display: block;
+
+            @media(max-width: $tablet-horizontal) {
+                display: none;
+            }
+        }
     }
 
     &__block {
-
+        @media(max-width: $mobile-vertical) {
+            padding-bottom: 20px;
+        }
     }
 
     &__text {
         font-size: 18px;
         padding-right: 10px;
+
+        @media(max-width: $tablet-horizontal) {
+            font-size: 14px;
+        }
     }
 
     &__contacts {
@@ -38,7 +66,13 @@
         mask-size: contain;
         background-color: $primary-dark;
         margin-right: 10px;
-        mask-repeat: n;
+        mask-repeat: no-repeat;
+
+        @media (max-width: $laptop) {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
 
         &_time {
             mask-image: url('../../assets/images/clock.svg');
@@ -66,5 +100,10 @@
         &_telegram {
             mask-image: url('../../assets/images/telegram.svg');
         }
+    }
+
+    &__copyright {
+        font-size: 14px;
+        padding: 0px 0px 10px 0px;
     }
 }

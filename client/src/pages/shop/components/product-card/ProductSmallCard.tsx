@@ -4,6 +4,7 @@ import CartButton from '../../../../components/CartButton';
 import cart from '../../../../store/cart';
 import { ProductCardProps } from './Product';
 import '../../../../styles/product/product-card.scss';
+import { SpecSymbols } from '../../../../values/specSymbols';
 
 const ProductSmallCard: FC<ProductCardProps> = observer(({ product, addToCart, addToFavorite, openFullView, onOpenQuickView }) => {
 
@@ -26,8 +27,8 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ product, addToCart, a
             <span className='product-card__brand'>STUDIO DESIGN</span>
             <span className='product-card__name' onClick={() => openFullView(product)}>{product.title}</span>
             <div className='product-card__price rlc'>
-                {product.discountPercent != 0 && <span className='product-card__old-price'>{product.oldPrice} ₴</span>}
-                <span className='product-card__current-price'>{product.price} ₴</span>
+                {product.discountPercent != 0 && <span className='product-card__old-price'>{product.oldPrice}{SpecSymbols.NBSP}₴</span>}
+                <span className='product-card__current-price'>{product.price}{SpecSymbols.NBSP}₴</span>
             </div>
             <CartButton isActive={cart.findById(product.id) === undefined} onClick={() => addToCart(product)} />
         </div>

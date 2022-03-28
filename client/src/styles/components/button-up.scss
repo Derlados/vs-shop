@@ -11,6 +11,7 @@
     background-color: $primary;
     cursor: pointer;
     transition: 0.25s;
+    z-index: 99;
 
     &__arrow {
         position: relative;

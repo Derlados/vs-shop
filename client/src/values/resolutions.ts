@@ -1,0 +1,8 @@
+export enum Resolutions {
+    DESCTOP = 1600,
+    LAPTOP = 1280,
+    TABLE_HORIZONTAL = 1024,
+    TABLET_VERTICAL = 768,
+    MOBILE_HORIZONTAL = 768,
+    MOBILE_VERtICAL = 550
+}
