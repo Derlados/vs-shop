@@ -1,4 +1,5 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .button-up {
     position: fixed;
@@ -6,12 +7,16 @@
     width: 56px;
     height: 56px;
     bottom: 0px;
-    right: 30px;
+    right: 20px;
     opacity: 0;
     background-color: $primary;
     cursor: pointer;
     transition: 0.25s;
     z-index: 99;
+
+    @media (max-width: $mobile-vertical) {
+        right: 10px;
+    }
 
     &__arrow {
         position: relative;
@@ -31,7 +36,11 @@
 
     &__open {
         opacity: 1;
-        bottom: 30px;
+        bottom: 20px;
+
+        @media (max-width: $mobile-vertical) {
+            bottom: 10px;
+        }
     }
 }
 

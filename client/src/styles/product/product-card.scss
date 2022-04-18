@@ -1,4 +1,5 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .product-card {
     width: 100%;
@@ -21,6 +22,11 @@
         position: absolute;
         top: 15px;
         left: 15px;
+
+        @media (max-width: $mobile-vertical) {
+            top: 5px;
+            left: 5px;
+        }
     }
 
     &__label {
@@ -45,6 +51,11 @@
         top: 15px;
         right: 15px;
         transition: 0.4s;
+
+        @media (max-width: $mobile-vertical) {
+            top: 5px;
+            right: 5px;
+        }
     }
 
     &__action-mask {

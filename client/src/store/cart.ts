@@ -50,6 +50,45 @@ class Cart {
                     count: 300
                 },
                 count: 4
+            },
+            {
+                product: {
+                    id: 4,
+                    isNew: true,
+                    title: "Originals Kaval Windbr",
+                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
+                    price: 18.99,
+                    oldPrice: 19.99,
+                    discountPercent: 5,
+                    count: 300
+                },
+                count: 4
+            },
+            {
+                product: {
+                    id: 5,
+                    isNew: true,
+                    title: "Originals Kaval Windbr",
+                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
+                    price: 18.99,
+                    oldPrice: 19.99,
+                    discountPercent: 5,
+                    count: 300
+                },
+                count: 4
+            },
+            {
+                product: {
+                    id: 6,
+                    isNew: true,
+                    title: "Originals Kaval Windbr",
+                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
+                    price: 18.99,
+                    oldPrice: 19.99,
+                    discountPercent: 5,
+                    count: 300
+                },
+                count: 4
             }
         ];
     }

@@ -52,4 +52,8 @@ body {
         max-width: 1600px;
         padding: 0px 20px 0px 20px;
     }
+
+    &__scrollable {
+        overflow: hidden;
+    }
 }

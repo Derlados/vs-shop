@@ -46,10 +46,12 @@ const Header = observer(() => {
 
     const onOpenCart = () => {
         localStore.isCartOpen = true;
+        document.body.style.overflow =  "hidden";
     }
 
     const onCloseCart = () => {
         localStore.isCartOpen = false;
+        document.body.style.overflow =  "scroll";
     }
 
     return (
@@ -57,7 +59,9 @@ const Header = observer(() => {
             <div className={classNames('header__container rcc', {
                 'header__container_fixed': localStore.isFixed
             })}>
-                <div className='home__burger-menu'></div>
+                <div className='header__burger-menu ccc'>
+                    <div className='header__burger-menu-icon ccc'></div>
+                </div>
                 <NavLink to={'/home'}>
                     <img src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' className='header__logo' />
                 </NavLink>
