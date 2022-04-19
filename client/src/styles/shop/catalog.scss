@@ -1,17 +1,23 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .catalog {
-    padding: 0px 0px 0px 15px;
-
     &__products {
         justify-content: space-between !important;
         width: 100%;
-        flex: 4;
         flex-wrap: wrap;
     }
 
     &__product-container {
-        width: calc(25% - 20px);
+        width: 24%;
+
+        @media (max-width: $laptop) {
+            width: 32%;
+        }
+
+        @media (max-width: $tablet-vertical) {
+            width: 49%;
+        }
 
         &_large {
             width: 100%;
@@ -77,11 +83,14 @@
     }
 
     &__selected-sort {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         width: 200px;
         font-size: 12px;
         border-radius: 5px;
         border: solid 1px $primary-gray;
-        padding: 10px;
+        padding: 10px 20px 10px 10px;
         transition: 0.4s;
         cursor: pointer;
         -webkit-touch-callout: none; /* iOS Safari */
@@ -152,6 +161,9 @@
     }  
 
     &__sort-item {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
         padding: 10px;
         cursor: pointer;
         transition: 0.5s;

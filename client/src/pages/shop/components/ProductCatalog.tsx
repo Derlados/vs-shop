@@ -9,7 +9,7 @@ import Pagination from './Pagination';
 import Product from './product-card/Product';
 import ProductQuickModal from './product-card/ProductQuickModal';
 
-const MAX_PRODUCTS_BY_PAGE = 16;
+const MAX_PRODUCTS_BY_PAGE = 24;
 
 export enum ViewMode {
     GRID,
@@ -55,7 +55,7 @@ const ProductCatalog = observer(() => {
             })}>
 
                 {products.map(product =>
-                    <div key={product.id} className={classNames('catalog__product-container', {
+                    <div key={product.id} className={classNames('catalog__product-container ccc', {
                         'catalog__product-container_large': localStore.selectedViewMode == ViewMode.LIST
                     })}>
                         <Product

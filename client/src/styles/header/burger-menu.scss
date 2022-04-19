@@ -1,0 +1,177 @@
+@import '../general/colors.scss';
+@import '../general/resolutions.scss';
+
+.burger-menu {
+    width: 100vw;
+    min-height: 100vh;
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    transition: 0.25s;
+    pointer-events: none;
+    background-color: transparent;
+
+    &_opened {
+        pointer-events: all;
+        background-color: rgba(0, 0, 0, 0.534);
+    }
+
+    &_opened > &__container {
+        left: 0;
+    }
+
+    &_underline {
+        position: relative;
+
+        &::after {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            content: '';
+            background-color: $primary-gray;
+        }
+    }
+
+    &__container {
+        position: fixed;
+        top: 0;
+        left: -500px;
+        width: 100vw;
+        max-width: 340px;
+        min-height: 100vh;
+        transition: 0.25s;
+        z-index: 99;
+        background-color: white;
+
+        @media (max-width: 340px) {
+            left: -150vw;
+        }
+    }
+
+    &__link {
+        text-decoration: none;
+        height: 100%;
+    }
+
+    &__head {
+        justify-content: space-between !important;
+        padding: 15px 15px 30px 15px;
+        height: 80px;
+    }
+
+    &__logo {
+        width: auto;
+        height: 100%;
+    }
+
+    &__close {
+        height: 24px;
+        width: 24px;
+        position: relative;
+        cursor: pointer;
+
+        &::before, &::after {
+            position: absolute;
+            top: calc(50% - 1px);
+            right: 0;
+            width: 20px;
+            height: 2px;
+            content: "";
+            -webkit-transition: all .5s ease 0s;
+            transition: all .5s ease 0s;
+            background-color: $primary;
+        }
+
+        &::after {
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }    
+
+        &::before {
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }    
+    }
+
+    &__wishlist {
+        font-size: 14px;
+        font-weight: 100;
+        padding: 12px 0px;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &:hover {
+            color: $primary;
+        }
+
+        &::before {
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            content: "";
+            width: 16px;
+            height: 16px;
+            padding-right: 7px;
+            mask-image: url('../../assets/images/favorite.svg');
+            background-color: $primary;
+        }
+    }
+
+    &__menu {
+        width: 100%;
+        padding: 12px 20px;
+        background-color: $primary-dark;
+        color: white;
+        font-weight: bold;
+    }
+
+    &__list {
+        width: 100%;
+        padding-bottom: 80px;
+
+        & > a {
+            width: 100%;
+            padding: 12px 20px;          
+            cursor: pointer;
+        }
+    }
+
+    &__contacts {
+
+    }
+
+
+    &__contact-link {
+        width: 36px;
+        height: 36px;
+        padding: 10px;
+        background-color: $primary;
+        border-radius: 50%;
+        margin: 0px 5px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &:hover {
+            background-color: $primary-dark;
+        }
+    }
+
+    &__icon {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+
+        &_telegram {
+            mask-image: url('../../assets/images/telegram.svg');
+        }
+
+        &_facebook {
+            mask-image: url('../../assets/images/facebook.svg');
+        }
+    }
+}

@@ -1,10 +1,22 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .checkout {
     margin-top: 50px;
 
+    @media (max-width: $tablet-horizontal) {
+        margin-top: 20px;
+        flex-direction: column !important;
+        align-items: center;
+    }
+
     &__details {
         width: 60%;
+
+        @media (max-width: $tablet-horizontal) {
+            width: 100%;
+            max-width: 700px;
+        }
     }
 
     &__title {
@@ -12,10 +24,19 @@
         font-weight: bold;
         margin-bottom: 20px;
         color: black;
+
+        @media (max-width: $mobile-vertical) {
+            font-size: 20px;
+        }
     }
 
     &__inputs-row {
         margin-bottom: 20px;
+
+        @media (max-width: $mobile-vertical) {
+            flex-direction: column !important;
+            align-items: center;
+        }
     }
 
     &__input {
@@ -27,6 +48,10 @@
 
     &__input:first-child {
         margin-right: 30px;
+
+        @media (max-width: $mobile-vertical) {
+            margin-right: 0px;
+        }
     }
 
     &__selector {
@@ -55,11 +80,21 @@
     &__order {
         width: 40%;
         margin-left: 30px;
+
+        @media (max-width: $tablet-horizontal) {
+            width: 100%;
+            max-width: 700px;
+            margin: 20px 0px 0px 0px;
+        }
     }
 
     &__order-container {
         padding: 45px;
         background-color: rgb(247, 247, 247);
+
+        @media (max-width: $mobile-vertical) {
+            padding: 20px;
+        }
 
     }
 
@@ -72,7 +107,9 @@
     }
 
     &__order-text {
-
+        @media (max-width: $mobile-vertical) {
+            font-size: 14px;
+        }
 
         &_bold {
             font-weight: bold;

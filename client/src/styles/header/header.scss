@@ -5,6 +5,10 @@
     width: 100%;
     height: 100px;
 
+    @media (max-width: $mobile-vertical) {
+        height: 80px;
+    }
+
     &__burger-menu {
         display: none !important;
         position: relative;
@@ -12,17 +16,6 @@
         height: 44px;
         padding: 0px 10px 0px 10px;
         margin-right: 10px;
-
-        &_opened {
-         
-            &::before {
-                top: 0;
-            }
-    
-            &::after {
-                bottom: 0;
-            }
-        }
 
         &::before, &::after {
             content: "";
@@ -74,6 +67,7 @@
 
         @media (max-width: $mobile-vertical) {
             padding: 10px;
+            height: 80px;
         }
     }
 
@@ -140,6 +134,7 @@
 
     &__search-input {
         flex: 1;
+        width: 100px;
         padding-left: 10px;
         outline: none;
         border: none;

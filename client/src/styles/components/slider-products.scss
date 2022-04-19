@@ -1,4 +1,5 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .slider-products {
     padding-top: 40px;
@@ -14,6 +15,10 @@
         position: relative;
         font-size: 28px;
         font-weight: bold;
+
+        @media (max-width: $tablet-vertical) {
+            font-size: 22px;
+        }
     }
 
     &__slider-container {
@@ -42,6 +47,12 @@
         cursor: pointer;
         transition: 0.4s;
         
+
+        @media (max-width: $tablet-vertical) {
+            width: 36px !important;
+            height: 36px !important;
+            font-size: 16px !important;
+        }
 
         &:hover {
             color: white;

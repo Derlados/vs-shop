@@ -69,7 +69,7 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
 
     return (
         <div className='product__info rlt'>
-            <div className='product__images ccc'>
+            <div className='product__images ctc'>
                 <div className='product__img-container'>
                     <img className='product__img' src={localStore.selectedImage} />
                     <div className='product__arrow product__arrow_back ccc' onClick={() => localStore.swiper.slidePrev()}>{"❮"}</div>
@@ -107,16 +107,22 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
                 {isExtended &&
                     <div className='description__details rlc'>
                         <ul className='description__list'>
-                            <li className='description__list-item description__list-item_attr'>Weight</li>
-                            <li className='description__list-item description__list-item_attr'>Dimensions</li>
-                            <li className='description__list-item description__list-item_attr'>Materials</li>
-                            <li className='description__list-item description__list-item_attr'>Other Info</li>
-                        </ul>
-                        <ul className='description__list'>
-                            <li className='description__list-item description__list-item_val'>400 g</li>
-                            <li className='description__list-item description__list-item_val'>10 x 10 x 15 cm</li>
-                            <li className='description__list-item description__list-item_val'>60% cotton, 40% polyester</li>
-                            <li className='description__list-item description__list-item_val'>American heirloom jean shorts pug seitan letterpress</li>
+                            <li className='description__list-item rlt'>
+                                <div className='description__list-item_attr'>Weight</div>
+                                <div className='description__list-item_val'>400 g</div>
+                            </li>
+                            <li className='description__list-item rlt'>
+                                <div className='description__list-item_attr'>Dimensions</div>
+                                <div className='description__list-item_val'>10 x 10 x 15 cm</div>
+                            </li>
+                            <li className='description__list-item rlt'>
+                                <div className='description__list-item_attr'>Materials</div>
+                                <div className='description__list-item_val'>60% cotton, 40% polyester</div>
+                            </li>
+                            <li className='description__list-item rlt'>
+                                <div className='description__list-item_attr'>Other Info</div>
+                                <div className='description__list-item_val'>American heirloom jean shorts pug seitan letterpress</div>
+                            </li>
                         </ul>
                     </div>
                 }

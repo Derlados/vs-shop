@@ -96,7 +96,7 @@ const Checkout = observer(() => {
                     </div>
                     <div className='checkout__total rlc'>
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
-                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cart.totalPrice} ₴</div>
+                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cart.totalPrice.toFixed(2)} ₴</div>
                     </div>
                 </div>
                 <div className='checkout__order-accept ccc' onClick={tryPlaceOrder}>PLACE ORDER</div>

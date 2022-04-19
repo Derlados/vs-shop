@@ -1,10 +1,20 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .product-card-large {
     width: 100%;
     border: solid 1px $primary-gray;
     margin-bottom: 20px;
     padding: 20px;
+
+    @media (max-width: $mobile-vertical) {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    @media (max-width: $tablet-vertical) {
+        padding: 10px;
+    }
 
     &__img-container {
         position: relative;
@@ -14,12 +24,21 @@
         &:hover > .product-card__actions {
             opacity: 1;
         }
+
+        @media (max-width: $mobile-vertical) {
+            width: 100%;
+            margin: 0px 0px 20px 0px;
+        }
     }
 
     &__title {
         font-size: 24px;
         font-weight: bold;
         margin-bottom: 7px;
+
+        @media (max-width: $tablet-vertical) {
+            font-size: 16px !important;
+        }
     }
 
     &__img {
@@ -33,10 +52,19 @@
     }
 
     &__desc {
+        text-align: justify;
         margin-bottom: 20px;
+
+        @media (max-width: $tablet-vertical) {
+            font-size: 14px !important;
+        }
     }
 
     &__price {
         font-size: 22px !important;
+
+        @media (max-width: $tablet-vertical) {
+            font-size: 18px !important;
+        }
     }
 } 

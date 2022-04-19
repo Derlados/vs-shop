@@ -6,12 +6,14 @@ import { routes } from '../../navigation/routes';
 import cart from '../../store/cart';
 import shop from '../../store/shop';
 import '../../styles/header/header.scss';
+import BurgerMenu from './BurgerMenu';
 import CartQuickView from './CartQuickView';
 
 interface LocalStore {
     isCartOpen: boolean;
     searchString: string;
     isFixed: boolean;
+    isMenuOpen: boolean;
 }
 
 const Header = observer(() => {
@@ -20,7 +22,8 @@ const Header = observer(() => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         isCartOpen: false,
         searchString: '',
-        isFixed: false
+        isFixed: false,
+        isMenuOpen: false
     }));
 
     useEffect(() => {
@@ -46,12 +49,22 @@ const Header = observer(() => {
 
     const onOpenCart = () => {
         localStore.isCartOpen = true;
-        document.body.style.overflow =  "hidden";
+        document.body.style.overflow = "hidden";
     }
 
     const onCloseCart = () => {
         localStore.isCartOpen = false;
-        document.body.style.overflow =  "scroll";
+        document.body.style.overflow = "scroll";
+    }
+
+    const onOpenMenu = () => {
+        localStore.isMenuOpen = true;
+        document.body.style.overflow = "hidden";
+    }
+
+    const onCloseMenu = () => {
+        localStore.isMenuOpen = false;
+        document.body.style.overflow = "scroll";
     }
 
     return (
@@ -59,7 +72,7 @@ const Header = observer(() => {
             <div className={classNames('header__container rcc', {
                 'header__container_fixed': localStore.isFixed
             })}>
-                <div className='header__burger-menu ccc'>
+                <div className={'header__burger-menu ccc'} onClick={onOpenMenu}>
                     <div className='header__burger-menu-icon ccc'></div>
                 </div>
                 <NavLink to={'/home'}>
@@ -92,6 +105,7 @@ const Header = observer(() => {
                     </div>
                 </div>
             </div>
+            <BurgerMenu isOpen={localStore.isMenuOpen} onClose={onCloseMenu} />
             <CartQuickView isOpen={localStore.isCartOpen} onClose={onCloseCart} />
         </div>
     )

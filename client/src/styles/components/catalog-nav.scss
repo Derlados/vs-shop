@@ -1,10 +1,13 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .catalog-nav {
     width: 100%;
 
     &__list {
-  
+        @media (max-width: $mobile-vertical) {
+            font-size: 14px;
+        }
     }
 
     &__item {

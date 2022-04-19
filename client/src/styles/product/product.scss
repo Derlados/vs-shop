@@ -1,4 +1,5 @@
 @import '../general/colors.scss';
+@import '../general/resolutions.scss';
 
 .product {
     padding-top: 30px;
@@ -11,12 +12,23 @@
 
     &__info {
         width: 100%;    
+
+        @media (max-width: $tablet-vertical) {
+            flex-direction: column !important;
+            align-items: center !important;
+        }
     }
 
     &__images {
         width: 35%;
         max-width: 400px;
         padding-right: 20px;
+    
+        @media (max-width: $tablet-vertical) {
+            width: 100%;
+            max-width: 100%;
+            padding: 0px 0px 20px 0px;
+        }
     }
 
     &__img {
@@ -300,7 +312,7 @@
         padding-bottom: 15px;
 
         &_attr {
-            
+            min-width: 120px;
         }
 
         &_val {
@@ -309,61 +321,6 @@
     }
 
 
-}
-
-.related {
-    padding-top: 40px;
-    width: 100%;
-
-    &__head {
-        width: 100%;
-        justify-content: space-between;
-        margin-bottom: 25px;
-    }
-    
-    &__title {
-        position: relative;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    &__slider-container {
-        position: relative;
-        max-width: 100%;
-        
-        &:hover > .product__arrow {
-            opacity: 1;;
-        }
-    }
-
-    &__slider {
-        width: 100%;
-    }
-
-    &__slide {
-        flex: 1;
-    }
-
-    &__arrow {
-        width: 48px !important;
-        height: 48px !important;
-        font-size: 22px !important;
-        background-color: $primary-gray;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.4s;
-        
-
-        &:hover {
-            color: white;
-            background-color: $primary;
-        }
-
-        &:first-child {
-            margin-right: 15px;
-        }
-    }
-    
 }
 
 .comments {
