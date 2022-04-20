@@ -25,7 +25,6 @@
     }
 
     &__settings {
-        justify-content: space-between;
         height: 65px;
         width: 100%;
     }
@@ -33,6 +32,8 @@
     &__view-modes {
         width: 100%;
     }
+
+
 
     &__mask-container {
         height: 37px;
@@ -42,6 +43,11 @@
         border: solid 1px $primary;
         transition: 0.4s;
         cursor: pointer;
+
+        @media (max-width: $mobile-vertical) {
+            margin-right: 0px;
+        }
+
 
         &:hover {
             background-color: $primary;
@@ -76,6 +82,55 @@
          background-color: $primary;
         mask-image: url('../../assets/images/list.svg');
     }
+
+    &__view-and-sort{
+        width: 100%;
+    }
+
+    &__filters {
+        display: none;
+        position: relative;
+        height: 37px;
+        background-color: $primary;
+        color: white;
+        border-radius: 5px;
+        text-align: center;
+        padding: 0px 10px;
+        margin: 0px 10px;
+        padding-left: 40px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $hover-primary;
+        }
+
+        &::before {
+            content: "";
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            position: absolute;
+            top: calc(50% - 8px);
+            left: 15px;
+            height: 16px;
+            width: 16px;
+            mask-image: url('../../assets/images/filter.svg');
+            background-color: white;
+        }
+
+        @media (max-width: $tablet-horizontal) {
+            display: flex;
+        }
+
+        @media (max-width: 400px) {
+            padding-left: 10px;
+            font-size: 14px;
+
+            &::before {
+                display: none;
+            }
+        }
+    }
+
 
     &__sort {
         position: relative;
@@ -128,6 +183,14 @@
                 -ms-transform: rotate(225deg); 
             }
         }
+
+        @media (max-width: $mobile-vertical) {
+            width: 150px;
+        }
+
+        @media (max-width: $mobile-mini) {
+            width: 120px;
+        }
     }
 
     &__sort-list {
@@ -157,6 +220,14 @@
             transform: scale(1);
             opacity: 1;
             pointer-events: all;
+        }
+
+        @media (max-width: $mobile-vertical) {
+            width: 150px;
+        }
+
+        @media (max-width: $mobile-mini) {
+            width: 120px;
         }
     }  
 

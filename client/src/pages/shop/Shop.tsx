@@ -7,21 +7,38 @@ import '../../styles/shop/filters.scss';
 import '../../styles/shop/catalog.scss';
 import '../../styles/shop/pagination.scss';
 import CatalogNav from '../../components/CatalogNav';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 
-const Shop = () => {
+interface LocalStore {
+    isFilterOpen: boolean;
+}
 
+const Shop = observer(() => {
+    const localStore = useLocalObservable<LocalStore>(() => ({
+        isFilterOpen: false
+    }))
+
+    const onOpenFilters = () => {
+        localStore.isFilterOpen = true;
+        document.body.style.overflow = "hidden";
+    }
+
+    const onCloseFilters = () => {
+        localStore.isFilterOpen = false;
+        document.body.style.overflow = "scroll";
+    }
 
     return (
         <div className='shop clt'>
             <CatalogNav />
             <div className='rct'>
-                <Filters />
-                <div className='shop__content сcc'>
-                    <ProductCatalog />
+                <Filters isOpen={localStore.isFilterOpen} onClose={onCloseFilters} />
+                <div className='shop__content'>
+                    <ProductCatalog onOpenFilters={onOpenFilters} />
                 </div>
             </div>
         </div>
     )
-}
+});
 
 export default Shop

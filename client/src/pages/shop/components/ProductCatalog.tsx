@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite'
+import { FC } from 'react';
 import CatalogNav from '../../../components/CatalogNav';
 import cart from '../../../store/cart';
 import shop from '../../../store/shop'
@@ -22,7 +23,11 @@ interface LocalStore {
     isOpenQuick: boolean
 }
 
-const ProductCatalog = observer(() => {
+interface ProductCatalogProps {
+    onOpenFilters: () => void;
+}
+
+const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedViewMode: ViewMode.GRID,
         selectedProduct: shop.filteredProducts[0],
@@ -34,12 +39,14 @@ const ProductCatalog = observer(() => {
     }
 
     const openQuickView = (product: IProduct) => {
+        document.body.style.overflow = "hidden";
         localStore.selectedProduct = product;
         localStore.isOpenQuick = true;
     }
 
 
     const closeQuickView = () => {
+        document.body.style.overflow = "scroll";
         localStore.isOpenQuick = false;
     }
 
@@ -48,7 +55,7 @@ const ProductCatalog = observer(() => {
     return (
         <div className='catalog ccc'>
             <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />
-            <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} />
+            <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} onOpenFilters={onOpenFilters} />
             <div className={classNames('catalog__products', {
                 'rlt': localStore.selectedViewMode == ViewMode.GRID,
                 'clc': localStore.selectedViewMode == ViewMode.LIST

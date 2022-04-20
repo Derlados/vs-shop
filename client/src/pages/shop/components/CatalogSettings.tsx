@@ -11,6 +11,7 @@ interface LocalStore {
 interface CatalogSettingsProps {
     selectedViewMode: ViewMode;
     onSelectViewMode: (viewMode: ViewMode) => void;
+    onOpenFilters: () => void;
 }
 
 const sortTypes: Map<SortType, string> = new Map([
@@ -20,7 +21,7 @@ const sortTypes: Map<SortType, string> = new Map([
     [SortType.NEW, "Новинки"]
 ]);
 
-const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, onSelectViewMode }) => {
+const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, onSelectViewMode, onOpenFilters }) => {
     const localStore = useLocalStore<LocalStore>(() => ({
         isOpenSort: false,
         selectedViewMode: ViewMode.GRID
@@ -37,18 +38,22 @@ const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, 
 
     return (
         <div className='catalog__settings rcc'>
-            <div className='catalog__view-modes rlc'>
-                <div className={classNames('catalog__mask-container',
-                    { 'catalog__mask-container_selected': selectedViewMode == ViewMode.GRID })}
-                    onClick={() => onSelectViewMode(ViewMode.GRID)}>
-                    <div className='catalog__view-mode catalog__view-grid'></div>
+            <div className='catalog__view-and-sort rlc'>
+                <div className='catalog__view-modes rlc'>
+                    <div className={classNames('catalog__mask-container',
+                        { 'catalog__mask-container_selected': selectedViewMode == ViewMode.GRID })}
+                        onClick={() => onSelectViewMode(ViewMode.GRID)}>
+                        <div className='catalog__view-mode catalog__view-grid'></div>
+                    </div>
+                    <div className={classNames('catalog__mask-container',
+                        { 'catalog__mask-container_selected': selectedViewMode == ViewMode.LIST })}
+                        onClick={() => onSelectViewMode(ViewMode.LIST)}>
+                        <div className='catalog__view-mode catalog__view-list'></div>
+                    </div>
                 </div>
-                <div className={classNames('catalog__mask-container',
-                    { 'catalog__mask-container_selected': selectedViewMode == ViewMode.LIST })}
-                    onClick={() => onSelectViewMode(ViewMode.LIST)}>
-                    <div className='catalog__view-mode catalog__view-list'></div>
-                </div>
+                <div className='catalog__filters ccc' onClick={onOpenFilters}>Фільтри</div>
             </div>
+
             <div className='catalog__sort'>
                 <div className={classNames('catalog__selected-sort', {
                     'catalog__selected-sort_open': localStore.isOpenSort

@@ -2,7 +2,7 @@
 @import '../general/resolutions.scss';
 
 .cart-quick {
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
     position: fixed;
     background-color: rgba(0, 0, 0, 0.534);
@@ -20,7 +20,7 @@
         right: -400px;
 
         @media (max-width: $mobile-vertical) {
-            right: -100vw;
+            right: -100%;
         }
     }
 
@@ -41,7 +41,7 @@
         scrollbar-width: none;  /* Firefox */    
 
         @media (max-width: $mobile-vertical) {
-            max-width: 100vw;
+            max-width: 100%;
         }
     }
 

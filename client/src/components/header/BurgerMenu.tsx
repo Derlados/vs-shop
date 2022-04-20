@@ -27,8 +27,8 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                 <div className='burger-menu__menu'>MENU</div>
                 <ul className='burger-menu__list clc'>
                     {routes.map(route => (
-                        <NavLink className='burger-menu__link burger-menu_underline' to={route.to} onClick={onClose}>
-                            <li key={route.title}>{route.title}</li>
+                        <NavLink key={route.title} className='burger-menu__link burger-menu_underline' to={route.to} onClick={onClose}>
+                            <li >{route.title}</li>
                         </NavLink>
                     ))}
                 </ul>
