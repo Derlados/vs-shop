@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./product.model";
 
-@Entity()
+@Entity("images")
 export class Image {
 
     @PrimaryGeneratedColumn("increment")
@@ -13,7 +13,6 @@ export class Image {
     @Column({ type: "boolean", default: false })
     isMain: boolean;
 
-    @ManyToOne(() => Product, product => product.imgs, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-    @JoinColumn({ name: "product_id" })
+    @ManyToOne(() => Product, product => product.images, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     product: Product;
 }

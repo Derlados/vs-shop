@@ -7,6 +7,7 @@ import { Product } from './products/models/product.model';
 import { Image } from './products/models/image.model';
 import { Attribute } from './products/models/attribute.model';
 import { Value } from './products/models/value.model';
+import { CategoryModule } from './category/category.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { Value } from './products/models/value.model';
         ProductsModule,
         UsersModule,
         AuthModule,
+        CategoryModule,
     ],
     controllers: [],
     providers: [],
