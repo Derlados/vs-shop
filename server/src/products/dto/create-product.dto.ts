@@ -20,4 +20,6 @@ export class CreateProductDto {
     @IsNumber()
     count: number;
 
+    @IsNumber()
+    categoryId: number;
 }

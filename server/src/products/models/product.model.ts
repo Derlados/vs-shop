@@ -1,5 +1,6 @@
 import { Exclude } from "class-transformer";
-import { AfterLoad, Column, Entity, JoinColumn, JoinTable, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Category } from "src/category/category.model";
+import { AfterLoad, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Image } from "./image.model";
 import { Value } from "./value.model";
 
@@ -27,9 +28,17 @@ export class Product {
     @Column({ type: "int", nullable: false })
     count: number;
 
+    @Column({ name: "category_id", type: "number", nullable: false })
+    categoryId: number;
+
     discountPercent: number;
 
     attributes: Object;
+
+    @ManyToOne((type) => Category, (category) => category.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+    @JoinColumn({ name: "category_id" })
+    category: Category;
+
 
     @OneToMany(() => Image, image => image.product)
     images: Image[];

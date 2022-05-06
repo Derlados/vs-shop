@@ -8,6 +8,8 @@ import { Image } from './products/models/image.model';
 import { Attribute } from './products/models/attribute.model';
 import { Value } from './products/models/value.model';
 import { CategoryModule } from './category/category.module';
+import { Category } from './category/category.model';
+import { FilesModule } from './files/files.module';
 
 @Module({
     imports: [
@@ -18,13 +20,14 @@ import { CategoryModule } from './category/category.module';
             username: 'root',
             password: '',
             database: 'victory_shop',
-            entities: [Product, Image, Attribute, Value],
+            entities: [Product, Image, Attribute, Value, Category],
             synchronize: true,
         }),
         ProductsModule,
         UsersModule,
         AuthModule,
         CategoryModule,
+        FilesModule,
     ],
     controllers: [],
     providers: [],

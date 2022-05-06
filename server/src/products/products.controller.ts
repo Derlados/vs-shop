@@ -1,4 +1,5 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { get } from 'http';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ReqCreateProductDto } from './dto/req-create-product.dto';
 import { ProductsService } from './products.service';
@@ -7,11 +8,22 @@ import { ProductsService } from './products.service';
 export class ProductsController {
     constructor(private productService: ProductsService) { }
 
-
     @Get()
     @UseInterceptors(ClassSerializerInterceptor)
     getProductList() {
         return this.productService.getProducts();
+    }
+
+    @Get('category=:category([a-z]+|[0-9]+)')
+    @UseInterceptors(ClassSerializerInterceptor)
+    getProductByCategory(@Param('category') category: string) {
+        return this.productService.getProductsByCategory(category);
+    }
+
+    @Get('filter')
+    @UseInterceptors(ClassSerializerInterceptor)
+    getFilteredProducts() {
+        return this.productService.getFilteredProducts(new Map());
     }
 
     @Get(':id([0-9]+)')
