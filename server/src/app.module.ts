@@ -12,17 +12,22 @@ import { Category } from './category/category.model';
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
+import { User } from './users/user.model';
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            envFilePath: `${process.env.NODE_ENV}.env`
+        }),
         TypeOrmModule.forRoot({
             type: 'mysql',
-            host: 'localhost',
+            host: process.env.DB_HOST,
             port: 3306,
-            username: 'root',
-            password: '',
+            username: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
             database: 'victory_shop',
-            entities: [Product, Image, Attribute, Value, Category],
+            entities: [Product, Image, Attribute, Value, Category, User],
             synchronize: true,
         }),
         ServeStaticModule.forRoot({
