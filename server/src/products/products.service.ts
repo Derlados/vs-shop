@@ -1,8 +1,11 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FilesService } from 'src/files/files.service';
+import { In, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateImagesDto } from './dto/update-images.dto';
 import { Attribute } from './models/attribute.model';
+import { Image } from './models/image.model';
 import { Product } from './models/product.model';
 import { Value } from './models/value.model';
 
@@ -20,7 +23,9 @@ export class ProductsService {
 
     constructor(@InjectRepository(Product) private productRepository: Repository<Product>,
         @InjectRepository(Attribute) private attributeRepository: Repository<Attribute>,
-        @InjectRepository(Value) private valuesRepository: Repository<Value>) {
+        @InjectRepository(Value) private valuesRepository: Repository<Value>,
+        @InjectRepository(Image) private imageRepository: Repository<Image>,
+        private fileService: FilesService) {
 
     }
 
@@ -55,17 +60,21 @@ export class ProductsService {
         return products;
     }
 
-    async createProduct(dto: CreateProductDto, attributes: Map<string, string>): Promise<Product> {
+    async createProduct(dto: CreateProductDto, attributes: Map<string, string>, images: Express.Multer.File[]): Promise<Product> {
         try {
             const result = await this.productRepository.insert(dto);
             const insertId = result.raw.insertId;
+
             await this.addAttributes(insertId, attributes);
+            await this.addImages(insertId, images);
 
             return this.getProductById(insertId);
         } catch (e) {
+            console.log(e);
             throw new InternalServerErrorException();
         }
     }
+
 
     /**
      * Обновление продукта. Основные данные обновляются, а значени аттрибутов обновляются удалением и вставкой
@@ -84,6 +93,35 @@ export class ProductsService {
         await this.addAttributes(id, attributes);
 
         return this.getProductById(id);
+    }
+
+    /**
+     * Обновление изображений:
+     * 1. Удаление изображение
+     * 2. Проверка, если одно из существующих изображений стало главным - меняется флаг по id, если главное изображение
+     *    новое, то флаг снимается со всех существующих изображений
+     * 3. Добавление новых изображений
+     * @param productId - id продукта
+     * @param newImages - новые изображение продукта
+     * @param deletedImagesId - удаленные изображения, если они есть
+     * @param newMainImageId - id нового изображения, если его нету, то главным будет выбрано из новых
+     */
+    async updateImages(productId: number, dto: UpdateImagesDto, newImages?: Express.Multer.File[]) {
+        if (dto.deletedImagesId) {
+            await this.imageRepository.delete({ id: In(dto.deletedImagesId) })
+        }
+
+        if (dto.newMainImageId) {
+            await this.imageRepository.update({ productId: productId }, { isMain: () => `id = ${dto.newMainImageId}` });
+        } else {
+            await this.imageRepository.update({ productId: productId }, { isMain: false });
+        }
+
+        if (newImages) {
+            await this.addImages(productId, newImages, dto.newMainImageId == undefined)
+        }
+
+        return this.imageRepository.find({ productId: productId })
     }
 
     async deleteProduct(id: number) {
@@ -117,6 +155,33 @@ export class ProductsService {
         await this.valuesRepository.createQueryBuilder()
             .insert()
             .values([...values])
+            .execute();
+    }
+
+    /**
+     * Создание и добавление ссылок на изображения
+     * @param productId - id продукта
+     * @param images - изображения, первое изображение считается главным
+     * @param isFirstMain - по умолчанию, первое добавляемое изображение всегда главное
+     */
+    private async addImages(productId: number, images: Express.Multer.File[], isFirstMain: boolean = true) {
+        if (images.length == 0) {
+            return;
+        }
+
+        const productImages = await this.fileService.createFiles(images);
+        const newImages = [{ productId: productId, name: productImages[0], isMain: isFirstMain }];
+        for (const image of productImages.slice(0, -1)) {
+            newImages.push({
+                productId: productId,
+                name: image,
+                isMain: false
+            });
+        }
+
+        await this.imageRepository.createQueryBuilder()
+            .insert()
+            .values([...newImages])
             .execute();
     }
 }

@@ -1,7 +1,9 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { get } from 'http';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ReqCreateProductDto } from './dto/req-create-product.dto';
+import { UpdateImagesDto } from './dto/update-images.dto';
 import { ProductsService } from './products.service';
 
 @Controller('products')
@@ -33,15 +35,24 @@ export class ProductsController {
     }
 
     @Post()
-    @UseInterceptors(ClassSerializerInterceptor)
-    addProduct(@Body() dto: ReqCreateProductDto) {
-        return this.productService.createProduct(dto.product, new Map(Object.entries(dto.attributes)));
+    @UseInterceptors(ClassSerializerInterceptor, FilesInterceptor('images'))
+    addProduct(@Body() dto: ReqCreateProductDto, @UploadedFiles() images: Express.Multer.File[]) {
+        if (!images) {
+            throw new BadRequestException("Не загружены изображения");
+        }
+        return this.productService.createProduct(dto.product, new Map(Object.entries(dto.attributes)), images);
     }
 
     @Put(':id')
     @UseInterceptors(ClassSerializerInterceptor)
     updateProduct(@Param('id') id: number, @Body() dto: ReqCreateProductDto) {
         return this.productService.updateProduct(id, dto.product, new Map(Object.entries(dto.attributes)));
+    }
+
+    @Put(':id/images')
+    @UseInterceptors(FilesInterceptor('images'))
+    updateImages(@Param('id') id: number, @Body() dto: UpdateImagesDto, @UploadedFiles() images: Express.Multer.File[]) {
+        return this.productService.updateImages(id, dto, images)
     }
 
     @Delete(':id')

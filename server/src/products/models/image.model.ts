@@ -8,11 +8,15 @@ export class Image {
     id: number;
 
     @Column({ type: 'text', nullable: false })
-    url: string;
+    name: string;
 
     @Column({ type: "boolean", default: false })
     isMain: boolean;
 
+    @Column({ type: "int", name: "product_id", nullable: false })
+    productId: number;
+
     @ManyToOne(() => Product, product => product.images, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+    @JoinColumn({ name: 'product_id' })
     product: Product;
 }

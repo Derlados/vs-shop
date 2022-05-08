@@ -39,7 +39,6 @@ export class Product {
     @JoinColumn({ name: "category_id" })
     category: Category;
 
-
     @OneToMany(() => Image, image => image.product)
     images: Image[];
 

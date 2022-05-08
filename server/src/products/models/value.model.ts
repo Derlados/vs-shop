@@ -4,10 +4,10 @@ import { Product } from "./product.model";
 
 @Entity()
 export class Value {
-    @PrimaryColumn({ type: "int", name: "product_id" })
+    @PrimaryColumn({ type: "int", name: "product_id", nullable: false })
     productId: number;
 
-    @PrimaryColumn({ type: "int", name: "attribute_id" })
+    @PrimaryColumn({ type: "int", name: "attribute_id", nullable: false })
     attributeId: number;
 
     @ManyToOne(() => Product, product => product.values, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })

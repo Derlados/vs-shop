@@ -10,6 +10,8 @@ import { Value } from './products/models/value.model';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/category.model';
 import { FilesModule } from './files/files.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
     imports: [
@@ -23,6 +25,13 @@ import { FilesModule } from './files/files.module';
             entities: [Product, Image, Attribute, Value, Category],
             synchronize: true,
         }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, 'static'),
+            serveRoot: '/static'
+        }),
+        // ServeStaticModule.forRoot({
+        //     rootPath: join(__dirname, 'client'),
+        // }),
         ProductsModule,
         UsersModule,
         AuthModule,
