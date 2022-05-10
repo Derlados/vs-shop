@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Column, Entity, JoinColumn, JoinTable, ManyToOne, PrimaryColumn } from "typeorm";
 import { Attribute } from "./attribute.model";
 import { Product } from "./product.model";
@@ -5,6 +6,7 @@ import { Product } from "./product.model";
 @Entity()
 export class Value {
     @PrimaryColumn({ type: "int", name: "product_id", nullable: false })
+    @Exclude()
     productId: number;
 
     @PrimaryColumn({ type: "int", name: "attribute_id", nullable: false })

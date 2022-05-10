@@ -79,8 +79,6 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
     const onAcceptRange = (min: number, max: number) => {
         shop.setPriceRange(min, max);
     }
-
-
     return (
         <div className={classNames('filters__mask ', {
             'filters__mask_opened': isOpen

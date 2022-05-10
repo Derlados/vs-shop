@@ -70,8 +70,7 @@ export class ProductsService {
 
             return this.getProductById(insertId);
         } catch (e) {
-            console.log(e);
-            throw new InternalServerErrorException();
+            throw new InternalServerErrorException(e);
         }
     }
 
@@ -152,10 +151,7 @@ export class ProductsService {
             values.push({ productId: productId, attributeId: attributeId, value: value });
         }
 
-        await this.valuesRepository.createQueryBuilder()
-            .insert()
-            .values([...values])
-            .execute();
+        await this.valuesRepository.insert(values);
     }
 
     /**
@@ -179,9 +175,6 @@ export class ProductsService {
             });
         }
 
-        await this.imageRepository.createQueryBuilder()
-            .insert()
-            .values([...newImages])
-            .execute();
+        await this.imageRepository.insert(newImages);
     }
 }

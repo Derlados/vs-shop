@@ -1,5 +1,6 @@
 import { Exclude } from "class-transformer";
-import { Category } from "src/category/category.model";
+import { Category } from "src/category/models/category.model";
+import { OrderProduct } from "src/orders/models/order-products.model";
 import { AfterLoad, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Image } from "./image.model";
 import { Value } from "./value.model";
@@ -35,7 +36,7 @@ export class Product {
 
     attributes: Object;
 
-    @ManyToOne((type) => Category, (category) => category.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+    @ManyToOne(() => Category, (category) => category.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
     @JoinColumn({ name: "category_id" })
     category: Category;
 
@@ -45,6 +46,10 @@ export class Product {
     @OneToMany(() => Value, value => value.product)
     @Exclude()
     values: Value[];
+
+    @OneToMany(() => OrderProduct, op => op.product)
+    @Exclude()
+    orderProducts: OrderProduct[]
 
     @AfterLoad()
     getDiscountPercent() {

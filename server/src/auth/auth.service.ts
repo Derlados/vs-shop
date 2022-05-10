@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException, Post } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
-import { User } from 'src/users/user.model';
+import { User } from 'src/users/models/user.model';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
@@ -28,7 +28,7 @@ export class AuthService {
         if (user && bcrypt.compareSync(dto.password, user.password)) {
             return this.createToken(user);
         } else {
-            throw new NotFoundException("Пользователь с таким никнеймом или паролем не найден")
+            throw new NotFoundException("Пользователь с таким email-ом или паролем не найден")
         }
     }
 

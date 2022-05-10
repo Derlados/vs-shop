@@ -39,14 +39,14 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => 
     }
 
     const openQuickView = (product: IProduct) => {
-        document.body.style.overflow = "hidden";
+        document.body.style.overflowY = "hidden";
         localStore.selectedProduct = product;
         localStore.isOpenQuick = true;
     }
 
 
     const closeQuickView = () => {
-        document.body.style.overflow = "scroll";
+        document.body.style.overflowY = "";
         localStore.isOpenQuick = false;
     }
 

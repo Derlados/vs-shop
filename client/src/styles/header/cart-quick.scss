@@ -11,6 +11,7 @@
     left: 0;
     transition: 0.25s;
 
+
     &_hide {
         pointer-events: none;
         background-color: transparent;
@@ -39,6 +40,10 @@
         overflow-y: scroll;
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */    
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         @media (max-width: $mobile-vertical) {
             max-width: 100%;

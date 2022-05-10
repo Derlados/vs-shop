@@ -20,12 +20,12 @@ const Shop = observer(() => {
 
     const onOpenFilters = () => {
         localStore.isFilterOpen = true;
-        document.body.style.overflow = "hidden";
+        document.body.style.overflowY = "hidden";
     }
 
     const onCloseFilters = () => {
         localStore.isFilterOpen = false;
-        document.body.style.overflow = "scroll";
+        document.body.style.overflowY = "";
     }
 
     return (

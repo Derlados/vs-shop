@@ -1,5 +1,7 @@
+import { Exclude } from "class-transformer";
 import { Product } from "src/products/models/product.model";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Filter } from "./filter.model";
 
 @Entity()
 export class Category {
@@ -15,6 +17,9 @@ export class Category {
     @Column({ type: "varchar", length: 250, nullable: false, unique: true })
     routeName: string;
 
-    @OneToMany((type) => Product, (product) => product.category)
+    @OneToMany(() => Product, (product) => product.category)
     products: Product[]
+
+    @OneToMany(() => Filter, filter => filter.category)
+    filters: Filter[];
 }

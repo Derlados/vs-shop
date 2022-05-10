@@ -8,17 +8,22 @@ import { Image } from './products/models/image.model';
 import { Attribute } from './products/models/attribute.model';
 import { Value } from './products/models/value.model';
 import { CategoryModule } from './category/category.module';
-import { Category } from './category/category.model';
+import { Category } from './category/models/category.model';
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
-import { User } from './users/user.model';
+import { User } from './users/models/user.model';
+import { Filter } from './category/models/filter.model';
+import { OrderModule } from './orders/orders.module';
+import { Order } from './orders/models/order.model';
+import { OrderProduct } from './orders/models/order-products.model';
 
 @Module({
     imports: [
         ConfigModule.forRoot({
-            envFilePath: `${process.env.NODE_ENV}.env`
+            isGlobal: true,
+            envFilePath: `.${process.env.NODE_ENV}.env`
         }),
         TypeOrmModule.forRoot({
             type: 'mysql',
@@ -26,8 +31,8 @@ import { User } from './users/user.model';
             port: 3306,
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
-            database: 'victory_shop',
-            entities: [Product, Image, Attribute, Value, Category, User],
+            database: process.env.DATABASE,
+            entities: [Product, Image, Attribute, Value, Category, User, Filter, Order, OrderProduct],
             synchronize: true,
         }),
         ServeStaticModule.forRoot({
@@ -42,6 +47,7 @@ import { User } from './users/user.model';
         AuthModule,
         CategoryModule,
         FilesModule,
+        OrderModule,
     ],
     controllers: [],
     providers: [],

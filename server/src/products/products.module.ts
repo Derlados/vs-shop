@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from 'src/category/category.model';
+import { Category } from 'src/category/models/category.model';
 import { FilesModule } from 'src/files/files.module';
 import { FilesService } from 'src/files/files.service';
 import { Attribute } from './models/attribute.model';
