@@ -1,5 +1,6 @@
 import { Product } from "src/products/models/product.model";
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "src/roles/models/role.model";
+import { Column, Entity, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User {
@@ -17,6 +18,9 @@ export class User {
 
     @Column({ type: "varchar", length: 25, nullable: true })
     phone?: string;
+
+    @ManyToMany(() => Role, role => role.users)
+    roles: Role[];
 
     // products: Product[];
 }

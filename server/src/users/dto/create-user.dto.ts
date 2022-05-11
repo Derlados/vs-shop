@@ -1,4 +1,6 @@
-import { IsEmail, IsOptional, IsString, MaxLength } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsEmail, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
+import { CreateRoleDto } from "src/roles/dto/create-role.dto";
 
 export class CreateUserDto {
     @IsString()
@@ -18,4 +20,10 @@ export class CreateUserDto {
     @IsString()
     @MaxLength(50)
     phone?: string;
+
+    @IsOptional()
+    @IsArray()
+    @Type(() => CreateRoleDto)
+    @ValidateNested({ each: true })
+    roles?: CreateRoleDto[];
 }

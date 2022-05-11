@@ -18,6 +18,8 @@ import { Filter } from './category/models/filter.model';
 import { OrderModule } from './orders/orders.module';
 import { Order } from './orders/models/order.model';
 import { OrderProduct } from './orders/models/order-products.model';
+import { RolesModule } from './roles/roles.module';
+import { Role } from './roles/models/role.model';
 
 @Module({
     imports: [
@@ -32,7 +34,7 @@ import { OrderProduct } from './orders/models/order-products.model';
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DATABASE,
-            entities: [Product, Image, Attribute, Value, Category, User, Filter, Order, OrderProduct],
+            entities: [Product, Image, Attribute, Value, Category, User, Filter, Order, OrderProduct, Role],
             synchronize: true,
         }),
         ServeStaticModule.forRoot({
@@ -48,6 +50,7 @@ import { OrderProduct } from './orders/models/order-products.model';
         CategoryModule,
         FilesModule,
         OrderModule,
+        RolesModule,
     ],
     controllers: [],
     providers: [],
