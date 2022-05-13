@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
-import { IsArray, IsEmail, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
+import { IsArray, IsEmail, IsEnum, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
 import { CreateRoleDto } from "src/roles/dto/create-role.dto";
+import { RoleValues } from "src/roles/roles.enum";
 
 export class CreateUserDto {
     @IsString()
@@ -23,7 +24,6 @@ export class CreateUserDto {
 
     @IsOptional()
     @IsArray()
-    @Type(() => CreateRoleDto)
-    @ValidateNested({ each: true })
-    roles?: CreateRoleDto[];
+    @IsEnum(RoleValues, { each: true })
+    roles: RoleValues[] = [RoleValues.USER];
 }

@@ -1,12 +1,11 @@
-import { IsString, Max } from "class-validator";
+
+import { IsString, MaxLength } from "class-validator";
 
 export class CreateRoleDto {
     @IsString()
-    @Max(50)
+    @MaxLength(50)
     name: string;
 
     @IsString()
     description: string;
-
-
 }

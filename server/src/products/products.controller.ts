@@ -4,7 +4,7 @@ import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestj
 import { get } from 'http';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
-import { RoleValue } from 'src/roles/roles.enum';
+import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ReqCreateProductDto } from './dto/req-create-product.dto';
@@ -40,7 +40,7 @@ export class ProductsController {
     }
 
     @Post()
-    @Roles(RoleValue.CUSTOMER)
+    @Roles(RoleValues.CUSTOMER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor, FilesInterceptor('images'))
     addProduct(@Body() dto: ReqCreateProductDto, @UploadedFiles() images: Express.Multer.File[]) {
@@ -51,7 +51,7 @@ export class ProductsController {
     }
 
     @Put(':id')
-    @Roles(RoleValue.CUSTOMER)
+    @Roles(RoleValues.CUSTOMER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     updateProduct(@Param('id') id: number, @Body() dto: ReqCreateProductDto) {
@@ -59,7 +59,7 @@ export class ProductsController {
     }
 
     @Put(':id/images')
-    @Roles(RoleValue.CUSTOMER)
+    @Roles(RoleValues.CUSTOMER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(FilesInterceptor('images'))
     updateImages(@Param('id') id: number, @Body() dto: UpdateImagesDto, @UploadedFiles() images: Express.Multer.File[]) {
@@ -67,7 +67,7 @@ export class ProductsController {
     }
 
     @Delete(':id')
-    @Roles(RoleValue.CUSTOMER)
+    @Roles(RoleValues.CUSTOMER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     deleteProduct(@Param('id') id: number) {
         return this.productService.deleteProduct(id);

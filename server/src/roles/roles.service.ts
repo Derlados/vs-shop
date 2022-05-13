@@ -14,6 +14,6 @@ export class RolesService {
     }
 
     createRole(dto: CreateRoleDto) {
-        return this.roleRepository.create(dto);
+        return this.roleRepository.save(dto);
     }
 }

@@ -130,6 +130,7 @@ export class ProductsService {
         }
     }
 
+    //TODO можно оптимизировать
     private async addAttributes(productId: number, attributes: Map<string, string>) {
         const valuesToInsert: Map<number, string> = new Map();
 

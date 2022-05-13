@@ -1,22 +1,22 @@
 import { Type } from "class-transformer";
-import { IsArray, IsNumber, IsOptional, IsString, Max, ValidateNested } from "class-validator";
+import { IsArray, IsEmail, isEmail, IsNumber, IsOptional, IsPhoneNumber, IsString, Max, MaxLength, ValidateNested } from "class-validator";
 import { OrderProductDto } from "./order-product.dto";
 
 export class CreateOrderDto {
     @IsString()
-    @Max(100)
+    @MaxLength(100)
     client: string;
 
-    @IsString()
-    @Max(20)
+    @IsPhoneNumber()
+    @MaxLength(20)
     phone: string;
 
-    @IsString()
-    @Max(50)
+    @IsEmail()
+    @MaxLength(50)
     email: string;
 
     @IsString()
-    @Max(200)
+    @MaxLength(200)
     address: string;
 
     @IsOptional()

@@ -43,12 +43,13 @@ export class OrderService {
         }
     }
 
-    async deleteOrder(id: number) {
+    async deleteOrders(orderIds: number[]) {
+        this.orderRepository.delete({ id: In(orderIds) });
         //TODO
     }
 
     private async addOrderProducts(orderId: number, orderProducts: OrderProductDto[]) {
-        const orderisValid = await this.validateOrder(orderId, orderProducts);
+        const orderisValid = await this.validateOrderProducts(orderProducts);
         if (!orderisValid) {
             throw new NotFoundException("Данный заказ невозможно выполнить. Нету необходимого товара")
         }
@@ -66,7 +67,7 @@ export class OrderService {
         return this.orderProductsRepository.insert(products);
     }
 
-    private async validateOrder(orderId: number, orderProducts: OrderProductDto[]) {
+    private async validateOrderProducts(orderProducts: OrderProductDto[]) {
         const products = await this.productsRepository.find({ id: In(orderProducts.map(op => op.id)) })
         if (products.length != orderProducts.length) {
             return false;

@@ -1,6 +1,6 @@
 import { Product } from "src/products/models/product.model";
 import { Role } from "src/roles/models/role.model";
-import { Column, Entity, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User {
@@ -20,7 +20,10 @@ export class User {
     phone?: string;
 
     @ManyToMany(() => Role, role => role.users)
+    @JoinTable()
     roles: Role[];
 
-    // products: Product[];
+    @OneToMany(() => Product, product => product.user)
+    @JoinTable()
+    products: Product[];
 }

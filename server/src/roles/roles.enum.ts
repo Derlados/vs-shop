@@ -1,5 +1,5 @@
-export enum RoleValue {
-    ADMIN = 'admin',
-    CUSTOMER = 'customer',
-    USER = 'user'
+export enum RoleValues {
+    ADMIN = 'Admin',
+    CUSTOMER = 'Customer',
+    USER = 'User'
 }

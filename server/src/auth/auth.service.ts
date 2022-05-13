@@ -13,7 +13,7 @@ export class AuthService {
     async registration(dto: CreateUserDto) {
         const candidate = await this.usersService.getUserByEmail(dto.email);
         if (candidate) {
-            throw new ConflictException("Пользователь с таким именем уже существует");
+            throw new ConflictException("Пользователь с таким email-ом уже существует");
         }
 
         const hashPassword = bcrypt.hashSync(dto.password, 5);
@@ -33,7 +33,7 @@ export class AuthService {
     }
 
     private createToken(user: User) {
-        const payload = { id: user.id, username: user.username, roles: user.roles }
+        const payload = { id: user.id, username: user.username, roles: user.roles.map(role => role.name) }
         return {
             access_token: this.jwtService.sign(payload),
         };

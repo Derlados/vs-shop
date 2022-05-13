@@ -1,6 +1,7 @@
 import { Exclude } from "class-transformer";
 import { Category } from "src/category/models/category.model";
 import { OrderProduct } from "src/orders/models/order-products.model";
+import { User } from "src/users/models/user.model";
 import { AfterLoad, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Image } from "./image.model";
 import { Value } from "./value.model";
@@ -32,6 +33,9 @@ export class Product {
     @Column({ name: "category_id", type: "number", nullable: false })
     categoryId: number;
 
+    @Column({ name: "user_id", type: "number", nullable: false })
+    userId: number;
+
     discountPercent: number;
 
     attributes: Object;
@@ -39,6 +43,10 @@ export class Product {
     @ManyToOne(() => Category, (category) => category.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
     @JoinColumn({ name: "category_id" })
     category: Category;
+
+    @ManyToOne(() => User, (user) => user.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+    @JoinColumn({ name: "user_id" })
+    user: User;
 
     @OneToMany(() => Image, image => image.product)
     images: Image[];
@@ -58,6 +66,11 @@ export class Product {
 
     @AfterLoad()
     getAttributes() {
+        if (!this.values) {
+            this.attributes = [];
+            return;
+        }
+
         const mapAttr = new Map<string, string>();
         for (const value of this.values) {
             mapAttr.set(value.attribute.attribute, value.value);

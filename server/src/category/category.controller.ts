@@ -1,7 +1,7 @@
 import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
-import { RoleValue } from 'src/roles/roles.enum';
+import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -23,7 +23,7 @@ export class CategoryController {
     }
 
     @Put(':id/filters')
-    @Roles(RoleValue.ADMIN)
+    @Roles(RoleValues.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     editFilters(@Param('id') id: number, @Body() dto: EditFiltersDto) {
@@ -31,7 +31,7 @@ export class CategoryController {
     }
 
     @Post()
-    @Roles(RoleValue.ADMIN)
+    @Roles(RoleValues.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
     addCategory(@Body() dto: CreateCategoryDto) {
         return this.categoryService.addCategory(dto);
