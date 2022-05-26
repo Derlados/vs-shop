@@ -13,7 +13,7 @@ const CatalogNav = () => {
             title: 'Головна'
         }
     ]);
-    const { categoryRoute, id } = useParams();
+    const { catalog: categoryRoute, id } = useParams();
 
     useEffect(() => {
         const newRoutes: ILink[] = [

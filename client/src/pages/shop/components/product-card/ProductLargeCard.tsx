@@ -6,7 +6,7 @@ import { ProductCardProps } from './Product';
 import '../../../../styles/product/product-card-large.scss';
 import { SpecSymbols } from '../../../../values/specSymbols';
 
-const ProductLargeCard: FC<ProductCardProps> = observer(({ product, addToCart, addToFavorite, openFullView, onOpenQuickView, getMainImage }) => {
+const ProductLargeCard: FC<ProductCardProps> = observer(({ product, addToCart, openFullView, onOpenQuickView, getMainImage }) => {
     return (
         <div className='product-card-large rlt'>
             <div className='product-card-large__img-container' onClick={() => openFullView(product)}>
@@ -18,9 +18,6 @@ const ProductLargeCard: FC<ProductCardProps> = observer(({ product, addToCart, a
                 <div className='product-card__actions ccc'>
                     <div className='product-card__action-mask' onClick={() => onOpenQuickView(product)}>
                         <div className='product-card__quick-view'></div>
-                    </div>
-                    <div className='product-card__action-mask' onClick={() => addToFavorite(product)}>
-                        <div className='product-card__favorite'></div>
                     </div>
                 </div>
             </div>

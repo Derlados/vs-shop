@@ -8,7 +8,7 @@ import { SpecSymbols } from '../../../../values/specSymbols';
 import { IProduct } from '../../../../types/IProduct';
 import { IImage } from '../../../../types/IImage';
 
-const ProductSmallCard: FC<ProductCardProps> = observer(({ product, addToCart, addToFavorite, openFullView, onOpenQuickView, getMainImage }) => {
+const ProductSmallCard: FC<ProductCardProps> = observer(({ product, addToCart, openFullView, onOpenQuickView, getMainImage }) => {
 
     return (
         <div className='product-card ccc'>
@@ -19,9 +19,6 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ product, addToCart, a
             <div className='product-card__actions ccc'>
                 <div className='product-card__action-mask' onClick={() => onOpenQuickView(product)}>
                     <div className='product-card__quick-view'></div>
-                </div>
-                <div className='product-card__action-mask' onClick={() => addToFavorite(product)}>
-                    <div className='product-card__favorite' ></div>
                 </div>
             </div>
 

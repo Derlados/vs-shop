@@ -15,7 +15,7 @@ interface ProductQuickModalProps {
 /**
  * ЗАМЕТКА: Swipper в данной компоненте не корректно работает с 4 слайдами. Следовательно нужно либо больше, либо меньше
  */
-const ProductQuickModal: FC<ProductQuickModalProps> = observer(({ isOpen, product, onCloseQuickView }) => {
+const ProductQuickModal: FC<ProductQuickModalProps> = observer(({ isOpen, product, onCloseQuickView, }) => {
     const wrapperRef = useRef(null);
 
     const handleClickOutside = (event: React.MouseEvent) => {

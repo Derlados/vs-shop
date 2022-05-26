@@ -11,7 +11,6 @@ import ProductSmallCard from './ProductSmallCard';
 export interface ProductProps {
     product: IProduct;
     addToCart: (product: IProduct, count?: number) => void;
-    addToFavorite: (product: IProduct) => void;
     openFullView: (product: IProduct) => void;
     getMainImage: (product: IProduct) => IImage;
 }
@@ -47,17 +46,12 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
         return product.images.find(img => img.isMain) ?? product.images[0];
     }
 
-    const addToFavorite = (product: IProduct) => {
-
-    }
-
     switch (type) {
         case "small": {
             return (
                 <ProductSmallCard
                     product={product}
                     addToCart={addToCart}
-                    addToFavorite={addToFavorite}
                     openFullView={openFullView}
                     onOpenQuickView={onOpenQuickView}
                     getMainImage={getMainImage}
@@ -69,7 +63,6 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                 <ProductLargeCard
                     product={product}
                     addToCart={addToCart}
-                    addToFavorite={addToFavorite}
                     openFullView={openFullView}
                     onOpenQuickView={onOpenQuickView}
                     getMainImage={getMainImage}
@@ -81,7 +74,6 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                 <ProductMainInfo
                     product={product}
                     addToCart={addToCart}
-                    addToFavorite={addToFavorite}
                     openFullView={openFullView}
                     getMainImage={getMainImage}
                 />
@@ -92,7 +84,6 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                 <ProductMainInfo
                     product={product}
                     addToCart={addToCart}
-                    addToFavorite={addToFavorite}
                     openFullView={openFullView}
                     getMainImage={getMainImage}
                     isExtended={true}

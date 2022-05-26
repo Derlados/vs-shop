@@ -6,6 +6,7 @@ import { routes } from '../../navigation/routes';
 import cart from '../../store/cart';
 import shop from '../../store/catalog';
 import '../../styles/header/header.scss';
+import { SpecSymbols } from '../../values/specSymbols';
 import BurgerMenu from './BurgerMenu';
 import CartQuickView from './CartQuickView';
 
@@ -82,7 +83,7 @@ const Header = observer(() => {
                     {routes.map(route => (
                         <li key={route.title} className={'header__nav-item'}>
                             <NavLink className={classNames('header__nav-link', {
-                                'header__nav-link_active': location.pathname == route.to
+                                'header__nav-link_active': location.pathname === route.to
                             })} to={route.to}>{route.title}</NavLink>
                         </li>
                     ))}
@@ -95,13 +96,12 @@ const Header = observer(() => {
                         </div>
                         <span className='header__search-find' onClick={findBySearch}>Пошук</span>
                     </div>
-                    <div className='header__favorite'>
-                        <div className='header__icon header__icon_favorite' />
-                        <div className='header__item-count ccc'>2</div>
-                    </div>
-                    <div className='header__cart' onClick={onOpenCart}>
-                        <div className='header__icon header__icon_cart' />
-                        <div className='header__item-count ccc'>{cart.cartProducts.length}</div>
+                    <div className='header__cart rcc' onClick={onOpenCart}>
+                        <div className='header__cart-btn'>
+                            <div className='header__icon header__icon_cart' />
+                            <div className='header__item-count ccc'>{cart.cartProducts.length}</div>
+                        </div>
+                        <div className='header__cart-total'>{cart.totalPrice}{SpecSymbols.NBSP}₴</div>
                     </div>
                 </div>
             </div>

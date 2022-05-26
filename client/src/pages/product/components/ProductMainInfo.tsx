@@ -16,7 +16,7 @@ interface ProductMainInfoProps extends ProductProps {
     isExtended?: boolean;
 }
 
-const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart, addToFavorite, isExtended = false }) => {
+const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart, isExtended = false }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         swiper: null,
         selectedCount: 1,

@@ -21,19 +21,17 @@ interface LocalStore {
 const Shop = observer(() => {
     const { catalog: catalogRoute } = useParams();
     const localStore = useLocalObservable<LocalStore>(() => ({
-        isInit: false,
+        isInit: catalogRoute !== undefined && catalog.isLoaded(catalogRoute!),
         isFilterOpen: false
     }))
 
     useEffect(() => {
-        localStore.isInit = false;
-        if (catalogRoute) {
+        if (catalogRoute && !localStore.isInit) {
             catalog.init(catalogRoute).then(() => {
                 localStore.isInit = true
             });
         }
     }, [catalogRoute]);
-
 
     const onOpenFilters = () => {
         localStore.isFilterOpen = true;

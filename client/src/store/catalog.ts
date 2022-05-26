@@ -69,6 +69,7 @@ class CatalogStore {
             min: Number.MAX_VALUE,
             max: 0
         }
+
         for (const product of this.products) {
             if (product.price > range.max) {
                 range.max = product.price;
@@ -79,8 +80,11 @@ class CatalogStore {
             }
         }
 
-
         return range;
+    }
+
+    public isLoaded(categoryName: string) {
+        return this.category.routeName === categoryName;
     }
 
     async init(categoryName: string) {
@@ -122,9 +126,7 @@ class CatalogStore {
             if (values.length !== 0) {
                 filteredProducts = filteredProducts.filter(p => values.includes(p.attributes.get(attribute) ?? ''))
             }
-
         }
-        console.log(filteredProducts);
 
         return filteredProducts;
     }
@@ -172,25 +174,23 @@ class CatalogStore {
     public setFilter(attribute: string, value: string) {
         const values = this.selectedFilters.get(attribute);
         values?.push(value);
-        console.log(this.selectedFilters);
     }
 
     public deleteFilter(attribute: string, value: string) {
         const values = this.selectedFilters.get(attribute);
-        values?.slice(values?.findIndex(v => v === value), 1);
-        console.log(this.selectedFilters);
+        values?.splice(values?.findIndex(v => v === value), 1);
     }
 
     /////////////////////////////////// ФИЛЬТРАЦИЯ И СОРТИРОВКА ПРОДУКТОВ ///////////////////////////////////
 
     public backPage() {
-        if (this.selectedPage != 1) {
+        if (this.selectedPage !== 1) {
             --this.selectedPage;
         }
     }
 
     public nextPage() {
-        if (this.selectedPage != this.maxPages) {
+        if (this.selectedPage !== this.maxPages) {
             ++this.selectedPage;
         }
     }
