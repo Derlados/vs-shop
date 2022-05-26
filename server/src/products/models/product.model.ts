@@ -18,10 +18,10 @@ export class Product {
     @Column({ type: "text", nullable: false })
     description: string;
 
-    @Column({ type: "decimal", nullable: false })
+    @Column({ type: "decimal", precision: 10, scale: 2, nullable: false })
     price: number;
 
-    @Column({ type: "decimal", nullable: false })
+    @Column({ type: "decimal", precision: 10, scale: 2, nullable: false })
     oldPrice: number;
 
     @Column({ type: "boolean", nullable: false, default: false })
@@ -73,7 +73,7 @@ export class Product {
 
         const mapAttr = new Map<string, string>();
         for (const value of this.values) {
-            mapAttr.set(value.attribute.attribute, value.value);
+            mapAttr.set(value.attribute.name, value.value);
         }
 
         this.attributes = Object.fromEntries(mapAttr);

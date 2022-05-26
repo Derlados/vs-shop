@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import React, { FC } from 'react'
-import shop, { SortType } from '../../../store/shop';
+import shop, { SortType } from '../../../store/catalog';
 import { ViewMode } from './ProductCatalog';
 
 interface LocalStore {
@@ -41,12 +41,12 @@ const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, 
             <div className='catalog__view-and-sort rlc'>
                 <div className='catalog__view-modes rlc'>
                     <div className={classNames('catalog__mask-container',
-                        { 'catalog__mask-container_selected': selectedViewMode == ViewMode.GRID })}
+                        { 'catalog__mask-container_selected': selectedViewMode === ViewMode.GRID })}
                         onClick={() => onSelectViewMode(ViewMode.GRID)}>
                         <div className='catalog__view-mode catalog__view-grid'></div>
                     </div>
                     <div className={classNames('catalog__mask-container',
-                        { 'catalog__mask-container_selected': selectedViewMode == ViewMode.LIST })}
+                        { 'catalog__mask-container_selected': selectedViewMode === ViewMode.LIST })}
                         onClick={() => onSelectViewMode(ViewMode.LIST)}>
                         <div className='catalog__view-mode catalog__view-list'></div>
                     </div>
@@ -57,7 +57,7 @@ const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, 
             <div className='catalog__sort'>
                 <div className={classNames('catalog__selected-sort', {
                     'catalog__selected-sort_open': localStore.isOpenSort
-                })} onClick={toggleSortList}>{shop.selectedSort == SortType.NOT_SELECTED ? "Не выбрано" : sortTypes.get(shop.selectedSort)}</div>
+                })} onClick={toggleSortList}>{shop.selectedSort === SortType.NOT_SELECTED ? "Не выбрано" : sortTypes.get(shop.selectedSort)}</div>
                 <ul className={classNames('catalog__sort-list', {
                     'catalog__sort-list_open': localStore.isOpenSort
                 })}>

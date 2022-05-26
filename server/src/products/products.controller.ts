@@ -1,6 +1,7 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, Request, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { query } from 'express';
 import { get } from 'http';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
@@ -21,10 +22,10 @@ export class ProductsController {
         return this.productService.getProducts();
     }
 
-    @Get('category=:category([a-z]+|[0-9]+)')
+    @Get('category=:category([0-9]+)')
     @UseInterceptors(ClassSerializerInterceptor)
-    getProductByCategory(@Param('category') category: string) {
-        return this.productService.getProductsByCategory(category);
+    getProductByCategory(@Param('category') categoryId: number) {
+        return this.productService.getProductsByCategory(categoryId);
     }
 
     @Get('filter')
@@ -39,37 +40,46 @@ export class ProductsController {
         return this.productService.getProductById(id);
     }
 
+    @Get('customer')
+    @Roles(RoleValues.SELLER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @UseInterceptors(ClassSerializerInterceptor)
+    getSellerProducts(@Req() req) {
+        return this.productService.getProductsBySeller(req.user.userId);
+    }
+
     @Post()
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor, FilesInterceptor('images'))
-    addProduct(@Body() dto: ReqCreateProductDto, @UploadedFiles() images: Express.Multer.File[]) {
+    addProduct(@Req() req, @Body() dto: ReqCreateProductDto, @UploadedFiles() images: Express.Multer.File[]) {
         if (!images) {
             throw new BadRequestException("Не загружены изображения");
         }
-        return this.productService.createProduct(dto.product, new Map(Object.entries(dto.attributes)), images);
+        return this.productService.createProduct(req.user.userId, dto.product, new Map(Object.entries(dto.attributes)), images);
     }
 
     @Put(':id')
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
-    updateProduct(@Param('id') id: number, @Body() dto: ReqCreateProductDto) {
-        return this.productService.updateProduct(id, dto.product, new Map(Object.entries(dto.attributes)));
+    updateProduct(@Req() req, @Param('id') id: number, @Body() dto: ReqCreateProductDto) {
+        return this.productService.updateProduct(id, req.user.userId, dto.product, new Map(Object.entries(dto.attributes)));
     }
 
     @Put(':id/images')
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(FilesInterceptor('images'))
-    updateImages(@Param('id') id: number, @Body() dto: UpdateImagesDto, @UploadedFiles() images: Express.Multer.File[]) {
-        return this.productService.updateImages(id, dto, images)
+    updateImages(@Req() req, @Param('id') id: number, @Body() dto: UpdateImagesDto, @UploadedFiles() images: Express.Multer.File[]) {
+        console.log(req.user);
+        return this.productService.updateImages(id, req.user.userId, dto, images)
     }
 
     @Delete(':id')
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    deleteProduct(@Param('id') id: number) {
-        return this.productService.deleteProduct(id);
+    deleteProduct(@Req() req, @Param('id') id: number) {
+        return this.productService.deleteProduct(id, req.user.userId);
     }
 }

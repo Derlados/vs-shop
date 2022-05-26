@@ -1,13 +1,25 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import MultiRangeSlider from '../../../lib/MultiRangeSlider/MultiRangeSlider';
-import shop from '../../../store/shop';
+import catalog from '../../../store/catalog';
+import shop from '../../../store/catalog';
+import { IFilters } from '../../../types/IFilters';
 import { IAttribute, ICkeckValue } from '../../../types/types'
 
+interface ICheckAttribute {
+    id: number;
+    name: string;
+    allValues: ICheckValue[];
+}
+
+interface ICheckValue {
+    value: string;
+    checked: boolean;
+}
 
 interface LocalStore {
-    attributes: IAttribute[];
+    attributes: ICheckAttribute[];
 }
 
 interface FiltersProps {
@@ -17,68 +29,32 @@ interface FiltersProps {
 
 const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
-        attributes: [
-            {
-                name: "ATTRIBUTE 1",
-                values: [
-                    {
-                        value: "value 1",
-                        checked: false
-                    },
-                    {
-                        value: "value 2",
-                        checked: false
-                    },
-                    {
-                        value: "value 3",
-                        checked: true
-                    },
-                    {
-                        value: "value 4",
-                        checked: false
-                    },
-                ]
-            },
-            {
-                name: "ATTRIBUTE 2",
-                values: [
-                    {
-                        value: "value 1",
-                        checked: true
-                    },
-                    {
-                        value: "value 2",
-                        checked: true
-                    }
-                ]
-            },
-            {
-                name: "ATTRIBUTE 3",
-                values: [
-                    {
-                        value: "value 1",
-                        checked: false
-                    },
-                    {
-                        value: "value 2",
-                        checked: false
-                    },
-                    {
-                        value: "value 3",
-                        checked: false
-                    }
-                ]
-            }
-        ]
+        attributes: []
     }))
 
-    const onCheckedChange = (attrValue: ICkeckValue) => {
-        attrValue.checked = !attrValue.checked;
+    useEffect(() => {
+        localStore.attributes = [];
+        for (const attr of catalog.filters.attributes) {
+            localStore.attributes.push({
+                ...attr.attribute,
+                allValues: attr.attribute.allValues.map(v => { return { value: v, checked: false } })
+            })
+        }
+    }, [catalog.filters.attributes]);
+
+    const onCheckedChange = (attribute: string, checkValue: ICkeckValue) => {
+        checkValue.checked = !checkValue.checked;
+        if (checkValue.checked) {
+            catalog.setFilter(attribute, checkValue.value)
+        } else {
+            catalog.deleteFilter(attribute, checkValue.value)
+        }
     }
 
     const onAcceptRange = (min: number, max: number) => {
-        shop.setPriceRange(min, max);
+        shop.selectPriceRange(min, max);
     }
+
     return (
         <div className={classNames('filters__mask ', {
             'filters__mask_opened': isOpen
@@ -92,18 +68,18 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
                     <div className='filters__price'>
                         <MultiRangeSlider
                             min={0}
-                            max={Math.ceil(shop.priceRange.max)}
+                            max={Math.ceil(catalog.priceRange.max)}
                             onChange={({ min, max }) => { }}
                             onAccept={onAcceptRange} />
                     </div>
                     {localStore.attributes.map(attr => (
-                        <div key={attr.name} className='filters__attr'>
+                        <div key={attr.id} className='filters__attr'>
                             <div className='filters__attr-name'>{attr.name}</div>
                             <ul className='filters__attr-list'>
-                                {attr.values.map(attrValue => (
-                                    <li key={attrValue.value} className='filters__attr-item rlc'>
+                                {attr.allValues.map(attrValue => (
+                                    <li key={`${attr.id}-${attrValue.value}`} className='filters__attr-item rlc'>
                                         <label className='filters__attr-value rcc'>{attrValue.value}
-                                            <input className='filters__checkbox' type="checkbox" checked={attrValue.checked} onChange={() => onCheckedChange(attrValue)} />
+                                            <input className='filters__checkbox' type="checkbox" checked={attrValue.checked} onChange={() => onCheckedChange(attr.name, attrValue)} />
                                             <span className='filters__checkmark'></span>
                                         </label>
                                     </li>
@@ -114,7 +90,6 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
                 </div>
             </div>
         </div>
-
     )
 });
 

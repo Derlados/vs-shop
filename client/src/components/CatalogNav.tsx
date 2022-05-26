@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { ILink } from '../navigation/routes';
+import catalog from '../store/catalog';
 import shop from '../store/shop';
 import '../styles/components/catalog-nav.scss';
 
@@ -12,7 +13,7 @@ const CatalogNav = () => {
             title: 'Головна'
         }
     ]);
-    const { catalog, id } = useParams();
+    const { categoryRoute, id } = useParams();
 
     useEffect(() => {
         const newRoutes: ILink[] = [
@@ -22,33 +23,33 @@ const CatalogNav = () => {
             }
         ];
 
-        if (catalog) {
-            const categoryName = shop.categories.get(catalog);
+        if (categoryRoute) {
+            const category = shop.getCategoryByRoute(categoryRoute);
 
-            if (categoryName) {
+            if (category) {
                 newRoutes.push({
-                    to: `../${catalog}`,
-                    title: categoryName
+                    to: `../${category.routeName}`,
+                    title: category.name
                 })
-            } else if (!categoryName) {
+            } else if (!category) {
                 navigation('/home');
             }
         }
 
-        if (id) {
-            try {
-                const product = shop.findProductById(+id);
+        if (id && Number.isInteger(parseInt(id))) {
+            const product = catalog.findProductById(+id);
+            if (product) {
                 newRoutes.push({
-                    to: `../../${catalog}/${product.id.toString()}`,
-                    title: product.title
+                    to: `../../${categoryRoute}/${product.id.toString()}`,
+                    title: product?.title
                 })
-            } catch (e) {
-                navigation(`/${catalog}`);
+            } else {
+                navigation(`/${categoryRoute}`);
             }
         }
 
         setRoutes(newRoutes);
-    }, [catalog, id])
+    }, [categoryRoute, id])
 
     return (
         <div className='catalog-nav'>

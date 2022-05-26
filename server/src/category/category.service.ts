@@ -18,22 +18,28 @@ export class CategoryService {
     }
 
     async getCategories() {
-        return this.categoryRepository.find();
+        return this.categoryRepository.createQueryBuilder("category")
+            .loadRelationCountAndMap("category.products", "category.products")
+            .getMany();
+    }
+
+    async getCategoryByName(name: string) {
+        return this.categoryRepository.findOne({ routeName: name });
     }
 
     async getCategoryFilters(categoryId: number) {
-        return this.filterRepository.find({ where: { categoryId: categoryId }, relations: ["attribute"] })
+        return this.filterRepository.find({ where: { categoryId: categoryId }, relations: ["attribute", "attribute.values"] })
     }
 
     async addFilters(categoryId: number, newKeyAttributes: KeyAttributeDto[]) {
-        const attributesToInsert = newKeyAttributes.map(attr => { return { attribute: attr.attribute } });
+        const attributesToInsert = newKeyAttributes.map(attr => { return { name: attr.attribute } });
         await this.attributeRepository.upsert(attributesToInsert, { conflictPaths: ["id"], skipUpdateIfNoValuesChanged: true });
-        const attributes = await this.attributeRepository.find({ attribute: In(newKeyAttributes.map(attr => attr.attribute)) })
+        const attributes = await this.attributeRepository.find({ name: In(newKeyAttributes.map(attr => attr.attribute)) })
 
         const filterValues = [];
         for (const newAttr of newKeyAttributes) {
             filterValues.push({
-                attributeId: attributes.find(attr => attr.attribute == newAttr.attribute).id,
+                attributeId: attributes.find(attr => attr.name == newAttr.attribute).id,
                 categoryId: categoryId,
                 isRange: newAttr.isRange,
                 step: newAttr.step

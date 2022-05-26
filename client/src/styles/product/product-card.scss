@@ -7,7 +7,7 @@
     border: solid 1px rgb(236, 236, 236);
     padding: 15px;
     transition: 0.4s;
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 14px 0px;
 
     @media (max-width: $mobile-vertical) {
         padding: 5px;
@@ -39,10 +39,12 @@
     }
 
     &__label {
+        min-width: 45px;
         border-radius: 5px;
         padding: 2px 7px 2px 7px;
         margin-bottom: 5px;
         font-size: 12px;
+        text-align: center;
         color: white;
 
         &_green {

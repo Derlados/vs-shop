@@ -1,15 +1,12 @@
-import React, { FC, useEffect } from 'react'
-import cart from '../../store/cart';
-import shop from '../../store/shop';
-import { IProduct } from '../../types/types'
-import ProductMainInfo from './components/ProductMainInfo';
+import { FC, useEffect } from 'react'
+import catalog from '../../store/catalog';
 import '../../styles/product/product.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import ProductDesc from './components/ProductDesc';
 import Product from '../shop/components/product-card/Product';
 import { useNavigate, useParams } from 'react-router-dom';
 import CatalogNav from '../../components/CatalogNav';
 import SliderProducts from '../../components/SliderProducts';
+import { IProduct } from '../../types/IProduct';
 
 type ProductParams = {
     id: string;
@@ -23,16 +20,21 @@ const ProductInfo: FC = observer(() => {
     const navigation = useNavigate();
     const { id } = useParams<ProductParams>();
     const localStore = useLocalObservable<LocalStore>(() => ({
-        product: shop.emptyProduct
+        product: catalog.products[0]
     }));
 
-    const map = new Map<string, string>();
-    map.values()
-
     useEffect(() => {
-        if (id && Number.isInteger(parseInt(id))) {
-            localStore.product = shop.findProductById(+id);
+        if (!id || !Number.isInteger(parseInt(id))) {
+            navigation('/404_not_found')
+            return;
         }
+
+        const product = catalog.findProductById(parseInt(id));
+        if (!product) {
+            navigation('/404_not_found')
+            return;
+        }
+        localStore.product = product;
     }, [id]);
 
 
@@ -43,7 +45,7 @@ const ProductInfo: FC = observer(() => {
                 <Product product={localStore.product} type="full-view" />
             </div>
             {/* Когда контент добавится  <ProductDesc /> */}
-            <SliderProducts title="You Might Also Like" products={[...shop.products.slice(0, 8)]} />
+            <SliderProducts title="You Might Also Like" products={[...catalog.products.slice(0, 8)]} />
         </div>
     )
 });

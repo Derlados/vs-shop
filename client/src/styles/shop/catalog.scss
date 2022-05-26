@@ -9,14 +9,14 @@
     }
 
     &__product-container {
-        width: 24%;
+        width: calc(25% - 7px);
 
         @media (max-width: $laptop) {
-            width: 32%;
+            width: calc(33.33% - 7px);
         }
 
         @media (max-width: $tablet-vertical) {
-            width: 49%;
+            width: calc(50% - 7px);
         }
 
         &_large {

@@ -9,7 +9,7 @@ export class Attribute {
     id: number;
 
     @Column({ type: 'varchar', length: 255, nullable: false, unique: true })
-    attribute: string;
+    name: string;
 
     @OneToMany(() => Value, value => value.attribute)
     @Exclude()
@@ -24,7 +24,7 @@ export class Attribute {
     @AfterLoad()
     getAllValues() {
         if (this.values) {
-            this.allValues = this.values.map(v => v.value);
+            this.allValues = [...new Set(this.values.map(v => v.value))];
         }
     }
 }

@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilesService } from 'src/files/files.service';
 import { In, Repository } from 'typeorm';
@@ -30,12 +30,12 @@ export class ProductsService {
     }
 
     async getProducts(): Promise<Product[]> {
-        const products = await this.productRepository.find({ relations: ["values", "values.attribute"] });
+        const products = await this.productRepository.find({ relations: ["values", "values.attribute", "images"] });
         return products;
     }
 
     async getProductById(id: number): Promise<Product> {
-        const product = await this.productRepository.findOne({ where: { id: id }, relations: ["values", "values.attribute"] });
+        const product = await this.productRepository.findOne({ where: { id: id }, relations: ["values", "values.attribute", "images"] });
         if (!product) {
             throw new NotFoundException("Товар не найден");
         }
@@ -43,8 +43,12 @@ export class ProductsService {
         return product;
     }
 
-    async getProductsByCategory(category: string) {
-        return this.productRepository.find({ where: { category: { routeName: category } }, relations: ["category", "values", "values.attribute"] });
+    async getProductsByCategory(categoryId: number) {
+        return this.productRepository.find({ where: { category: { id: categoryId } }, relations: ["category", "values", "values.attribute", "images"] });
+    }
+
+    async getProductsBySeller(userId: number) {
+        return this.productRepository.find({ where: { userId: userId }, relations: ["values", "values.attribute", "images"] });
     }
 
     /** TODO: Если работа на клиенте будет неоптимальной - фильтровать будет сервер */
@@ -60,9 +64,9 @@ export class ProductsService {
         return products;
     }
 
-    async createProduct(dto: CreateProductDto, attributes: Map<string, string>, images: Express.Multer.File[]): Promise<Product> {
+    async createProduct(userId: number, dto: CreateProductDto, attributes: Map<string, string>, images: Express.Multer.File[]): Promise<Product> {
         try {
-            const result = await this.productRepository.insert(dto);
+            const result = await this.productRepository.insert({ ...dto, userId: userId });
             const insertId = result.raw.insertId;
 
             await this.addAttributes(insertId, attributes);
@@ -74,7 +78,6 @@ export class ProductsService {
         }
     }
 
-
     /**
      * Обновление продукта. Основные данные обновляются, а значени аттрибутов обновляются удалением и вставкой
      * @param id - id продукта
@@ -82,8 +85,8 @@ export class ProductsService {
      * @param attributes - аттрибути
      * @returns {Promise<Product>} обновленный объект 
      */
-    async updateProduct(id: number, dto: CreateProductDto, attributes: Map<string, string>): Promise<Product> {
-        const result = await this.productRepository.update({ id: id }, dto);
+    async updateProduct(id: number, userId: number, dto: CreateProductDto, attributes: Map<string, string>): Promise<Product> {
+        const result = await this.productRepository.update({ id: id, userId: userId }, dto);
         if (result.affected == 0) {
             throw new NotFoundException("Товар не найден");
         }
@@ -105,8 +108,17 @@ export class ProductsService {
      * @param deletedImagesId - удаленные изображения, если они есть
      * @param newMainImageId - id нового изображения, если его нету, то главным будет выбрано из новых
      */
-    async updateImages(productId: number, dto: UpdateImagesDto, newImages?: Express.Multer.File[]) {
+    async updateImages(productId: number, userId: number, dto: UpdateImagesDto, newImages?: Express.Multer.File[]) {
+        const product = await this.productRepository.findOne({ where: { id: productId, userId: userId }, relations: ["images"] });
+        if (!product) {
+            throw new NotFoundException("Продукт не найден")
+        }
+
         if (dto.deletedImagesId) {
+            if (product.images.some((img) => !dto.deletedImagesId.includes(img.id))) {
+                throw new ForbiddenException("Вы не имеет права удалить эти изображения")
+            }
+
             await this.imageRepository.delete({ id: In(dto.deletedImagesId) })
         }
 
@@ -123,8 +135,8 @@ export class ProductsService {
         return this.imageRepository.find({ productId: productId })
     }
 
-    async deleteProduct(id: number) {
-        const result = await this.productRepository.delete({ id: id });
+    async deleteProduct(id: number, userId: number) {
+        const result = await this.productRepository.delete({ id: id, userId: userId });
         if (result.affected == 0) {
             throw new NotFoundException("Товар не найден");
         }
@@ -136,10 +148,10 @@ export class ProductsService {
 
         // Добавление новых атрибутов
         for (const [attribute, value] of attributes.entries()) {
-            const selectedAttr = await this.attributeRepository.findOne({ attribute: attribute });
+            const selectedAttr = await this.attributeRepository.findOne({ name: attribute });
 
             if (!selectedAttr) {
-                const result = await this.attributeRepository.insert({ attribute: attribute });
+                const result = await this.attributeRepository.insert({ name: attribute });
                 valuesToInsert.set(result.raw.insertId, value);
             } else {
                 valuesToInsert.set(selectedAttr.id, value);

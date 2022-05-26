@@ -4,7 +4,7 @@ import React, { ChangeEvent, KeyboardEvent, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom';
 import { routes } from '../../navigation/routes';
 import cart from '../../store/cart';
-import shop from '../../store/shop';
+import shop from '../../store/catalog';
 import '../../styles/header/header.scss';
 import BurgerMenu from './BurgerMenu';
 import CartQuickView from './CartQuickView';
@@ -28,7 +28,7 @@ const Header = observer(() => {
 
     useEffect(() => {
         window.addEventListener('scroll', (e) => {
-            localStore.isFixed = window.scrollY > 200;
+            localStore.isFixed = window.scrollY > 100;
         })
     }, [])
 
@@ -76,7 +76,7 @@ const Header = observer(() => {
                     <div className='header__burger-menu-icon ccc'></div>
                 </div>
                 <NavLink to={'/home'}>
-                    <img src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' className='header__logo' />
+                    <img alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' className='header__logo' />
                 </NavLink>
                 <ul className='header__nav-list'>
                     {routes.map(route => (

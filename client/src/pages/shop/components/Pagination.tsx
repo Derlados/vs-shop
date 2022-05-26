@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useEffect, useState } from 'react'
-import shop from '../../../store/shop';
+import { FC, useEffect, useState } from 'react';
 
 interface PaginationProps {
     pageWindow?: number;
@@ -22,7 +21,7 @@ const Pagination: FC<PaginationProps> = observer(({ pageWindow = 9, maxPages, cu
             return;
         }
 
-        const currentPageIndex = pages.findIndex(p => p == currentPage.toString());
+        const currentPageIndex = pages.findIndex(p => p === currentPage.toString());
         let leftIndex = currentPageIndex - Math.floor(pageWindow / 2);
         let rightIndex = currentPageIndex + Math.floor(pageWindow / 2) + 1;
 
@@ -42,20 +41,20 @@ const Pagination: FC<PaginationProps> = observer(({ pageWindow = 9, maxPages, cu
         pages[0] = '1';
         pages[pages.length - 1] = maxPages.toString();
 
-        if (pages[1] != '2') {
+        if (pages[1] !== '2') {
             pages[1] = '...';
         }
 
-        if (pages[pages.length - 2] != (maxPages - 1).toString()) {
+        if (pages[pages.length - 2] !== (maxPages - 1).toString()) {
             pages[pages.length - 2] = '...';
         }
 
 
         setPages(pages);
-    }, [currentPage, maxPages]);
+    }, [currentPage, maxPages, pageWindow]);
 
     const onClickPage = (page: string) => {
-        if (page != '...') {
+        if (page !== '...') {
             setPage(+page);
             scrollTop();
         }
@@ -88,7 +87,6 @@ const Pagination: FC<PaginationProps> = observer(({ pageWindow = 9, maxPages, cu
             ))}
             <li className='pagination__arrow pagination__item' onClick={onNext}>{'>'}</li>
         </ul>
-
     )
 });
 

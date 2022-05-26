@@ -16,18 +16,15 @@ interface ProductMainInfoProps extends ProductProps {
     isExtended?: boolean;
 }
 
-
 const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart, addToFavorite, isExtended = false }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         swiper: null,
         selectedCount: 1,
-        selectedImage: product.imgs[0]
+        selectedImage: product.images[0].url ?? ''
     }));
 
     useEffect(() => {
-        localStore.selectedCount = 1;
-        localStore.selectedImage = product.imgs[0];
-        localStore.swiper?.slideToLoop(product.imgs.length - 1, 0);
+        localStore.swiper?.slideToLoop(product.images.length - 1, 0);
     }, [product])
 
     const incrementCount = () => {
@@ -43,7 +40,7 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
     }
 
     const handleCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.value != '' && +event.target.value >= 1 && +event.target.value <= product.count) {
+        if (event.target.value !== '' && +event.target.value >= 1 && +event.target.value <= product.count) {
             localStore.selectedCount = +event.target.value;
         }
     }
@@ -53,17 +50,17 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
     }
 
     const selectImg = (index: number) => {
-        localStore.selectedImage = product.imgs[index];
+        localStore.selectedImage = product.images[index].url;
         localStore.swiper?.slideToLoop(index - 1);
     }
 
     const onIndexChange = (realIndex: number) => {
         const index = ++realIndex;
 
-        if (index == product.imgs.length) {
-            localStore.selectedImage = product.imgs[0];
+        if (index === product.images.length) {
+            localStore.selectedImage = product.images[0].url;
         } else {
-            localStore.selectedImage = product.imgs[index];
+            localStore.selectedImage = product.images[index].url;
         }
     }
 
@@ -71,7 +68,7 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
         <div className='product__info rlt'>
             <div className='product__images ctc'>
                 <div className='product__img-container'>
-                    <img className='product__img' src={localStore.selectedImage} />
+                    <img className='product__img' alt='' src={localStore.selectedImage} />
                     <div className='product__arrow product__arrow_back ccc' onClick={() => localStore.swiper.slidePrev()}>{"❮"}</div>
                     <div className='product__arrow product__arrow_next ccc' onClick={() => localStore.swiper.slideNext()}>{"❯"}</div>
                 </div>
@@ -81,14 +78,14 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
                         spaceBetween={10}
                         slidesPerView={3}
                         direction="horizontal"
-                        initialSlide={product.imgs.length - 1}
+                        initialSlide={product.images.length - 1}
                         onRealIndexChange={(sw) => onIndexChange(sw.realIndex)}
                         loop={true}
                         onSwiper={(sw) => localStore.swiper = sw}
                     >
-                        {product.imgs.map((img, index) => (
+                        {product.images.map((img, index) => (
                             <SwiperSlide key={index}>
-                                <img className='product__slider-slide' src={img} onClick={() => selectImg(index)} />
+                                <img className='product__slider-slide' alt='' src={img.url} onClick={() => selectImg(index)} />
                             </SwiperSlide>
                         ))}
                     </Swiper>
@@ -107,22 +104,12 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
                 {isExtended &&
                     <div className='description__details rlc'>
                         <ul className='description__list'>
-                            <li className='description__list-item rlt'>
-                                <div className='description__list-item_attr'>Weight</div>
-                                <div className='description__list-item_val'>400 g</div>
-                            </li>
-                            <li className='description__list-item rlt'>
-                                <div className='description__list-item_attr'>Dimensions</div>
-                                <div className='description__list-item_val'>10 x 10 x 15 cm</div>
-                            </li>
-                            <li className='description__list-item rlt'>
-                                <div className='description__list-item_attr'>Materials</div>
-                                <div className='description__list-item_val'>60% cotton, 40% polyester</div>
-                            </li>
-                            <li className='description__list-item rlt'>
-                                <div className='description__list-item_attr'>Other Info</div>
-                                <div className='description__list-item_val'>American heirloom jean shorts pug seitan letterpress</div>
-                            </li>
+                            {[...product.attributes].map(([attribute, value]) => (
+                                <li className='description__list-item rlt'>
+                                    <div className='description__list-item_attr'>{attribute}</div>
+                                    <div className='description__list-item_val'>{value}</div>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 }

@@ -5,14 +5,17 @@ import Input from '../../components/Input';
 import Selector from '../../components/Selector';
 import cart from '../../store/cart';
 import '../../styles/checkout/checkout.scss';
+import { IOrder } from '../../types/IOrder';
 
 interface LocalStore {
     firstName: string;
     lastName: string;
     phone: string;
     email: string;
-    isEmailInvalid: boolean;
     city: string;
+    address: string;
+    additiobalInfo: string;
+    isEmailValid: boolean;
 }
 
 const addresses = [
@@ -30,11 +33,13 @@ const Checkout = observer(() => {
         phone: '+38 ',
         email: '',
         city: '',
-        isEmailInvalid: false
+        address: '',
+        additiobalInfo: '',
+        isEmailValid: true
     }))
 
     const onChangeEmail = (email: string) => {
-        localStore.isEmailInvalid = !EMAIL_REGEX.test(email)
+        localStore.isEmailValid = EMAIL_REGEX.test(email)
         localStore.email = email;
     }
 
@@ -48,11 +53,24 @@ const Checkout = observer(() => {
     }
 
     const tryPlaceOrder = () => {
-        if (localStore.firstName && localStore.lastName && localStore.phone.length == 17
-            && localStore.email && !localStore.isEmailInvalid && localStore.city) {
+        if (localStore.firstName && localStore.lastName && localStore.phone.length === 17
+            && localStore.email && localStore.isEmailValid && localStore.city) {
+            const order: IOrder = {
+                client: `${localStore.lastName} ${localStore.firstName}`,
+                phone: localStore.phone,
+                email: localStore.email,
+                address: `${localStore.city} ${localStore.address}`,
+                additionalInfo: localStore.additiobalInfo,
+                totalPrice: cart.totalPrice,
+                isComplete: false,
+                orderProducts: cart.cartProducts
+            }
+
 
         }
     }
+
+
 
     return (
         <div className='checkout rlt'>
@@ -65,14 +83,14 @@ const Checkout = observer(() => {
                 <div className='checkout__inputs-row rlc'>
                     <Input className='checkout__input' hint='Номер телефону' value={localStore.phone} onChange={(v) => onChangePhone(v.target.value)} />
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': localStore.isEmailInvalid
+                        'checkout__input_invalid': localStore.isEmailValid
                     })} hint='Електронна пошта' value={localStore.email} onChange={(v) => onChangeEmail(v.target.value)} />
                 </div>
                 <Input hint='Населений пункт України' value={localStore.city} onChange={(v) => localStore.city = v.target.value} />
-                <Selector className='checkout__selector' hint={'Адреса точки видачі'} values={addresses} onChange={() => { }} />
+                <Selector className='checkout__selector' hint={'Адреса точки видачі'} values={addresses} onChange={(v) => { }} />
                 <div className='checkout__additional-info'>
                     <div className='checkout__additional-head'>Additional information</div>
-                    <textarea className='checkout__additional-area' placeholder='Notes about your order, e.g. special notes for delivery'></textarea>
+                    <textarea className='checkout__additional-area' placeholder='Notes about your order, e.g. special notes for delivery' onChange={(v) => localStore.additiobalInfo = v.target.value}></textarea>
                 </div>
             </div>
             <div className='checkout__order clt'>

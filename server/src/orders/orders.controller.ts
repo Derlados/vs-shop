@@ -13,14 +13,14 @@ export class OrderController {
     constructor(private ordersService: OrderService) { }
 
     @Get()
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     getOrders(@Query('startDate') startDate: Date, @Query('endDate') endDate: Date) {
         return this.ordersService.getOrders(startDate, endDate);
     }
 
     @Get('/:id')
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     getOrder(@Param('id') id: number) {
         return this.ordersService.getOrderById(id);
@@ -32,7 +32,7 @@ export class OrderController {
     }
 
     @Put('/complete')
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     competeOrders(@Body() dto: CompleteOrdersDto) {
         return this.ordersService.completeOrders(dto);
@@ -40,14 +40,14 @@ export class OrderController {
 
     //TODO
     @Put(':id')
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     editOrder(@Param('id') id: number) {
         // this.ordersService.deleteOrders([id]);
     }
 
     @Delete(':id')
-    @Roles(RoleValues.CUSTOMER)
+    @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     deleteOrder(@Param('id') id: number) {
         this.ordersService.deleteOrders([id]);

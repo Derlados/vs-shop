@@ -16,6 +16,11 @@ export class CategoryController {
         return this.categoryService.getCategories();
     }
 
+    @Get('/category=:category')
+    getCategoryByName(@Param('category') categoryName: string) {
+        return this.categoryService.getCategoryByName(categoryName);
+    }
+
     @Get(':id/filters')
     @UseInterceptors(ClassSerializerInterceptor)
     getCategoryFilters(@Param('id') id: number) {

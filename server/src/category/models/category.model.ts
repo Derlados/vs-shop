@@ -1,6 +1,7 @@
 import { Exclude } from "class-transformer";
 import { Product } from "src/products/models/product.model";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { RelationCountAttribute } from "typeorm/query-builder/relation-count/RelationCountAttribute";
 import { Filter } from "./filter.model";
 
 @Entity()

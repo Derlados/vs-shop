@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Attribute } from "src/products/models/attribute.model";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Category } from "./category.model";
@@ -6,9 +7,11 @@ import { Category } from "./category.model";
 export class Filter {
 
     @PrimaryColumn({ name: "category_id", type: "int", nullable: false })
+    @Exclude()
     categoryId: number;
 
     @PrimaryColumn({ name: "attribute_id", type: "int", nullable: false })
+    @Exclude()
     attributeId: number;
 
     @ManyToOne(() => Category, category => category.filters, { onDelete: "CASCADE", onUpdate: "CASCADE" })

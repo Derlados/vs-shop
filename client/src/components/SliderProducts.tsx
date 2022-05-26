@@ -1,12 +1,11 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import Product from '../pages/shop/components/product-card/Product';
-import cart from '../store/cart';
-import { IProduct } from '../types/types';
 import '../styles/components/slider-products.scss';
 import { Resolutions } from '../values/resolutions';
+import { IProduct } from '../types/IProduct';
 
 interface LocalStore {
     swiper: any;

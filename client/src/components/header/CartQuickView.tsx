@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import React, { FC, useRef } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import cart from '../../store/cart';
 import '../../styles/header/cart-quick.scss';
-import { IProduct } from '../../types/types';
+import { IProduct } from '../../types/IProduct';
 
 interface CartQuickViewProps {
     isOpen: boolean;
@@ -50,7 +50,7 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
                         <ul className='cart-quick__product-list'>
                             {cart.cartProducts.map(cp => (
                                 <li key={cp.product.id} className='cart-quick__product rlt'>
-                                    <img className='cart-quick__product-img' src={cp.product.imgs[0]} onClick={() => openProductInfo(cp.product)} />
+                                    <img className='cart-quick__product-img' alt='' src={cp.product.images[0].url} onClick={() => openProductInfo(cp.product)} />
                                     <div className='cart-quick__product-desc'>
                                         <div className='cart-quick__product-head rcc'>
                                             <div className='cart-quick__product-title' onClick={() => openProductInfo(cp.product)}>{cp.product.title}</div>

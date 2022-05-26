@@ -20,6 +20,7 @@ import { Order } from './orders/models/order.model';
 import { OrderProduct } from './orders/models/order-products.model';
 import { RolesModule } from './roles/roles.module';
 import { Role } from './roles/models/role.model';
+import { AddressesModule } from './addresses/addresses.module';
 
 @Module({
     imports: [
@@ -51,6 +52,7 @@ import { Role } from './roles/models/role.model';
         FilesModule,
         OrderModule,
         RolesModule,
+        AddressesModule,
     ],
     controllers: [],
     providers: [],

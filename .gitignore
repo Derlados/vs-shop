@@ -63,3 +63,4 @@ yarn-error.log*
 server/.gitignore
 
 templates.txt
+passwords.txt

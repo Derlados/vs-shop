@@ -2,10 +2,9 @@ import { observer } from 'mobx-react-lite';
 import React, { FC, useRef } from 'react';
 import '../../../../styles/product/product.scss';
 import '../../../../styles/product/product-modal.scss';
-import Product, { ProductProps } from './Product';
+import Product from './Product';
 import classNames from 'classnames';
-import ProductMainInfo from '../../../product/components/ProductMainInfo';
-import { IProduct } from '../../../../types/types';
+import { IProduct } from '../../../../types/IProduct';
 
 interface ProductQuickModalProps {
     isOpen: boolean;

@@ -29,23 +29,23 @@ const ProductDesc: FC = observer(() => {
         <div className='description'>
             <div className='description__buttons rcc'>
                 <div className={classNames('description__btn', {
-                    'description__btn_selected': localStore.selectedDesc == DescCategory.DESCRIPTION
+                    'description__btn_selected': localStore.selectedDesc === DescCategory.DESCRIPTION
                 })} onClick={() => setDescCategory(DescCategory.DESCRIPTION)}> Description
                 </div>
                 <div className={classNames('description__btn', {
-                    'description__btn_selected': localStore.selectedDesc == DescCategory.DETAILS
+                    'description__btn_selected': localStore.selectedDesc === DescCategory.DETAILS
                 })} onClick={() => setDescCategory(DescCategory.DETAILS)}> Details
                 </div>
             </div>
             <div className='description__container'>
-                {localStore.selectedDesc == DescCategory.DESCRIPTION &&
+                {localStore.selectedDesc === DescCategory.DESCRIPTION &&
                     <div className='description__text'>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque.</p>
                         <p>Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam erat mi, rutrum at sollicitudin rhoncus, ultricies posuere erat. Duis convallis, arcu nec aliquam consequat, purus felis vehicula felis, a dapibus enim lorem nec augue. Nunc facilisis sagittis ullamcorper.</p>
                         <p>Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean eleifend laoreet congue. Vivamus adipiscing nisl ut dolor dignissim semper. Nulla luctus malesuada tincidunt.</p>
                     </div>
                 }
-                {localStore.selectedDesc == DescCategory.DETAILS &&
+                {localStore.selectedDesc === DescCategory.DETAILS &&
                     <div className='description__details rlc'>
                         <ul className='description__list'>
                             <li className='description__list-item description__list-item_attr'>Weight</li>

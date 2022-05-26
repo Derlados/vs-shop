@@ -1,96 +1,16 @@
 import { makeAutoObservable } from "mobx";
-import { IProduct } from "../types/types";
+import orderService from "../services/order.service";
+import { ICartProduct } from "../types/ICartProuct";
+import { IOrder } from "../types/IOrder";
+import { IProduct } from "../types/IProduct";
 
-interface ICartProduct {
-    product: IProduct;
-    count: number;
-}
 
 class Cart {
     cartProducts: ICartProduct[];
 
     constructor() {
         makeAutoObservable(this);
-        this.cartProducts = [
-            {
-                product: {
-                    id: 1,
-                    isNew: true,
-                    title: "Originals Kaval Windbr",
-                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
-                    price: 18.99,
-                    oldPrice: 19.99,
-                    discountPercent: 5,
-                    count: 300
-                },
-                count: 2
-            },
-            {
-                product: {
-                    id: 2,
-                    isNew: true,
-                    title: "Originals Kaval Windbr",
-                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
-                    price: 18.99,
-                    oldPrice: 19.99,
-                    discountPercent: 5,
-                    count: 300
-                },
-                count: 1
-            },
-            {
-                product: {
-                    id: 3,
-                    isNew: true,
-                    title: "Originals Kaval Windbr",
-                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
-                    price: 18.99,
-                    oldPrice: 19.99,
-                    discountPercent: 5,
-                    count: 300
-                },
-                count: 4
-            },
-            {
-                product: {
-                    id: 4,
-                    isNew: true,
-                    title: "Originals Kaval Windbr",
-                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
-                    price: 18.99,
-                    oldPrice: 19.99,
-                    discountPercent: 5,
-                    count: 300
-                },
-                count: 4
-            },
-            {
-                product: {
-                    id: 5,
-                    isNew: true,
-                    title: "Originals Kaval Windbr",
-                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
-                    price: 18.99,
-                    oldPrice: 19.99,
-                    discountPercent: 5,
-                    count: 300
-                },
-                count: 4
-            },
-            {
-                product: {
-                    id: 6,
-                    isNew: true,
-                    title: "Originals Kaval Windbr",
-                    imgs: ['https://template.hasthemes.com/melani/melani/assets/img/product/product-9.jpg'],
-                    price: 18.99,
-                    oldPrice: 19.99,
-                    discountPercent: 5,
-                    count: 300
-                },
-                count: 4
-            }
-        ];
+        this.cartProducts = [];
     }
 
     get totalPrice(): number {
@@ -115,6 +35,12 @@ class Cart {
         return this.cartProducts.find(cp => cp.product.id == id);
     }
 
+    async completeOrder(order: IOrder) {
+        const createdOrder = await orderService.createOrder(order);
+        if (createdOrder) {
+            this.cartProducts = [];
+        }
+    }
 }
 
 export default new Cart();

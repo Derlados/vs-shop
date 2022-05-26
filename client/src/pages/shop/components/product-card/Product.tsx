@@ -2,10 +2,10 @@ import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import cart from '../../../../store/cart';
-import { IProduct } from '../../../../types/types'
+import { IImage } from '../../../../types/IImage';
+import { IProduct } from '../../../../types/IProduct';
 import ProductMainInfo from '../../../product/components/ProductMainInfo';
 import ProductLargeCard from './ProductLargeCard';
-import ProductQuickModal from './ProductQuickModal';
 import ProductSmallCard from './ProductSmallCard';
 
 export interface ProductProps {
@@ -13,6 +13,7 @@ export interface ProductProps {
     addToCart: (product: IProduct, count?: number) => void;
     addToFavorite: (product: IProduct) => void;
     openFullView: (product: IProduct) => void;
+    getMainImage: (product: IProduct) => IImage;
 }
 
 export interface ProductCardProps extends ProductProps {
@@ -42,6 +43,10 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
         cart.addToCart(product, count);
     }
 
+    const getMainImage = (product: IProduct): IImage => {
+        return product.images.find(img => img.isMain) ?? product.images[0];
+    }
+
     const addToFavorite = (product: IProduct) => {
 
     }
@@ -55,6 +60,7 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                     addToFavorite={addToFavorite}
                     openFullView={openFullView}
                     onOpenQuickView={onOpenQuickView}
+                    getMainImage={getMainImage}
                 />
             )
         }
@@ -66,6 +72,7 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                     addToFavorite={addToFavorite}
                     openFullView={openFullView}
                     onOpenQuickView={onOpenQuickView}
+                    getMainImage={getMainImage}
                 />
             )
         }
@@ -76,6 +83,7 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                     addToCart={addToCart}
                     addToFavorite={addToFavorite}
                     openFullView={openFullView}
+                    getMainImage={getMainImage}
                 />
             )
         }
@@ -86,6 +94,7 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                     addToCart={addToCart}
                     addToFavorite={addToFavorite}
                     openFullView={openFullView}
+                    getMainImage={getMainImage}
                     isExtended={true}
                 />
             )
