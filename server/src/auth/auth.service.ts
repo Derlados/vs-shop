@@ -20,13 +20,19 @@ export class AuthService {
         dto.password = hashPassword;
         const user = await this.usersService.createUser(dto);
 
-        return this.createToken(user);
+        return {
+            user: this.getPrivateUserInfo(user),
+            ...this.createToken(user)
+        };
     }
 
     async login(dto: LoginUserDto) {
         const user = await this.usersService.getUserByEmail(dto.email);
         if (user && bcrypt.compareSync(dto.password, user.password)) {
-            return this.createToken(user);
+            return {
+                user: this.getPrivateUserInfo(user),
+                ...this.createToken(user)
+            };
         } else {
             throw new NotFoundException("Пользователь с таким email-ом или паролем не найден")
         }
@@ -35,8 +41,15 @@ export class AuthService {
     private createToken(user: User) {
         const payload = { userId: user.id, username: user.username, roles: user.roles.map(role => role.name) }
         return {
-            access_token: this.jwtService.sign(payload),
+            accessToken: this.jwtService.sign(payload),
         };
     }
 
+    private getPrivateUserInfo(user: User) {
+        return {
+            ...user,
+            password: '',
+            roles: user.roles.map(r => r.name)
+        }
+    }
 }

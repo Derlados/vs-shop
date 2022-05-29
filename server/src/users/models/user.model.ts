@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Product } from "src/products/models/product.model";
 import { Role } from "src/roles/models/role.model";
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
@@ -11,6 +12,7 @@ export class User {
     username: string;
 
     @Column({ type: "varchar", length: 255, nullable: false })
+    @Exclude()
     password: string;
 
     @Column({ type: "varchar", length: 50, nullable: false, unique: true })

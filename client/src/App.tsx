@@ -8,24 +8,16 @@ import Checkout from './pages/checkout/Checkout';
 import ButtonUp from './components/ButtonUp';
 import Home from './pages/home/Home';
 import Footer from './components/footer/Footer';
+import Auth from './pages/auth/Auth';
+import Main from './Main';
 
 const App = () => {
     return (
         <div className='app cct'>
-            <Header />
-            <div className='app__content cct'>
-                <div className='app__page'>
-                    <Routes>
-                        <Route path='*' element={<Navigate to='/home' />} />
-                        <Route path='/home' element={<Home />} />
-                        <Route path='/checkout' element={<Checkout />} />
-                        <Route path='/:catalog' element={<Shop />} />
-                        <Route path='/:catalog/:id' element={<ProductInfo />} />
-                    </Routes>
-                </div>
-            </div>
-            <Footer />
-            <ButtonUp />
+            <Routes>
+                <Route path='/auth' element={<Auth />} />
+                <Route path='*' element={<Main />} />
+            </Routes>
         </div>
     )
 }
