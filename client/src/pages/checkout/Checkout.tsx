@@ -66,11 +66,9 @@ const Checkout = observer(() => {
                 orderProducts: cart.cartProducts
             }
 
-
+            //TODO
         }
     }
-
-
 
     return (
         <div className='checkout rlt'>
@@ -83,7 +81,7 @@ const Checkout = observer(() => {
                 <div className='checkout__inputs-row rlc'>
                     <Input className='checkout__input' hint='Номер телефону' value={localStore.phone} onChange={(v) => onChangePhone(v.target.value)} />
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': localStore.isEmailValid
+                        'checkout__input_invalid': !localStore.isEmailValid
                     })} hint='Електронна пошта' value={localStore.email} onChange={(v) => onChangeEmail(v.target.value)} />
                 </div>
                 <Input hint='Населений пункт України' value={localStore.city} onChange={(v) => localStore.city = v.target.value} />

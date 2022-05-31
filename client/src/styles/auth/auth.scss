@@ -4,7 +4,7 @@
 .auth {
     width: 100%;
     flex: 1;
-    background-color: #43435e;
+    background-color: $primary-admin;
 
     &__logo {
         margin-bottom: 20px;
@@ -39,7 +39,7 @@
         width: 100%;
         border-radius: 25px;
         padding: 10px;
-        background-color: #43435e;
+        background-color:  $primary-admin;
         text-align: center;
         font-size: 24px;
         color: white;
@@ -48,7 +48,7 @@
         transition: 0.4s;
 
         &:hover {
-            background-color: #545470;
+            background-color:  $primary-admin-hover;
         }
 
         @media (max-width: $mobile-vertical) {

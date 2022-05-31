@@ -40,6 +40,10 @@
     }
 
     &__input {
+        input {
+            transition: 0.4s;
+        }
+        
 
         &_invalid input {
             border-color: rgb(252, 157, 157);

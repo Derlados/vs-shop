@@ -55,11 +55,11 @@ const Home = observer(() => {
             <div className='home__category-title'>Catalog</div>
             <div className='home__categories rlc'>
                 {shop.categories.map((category) => (
-                    <div className='home__category-card rlc'>
+                    <div key={category.routeName} className='home__category-card rlc'>
                         <div className='home__category-text'>
                             <div className='home__category-name'>{category.name}</div>
                             <div className='home__category-count-products'>Products ({category.products})</div>
-                            <NavLink key={category.routeName} className='home__category-shop-now' to={`../${category.routeName}`}>Shop now</NavLink>
+                            <NavLink className='home__category-shop-now' to={`/${category.routeName}`}>Shop now</NavLink>
                         </div>
                         <img className='home__category-img' alt='' src={category.img} />
                     </div>

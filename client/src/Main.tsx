@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import ButtonUp from './components/ButtonUp'
 import Footer from './components/footer/Footer'
 import Header from './components/header/Header'
@@ -14,13 +14,7 @@ const Main = () => {
             <Header />
             <div className='app__content cct'>
                 <div className='app__page'>
-                    <Routes>
-                        <Route path='*' element={<Navigate to='/home' />} />
-                        <Route path='/home' element={<Home />} />
-                        <Route path='/checkout' element={<Checkout />} />
-                        <Route path='/:catalog' element={<Shop />} />
-                        <Route path='/:catalog/:id' element={<ProductInfo />} />
-                    </Routes>
+                    <Outlet />
                 </div>
             </div>
             <Footer />

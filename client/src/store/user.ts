@@ -3,12 +3,20 @@ import { IUser, UserRoles } from "../types/IUser";
 
 class UserStore {
     private readonly ACCESS_TOKEN = 'access-token';
-    user?: IUser;
+    private readonly USER_INFO = 'user-info';
+    userInfo?: IUser;
     token: string;
 
     constructor() {
         makeAutoObservable(this);
         this.token = localStorage.getItem(this.ACCESS_TOKEN) ?? '';
+
+        const jsonInfo = localStorage.getItem(this.USER_INFO);
+        this.userInfo = jsonInfo !== null ? JSON.parse(jsonInfo) : null;
+    }
+
+    get isAuth(): boolean {
+        return this.token !== '' && this.userInfo !== null;
     }
 
     setToken(token: string) {
@@ -17,7 +25,8 @@ class UserStore {
     }
 
     setUserInfo(user: IUser) {
-        this.user = user;
+        this.userInfo = user;
+        localStorage.setItem(this.USER_INFO, JSON.stringify(user))
     }
 
     deleteToken() {
@@ -25,9 +34,7 @@ class UserStore {
         localStorage.removeItem(this.ACCESS_TOKEN);
     }
 
-    isAuth() {
-        return this.token !== '';
-    }
+
 }
 
 export default new UserStore();
