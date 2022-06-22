@@ -2,7 +2,7 @@ import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class KeyAttributeDto {
     @IsString()
-    attribute: string;
+    name: string;
 
     @IsBoolean()
     isRange: boolean;

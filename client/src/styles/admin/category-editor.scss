@@ -26,7 +26,7 @@
         flex: 1;
     }
 
-    &__left-form { 
+    &__left-form {
         padding-right: 30px;
     }
 
@@ -36,51 +36,89 @@
     }
 
     &__edit-img-cont {
-        width: 350px;
-        height: 350px;
-        padding: 20px;
-        border: dashed rgb(158, 158, 158);
+        width: 100%;
+        height: 100%;
         margin-bottom: 15px;
         cursor: pointer;
         transition: 0.4s;
 
-        &:hover {
+        &:hover>.category-editor__edit-img-border {
             border: dashed $secondary-dark;
         }
 
-        &:hover > .category-editor__edit-img {
+        &:hover .category-editor__edit-img-icon {
             background-color: $secondary-dark;
         }
     }
 
-    &__edit-img {
-        width: 100%;
-        height: 100%;
+    &__edit-img-border {
+        border: dashed rgb(158, 158, 158);
         transition: 0.4s;
+    }
+
+    &__edit-img {
+        width: 330px;
+        height: 330px;
+    }
+
+    &__edit-img-icon {
+        background-color: rgb(158, 158, 158);
+        transition: 0.4s;
+
         content: "";
         mask-size: contain;
         mask-image: url('../../assets/images/image.svg');
         mask-repeat: no-repeat;
-        background-color: rgb(158, 158, 158);
     }
 
-    &__accept-btn {
-        width: 100%;
-        height: 90px;
-        background-color: $primary-admin;
-        text-align: center;
-        font-size: 24px;
+    &__editor-head {
+        justify-content: space-between !important;
+    }
+
+    &__clear-btn {
         color: white;
+        padding: 7px 25px;
+        margin-bottom: 10px;
         cursor: pointer;
         transition: 0.4s;
+
+        background-color: $primary-admin;
 
         &:hover {
             background-color: $primary-admin-hover;
         }
-    }   
+    }
+
+    &__action-btn {
+        width: 100%;
+        height: 70px;
+        margin-top: 5px;
+
+        text-align: center;
+        font-size: 22px;
+        color: white;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &_accept {
+            background-color: $primary-admin;
+
+            &:hover {
+                background-color: $primary-admin-hover;
+            }
+        }
+
+        &_delete {
+            background-color: rgb(221, 51, 51);
+
+            &:hover {
+                background-color: rgb(172, 33, 33);
+            }
+        }
+    }
 
     &__name {
-         font-size: 24px;
+        font-size: 24px;
         margin-bottom: 10px;
     }
 
@@ -89,9 +127,7 @@
         margin: 10px 0px;
     }
 
-    &__key-attrs-list {
-
-    }
+    &__key-attrs-list {}
 
     &__key-attr-item {
         width: 100%;
@@ -103,7 +139,7 @@
         outline: none;
         font-size: 14px;
         border: 1px solid $third-gray;
-          margin: 5px 0px;
+        margin: 5px 0px;
     }
 
     &__del-attr {

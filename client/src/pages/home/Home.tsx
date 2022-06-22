@@ -58,7 +58,7 @@ const Home = observer(() => {
                     <div key={category.routeName} className='home__category-card rlc'>
                         <div className='home__category-text'>
                             <div className='home__category-name'>{category.name}</div>
-                            <div className='home__category-count-products'>Products ({category.products})</div>
+                            <div className='home__category-count-products'>Products ({category.productsCount})</div>
                             <NavLink className='home__category-shop-now' to={`/${category.routeName}`}>Shop now</NavLink>
                         </div>
                         <img className='home__category-img' alt='' src={category.img} />

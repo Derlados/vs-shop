@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import categoriesService from "../services/categories.service";
+import categoriesService from "../services/categories/categories.service";
 import productsService from "../services/products.service";
 import { ICategory } from "../types/ICategory";
 import { IFilters, IRange } from "../types/IFilters";
@@ -34,7 +34,8 @@ class CatalogStore {
             name: '',
             img: '',
             routeName: '',
-            products: 0
+            keyAttributes: [],
+            productsCount: 0
         };
         this.products = [];
         this.filters = {
@@ -58,7 +59,7 @@ class CatalogStore {
 
     get maxPages(): number {
         let maxPages: number = Math.floor(this.filteredProducts.length / CatalogStore.MAX_PRODUCTS_BY_PAGE);
-        if (this.filteredProducts.length % CatalogStore.MAX_PRODUCTS_BY_PAGE != 0) {
+        if (this.filteredProducts.length % CatalogStore.MAX_PRODUCTS_BY_PAGE !== 0) {
             ++maxPages;
         }
         return maxPages;

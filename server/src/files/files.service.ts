@@ -6,6 +6,8 @@ import * as fs from 'fs';
 
 @Injectable()
 export class FilesService {
+    private readonly FILE_URL = process.env.STATIC_API;
+
 
     async createFile(file: Express.Multer.File): Promise<string> {
         const filename = uuid.v4() + '.jpg';
@@ -14,7 +16,7 @@ export class FilesService {
             fs.mkdirSync(filePath, { recursive: true })
         }
         fs.writeFileSync(path.join(filePath, filename), file.buffer)
-        return filename;
+        return this.FILE_URL + filename;
     }
 
     async createFiles(files: Express.Multer.File[]): Promise<string[]> {

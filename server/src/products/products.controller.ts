@@ -1,13 +1,9 @@
 import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, Request, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { query } from 'express';
-import { get } from 'http';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
-import { CreateProductDto } from './dto/create-product.dto';
 import { ReqCreateProductDto } from './dto/req-create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
 import { ProductsService } from './products.service';
@@ -59,7 +55,7 @@ export class ProductsController {
         return this.productService.createProduct(req.user.userId, dto.product, new Map(Object.entries(dto.attributes)), images);
     }
 
-    @Put(':id')
+    @Put(':id([0-9]+)')
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
@@ -72,11 +68,10 @@ export class ProductsController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(FilesInterceptor('images'))
     updateImages(@Req() req, @Param('id') id: number, @Body() dto: UpdateImagesDto, @UploadedFiles() images: Express.Multer.File[]) {
-        console.log(req.user);
         return this.productService.updateImages(id, req.user.userId, dto, images)
     }
 
-    @Delete(':id')
+    @Delete(':id([0-9]+)')
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     deleteProduct(@Req() req, @Param('id') id: number) {

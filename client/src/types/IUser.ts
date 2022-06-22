@@ -7,7 +7,7 @@ export interface IUser {
 }
 
 export enum UserRoles {
-    ADMIN = 'Admin',
-    SELLER = 'Customer',
-    USER = 'User'
+    ADMIN = 'admin',
+    SELLER = 'seller',
+    USER = 'user'
 }
