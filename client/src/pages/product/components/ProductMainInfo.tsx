@@ -99,13 +99,12 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
                     <div className='product__old-price'>{product.oldPrice} ₴</div>
                     <div className='product__current-price'>{product.price} ₴</div>
                 </div>
-                <div className='product__desc'>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit. Mauris consequat nisi ut mauris efficitur lacinia.</div>
+                <div className='product__desc'>{product.description}</div>
                 {isExtended &&
                     <div className='description__details rlc'>
                         <ul className='description__list'>
                             {[...product.attributes].map(([attribute, value]) => (
-                                <li className='description__list-item rlt'>
+                                <li key={attribute} className='description__list-item rlt'>
                                     <div className='description__list-item_attr'>{attribute}</div>
                                     <div className='description__list-item_val'>{value}</div>
                                 </li>

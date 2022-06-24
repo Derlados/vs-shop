@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { IOrder } from '../../../types/IOrder';
+import React, { FC } from 'react';
+import { IOrder } from '../../../../types/IOrder';
 
 interface OrderItemProps {
     order: IOrder;

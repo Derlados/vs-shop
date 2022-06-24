@@ -1,7 +1,7 @@
-import React from 'react'
-import orders from '../../../store/orders'
+
+import orders from '../../../../store/orders'
 import OrderItem from './OrderItem'
-import '../../../styles/admin/orders.scss';
+import '../../../../styles/admin/orders.scss';
 
 const OrderList = () => {
     return (

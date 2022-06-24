@@ -1,0 +1,109 @@
+@import '../general/colors.scss';
+
+.admin-general {
+    &__input {
+        width: 100%;
+        padding: 10px;
+        outline: none;
+        font-size: 14px;
+        border: 1px solid $third-gray;
+        margin: 5px 0px;
+
+        &_textarea {
+            min-height: 150px;
+        }
+    }
+
+    &__input-title {
+        height: 100%;
+        min-width: 150px;
+        padding: 0px 15px;
+        color: gray;
+    }
+
+    &__clear-btn {
+        color: white;
+        padding: 7px 25px;
+        cursor: pointer;
+        transition: 0.4s;
+
+        background-color: $primary-admin;
+
+        &:hover {
+            background-color: $primary-admin-hover;
+        }
+    }
+
+    &__edit-img-icon {
+        background-color: rgb(158, 158, 158);
+        transition: 0.4s;
+
+        content: "";
+        mask-size: contain;
+        mask-image: url('../../assets/images/image.svg');
+        mask-repeat: no-repeat;
+    }
+
+    &__del-item {
+        width: 42px;
+        height: 42px;
+        margin-left: 10px;
+        background-color: $primary-admin;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &:hover {
+            background-color: $primary-admin-hover;
+        }
+    }
+
+    &__action-btn {
+        width: 100%;
+        height: 70px;
+        margin-top: 5px;
+        user-select: none;
+        text-align: center;
+        font-size: 22px;
+        color: white;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &_accept {
+            background-color: $primary-admin;
+
+            &:hover {
+                background-color: $primary-admin-hover;
+            }
+        }
+
+        &_delete {
+            background-color: rgb(221, 51, 51);
+
+            &:hover {
+                background-color: rgb(172, 33, 33);
+            }
+        }
+
+        &_inactive {
+            opacity: 0.3;
+            cursor: auto;
+            pointer-events: none;
+
+        }
+    }
+
+    &__line {
+        width: 100%;
+        height: 1px;
+        background-color: $third-gray;
+        margin-bottom: 20px;
+    }
+
+    &__subtitle {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 10px 0px;
+    }
+}

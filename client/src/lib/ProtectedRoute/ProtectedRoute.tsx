@@ -15,7 +15,6 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ isAuth, roles, element }) => 
         return <Navigate to='/auth' />
     }
 
-    console.log(user.userInfo?.roles);
 
     if (roles && !user.userInfo?.roles.some(r => roles.includes(r))) {
         return <Navigate to='/home' />

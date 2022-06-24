@@ -1,14 +1,15 @@
 import React, { ChangeEvent, ChangeEventHandler, useRef } from 'react'
-import shop from '../../../store/shop';
-import '../../../styles/home/home.scss';
-import '../../../styles/admin/category-editor.scss';
-import { NavLink } from 'react-router-dom';
+import shop from '../../../../store/shop';
+import '../../../../styles/home/home.scss';
+import '../../../../styles/admin/category-editor.scss';
+import '../../../../styles/admin/admin-general.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { ICategory } from '../../../types/ICategory';
+import { ICategory } from '../../../../types/ICategory';
 import { nanoid } from 'nanoid';
-import { CreateCategoryDto } from '../../../services/categories/dto/create-category.dto';
-import CategoryCard from '../../../components/CategoryCard';
-import FileUploader from '../../../lib/FileUploader/FileUploader';
+import { CreateCategoryDto } from '../../../../services/categories/dto/create-category.dto';
+import CategoryCard from '../../../../components/CategoryCard';
+import FileUploader from '../../../../lib/FileUploader/FileUploader';
+import classNames from 'classnames';
 
 
 interface IKeyAttribute {
@@ -138,27 +139,29 @@ const CategoryEditor = observer(() => {
                     <FileUploader inputRef={inputRef} className='category-editor__edit-img-cont' onUploadImage={onUploadImage}>
                         {!localStore.imgUrl ?
                             <div className='category-editor__edit-img-border'>
-                                <div className='category-editor__edit-img category-editor__edit-img-icon'></div>
+                                <div className='category-editor__edit-img admin-general__edit-img-icon'></div>
                             </div>
                             :
                             <img className='category-editor__edit-img' src={localStore.imgUrl} />
                         }
                     </FileUploader>
-                    <div className='category-editor__action-btn category-editor__action-btn_accept ccc' onClick={onAccept}>Accept</div>
+                    <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
+                        "admin-general__action-btn_inactive": !validate()
+                    })} onClick={onAccept}>Accept</div>
                     {localStore.id !== -1 && <div className='category-editor__action-btn category-editor__action-btn_delete ccc' onClick={() => onDelete(localStore.id)}>Delete</div>}
                 </div>
                 <div className='category-editor__right-form clt'>
                     <div className='category-editor__editor-head rlt'>
                         <div className='category-editor__name'>Name and URL</div>
-                        <div className='category-editor__clear-btn' onClick={onClear}>Clear</div>
+                        <div className='admin-general__clear-btn' onClick={onClear}>Clear</div>
                     </div>
-                    <input className='category-editor__input' placeholder='category name' value={localStore.name} onChange={(v) => localStore.name = v.target.value} />
-                    <input className='category-editor__input' placeholder='category url name' value={localStore.routeName} onChange={(v) => localStore.routeName = v.target.value} />
+                    <input className='admin-general__input' placeholder='category name' value={localStore.name} onChange={(v) => localStore.name = v.target.value} />
+                    <input className='admin-general__input' placeholder='category url name' value={localStore.routeName} onChange={(v) => localStore.routeName = v.target.value} />
                     <div className='category-editor__key-attrs'>Key attributes</div>
                     <ul className='category-editor__key-attr-list'>
                         {localStore.attributes.map((attr, index) => (
                             <li key={attr.id} className='category-editor__key-attr-item rlc'>
-                                <input className='category-editor__input' placeholder='attribute name' value={attr.value} onChange={(v) => onChangeAttr(index, v.target.value)} />
+                                <input className='admin-general__input' placeholder='attribute name' value={attr.value} onChange={(v) => onChangeAttr(index, v.target.value)} />
                                 {localStore.attributes.length !== index + 1 && <div className='category-editor__del-attr ccc' onClick={() => deleteAttr(index)}>X</div>}
                             </li>
                         ))}

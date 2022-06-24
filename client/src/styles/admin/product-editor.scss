@@ -1,0 +1,52 @@
+@import '../general/colors.scss';
+
+.product-editor {
+
+    &__form {
+        padding-bottom: 20px;
+    }
+
+    &__chars-head {
+        width: 100%;
+        justify-content: space-between !important;
+    }
+
+
+    &__prev {
+        width: 100%;
+        min-height: 400px;
+    }
+
+    &__prev-product {
+        max-height: 100%;
+
+
+        &_small {
+            max-width: 300px;
+            padding: 15px 0px 0px 15px;
+        }
+
+        &_quick-view {
+            flex: 1;
+            padding: 15px 15px 0px 0px;
+
+        }
+    }
+
+    &__chars {
+        width: 100%;
+    }
+
+    &__chars-editor {
+        width: 100%;
+    }
+
+    &__attribute-name {
+        width: 100px;
+        margin-right: 10px;
+    }
+
+    &__attribute-value {
+        flex: 1;
+    }
+}

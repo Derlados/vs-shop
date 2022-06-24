@@ -26,7 +26,7 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ product, addToCart, o
             <span className='product-card__brand'>STUDIO DESIGN</span>
             <span className='product-card__name' onClick={() => openFullView(product)}>{product.title}</span>
             <div className='product-card__price rlc'>
-                {product.discountPercent !== 0 && <span className='product-card__old-price'>{product.oldPrice}{SpecSymbols.NBSP}₴</span>}
+                {product.oldPrice !== product.price && <span className='product-card__old-price'>{product.oldPrice}{SpecSymbols.NBSP}₴</span>}
                 <span className='product-card__current-price'>{product.price}{SpecSymbols.NBSP}₴</span>
             </div>
             <CartButton isActive={cart.findById(product.id) === undefined} onClick={() => addToCart(product)} />

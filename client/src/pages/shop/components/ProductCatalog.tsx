@@ -7,6 +7,7 @@ import CatalogSettings from './CatalogSettings';
 import Pagination from './Pagination';
 import Product from './product-card/Product';
 import ProductQuickModal from './product-card/ProductQuickModal';
+import ProductGrid from './ProductGrid';
 
 const MAX_PRODUCTS_BY_PAGE = 24;
 
@@ -54,36 +55,13 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => 
         <div className='catalog ccc'>
             {localStore.selectedProduct && <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />}
             <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} onOpenFilters={onOpenFilters} />
-            <div className={classNames('catalog__products', {
-                'rlt': localStore.selectedViewMode === ViewMode.GRID,
-                'clc': localStore.selectedViewMode === ViewMode.LIST
-            })}>
-                {products.map(product =>
-                    <div key={product.id} className={classNames('catalog__product-container ccc', {
-                        'catalog__product-container_large': localStore.selectedViewMode === ViewMode.LIST
-                    })}>
-                        <Product
-                            key={product.id}
-                            type={localStore.selectedViewMode === ViewMode.GRID ? 'small' : 'large'}
-                            product={product}
-                            onOpenQuickView={openQuickView} />
-                    </div>
-                )}
-                {/* Для нормальной работы flex-wrap и space between */}
-                {[...Array(4).keys()].map(num => (
-                    <div key={`empty-${num}`} className={classNames('catalog__product-container ccc', {
-                        'catalog__product-container_large': localStore.selectedViewMode === ViewMode.LIST
-                    })}>
-
-                    </div>
-                ))}
-            </div>
+            <ProductGrid products={products} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} />
             <Pagination
                 maxPages={catalog.maxPages}
                 currentPage={catalog.selectedPage}
-                back={() => catalog.backPage()}
-                next={() => catalog.nextPage()}
-                setPage={(page: number) => catalog.selectPage(page)} />
+                back={catalog.backPage}
+                next={catalog.nextPage}
+                setPage={catalog.selectPage} />
         </div>
     )
 });

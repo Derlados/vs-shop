@@ -11,7 +11,7 @@ class CategoryService extends Service {
         return data;
     }
 
-    async getCategoryByName(categoryName: string): Promise<ICategory> {
+    async getCategoryByRouteName(categoryName: string): Promise<ICategory> {
         const { data } = await axiosInstance.get<ICategory>(`${this.API_URL}/category=${categoryName}`, { headers: headersJSON() });
         return data;
     }

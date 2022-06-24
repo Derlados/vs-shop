@@ -61,32 +61,9 @@
         height: 330px;
     }
 
-    &__edit-img-icon {
-        background-color: rgb(158, 158, 158);
-        transition: 0.4s;
-
-        content: "";
-        mask-size: contain;
-        mask-image: url('../../assets/images/image.svg');
-        mask-repeat: no-repeat;
-    }
-
     &__editor-head {
         justify-content: space-between !important;
-    }
-
-    &__clear-btn {
-        color: white;
-        padding: 7px 25px;
         margin-bottom: 10px;
-        cursor: pointer;
-        transition: 0.4s;
-
-        background-color: $primary-admin;
-
-        &:hover {
-            background-color: $primary-admin-hover;
-        }
     }
 
     &__action-btn {
@@ -119,7 +96,6 @@
 
     &__name {
         font-size: 24px;
-        margin-bottom: 10px;
     }
 
     &__key-attrs {
@@ -133,14 +109,6 @@
         width: 100%;
     }
 
-    &__input {
-        width: 100%;
-        padding: 10px;
-        outline: none;
-        font-size: 14px;
-        border: 1px solid $third-gray;
-        margin: 5px 0px;
-    }
 
     &__del-attr {
         width: 42px;

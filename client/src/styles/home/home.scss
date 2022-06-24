@@ -26,9 +26,7 @@
         height: 100%;
     }
 
-    &__board-info {
-
-    }
+    &__board-info {}
 
     &__board-title {
         white-space: pre-line;
@@ -122,78 +120,6 @@
         font-size: 28px;
         font-weight: bold;
         padding-bottom: 15px;
-    }
-
-    &__categories {
-        width: 100%;
-        flex-wrap: wrap;
-        justify-content: space-between !important;
-    }
-
-    &__category-card {
-        justify-content: space-between !important;
-        width: calc(33.33% - 10px);
-        margin: 0px 0px 20px 0px;
-        height: 150px;
-        background-color: $secondary-gray;
-        cursor: pointer;
-        overflow: hidden;
-
-        @media (max-width: $tablet-horizontal) {
-            width: calc(50% - 10px);
-        }
-
-        @media (max-width: 600px) {
-            width: 100%;
-        }
-    }
-
-    &__category-text {
-        padding-left: 20px;
-    }
-
-    &__category-name {
-        font-size: 18px;
-        font-weight: bold;
-        padding-bottom: 10px;
-
-        @media (max-width: $tablet-horizontal) {
-            font-size: 16px;
-        }
-    }
-
-    &__category-count-products {
-        color: gray;
-        padding-bottom: 20px;
-        font-size: 14px;
-    }
-
-    &__category-img {
-        height: 100%;
-        width: 40%;
-        object-fit: cover;
-        transition: 0.4s;
-
-        &:hover {
-            height: 103%;
-            width: 53%;
-        }
-
-        @media (max-width: $mobile-vertical) {
-            width: 45%;
-        }
-    }
-
-    &__category-shop-now {
-        text-decoration: none;
-        font-size: 18px;
-        font-weight: bold;
-        transition: 0.4s;
-
-        &:hover {
-            color: $primary;
-            padding-left: 10px;
-        }
     }
 
     &__banner {

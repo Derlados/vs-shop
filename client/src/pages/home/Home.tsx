@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react'
 import { NavLink } from 'react-router-dom';
+import CategoryList from '../../components/CategoryList';
 import SliderProducts from '../../components/SliderProducts';
 import catalog from '../../store/catalog';
 import shop from '../../store/shop';
@@ -53,18 +54,7 @@ const Home = observer(() => {
             </div>
             <SliderProducts title="Best sellers" slidesPerView={5} products={[...shop.bestSellers.slice(0, 8)]} />
             <div className='home__category-title'>Catalog</div>
-            <div className='home__categories rlc'>
-                {shop.categories.map((category) => (
-                    <div key={category.routeName} className='home__category-card rlc'>
-                        <div className='home__category-text'>
-                            <div className='home__category-name'>{category.name}</div>
-                            <div className='home__category-count-products'>Products ({category.productsCount})</div>
-                            <NavLink className='home__category-shop-now' to={`/${category.routeName}`}>Shop now</NavLink>
-                        </div>
-                        <img className='home__category-img' alt='' src={category.img} />
-                    </div>
-                ))}
-            </div>
+            <CategoryList categories={shop.categories} />
             <img className='home__banner' alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/banner-image/4.jpg' />
             <SliderProducts title="Resenly added" products={[...shop.newProducts.slice(0, 8)]} />
         </div>
