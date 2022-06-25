@@ -14,6 +14,8 @@ import Product from '../../../shop/components/product-card/Product';
 import { ViewMode } from '../../../shop/components/ProductCatalog';
 import ProductGrid from '../../../shop/components/ProductGrid';
 
+const MAX_PRODUCTS_BY_PAGE = 8;
+
 interface LocalStore {
     selectedCategory?: ICategory;
     product: IProduct;
@@ -21,9 +23,8 @@ interface LocalStore {
 
 const ProductEditor = observer(() => {
     const inputRef = useRef<HTMLInputElement>(null);
-
-    const getProductTemplate = () => {
-        return {
+    const localStore = useLocalObservable<LocalStore>(() => ({
+        product: {
             id: -1,
             categoryId: -1,
             userId: -1,
@@ -37,19 +38,37 @@ const ProductEditor = observer(() => {
             attributes: new Map<string, string>(),
             images: [{ id: -1, url: 'https://htmldemo.net/melani/melani/assets/img/product/product-9.jpg', isMain: false }]
         }
-    }
-
-    const localStore = useLocalObservable<LocalStore>(() => ({
-        product: getProductTemplate()
     }))
     localStore.product.discountPercent = -Math.floor((1 - localStore.product.price / localStore.product.oldPrice) * 100);
 
-    useEffect(() => {
-        localStore.selectedCategory = shop.categories[0];
-        if (localStore.selectedCategory) {
+    const getProductTemplate = () => {
+        const attributes = new Map<string, string>();
+        if (localStore && localStore.selectedCategory) {
             for (const attr of localStore.selectedCategory.keyAttributes) {
-                localStore.product.attributes.set(attr.name, '');
+                attributes.set(attr.name, '');
             }
+        }
+
+        return {
+            id: -1,
+            categoryId: -1,
+            userId: -1,
+            title: '',
+            description: '',
+            price: 0,
+            oldPrice: 0,
+            isNew: false,
+            count: 0,
+            discountPercent: 0,
+            attributes: attributes,
+            images: [{ id: -1, url: 'https://htmldemo.net/melani/melani/assets/img/product/product-9.jpg', isMain: false }]
+        }
+    }
+
+
+    useEffect(() => {
+        if (shop.categories[0]) {
+            onSelectCategory(shop.categories[0])
         }
     }, [shop.categories]);
 
@@ -57,12 +76,26 @@ const ProductEditor = observer(() => {
 
     }
 
+    const toggleIsNew = () => {
+        localStore.product.isNew = !localStore.product.isNew;
+    }
+
     const onAccept = () => {
         if (!validate()) {
             return;
         }
 
-        catalog.addProduct(localStore.product);
+        if (localStore.product.id === -1) {
+            catalog.addProduct(localStore.product);
+        } else {
+            catalog.editProduct(localStore.product.id, localStore.product);
+        }
+
+        onClear();
+    }
+
+    const onEdit = (product: IProduct) => {
+        localStore.product = { ...product }
     }
 
     const onSelectCategory = (category: ICategory) => {
@@ -75,13 +108,18 @@ const ProductEditor = observer(() => {
         localStore.product = getProductTemplate();
     }
 
+    const onDelete = () => {
+        catalog.deleteProduct(localStore.product.id);
+        onClear();
+    }
+
     const validate = (): boolean => {
         const { title, description, price, oldPrice, attributes } = localStore.product;
         if (!title || !description || !price || !oldPrice) {
             return false;
         }
 
-        for (const value in attributes.values()) {
+        for (const value of attributes.values()) {
             if (!value) {
                 return false;
             }
@@ -95,8 +133,10 @@ const ProductEditor = observer(() => {
             <div className='admin-general__subtitle'>Каталоги</div>
             <CategoryList categories={shop.categories} onClick={onSelectCategory} />
             <div className='admin-general__line'></div>
-            <div className='admin-general__subtitle'>{`Товари у каталозі "${localStore.selectedCategory?.name}"`}</div>
-            <ProductGrid products={catalog.products} viewMode={ViewMode.GRID} />
+            <div className='product-editor__product-list'>
+                <div className='admin-general__subtitle'>Товари у каталозі "{localStore.selectedCategory?.name}"</div>
+                <ProductGrid products={catalog.products} viewMode={ViewMode.GRID} maxPerPage={MAX_PRODUCTS_BY_PAGE} onSelectProduct={onEdit} />
+            </div>
             <div className='admin-general__line'></div>
             <div className='product-editor__form'>
                 <div className='product-editor__images clc'>
@@ -125,18 +165,25 @@ const ProductEditor = observer(() => {
                         <div className='admin-general__input-title'>Опис: </div>
                         <textarea className='admin-general__input admin-general__input_textarea' placeholder='Введіть опис' value={localStore.product.description} onChange={(v) => localStore.product.description = v.target.value} />
                     </div>
-
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Ціна: </div>
-                        <input type="number" step={0.01} onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.price ?? ''} onChange={(v) => localStore.product.price = +v.target.value} />
+                        <input type="number" step={0.01} onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.price ?? ''} onChange={(v) => localStore.product.price = Number(v.target.value)} />
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Минула ціна: </div>
-                        <input type="number" step={0.01} onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.oldPrice} onChange={(v) => localStore.product.oldPrice = +v.target.value} />
+                        <input type="number" step={0.01} onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.oldPrice} onChange={(v) => localStore.product.oldPrice = Number(v.target.value)} />
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Кількість: </div>
-                        <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count} onChange={(v) => localStore.product.count = +v.target.value} />
+                        <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count} onChange={(v) => localStore.product.count = Number(v.target.value)} />
+                    </div>
+                    <div className='rlc'>
+                        <div className='admin-general__input-title'>Новий ?: </div>
+                        <label className='admin-general__checkbox-cont rcc'>
+                            <input className='admin-general__checkbox' type="checkbox" checked={localStore.product.isNew} onChange={toggleIsNew} />
+                            <span className='admin-general__checkmark'></span>
+                        </label>
+
                     </div>
                     <div className='admin-general__subtitle'>Характеристики</div>
                     <ul className='product-editor__attributes clc'>
@@ -152,6 +199,7 @@ const ProductEditor = observer(() => {
                 <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
                     "admin-general__action-btn_inactive": !validate()
                 })} onClick={onAccept}>Accept</div>
+                {localStore.product.id !== -1 && <div className={'admin-general__action-btn admin-general__action-btn_delete ccc'} onClick={onDelete}>Delete</div>}
             </div>
             <div className='admin-general__line'></div>
             <div className='admin-general__subtitle'>Передогляд</div>

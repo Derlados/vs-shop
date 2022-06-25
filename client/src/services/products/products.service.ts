@@ -20,12 +20,12 @@ class ProductService extends Service {
     }
 
     async addProducts(product: IProduct): Promise<IProduct> {
-        const { data } = await axiosInstance.post<IProduct>(`${this.API_URL}/products`, this.getProductDto(product), { headers: headersJSON() });
+        const { data } = await axiosInstance.post<IProduct>(`${this.API_URL}`, this.getProductDto(product), { headers: headersJSON() });
         return this.parseProduct(data);
     }
 
     async editProduct(id: number, product: IProduct) {
-        const { data } = await axiosInstance.put<IProduct>(`${this.API_URL}/products/${id}`, this.getProductDto(product), { headers: headersJSON() });
+        const { data } = await axiosInstance.put<IProduct>(`${this.API_URL}/${id}`, this.getProductDto(product), { headers: headersJSON() });
         return this.parseProduct(data);
     }
 
@@ -34,7 +34,7 @@ class ProductService extends Service {
     }
 
     async deleteProduct(id: number) {
-        const { data } = await axiosInstance.delete<IProduct>(`${this.API_URL}/products/${id}`, { headers: headersJSON() });
+        const { data } = await axiosInstance.delete<IProduct>(`${this.API_URL}/${id}`, { headers: headersJSON() });
         return data;
     }
 
@@ -49,7 +49,7 @@ class ProductService extends Service {
                 count: product.count,
                 categoryId: product.categoryId
             },
-            attributes: product.attributes
+            attributes: Object.fromEntries(product.attributes)
         }
     }
 

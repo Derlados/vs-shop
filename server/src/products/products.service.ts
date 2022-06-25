@@ -64,18 +64,12 @@ export class ProductsService {
         return products;
     }
 
-    async createProduct(userId: number, dto: CreateProductDto, attributes: Map<string, string>, images: Express.Multer.File[]): Promise<Product> {
-        try {
-            const result = await this.productRepository.insert({ ...dto, userId: userId });
-            const insertId = result.raw.insertId;
+    async createProduct(userId: number, dto: CreateProductDto, attributes: Map<string, string>): Promise<Product> {
+        const result = await this.productRepository.insert({ ...dto, userId: userId });
+        const insertId = result.raw.insertId;
 
-            await this.addAttributes(insertId, attributes);
-            await this.addImages(insertId, images);
-
-            return this.getProductById(insertId);
-        } catch (e) {
-            throw new InternalServerErrorException(e);
-        }
+        await this.addAttributes(insertId, attributes);
+        return this.getProductById(insertId);
     }
 
     /**

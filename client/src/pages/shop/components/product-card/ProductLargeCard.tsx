@@ -5,24 +5,29 @@ import cart from '../../../../store/cart';
 import { ProductCardProps } from './Product';
 import '../../../../styles/product/product-card-large.scss';
 import { SpecSymbols } from '../../../../values/specSymbols';
+import { NavLink } from 'react-router-dom';
 
-const ProductLargeCard: FC<ProductCardProps> = observer(({ product, addToCart, openFullView, onOpenQuickView, getMainImage }) => {
+const ProductLargeCard: FC<ProductCardProps> = observer(({ product, urlFull, addToCart, onOpenQuickView, getMainImage }) => {
     return (
         <div className='product-card-large rlt'>
-            <div className='product-card-large__img-container' onClick={() => openFullView(product)}>
-                <img className='product-card__img product-card-large__img' alt='' src={getMainImage(product).url} />
-                <div className='product-card__labels product-card__labels_large ccc'>
-                    {product.isNew && <div className='product-card__label product-card__label_green'>New</div>}
-                    {product.discountPercent !== 0 && <div className='product-card__label product-card__label_red'>-{product.discountPercent} %</div>}
-                </div>
-                <div className='product-card__actions ccc'>
-                    <div className='product-card__action-mask' onClick={() => onOpenQuickView(product)}>
-                        <div className='product-card__quick-view'></div>
+            <NavLink to={urlFull}>
+                <div className='product-card-large__img-container'>
+                    <img className='product-card__img product-card-large__img' alt='' src={getMainImage(product).url} />
+                    <div className='product-card__labels product-card__labels_large ccc'>
+                        {product.isNew && <div className='product-card__label product-card__label_green'>New</div>}
+                        {product.discountPercent !== 0 && <div className='product-card__label product-card__label_red'>-{product.discountPercent} %</div>}
+                    </div>
+                    <div className='product-card__actions ccc'>
+                        <div className='product-card__action-mask' onClick={() => onOpenQuickView(product)}>
+                            <div className='product-card__quick-view'></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </NavLink>
             <div className='product-card-large__info clt'>
-                <span className='product-card__name product-card-large__title' onClick={() => openFullView(product)}>{product.title}</span>
+                <NavLink to={urlFull}>
+                    <span className='product-card__name product-card-large__title'>{product.title}</span>
+                </NavLink>
                 <span className='product-card__brand'>STUDIO DESIGN</span>
                 <div className='product-card__price rlc'>
                     {product.discountPercent !== 0 && <span className='product-card__old-price  product-card-large__price'>{product.oldPrice}{SpecSymbols.NBSP}₴</span>}

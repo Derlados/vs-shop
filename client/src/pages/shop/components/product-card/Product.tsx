@@ -2,6 +2,8 @@ import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import cart from '../../../../store/cart';
+import catalog from '../../../../store/catalog';
+import shop from '../../../../store/shop';
 import { IImage } from '../../../../types/IImage';
 import { IProduct } from '../../../../types/IProduct';
 import ProductMainInfo from '../../../product/components/ProductMainInfo';
@@ -11,12 +13,12 @@ import ProductSmallCard from './ProductSmallCard';
 export interface ProductProps {
     product: IProduct;
     addToCart: (product: IProduct, count?: number) => void;
-    openFullView: (product: IProduct) => void;
     getMainImage: (product: IProduct) => IImage;
 }
 
 export interface ProductCardProps extends ProductProps {
     onOpenQuickView: (product: IProduct) => void;
+    urlFull: string;
 }
 
 interface CreateProductCardProps {
@@ -26,17 +28,7 @@ interface CreateProductCardProps {
 }
 
 const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQuickView = () => { } }) => {
-    window.scrollTo({
-        top: 0,
-        behavior: "auto"
-    })
-    const { catalog } = useParams();
-    const navigation = useNavigate();
-
-    //TODO
-    const openFullView = (product: IProduct) => {
-        navigation(`/${catalog}/${product.id}`);
-    }
+    const category = shop.getCategoryById(product.categoryId)?.routeName;
 
     const addToCart = (product: IProduct, count: number = 1) => {
         cart.addToCart(product, count);
@@ -51,8 +43,8 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
             return (
                 <ProductSmallCard
                     product={product}
+                    urlFull={`/${category}/${product.id}`}
                     addToCart={addToCart}
-                    openFullView={openFullView}
                     onOpenQuickView={onOpenQuickView}
                     getMainImage={getMainImage}
                 />
@@ -62,8 +54,8 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
             return (
                 <ProductLargeCard
                     product={product}
+                    urlFull={`/${category}/${product.id}`}
                     addToCart={addToCart}
-                    openFullView={openFullView}
                     onOpenQuickView={onOpenQuickView}
                     getMainImage={getMainImage}
                 />
@@ -74,7 +66,6 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                 <ProductMainInfo
                     product={product}
                     addToCart={addToCart}
-                    openFullView={openFullView}
                     getMainImage={getMainImage}
                 />
             )
@@ -84,7 +75,6 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                 <ProductMainInfo
                     product={product}
                     addToCart={addToCart}
-                    openFullView={openFullView}
                     getMainImage={getMainImage}
                     isExtended={true}
                 />

@@ -49,19 +49,11 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => 
         localStore.isOpenQuick = false;
     }
 
-    const products = catalog.filteredProducts.slice((catalog.selectedPage - 1) * MAX_PRODUCTS_BY_PAGE, catalog.selectedPage * MAX_PRODUCTS_BY_PAGE);
-
     return (
         <div className='catalog ccc'>
             {localStore.selectedProduct && <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />}
             <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} onOpenFilters={onOpenFilters} />
-            <ProductGrid products={products} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} />
-            <Pagination
-                maxPages={catalog.maxPages}
-                currentPage={catalog.selectedPage}
-                back={catalog.backPage}
-                next={catalog.nextPage}
-                setPage={catalog.selectPage} />
+            <ProductGrid products={catalog.products} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} maxPerPage={MAX_PRODUCTS_BY_PAGE} />
         </div>
     )
 });

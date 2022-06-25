@@ -17,7 +17,7 @@
         box-shadow: 0px 0px 10px rgb(139, 139, 139);
     }
 
-    &:hover > &__actions {
+    &:hover>&__actions {
         opacity: 1;
 
     }
@@ -84,12 +84,14 @@
             border: solid 1px $primary;
         }
 
-        &:hover > .product-card__quick-view, &:hover > .product-card__favorite {
+        &:hover>.product-card__quick-view,
+        &:hover>.product-card__favorite {
             background-color: white;
         }
     }
 
-    &__quick-view, &__favorite {
+    &__quick-view,
+    &__favorite {
         width: 100%;
         height: 100%;
         mask-size: contain;
@@ -109,7 +111,7 @@
         width: 100%;
         height: auto;
         cursor: pointer;
-    }   
+    }
 
     &__brand {
         color: gray;
@@ -119,7 +121,7 @@
 
     &__name {
         cursor: pointer;
-               
+
         @media (max-width: $tablet-vertical) {
             font-size: 14px;
         }
@@ -133,7 +135,8 @@
         }
     }
 
-    &__old-price, &__current-price {
+    &__old-price,
+    &__current-price {
         font-size: 18px;
 
         @media (max-width: $tablet-vertical) {

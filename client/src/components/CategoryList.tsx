@@ -9,7 +9,7 @@ interface CategoryListProps {
     onClick?: (category: ICategory) => void;
 }
 
-const CategoryList: FC<CategoryListProps> = ({ categories, onClick = (category) => { } }) => {
+const CategoryList: FC<CategoryListProps> = ({ categories, onClick = () => { } }) => {
     return (
         <div className='category-list rlc'>
             {categories.map((category) => (

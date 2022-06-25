@@ -41,6 +41,9 @@ class ShopStore {
         this.categories.splice(this.categories.findIndex(c => c.id === id), 1);
     }
 
+    getCategoryById(id: number) {
+        return this.categories.find((c) => c.id === id)
+    }
 
     getCategoryByRoute(routeName: string) {
         return this.categories.find((c) => c.routeName === routeName)

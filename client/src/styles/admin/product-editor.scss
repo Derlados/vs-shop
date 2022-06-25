@@ -2,6 +2,11 @@
 
 .product-editor {
 
+    &__product-list {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
     &__form {
         padding-bottom: 20px;
     }
@@ -10,7 +15,6 @@
         width: 100%;
         justify-content: space-between !important;
     }
-
 
     &__prev {
         width: 100%;
@@ -49,4 +53,6 @@
     &__attribute-value {
         flex: 1;
     }
+
+
 }

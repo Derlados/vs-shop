@@ -29,7 +29,7 @@
             transition: 0.25s;
         }
 
-        &_opened > .filters {
+        &_opened>.filters {
             left: 0;
         }
 
@@ -49,7 +49,8 @@
         width: 24px;
         cursor: pointer;
 
-        &::before, &::after {
+        &::before,
+        &::after {
             position: absolute;
             top: calc(50% - 1px);
             right: 0;
@@ -64,12 +65,12 @@
         &::after {
             -webkit-transform: rotate(-45deg);
             transform: rotate(-45deg);
-        }    
+        }
 
         &::before {
             -webkit-transform: rotate(45deg);
             transform: rotate(45deg);
-        }    
+        }
 
         @media (max-width: $tablet-horizontal) {
             display: block;
@@ -82,7 +83,7 @@
         padding: 15px 0px 15px 0px;
         color: black;
 
-         @media (max-width: $tablet-horizontal) {
+        @media (max-width: $tablet-horizontal) {
             padding: 0px 0px 15px 0px;
         }
     }
@@ -91,7 +92,7 @@
         width: 100%;
         height: 1px;
         background-color: rgb(211, 211, 211);
-        margin-bottom:20px;
+        margin-bottom: 20px;
     }
 
     &__price {
@@ -116,8 +117,8 @@
         cursor: pointer;
         margin: 10px 0px 10px 0px;
 
-        &:hover > .filters__checkmark {
-           border: 1px solid $primary;
+        &:hover>.filters__checkmark {
+            border: 1px solid $primary;
         }
     }
 
@@ -134,7 +135,7 @@
             color: $primary;
         }
 
-        &:hover > .filters__checkmark {
+        &:hover>.filters__checkmark {
             border: 1px solid $primary;
         }
     }
@@ -145,11 +146,11 @@
         height: 0;
         width: 0;
 
-        &:checked ~ .filters__checkmark {
+        &:checked~.filters__checkmark {
             border: 1px solid $primary;
         }
 
-        &:checked ~ .filters__checkmark::after {
+        &:checked~.filters__checkmark::after {
             display: block;
         }
     }
@@ -174,7 +175,5 @@
         }
     }
 
-    &__attr-value {
-
-    }
+    &__attr-value {}
 }

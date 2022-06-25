@@ -47,12 +47,9 @@ export class ProductsController {
     @Post()
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @UseInterceptors(ClassSerializerInterceptor, FilesInterceptor('images'))
-    addProduct(@Req() req, @Body() dto: ReqCreateProductDto, @UploadedFiles() images: Express.Multer.File[]) {
-        if (!images) {
-            throw new BadRequestException("Не загружены изображения");
-        }
-        return this.productService.createProduct(req.user.userId, dto.product, new Map(Object.entries(dto.attributes)), images);
+    @UseInterceptors(ClassSerializerInterceptor)
+    addProduct(@Req() req, @Body() dto: ReqCreateProductDto) {
+        return this.productService.createProduct(req.user.userId, dto.product, new Map(Object.entries(dto.attributes)));
     }
 
     @Put(':id([0-9]+)')

@@ -78,4 +78,10 @@ export class Product {
 
         this.attributes = Object.fromEntries(mapAttr);
     }
+
+    @AfterLoad()
+    convertToNumber() {
+        this.price = Number(this.price);
+        this.oldPrice = Number(this.oldPrice);
+    }
 }

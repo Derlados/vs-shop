@@ -2,7 +2,7 @@
 @import '../general/resolutions.scss';
 
 .catalog {
-    &__products {
+    &__products-grid {
         justify-content: space-between !important;
         width: 100%;
         flex-wrap: wrap;
@@ -21,6 +21,18 @@
 
         &_large {
             width: 100%;
+        }
+
+        &_inactive-links {
+            cursor: pointer;
+
+            a {
+                pointer-events: none;
+            }
+        }
+
+        a {
+            text-decoration: none;
         }
     }
 
@@ -53,7 +65,7 @@
             background-color: $primary;
         }
 
-        &:hover > .catalog__view-mode {
+        &:hover>.catalog__view-mode {
             background-color: white;
         }
 
@@ -61,7 +73,7 @@
             background-color: $primary;
         }
 
-        &_selected > .catalog__view-mode {
+        &_selected>.catalog__view-mode {
             background-color: white;
         }
     }
@@ -79,11 +91,11 @@
     }
 
     &__view-list {
-         background-color: $primary;
+        background-color: $primary;
         mask-image: url('../../assets/images/list.svg');
     }
 
-    &__view-and-sort{
+    &__view-and-sort {
         width: 100%;
     }
 
@@ -148,17 +160,23 @@
         padding: 10px 20px 10px 10px;
         transition: 0.4s;
         cursor: pointer;
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+        -webkit-touch-callout: none;
+        /* iOS Safari */
+        -webkit-user-select: none;
+        /* Safari */
+        -khtml-user-select: none;
+        /* Konqueror HTML */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer/Edge */
+        user-select: none;
+        /* Non-prefixed version, currently supported by Chrome and Opera */
 
         &:hover {
             border: solid 1px rgb(201, 201, 201);
         }
-        
+
         &::after {
             width: 3px;
             height: 3px;
@@ -177,10 +195,10 @@
         }
 
         &_open {
-             &::after {
+            &::after {
                 transform: rotate(225deg);
                 -webkit-transform: rotate(225deg);
-                -ms-transform: rotate(225deg); 
+                -ms-transform: rotate(225deg);
             }
         }
 
@@ -209,12 +227,18 @@
         background-color: white;
         z-index: 5;
         transition: 0.25s;
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+        -webkit-touch-callout: none;
+        /* iOS Safari */
+        -webkit-user-select: none;
+        /* Safari */
+        -khtml-user-select: none;
+        /* Konqueror HTML */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer/Edge */
+        user-select: none;
+        /* Non-prefixed version, currently supported by Chrome and Opera */
 
         &_open {
             transform: scale(1);
@@ -229,7 +253,7 @@
         @media (max-width: $mobile-mini) {
             width: 120px;
         }
-    }  
+    }
 
     &__sort-item {
         white-space: nowrap;
@@ -244,4 +268,3 @@
         }
     }
 }
-

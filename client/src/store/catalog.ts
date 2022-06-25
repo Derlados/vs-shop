@@ -15,13 +15,10 @@ export enum SortType {
 }
 
 class CatalogStore {
-    private static MAX_PRODUCTS_BY_PAGE = 16;
-
-    private category: ICategory;
+    public category: ICategory;
     public filters: IFilters;
     public products: IProduct[];
 
-    public selectedPage: number;
     public selectedSort: SortType;
     public selectedPriceRange: IRange;
     public searchString: string;
@@ -43,26 +40,18 @@ class CatalogStore {
             attributes: []
         };
 
-        this.selectedPage = 1;
         this.selectedSort = SortType.NOT_SELECTED;
         this.selectedPriceRange = this.priceRange;
         this.searchString = '';
         this.selectedFilters = new Map();
     }
 
+
     get filteredProducts(): IProduct[] {
         let products = [...this.products];
         products = this.filterProducts(products);
         products = this.sortProducts(products);
         return products;
-    }
-
-    get maxPages(): number {
-        let maxPages: number = Math.floor(this.filteredProducts.length / CatalogStore.MAX_PRODUCTS_BY_PAGE);
-        if (this.filteredProducts.length % CatalogStore.MAX_PRODUCTS_BY_PAGE !== 0) {
-            ++maxPages;
-        }
-        return maxPages;
     }
 
     get priceRange(): IRange {
@@ -182,24 +171,6 @@ class CatalogStore {
         values?.splice(values?.findIndex(v => v === value), 1);
     }
 
-    /////////////////////////////////// ПЕРЕХОД ПО СТРАНИЦАМ КАТАЛОГА ///////////////////////////////////
-
-    public backPage() {
-        if (this.selectedPage !== 1) {
-            --this.selectedPage;
-        }
-    }
-
-    public nextPage() {
-        if (this.selectedPage !== this.maxPages) {
-            ++this.selectedPage;
-        }
-    }
-
-    public selectPage(page: number) {
-        this.selectedPage = page;
-    }
-
     /////////////////////////////////// CRUD ОПЕРАЦИИ ДЛЯ ПРОДУКТОВ В КАТАЛОГЕ //////////////////////////////////
 
     public async addProduct(product: IProduct) {
@@ -210,7 +181,7 @@ class CatalogStore {
 
     public async editProduct(id: number, product: IProduct) {
         product.categoryId = this.category.id;
-        const updatedProduct = await productsService.addProducts(product);
+        const updatedProduct = await productsService.editProduct(id, product);
         this.products[this.products.findIndex(p => p.id === id)] = updatedProduct;
     }
 
