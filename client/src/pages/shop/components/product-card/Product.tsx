@@ -28,7 +28,7 @@ interface CreateProductCardProps {
 }
 
 const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQuickView = () => { } }) => {
-    const category = shop.getCategoryById(product.categoryId)?.routeName;
+    const { catalog: category } = useParams();
 
     const addToCart = (product: IProduct, count: number = 1) => {
         cart.addToCart(product, count);

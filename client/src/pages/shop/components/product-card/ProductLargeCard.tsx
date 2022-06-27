@@ -12,7 +12,7 @@ const ProductLargeCard: FC<ProductCardProps> = observer(({ product, urlFull, add
         <div className='product-card-large rlt'>
             <NavLink to={urlFull}>
                 <div className='product-card-large__img-container'>
-                    <img className='product-card__img product-card-large__img' alt='' src={getMainImage(product).url} />
+                    <img className='product-card__img product-card-large__img' alt='' src={getMainImage(product)?.url ?? require('../../../../assets/images/no-photos.png')} />
                     <div className='product-card__labels product-card__labels_large ccc'>
                         {product.isNew && <div className='product-card__label product-card__label_green'>New</div>}
                         {product.discountPercent !== 0 && <div className='product-card__label product-card__label_red'>-{product.discountPercent} %</div>}

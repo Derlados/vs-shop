@@ -109,7 +109,8 @@ export class ProductsService {
         }
 
         if (dto.deletedImagesId) {
-            if (product.images.some((img) => !dto.deletedImagesId.includes(img.id))) {
+            const existImageIds = product.images.map(img => img.id)
+            if (dto.deletedImagesId.some((id) => !existImageIds.includes(id))) {
                 throw new ForbiddenException("Вы не имеет права удалить эти изображения")
             }
 
@@ -173,11 +174,11 @@ export class ProductsService {
         }
 
         const productImages = await this.fileService.createFiles(images);
-        const newImages = [{ productId: productId, name: productImages[0], isMain: isFirstMain }];
+        const newImages = [{ productId: productId, url: productImages[0], isMain: isFirstMain }];
         for (const image of productImages.slice(0, -1)) {
             newImages.push({
                 productId: productId,
-                name: image,
+                url: image,
                 isMain: false
             });
         }

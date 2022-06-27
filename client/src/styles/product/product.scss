@@ -11,7 +11,7 @@
     }
 
     &__info {
-        width: 100%;    
+        width: 100%;
 
         @media (max-width: $tablet-vertical) {
             flex-direction: column !important;
@@ -23,7 +23,7 @@
         width: 35%;
         max-width: 400px;
         padding-right: 20px;
-    
+
         @media (max-width: $tablet-vertical) {
             width: 100%;
             max-width: 100%;
@@ -35,23 +35,27 @@
         width: 100%;
         height: auto;
         border: solid 1px $primary-gray;
+        padding: 20px;
     }
 
     &__img-container {
         position: relative;
         margin-bottom: 15px;
 
-        &:hover > .product__arrow {
-            opacity: 1;;
+        &:hover>.product__arrow {
+            opacity: 1;
+            ;
         }
     }
 
     &__slider-container {
         position: relative;
         max-width: 100%;
-        
-        &:hover > .product__arrow {
-            opacity: 1;;
+        width: 100%;
+
+        &:hover>.product__arrow {
+            opacity: 1;
+
         }
     }
 
@@ -79,17 +83,23 @@
         cursor: pointer;
         transition: 0.4s;
         z-index: 99;
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+        -webkit-touch-callout: none;
+        /* iOS Safari */
+        -webkit-user-select: none;
+        /* Safari */
+        -khtml-user-select: none;
+        /* Konqueror HTML */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer/Edge */
+        user-select: none;
+        /* Non-prefixed version, currently supported by Chrome and Opera */
 
         &:hover {
             color: white;
             background-color: $primary;
-        } 
+        }
 
         &_back {
             left: 0;
@@ -125,8 +135,9 @@
         color: gray;
     }
 
-    &__current-price {
-
+    &__current-price,
+    &__old-price {
+        font-size: 22px;
     }
 
     &__desc {
@@ -210,9 +221,7 @@
         }
     }
 
-    &__share-actions {
-
-    }
+    &__share-actions {}
 
     &__share {
         font-size: 18px;
@@ -277,7 +286,7 @@
             color: black;
         }
 
-        &_selected{
+        &_selected {
             color: black;
 
             &::after {
@@ -300,7 +309,7 @@
 
     &__details {
         width: 100%;
-            padding-bottom: 5px;
+        padding-bottom: 5px;
     }
 
     &__list {
@@ -323,6 +332,4 @@
 
 }
 
-.comments {
-
-}
+.comments {}

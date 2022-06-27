@@ -65,6 +65,7 @@ export class ProductsController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(FilesInterceptor('images'))
     updateImages(@Req() req, @Param('id') id: number, @Body() dto: UpdateImagesDto, @UploadedFiles() images: Express.Multer.File[]) {
+        dto.deletedImagesId?.map((id, index) => dto.deletedImagesId[index] = Number(id));
         return this.productService.updateImages(id, req.user.userId, dto, images)
     }
 

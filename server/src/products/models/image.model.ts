@@ -21,9 +21,4 @@ export class Image {
     @ManyToOne(() => Product, product => product.images, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'product_id' })
     product: Product;
-
-    @AfterLoad()
-    getUrl() {
-        this.url = `http://localhost:5000/static/${this.url}`;
-    }
 }

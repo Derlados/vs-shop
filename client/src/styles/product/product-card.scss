@@ -9,6 +9,10 @@
     transition: 0.4s;
     margin: 0px 0px 14px 0px;
 
+    a {
+        text-decoration: none;
+    }
+
     @media (max-width: $mobile-vertical) {
         padding: 5px;
     }
@@ -120,11 +124,9 @@
     }
 
     &__name {
-        cursor: pointer;
 
-        @media (max-width: $tablet-vertical) {
-            font-size: 14px;
-        }
+        font-size: 14px;
+        cursor: pointer;
     }
 
     &__price {

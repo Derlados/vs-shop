@@ -8,7 +8,7 @@ import { SpecSymbols } from '../../../../values/specSymbols';
 import { NavLink } from 'react-router-dom';
 
 const ProductSmallCard: FC<ProductCardProps> = observer(({ urlFull, product, addToCart, onOpenQuickView, getMainImage }) => {
-    product.images[0].url = 'https://htmldemo.net/melani/melani/assets/img/product/product-9.jpg';
+
     return (
         <div className='product-card ccc'>
             <div className='product-card__labels ccc'>
@@ -21,7 +21,7 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ urlFull, product, add
                 </div>
             </div>
             <NavLink to={`${urlFull}`}>
-                <img className='product-card__img' alt='' src={getMainImage(product).url} />
+                <img className='product-card__img' alt='' src={getMainImage(product)?.url ?? require('../../../../assets/images/no-photos.png')} />
             </NavLink>
             <span className='product-card__brand'>STUDIO DESIGN</span>
             <NavLink to={`${urlFull}`}>

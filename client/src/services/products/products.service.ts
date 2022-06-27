@@ -1,4 +1,5 @@
 import { axiosInstance, headersJSON } from "..";
+import { IImage } from "../../types/IImage";
 import { IProduct } from "../../types/IProduct";
 import { Service } from "../service";
 
@@ -24,13 +25,28 @@ class ProductService extends Service {
         return this.parseProduct(data);
     }
 
-    async editProduct(id: number, product: IProduct) {
+    async editProduct(id: number, product: IProduct): Promise<IProduct> {
         const { data } = await axiosInstance.put<IProduct>(`${this.API_URL}/${id}`, this.getProductDto(product), { headers: headersJSON() });
         return this.parseProduct(data);
     }
 
-    async editProductImages() {
+    async editProductImages(id: number, images: File[], deletedImagesId?: number[], newMainImageId?: number): Promise<IImage[]> {
+        const formData = new FormData();
+        for (const image of images) {
+            formData.append('images', image);
+        }
 
+        if (deletedImagesId) {
+            for (const id of deletedImagesId) {
+                formData.append('deletedImagesId[]', id.toString());
+            }
+        }
+        if (newMainImageId) {
+            formData.append('newMainImageId', newMainImageId.toString());
+        }
+
+        const { data } = await axiosInstance.put<IImage[]>(`${this.API_URL}/${id}/images`, formData, { headers: headersJSON() });
+        return data;
     }
 
     async deleteProduct(id: number) {

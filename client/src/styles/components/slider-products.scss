@@ -10,7 +10,7 @@
         justify-content: space-between;
         margin-bottom: 25px;
     }
-    
+
     &__title {
         position: relative;
         font-size: 28px;
@@ -24,9 +24,10 @@
     &__slider-container {
         position: relative;
         max-width: 100%;
-        
-        &:hover > .product__arrow {
-            opacity: 1;;
+        width: 100%;
+
+        &:hover>.product__arrow {
+            opacity: 1;
         }
     }
 
@@ -46,7 +47,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: 0.4s;
-        
+
 
         @media (max-width: $tablet-vertical) {
             width: 36px !important;
@@ -63,5 +64,5 @@
             margin-right: 15px;
         }
     }
-    
+
 }

@@ -1,12 +1,12 @@
-import { IsArray, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsNumber, IsNumberString, IsOptional, IsString } from "class-validator";
 
 export class UpdateImagesDto {
     @IsOptional()
     @IsArray()
-    @IsNumber({}, { each: true })
+    @IsNumberString({}, { each: true })
     deletedImagesId?: number[];
 
     @IsOptional()
-    // @IsNumber()
+    @IsNumberString()
     newMainImageId?: number;
 }

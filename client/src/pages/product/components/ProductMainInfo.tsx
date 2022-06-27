@@ -5,6 +5,7 @@ import CartButton from '../../../components/CartButton';
 import cart from '../../../store/cart';
 import { ProductProps } from '../../shop/components/product-card/Product';
 import 'swiper/css';
+import { IImage } from '../../../types/IImage';
 
 interface LocalStore {
     swiper: any;
@@ -20,12 +21,22 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
     const localStore = useLocalObservable<LocalStore>(() => ({
         swiper: null,
         selectedCount: 1,
-        selectedImage: product.images[0].url ?? ''
+        selectedImage: product.images[0]?.url
     }));
+
+    const getMainImg = (): IImage => {
+        let mainImg = product.images.find(img => img.isMain)
+        if (!mainImg) {
+            mainImg = product.images[0];
+        }
+        return mainImg;
+    }
 
     useEffect(() => {
         localStore.swiper?.slideToLoop(product.images.length - 1, 0);
-    }, [product])
+        localStore.selectedImage = getMainImg()?.url
+    }, [product, product.images.length])
+
 
     const incrementCount = () => {
         if (localStore.selectedCount < product.count) {
@@ -60,7 +71,7 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
         if (index === product.images.length) {
             localStore.selectedImage = product.images[0].url;
         } else {
-            localStore.selectedImage = product.images[index].url;
+            localStore.selectedImage = product.images[index]?.url;
         }
     }
 
@@ -68,9 +79,9 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
         <div className='product__info rlt'>
             <div className='product__images ctc'>
                 <div className='product__img-container'>
-                    <img className='product__img' alt='' src={localStore.selectedImage} />
-                    <div className='product__arrow product__arrow_back ccc' onClick={() => localStore.swiper.slidePrev()}>{"❮"}</div>
-                    <div className='product__arrow product__arrow_next ccc' onClick={() => localStore.swiper.slideNext()}>{"❯"}</div>
+                    <img className='product__img' alt='' src={localStore.selectedImage ?? require('../../../assets/images/no-photos.png')} />
+                    {product.images.length !== 0 && <div className='product__arrow product__arrow_back ccc' onClick={() => localStore.swiper.slidePrev()}>{"❮"}</div>}
+                    {product.images.length !== 0 && <div className='product__arrow product__arrow_next ccc' onClick={() => localStore.swiper.slideNext()}>{"❯"}</div>}
                 </div>
                 <div className='product__slider-container'>
                     <Swiper
@@ -89,8 +100,8 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                    <div className='product__arrow product__arrow_back ccc' onClick={() => localStore.swiper.slidePrev()}>{"❮"}</div>
-                    <div className='product__arrow product__arrow_next ccc' onClick={() => localStore.swiper.slideNext()}>{"❯"}</div>
+                    {product.images.length !== 0 && <div className='product__arrow product__arrow_back ccc' onClick={() => localStore.swiper.slidePrev()}>{"❮"}</div>}
+                    {product.images.length !== 0 && <div className='product__arrow product__arrow_next ccc' onClick={() => localStore.swiper.slideNext()}>{"❯"}</div>}
                 </div>
             </div>
             <div className='product__content clt'>

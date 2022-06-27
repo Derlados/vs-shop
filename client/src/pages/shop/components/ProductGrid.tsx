@@ -28,7 +28,6 @@ const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPer
         maxPages: 1,
         selectedProducts: []
     }))
-    console.log(products);
 
     useEffect(() => {
         let maxPages: number = Math.floor(products.length / maxPerPage);

@@ -46,7 +46,6 @@ class CatalogStore {
         this.selectedFilters = new Map();
     }
 
-
     get filteredProducts(): IProduct[] {
         let products = [...this.products];
         products = this.filterProducts(products);
@@ -173,15 +172,17 @@ class CatalogStore {
 
     /////////////////////////////////// CRUD ОПЕРАЦИИ ДЛЯ ПРОДУКТОВ В КАТАЛОГЕ //////////////////////////////////
 
-    public async addProduct(product: IProduct) {
+    public async addProduct(product: IProduct, images: File[], deletedImagesId?: number[], newMainImageId?: number) {
         product.categoryId = this.category.id;
         const newProduct = await productsService.addProducts(product);
+        newProduct.images = await productsService.editProductImages(newProduct.id, images, deletedImagesId, newMainImageId);
         this.products.push(newProduct);
     }
 
-    public async editProduct(id: number, product: IProduct) {
+    public async editProduct(id: number, product: IProduct, images: File[], deletedImagesId?: number[], newMainImageId?: number) {
         product.categoryId = this.category.id;
         const updatedProduct = await productsService.editProduct(id, product);
+        updatedProduct.images = await productsService.editProductImages(updatedProduct.id, images, deletedImagesId, newMainImageId);
         this.products[this.products.findIndex(p => p.id === id)] = updatedProduct;
     }
 
@@ -189,7 +190,6 @@ class CatalogStore {
         await productsService.deleteProduct(id);
         this.products.splice(this.products.findIndex(p => p.id === id), 1);
     }
-
 }
 
 export default new CatalogStore();

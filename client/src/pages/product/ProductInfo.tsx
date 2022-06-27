@@ -37,17 +37,21 @@ const ProductInfo: FC = observer(() => {
         localStore.product = product;
     }, [id]);
 
-
-    return (
-        <div className='product ccc'>
-            <CatalogNav />
-            <div className='product__container rlc'>
-                <Product product={localStore.product} type="full-view" />
+    if (localStore.product) {
+        return (
+            <div className='product ccc'>
+                <CatalogNav />
+                <div className='product__container rlc'>
+                    <Product product={localStore.product} type="full-view" />
+                </div>
+                {/* Когда контент добавится  <ProductDesc /> */}
+                <SliderProducts title="You Might Also Like" products={[...catalog.products.slice(0, 8)]} />
             </div>
-            {/* Когда контент добавится  <ProductDesc /> */}
-            <SliderProducts title="You Might Also Like" products={[...catalog.products.slice(0, 8)]} />
-        </div>
-    )
+        )
+    } else {
+        return <div>Loading...</div>
+    }
+
 });
 
 export default ProductInfo
