@@ -2,8 +2,6 @@
 @import '../general/resolutions.scss';
 
 .checkout {
-    margin-top: 50px;
-
     @media (max-width: $tablet-horizontal) {
         margin-top: 20px;
         flex-direction: column !important;
@@ -43,7 +41,7 @@
         input {
             transition: 0.4s;
         }
-        
+
 
         &_invalid input {
             border-color: rgb(252, 157, 157);
@@ -111,9 +109,7 @@
     }
 
     &__order-text {
-        @media (max-width: $mobile-vertical) {
-            font-size: 14px;
-        }
+        font-size: 14px;
 
         &_bold {
             font-weight: bold;
@@ -131,7 +127,7 @@
     &__order-product-list {
         position: relative;
         width: 100%;
-        padding: 20px 0px 20px 0px;
+        padding-top: 10px;
         border-bottom: 1px solid $secondary-gray;
         margin-bottom: 25px;
     }
@@ -141,13 +137,11 @@
         justify-content: space-between !important;
         color: $secondary-gray;
         padding: 5px 0px 5px 0px;
-      
     }
 
     &__order-delivery {
         width: 100%;
         justify-content: space-between !important;
-        padding-bottom: 30px;
         border-bottom: 1px solid $secondary-gray;
         margin-bottom: 20px;
     }
@@ -155,7 +149,7 @@
     &__total {
         width: 100%;
         justify-content: space-between !important;
-         
+
     }
 
     &__order-accept {
@@ -170,5 +164,12 @@
         &:hover {
             background-color: $hover-primary;
         }
+    }
+
+    &__line {
+        width: 100%;
+        height: 1px;
+        background-color: #dee0e4;
+        margin-bottom: 20px;
     }
 }

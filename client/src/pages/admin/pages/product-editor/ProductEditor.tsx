@@ -116,6 +116,13 @@ const ProductEditor = observer(() => {
     const selectMainImg = (image: IImage) => {
         localStore.product.images.forEach((img) => img.isMain = false);
         image.isMain = true;
+
+        const fileIndex = localStore.uploadedFiles.findIndex(uf => uf.id == image.id);
+        if (fileIndex !== -1) {
+            const temp = localStore.uploadedFiles[0];
+            localStore.uploadedFiles[0] = localStore.uploadedFiles[fileIndex];
+            localStore.uploadedFiles[fileIndex] = temp;
+        }
     }
 
     const deleteImg = (image: IImage) => {

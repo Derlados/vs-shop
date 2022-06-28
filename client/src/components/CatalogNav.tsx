@@ -37,7 +37,7 @@ const CatalogNav = () => {
         }
 
         if (id && Number.isInteger(parseInt(id))) {
-            const product = catalog.findProductById(+id);
+            const product = catalog.getProductById(+id);
             if (product) {
                 newRoutes.push({
                     to: `../../${categoryRoute}/${product.id.toString()}`,

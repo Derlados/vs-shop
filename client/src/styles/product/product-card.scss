@@ -119,17 +119,26 @@
 
     &__brand {
         color: gray;
-        margin-bottom: 5px;
-        font-size: 12px;
+        margin: 0px 0px 5px 0px;
+        font-size: 14px;
+
+        &_large {
+            margin: 5px 0px 0px 0px;
+            font-size: 14px;
+        }
     }
 
     &__name {
-
         font-size: 14px;
+        line-height: 18px;
         cursor: pointer;
+
+        &_large {
+            font-size: 16px;
+        }
     }
 
-    &__price {
+    &__old-price {
         margin: 15px 0px;
 
         @media (max-width: $tablet-vertical) {
@@ -137,7 +146,6 @@
         }
     }
 
-    &__old-price,
     &__current-price {
         font-size: 18px;
 
@@ -149,9 +157,13 @@
     &__old-price {
         text-decoration: line-through;
         color: gray;
+        margin-left: 5px;
+        font-size: 16px;
+
+        @media (max-width: $tablet-vertical) {
+            font-size: 14px;
+        }
     }
 
-    &__current-price {
-        margin-left: 5px;
-    }
+
 }

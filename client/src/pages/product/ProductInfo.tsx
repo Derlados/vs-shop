@@ -3,38 +3,50 @@ import catalog from '../../store/catalog';
 import '../../styles/product/product.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import Product from '../shop/components/product-card/Product';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import CatalogNav from '../../components/CatalogNav';
 import SliderProducts from '../../components/SliderProducts';
 import { IProduct } from '../../types/IProduct';
+import Loader from '../../lib/Loader/Loader';
 
 type ProductParams = {
+    catalog: string;
     id: string;
 };
 
 interface LocalStore {
-    product: IProduct;
+    product?: IProduct;
+    isLoading: boolean;
 }
 
 const ProductInfo: FC = observer(() => {
-    const navigation = useNavigate();
-    const { id } = useParams<ProductParams>();
+
+    const { id, catalog: category } = useParams<ProductParams>();
     const localStore = useLocalObservable<LocalStore>(() => ({
-        product: catalog.products[0]
+        product: catalog.products[0],
+        isLoading: true
     }));
+    console.log("render", localStore.isLoading, localStore.product);
 
     useEffect(() => {
+        async function fetchProduct(category: string) {
+            if (catalog.products.length == 0) {
+                await catalog.init(category);
+            }
+
+            const product = catalog.getProductById(Number(id))
+            localStore.product = product;
+            localStore.isLoading = false;
+        }
+
         if (!id || !Number.isInteger(parseInt(id))) {
-            navigation('/404_not_found')
+            localStore.isLoading = false;
             return;
         }
 
-        const product = catalog.findProductById(parseInt(id));
-        if (!product) {
-            navigation('/404_not_found')
-            return;
+        if (category) {
+            fetchProduct(category);
         }
-        localStore.product = product;
     }, [id]);
 
     if (localStore.product) {
@@ -48,10 +60,15 @@ const ProductInfo: FC = observer(() => {
                 <SliderProducts title="You Might Also Like" products={[...catalog.products.slice(0, 8)]} />
             </div>
         )
+    } else if (localStore.isLoading) {
+        return (
+            <div className='product__loader ccc'>
+                <Loader />
+            </div>
+        )
     } else {
-        return <div>Loading...</div>
+        return <Navigate to={'/404_not_found'} />
     }
-
 });
 
 export default ProductInfo

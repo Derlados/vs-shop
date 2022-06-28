@@ -2,6 +2,10 @@
 @import '../general/resolutions.scss';
 
 .catalog {
+    &__product-grid-cont {
+        width: 100%;
+    }
+
     &__products-grid {
         justify-content: space-between !important;
         width: 100%;

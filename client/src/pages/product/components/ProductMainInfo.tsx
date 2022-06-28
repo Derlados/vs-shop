@@ -60,9 +60,10 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
         addToCart(product, localStore.selectedCount);
     }
 
+    //TODO Есть баг с прямым выбором изображения
     const selectImg = (index: number) => {
-        localStore.selectedImage = product.images[index].url;
-        localStore.swiper?.slideToLoop(index - 1);
+        // localStore.selectedImage = product.images[index].url;
+        // localStore.swiper?.slideToLoop(index - 1);
     }
 
     const onIndexChange = (realIndex: number) => {
@@ -107,8 +108,8 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
             <div className='product__content clt'>
                 <div className='product__title'>{product.title}</div>
                 <div className='product__price rlc'>
-                    <div className='product__old-price'>{product.oldPrice} ₴</div>
                     <div className='product__current-price'>{product.price} ₴</div>
+                    <div className='product__old-price'>{product.oldPrice} ₴</div>
                 </div>
                 <div className='product__desc'>{product.description}</div>
                 {isExtended &&

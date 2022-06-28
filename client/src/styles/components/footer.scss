@@ -5,7 +5,7 @@
     width: 100%;
     margin-top: 30px;
     padding: 40px 0px 20px 0px;
-    background-color: $primary-gray;
+    background-color: #f5f5f5;
 
     &__container {
         justify-content: space-between !important;
@@ -52,13 +52,9 @@
         }
     }
 
-    &__contacts {
+    &__contacts {}
 
-    }
-
-    &__contact-item {
-        
-    }
+    &__contact-item {}
 
     &__icon {
         width: 32px;
@@ -82,7 +78,8 @@
             mask-image: url('../../assets/images/phone.svg');
         }
 
-        &_facebook, &_telegram {
+        &_facebook,
+        &_telegram {
             width: 24px;
             height: 24px;
             transition: 0.4s;

@@ -17,6 +17,7 @@ import Checkout from './pages/checkout/Checkout';
 import ProductInfo from './pages/product/ProductInfo';
 import Shop from './pages/shop/Shop';
 import HomePageEditor from './pages/admin/components/HomePageEditor';
+import NotFound404 from './pages/notFound404/NotFound404';
 
 const App = () => {
     return (
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path='/' element={<Main />} >
                     <Route path='/home' element={<Home />} />
                     <Route path='/checkout' element={<Checkout />} />
+                    <Route path='/404_not_found' element={<NotFound404 />} />
                     <Route path='/:catalog' element={<Shop />} />
                     <Route path='/:catalog/:id' element={<ProductInfo />} />
                     <Route path='/' element={<Navigate to='/home' />} />

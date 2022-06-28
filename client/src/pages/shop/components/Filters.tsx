@@ -61,7 +61,7 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
         })}>
             <div className='filters'>
                 <div className='filters__close-btn' onClick={onClose}></div>
-                <div className='filters__title'>Косметика</div>
+                <div className='filters__title'>{catalog.category.name}</div>
                 <div className='filters__line'></div>
                 <div>
                     <div className='filters__attr-name'>Price</div>

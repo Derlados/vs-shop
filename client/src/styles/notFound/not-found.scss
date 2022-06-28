@@ -1,0 +1,53 @@
+@import '../general/colors.scss';
+@import '../general/resolutions.scss';
+
+
+.not-found {
+    width: 100%;
+
+    &__404 {
+        font-size: 144px;
+        line-height: 148px;
+        color: $primary;
+        margin-bottom: 20px;
+    }
+
+    &__text {
+        font-size: 20px;
+        margin-bottom: 20px;
+
+        &_large {
+            font-size: 42px;
+            font-weight: bold;
+        }
+    }
+
+    &__button {
+        border-radius: 30px;
+        background-color: $primary;
+        padding: 15px;
+        cursor: pointer;
+        transition: 0.4s;
+        margin-top: 15px;
+        text-decoration: none;
+
+        &:hover {
+            background-color: $hover-primary;
+        }
+    }
+
+    &__button-text {
+        color: white;
+        font-size: 20px;
+    }
+
+    &__button-icon {
+        content: "";
+        width: 28px;
+        height: 28px;
+        mask-size: contain;
+        mask-image: url('../../assets/images/left.svg');
+        background-color: white;
+        margin-left: 10px;
+    }
+}

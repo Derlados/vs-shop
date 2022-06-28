@@ -2,7 +2,6 @@
 @import '../general/resolutions.scss';
 
 .product {
-    padding-top: 30px;
     flex: 1;
 
     &__container {
@@ -44,7 +43,6 @@
 
         &:hover>.product__arrow {
             opacity: 1;
-            ;
         }
     }
 
@@ -130,13 +128,13 @@
     }
 
     &__old-price {
-        padding-right: 10px;
         text-decoration: line-through;
         color: gray;
+        font-size: 20px;
     }
 
-    &__current-price,
-    &__old-price {
+    &__current-price {
+        margin-right: 10px;
         font-size: 22px;
     }
 
@@ -250,6 +248,7 @@
         }
     }
 
+    &__loader {}
 }
 
 .description {

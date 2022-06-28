@@ -174,8 +174,8 @@ export class ProductsService {
         }
 
         const productImages = await this.fileService.createFiles(images);
-        const newImages = [{ productId: productId, url: productImages[0], isMain: isFirstMain }];
-        for (const image of productImages.slice(0, -1)) {
+        const newImages = [{ productId: productId, url: productImages.shift(), isMain: isFirstMain }];
+        for (const image of productImages) {
             newImages.push({
                 productId: productId,
                 url: image,

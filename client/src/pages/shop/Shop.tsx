@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import shop from '../../store/shop';
 import catalog from '../../store/catalog';
+import Loader from '../../lib/Loader/Loader';
 
 interface LocalStore {
     isInit: boolean;
@@ -55,7 +56,9 @@ const Shop = observer(() => {
                 </div>
             </div>
             :
-            <div>Loading...</div>
+            <div className='shop__loader ccc'>
+                <Loader />
+            </div>
     )
 });
 

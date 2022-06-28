@@ -53,7 +53,7 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => 
         <div className='catalog ccc'>
             {localStore.selectedProduct && <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />}
             <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} onOpenFilters={onOpenFilters} />
-            <ProductGrid products={catalog.products} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} maxPerPage={MAX_PRODUCTS_BY_PAGE} />
+            <ProductGrid products={catalog.filteredProducts} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} maxPerPage={MAX_PRODUCTS_BY_PAGE} />
         </div>
     )
 });

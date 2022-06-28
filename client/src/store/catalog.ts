@@ -92,7 +92,7 @@ class CatalogStore {
         }
     }
 
-    public findProductById(id: number): IProduct | undefined {
+    public getProductById(id: number): IProduct | undefined {
         return this.products.find(p => p.id === id);
     }
 

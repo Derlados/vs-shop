@@ -21,7 +21,7 @@
         width: 250px;
         margin-right: 20px;
 
-        &:hover > .product-card__actions {
+        &:hover>.product-card__actions {
             opacity: 1;
         }
 
@@ -54,17 +54,22 @@
     &__desc {
         text-align: justify;
         margin-bottom: 20px;
-
-        @media (max-width: $tablet-vertical) {
-            font-size: 14px !important;
-        }
+        font-size: 14px !important;
     }
 
     &__price {
-        font-size: 22px !important;
+        font-size: 20px !important;
 
         @media (max-width: $tablet-vertical) {
             font-size: 18px !important;
         }
     }
-} 
+
+    &__old-price {
+        font-size: 18px !important;
+
+        @media (max-width: $tablet-vertical) {
+            font-size: 16px !important;
+        }
+    }
+}

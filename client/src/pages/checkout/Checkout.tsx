@@ -101,15 +101,17 @@ const Checkout = observer(() => {
                     <ul className='checkout__order-product-list'>
                         {cart.cartProducts.map(cp => (
                             <li key={cp.product.id} className='checkout__order-product rlc'>
-                                <div className='checkout__order-text'>{cp.product.title} X {cp.count}</div>
+                                <div className='checkout__order-text'>{cp.product.title} × {cp.count}</div>
                                 <div className='checkout__order-text'>{cp.product.price * cp.count} ₴</div>
                             </li>
                         ))}
                     </ul>
+                    <div className='checkout__line'></div>
                     <div className='checkout__order-delivery rlc'>
                         <div className='checkout__order-text checkout__order-text_bold'>Delivery</div>
                         <div className='checkout__order-text'>Free shipping</div>
                     </div>
+                    <div className='checkout__line'></div>
                     <div className='checkout__total rlc'>
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cart.totalPrice.toFixed(2)} ₴</div>
