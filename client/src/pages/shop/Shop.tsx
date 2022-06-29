@@ -8,30 +8,34 @@ import '../../styles/shop/catalog.scss';
 import '../../styles/shop/pagination.scss';
 import CatalogNav from '../../components/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import shop from '../../store/shop';
 import catalog from '../../store/catalog';
 import Loader from '../../lib/Loader/Loader';
 
 interface LocalStore {
-    isInit: boolean;
+    isLoaded: boolean;
     isFilterOpen: boolean;
 }
 
 const Shop = observer(() => {
     const { catalog: catalogRoute } = useParams();
     const localStore = useLocalObservable<LocalStore>(() => ({
-        isInit: catalogRoute !== undefined && catalog.isLoaded(catalogRoute!),
+        isLoaded: true,
         isFilterOpen: false
     }))
 
     useEffect(() => {
-        if (catalogRoute && !localStore.isInit) {
-            catalog.init(catalogRoute).then(() => {
-                localStore.isInit = true
-            });
+        async function fetchProducts() {
+            if (catalogRoute) {
+                await catalog.init(catalogRoute)
+                localStore.isLoaded = false;
+            }
         }
+
+        localStore.isLoaded = true;
+        fetchProducts();
     }, [catalogRoute]);
 
     const onOpenFilters = () => {
@@ -44,8 +48,8 @@ const Shop = observer(() => {
         document.body.style.overflowY = "";
     }
 
-    return (
-        localStore.isInit ?
+    if (!localStore.isLoaded && catalog.products.length !== 0) {
+        return (
             <div className='shop clt'>
                 <CatalogNav />
                 <div className='rct'>
@@ -55,11 +59,16 @@ const Shop = observer(() => {
                     </div>
                 </div>
             </div>
-            :
+        )
+    } else if (localStore.isLoaded) {
+        return (
             <div className='shop__loader ccc'>
                 <Loader />
             </div>
-    )
+        )
+    } else {
+        return <Navigate to={'/404_not_found'} />
+    }
 });
 
 export default Shop

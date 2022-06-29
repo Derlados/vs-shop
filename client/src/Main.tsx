@@ -8,7 +8,7 @@ const Main = () => {
         <div className='app__main cct'>
             <Header />
             <div className='app__content ccc'>
-                <div className='app__page'>
+                <div className='app__page cct'>
                     <Outlet />
                 </div>
             </div>

@@ -18,6 +18,10 @@ class ShopStore {
         this.fetchAll();
     }
 
+    get categoryRoutes(): string[] {
+        return this.categories.map(c => c.routeName);
+    }
+
     async fetchAll() {
         this.categories = await categoriesService.getAllCategories();
     }
@@ -40,6 +44,8 @@ class ShopStore {
         await categoriesService.deleteCategory(id);
         this.categories.splice(this.categories.findIndex(c => c.id === id), 1);
     }
+
+
 
     getCategoryById(id: number) {
         return this.categories.find((c) => c.id === id)

@@ -15,6 +15,11 @@ const CategoryList: FC<CategoryListProps> = ({ categories, onClick }) => {
             {categories.map((category) => (
                 <CategoryCard key={category.id} category={category} onClick={onClick ? () => onClick(category) : undefined} />
             ))}
+            {categories.length % 3 == 2 &&
+                <div className='category-list__category-card category-list__category-card_empty  rlc'>
+
+                </div>
+            }
         </div>
     )
 }

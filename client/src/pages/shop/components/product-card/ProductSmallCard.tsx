@@ -20,11 +20,11 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ urlFull, product, add
                     <div className='product-card__quick-view'></div>
                 </div>
             </div>
-            <NavLink to={`${urlFull}`}>
+            <NavLink className='product-card__img-cont' to={`${urlFull}`}>
                 <img className='product-card__img' alt='' src={getMainImage(product)?.url ?? require('../../../../assets/images/no-photos.png')} />
             </NavLink>
             <span className='product-card__brand'>Intel Corp</span>
-            <NavLink to={`${urlFull}`}>
+            <NavLink className='product-card__name-cont' to={`${urlFull}`}>
                 <span className='product-card__name'>{product.title}</span>
             </NavLink>
             <div className='product-card__price rlc'>

@@ -72,12 +72,16 @@ class CatalogStore {
         return range;
     }
 
-    public isLoaded(categoryName: string) {
-        return this.category.routeName === categoryName;
-    }
-
     async init(categoryRoute: string) {
+        if (categoryRoute == this.category.routeName) {
+            return;
+        }
+        this.clear();
+
         this.category = await categoriesService.getCategoryByRouteName(categoryRoute);
+        if (!this.category) {
+            return;
+        }
         this.products = await productsService.getProductsByCategory(this.category.id);
 
         this.selectedPriceRange = this.priceRange;
@@ -94,6 +98,11 @@ class CatalogStore {
 
     public getProductById(id: number): IProduct | undefined {
         return this.products.find(p => p.id === id);
+    }
+
+    private clear() {
+        this.products = [];
+        this.selectedFilters = new Map();
     }
 
     /////////////////////////////////// ФИЛЬТРАЦИЯ И СОРТИРОВКА ПРОДУКТОВ ///////////////////////////////////

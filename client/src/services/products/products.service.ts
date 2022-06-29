@@ -35,7 +35,6 @@ class ProductService extends Service {
         for (const image of images) {
             formData.append('images', image);
         }
-        console.log(formData.getAll('images'));
 
         if (deletedImagesId) {
             for (const id of deletedImagesId) {

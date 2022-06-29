@@ -6,7 +6,6 @@ import shop from '../store/shop';
 import '../styles/components/catalog-nav.scss';
 
 const CatalogNav = () => {
-    const navigation = useNavigate();
     const [routes, setRoutes] = useState<ILink[]>([
         {
             to: '/home',
@@ -31,8 +30,6 @@ const CatalogNav = () => {
                     to: `../${category.routeName}`,
                     title: category.name
                 })
-            } else if (!category) {
-                navigation('/home');
             }
         }
 
@@ -43,8 +40,6 @@ const CatalogNav = () => {
                     to: `../../${categoryRoute}/${product.id.toString()}`,
                     title: product?.title
                 })
-            } else {
-                navigation(`/${categoryRoute}`);
             }
         }
 

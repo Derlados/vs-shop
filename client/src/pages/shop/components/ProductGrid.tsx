@@ -84,12 +84,14 @@ const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPer
                     </div>
                 ))}
             </div>
-            <Pagination
-                maxPages={localStore.maxPages}
-                currentPage={localStore.selectedPage}
-                back={backPage}
-                next={nextPage}
-                setPage={selectPage} />
+            {localStore.maxPages > 1 &&
+                <Pagination
+                    maxPages={localStore.maxPages}
+                    currentPage={localStore.selectedPage}
+                    back={backPage}
+                    next={nextPage}
+                    setPage={selectPage} />
+            }
         </div>
     )
 })

@@ -17,7 +17,7 @@
         background-color: rgba(0, 0, 0, 0.534);
     }
 
-    &_opened > &__container {
+    &_opened>&__container {
         left: 0;
     }
 
@@ -40,20 +40,27 @@
         top: 0;
         left: -500px;
         width: 100%;
-        max-width: 340px;
+        max-width: 400px;
         min-height: 100vh;
         transition: 0.25s;
         z-index: 99;
         background-color: white;
 
-        @media (max-width: 340px) {
+        @media (max-width: 400px) {
             left: -150vw;
         }
     }
 
-    &__link {
-        text-decoration: none;
+    &__item {
+        width: 100%;
         height: 100%;
+
+        &>a {
+            display: block;
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+
     }
 
     &__head {
@@ -73,7 +80,8 @@
         position: relative;
         cursor: pointer;
 
-        &::before, &::after {
+        &::before,
+        &::after {
             position: absolute;
             top: calc(50% - 1px);
             right: 0;
@@ -88,12 +96,12 @@
         &::after {
             -webkit-transform: rotate(-45deg);
             transform: rotate(-45deg);
-        }    
+        }
 
         &::before {
             -webkit-transform: rotate(45deg);
             transform: rotate(45deg);
-        }    
+        }
     }
 
     &__wishlist {
@@ -131,16 +139,65 @@
         width: 100%;
         padding-bottom: 80px;
 
-        & > a {
+        &>a {
             width: 100%;
-            padding: 12px 20px;          
+            padding: 12px 20px;
             cursor: pointer;
         }
     }
 
-    &__contacts {
+    &__nav-arrow {
+        margin-left: 3px;
+        position: relative;
+        top: 0px;
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid black;
+        border-top: 2px solid black;
+        transform: rotate(135deg);
+        transition: 0.4s;
 
+        &_up {
+            transform: rotate(-45deg);
+        }
     }
+
+    &__list-head {
+        width: 100%;
+        justify-content: space-between !important;
+        padding: 10px 20px;
+        font-size: 18px;
+    }
+
+    &__link-list {
+        list-style: inside !important;
+        margin-left: 40px;
+        max-height: 0;
+        transition: max-height 0.25s ease-out;
+        overflow: hidden;
+
+        li {
+            margin-bottom: 5px;
+
+            &:last-child {
+                margin-bottom: 10px;
+            }
+        }
+
+        a {
+            text-decoration: none;
+            line-height: 16px;
+        }
+
+        &_open {
+            max-height: 200px;
+            transition: max-height 0.25s ease-in;
+        }
+    }
+
+    &__contacts {}
 
 
     &__contact-link {

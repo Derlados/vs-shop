@@ -30,6 +30,10 @@ li {
     list-style-type: none;
 }
 
+a {
+    text-decoration: none;
+}
+
 body {
     background-color: white;
 }
@@ -45,13 +49,21 @@ body {
 
     &__content {
         width: 100%;
+
         flex: 1;
     }
 
     &__page {
+        flex: 1;
         width: 100%;
-        max-width: 1600px;
         padding: 0px 20px;
+        margin: auto;
+
+        &>div {
+            flex: 1;
+            width: 100%;
+            max-width: 1600px;
+        }
 
         @media (max-width: $mobile-vertical) {
             padding: 0px 10px;

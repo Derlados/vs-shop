@@ -16,6 +16,11 @@
         cursor: pointer;
         overflow: hidden;
 
+        &_empty {
+            background-color: white;
+            height: 0px;
+        }
+
         @media (max-width: $tablet-horizontal) {
             width: calc(50% - 10px);
         }

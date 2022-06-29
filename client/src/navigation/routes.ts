@@ -1,26 +1,27 @@
+import shop from "../store/shop";
+
 export interface ILink {
     title: string;
     to: string;
     img?: string; // Иконка подготавливается в стиле, потому передается название класса
+    isNew?: boolean;
 }
 
+//TODO проблема с динамическими роутами которые нужное еще и асинхронно подкачивать
 export const routes: ILink[] = [
     {
-        title: 'Home',
+        title: 'Головна',
         to: '/home'
     },
     {
-        title: 'Catalog',
-        to: '/category1'
+        title: 'Каталоги',
+        to: '',
     },
     {
-        title: 'Contacts',
-        to: '/contacts'
-    },
-    {
-        title: 'About',
-        to: '/about'
-    },
+        title: 'Вишивка',
+        to: '/embroidery',
+        isNew: true
+    }
 ]
 
 export const adminRoutes: ILink[] = [

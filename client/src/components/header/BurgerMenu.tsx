@@ -1,10 +1,14 @@
 import classNames from 'classnames';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import { routes } from '../../navigation/routes';
+import shop from '../../store/shop';
 import '../../styles/header/burger-menu.scss';
 
+interface LocalStore {
+    isCatalogListOpen: boolean;
+}
 
 interface BurgerMenuProps {
     isOpen: boolean;
@@ -12,6 +16,14 @@ interface BurgerMenuProps {
 }
 
 const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
+    const localStore = useLocalObservable<LocalStore>(() => ({
+        isCatalogListOpen: false
+    }))
+
+    const toggleCatalogList = () => {
+        localStore.isCatalogListOpen = !localStore.isCatalogListOpen;
+    }
+
     return (
         <div className={classNames('burger-menu ccc', {
             'burger-menu_opened': isOpen
@@ -23,14 +35,37 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                     </NavLink>
                     <div className='burger-menu__close' onClick={onClose}></div>
                 </div>
-                <div className='burger-menu__wishlist burger-menu_underline rcc'>{`Wishlist (${0})`}</div>
+                {/* <div className='burger-menu__wishlist burger-menu_underline rcc'>{`Wishlist (${0})`}</div> */}
                 <div className='burger-menu__menu'>MENU</div>
                 <ul className='burger-menu__list clc'>
-                    {routes.map(route => (
-                        <NavLink key={route.title} className='burger-menu__link burger-menu_underline' to={route.to} onClick={onClose}>
-                            <li >{route.title}</li>
+                    <li className='burger-menu__item burger-menu_underline'>
+                        <NavLink to={'/home'} onClick={onClose}>
+                            Головна
                         </NavLink>
-                    ))}
+                    </li>
+                    <li className='burger-menu__item burger-menu_underline'>
+                        <div className='burger-menu__list-head rcc' onClick={toggleCatalogList}>
+                            <span>Каталоги</span>
+                            <span className={classNames('burger-menu__nav-arrow', {
+                                'burger-menu__nav-arrow_up': localStore.isCatalogListOpen
+                            })}></span>
+                        </div>
+                        <ul className={classNames('burger-menu__link-list', {
+                            'burger-menu__link-list_open': localStore.isCatalogListOpen
+                        })}>
+                            {shop.categories.map(category => (
+                                <li key={category.id}>
+                                    <NavLink to={category.routeName} onClick={onClose}>- {category.name}</NavLink>
+                                </li>
+                            ))}
+                        </ul>
+                    </li>
+                    <li className='burger-menu__item burger-menu_underline'>
+                        <NavLink to={'/home'} onClick={onClose}>
+                            Вишивка
+                        </NavLink>
+                    </li>
+
                 </ul>
                 <div className='burger-menu__contacts rcc'>
                     <a className='burger-menu__contact-link '>
@@ -41,7 +76,7 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                     </a>
                 </div>
             </div>
-        </div>
+        </div >
     )
 });
 
