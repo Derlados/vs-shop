@@ -38,8 +38,8 @@ const App = () => {
                     <Route path='/404_not_found' element={<NotFound404 />} />
                     <Route path='/:catalog' element={<Shop />} />
                     <Route path='/:catalog/:id' element={<ProductInfo />} />
-                    {/* <Route path='/' element={<Navigate to='/home' />} />
-                    <Route path='*' element={<Navigate to='/home' />} /> */}
+                    <Route path='/' element={<Navigate to='/home' />} />
+                    <Route path='*' element={<Navigate to='/home' />} />
                 </Route>
                 <Route path='*' element={<Navigate to={'/'} />} />
             </Routes>

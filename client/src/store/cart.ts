@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import orderService from "../services/order.service";
+import orderService from "../services/order/order.service";
 import { ICartProduct } from "../types/ICartProuct";
 import { IOrder } from "../types/IOrder";
 import { IProduct } from "../types/IProduct";

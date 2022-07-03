@@ -1,6 +1,6 @@
 import axios from "axios";
-import { axiosInstance } from ".";
-import { Service } from "./service";
+import { axiosInstance } from "..";
+import { Service } from "../service";
 
 class CategoryService extends Service {
 

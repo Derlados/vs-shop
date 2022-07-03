@@ -1,40 +1,35 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React from 'react';
+import { nanoid } from 'nanoid';
+import React, { useEffect } from 'react';
 import Input from '../../components/Input';
-import Selector from '../../components/Selector';
+import Selector from '../../lib/Selector/Selector';
 import cart from '../../store/cart';
+import orders from '../../store/orders';
 import '../../styles/checkout/checkout.scss';
 import { IOrder } from '../../types/IOrder';
+import { ISettlement } from '../../types/ISettlement';
 
 interface LocalStore {
     firstName: string;
     lastName: string;
     phone: string;
     email: string;
-    city: string;
     address: string;
-    additiobalInfo: string;
+    additionalInfo: string;
     isEmailValid: boolean;
 }
 
-const addresses = [
-    'Address 1',
-    'Address 2',
-    'Address 3',
-    'Address 4'
-]
-
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
+
 const Checkout = observer(() => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         firstName: '',
         lastName: '',
         phone: '+38 ',
         email: '',
-        city: '',
         address: '',
-        additiobalInfo: '',
+        additionalInfo: '',
         isEmailValid: true
     }))
 
@@ -54,13 +49,13 @@ const Checkout = observer(() => {
 
     const tryPlaceOrder = () => {
         if (localStore.firstName && localStore.lastName && localStore.phone.length === 17
-            && localStore.email && localStore.isEmailValid && localStore.city) {
+            && localStore.email && localStore.isEmailValid && localStore.address) {
             const order: IOrder = {
                 client: `${localStore.lastName} ${localStore.firstName}`,
                 phone: localStore.phone,
                 email: localStore.email,
-                address: `${localStore.city} ${localStore.address}`,
-                additionalInfo: localStore.additiobalInfo,
+                address: localStore.address,
+                additionalInfo: localStore.additionalInfo,
                 totalPrice: cart.totalPrice,
                 isComplete: false,
                 orderProducts: cart.cartProducts
@@ -68,6 +63,49 @@ const Checkout = observer(() => {
 
             //TODO
         }
+    }
+
+    const getSettlementValues = (settlements: ISettlement[]) => {
+        const settlementValues = new Map<string, string>();
+        settlements = settlements.slice().sort((a, b) => {
+            if (a.settlementType === 'місто') {
+                return -1;
+            }
+
+            if (a.settlementType === 'село') {
+                return 1;
+            }
+
+            return 0;
+        })
+        for (const settlement of settlements) {
+            settlementValues.set(settlement.ref, getSettlementFullName(settlement));
+        }
+
+        return settlementValues;
+    }
+
+    const getWarehouseValues = (warehouses: string[]) => {
+        const warehouseValues = new Map<string, string>();
+        for (const warehouse of warehouses) {
+            warehouseValues.set(warehouse, warehouse);
+        }
+
+        return warehouseValues;
+    }
+
+    const getSettlementFullName = (settlement: ISettlement) => {
+        const settlementTypeAbb = settlement.settlementType.substring(0, 1);
+        let settlementFullName = `${settlementTypeAbb}. ${settlement.name}`;
+        if (settlement.area) {
+            settlementFullName += ` - ${settlement.area}`
+        }
+
+        if (settlement.region) {
+            settlementFullName += `, ${settlement.region}`
+        }
+
+        return settlementFullName;
     }
 
     return (
@@ -84,11 +122,23 @@ const Checkout = observer(() => {
                         'checkout__input_invalid': !localStore.isEmailValid
                     })} hint='Електронна пошта' value={localStore.email} onChange={(v) => onChangeEmail(v.target.value)} />
                 </div>
-                <Input hint='Населений пункт України' value={localStore.city} onChange={(v) => localStore.city = v.target.value} />
-                <Selector className='checkout__selector' hint={'Адреса точки видачі'} values={addresses} onChange={(v) => { }} />
+                <Selector
+                    className='checkout__selector'
+                    withInput={true}
+                    hint={'Населений пункт України'}
+                    values={getSettlementValues(orders.settlements)}
+                    onSelect={(ref: string) => orders.selectSettlement(ref)}
+                    onChange={(v) => orders.findSettlements(v)} />
+                <Selector
+                    className='checkout__selector'
+                    withInput={true}
+                    withSearch={true}
+                    hint={'Адреса точки видачі'}
+                    values={getWarehouseValues(orders.warehouses)}
+                    onSelect={(v: string) => localStore.address = v} />
                 <div className='checkout__additional-info'>
                     <div className='checkout__additional-head'>Additional information</div>
-                    <textarea className='checkout__additional-area' placeholder='Notes about your order, e.g. special notes for delivery' onChange={(v) => localStore.additiobalInfo = v.target.value}></textarea>
+                    <textarea className='checkout__additional-area' placeholder='Notes about your order, e.g. special notes for delivery' onChange={(v) => localStore.additionalInfo = v.target.value}></textarea>
                 </div>
             </div>
             <div className='checkout__order clt'>

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import authService from '../../services/auth.service';
+import authService from '../../services/users/auth.service';
 import user from '../../store/user';
 import '../../styles/auth/auth.scss';
 

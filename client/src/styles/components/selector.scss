@@ -13,13 +13,6 @@
         position: relative;
         width: 100%;
         cursor: pointer;
-    }
-
-    &__selected-value {
-        font-size: 14px;
-        padding: 10px;
-        border: solid 1px $primary-gray;
-        border-radius: 5px;
 
         &::after {
             width: 3px;
@@ -42,36 +35,76 @@
             &::after {
                 transform: rotate(225deg);
                 -webkit-transform: rotate(225deg);
-                -ms-transform: rotate(225deg); 
+                -ms-transform: rotate(225deg);
             }
         }
     }
 
+    &__selected-value {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px;
+        border: solid 1px $primary-gray;
+        outline: none;
+
+        &:focus~.selector__values {
+            transform: scaleY(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        &_not-selected {
+            color: gray;
+        }
+    }
+
     &__values {
+        max-height: 150px;
         width: 100%;
         transform-origin: top left;
-        transform: scale(0.5);
+        transform: scaleY(0.5);
         opacity: 0;
         pointer-events: none;
-        overflow-y: hidden;
+        overflow-y: scroll;
         position: absolute;
-        top: 45px;
+        top: 40px;
         left: 0;
         list-style-type: none;
         font-size: 14px;
         border: solid 1px $primary-gray;
         background-color: white;
         z-index: 5;
-        transition: 0.25s;
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+        transition: 0.15s;
+
+
+        -webkit-touch-callout: none;
+        /* iOS Safari */
+        -webkit-user-select: none;
+        /* Safari */
+        -khtml-user-select: none;
+        /* Konqueror HTML */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer/Edge */
+        user-select: none;
+        /* Non-prefixed version, currently supported by Chrome and Opera */
+
+        &::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: $primary-gray;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $primary-dark;
+            border-radius: 5px;
+        }
 
         &_open {
-            transform: scale(1);
+            transform: scaleY(1);
             opacity: 1;
             pointer-events: all;
         }
