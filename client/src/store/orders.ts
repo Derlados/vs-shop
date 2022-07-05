@@ -4,18 +4,9 @@ import orderService from "../services/order/order.service";
 import { IOrder } from "../types/IOrder";
 import { ISettlement } from "../types/ISettlement";
 
-// м. Київ, Київська обл.
-// м. Дніпро, Дніпропетровська обл.
-// м. Харків, Харківська обл.
-// м. Запоріжжя, Запорізька обл.
-// м. Одеса,  Одеська обл.
-// м. Кривий Ріг, Дніпропетровська обл.
-// м. Львів, Львівська обл.
-// м. Вінниця, Вінницька обл.
-// м. Миколаїв, Миколаївська обл.
-// м. Полтава, Полтавська обл.
 
 class OrderStore {
+    apiError: string;
     orders: IOrder[];
     settlements: ISettlement[];
     warehouses: string[];
@@ -23,6 +14,7 @@ class OrderStore {
 
     constructor() {
         makeAutoObservable(this);
+        this.apiError = '';
         this.orders = [];
         this.settlements = [
             { ref: "8d5a980d-391c-11dd-90d9-001a92567626", name: "Київ", region: '', area: "Київська обл.", settlementType: "місто" },
@@ -60,6 +52,16 @@ class OrderStore {
             this.orders = await orderService.getAll();
         }
         return this.orders;
+    }
+
+    async placeOrder(order: IOrder): Promise<boolean> {
+        try {
+            orderService.createOrder(order);
+            return true;
+        } catch (e) {
+            this.apiError = orderService.getError();
+            return false;
+        }
     }
 }
 

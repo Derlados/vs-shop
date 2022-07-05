@@ -41,7 +41,7 @@ class NovaposhtaService extends Service {
         return {
             apiKey: this.API_KEY,
             modelName: "Address",
-            calledMethod: "getSettlements",
+            calledMethod: "getCities",
             methodProperties: {
                 FindByString: searchString
             }

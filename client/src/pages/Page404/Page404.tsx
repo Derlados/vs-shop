@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import '../../styles/notFound/not-found.scss';
 
-const NotFound404 = () => {
+const Page404 = () => {
     return (
         <div className='not-found ccc'>
             <div className='not-found__404'>404</div>
@@ -16,4 +16,4 @@ const NotFound404 = () => {
     )
 }
 
-export default NotFound404
+export default Page404

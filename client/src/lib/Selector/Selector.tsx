@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect, useRef } from 'react'
-import Input from '../../components/Input';
-import '../../styles/components/selector.scss';
+import './selector.scss';
 
 interface SelectorProps {
     className?: string;
     withInput?: boolean;
     withSearch?: boolean;
+    selectedValue?: string;
     hint: string;
     values: Map<any, string>;
     onSelect: (value: any) => void;
@@ -19,7 +19,7 @@ interface LocalStore {
     isOpen: boolean;
 }
 
-const Selector: FC<SelectorProps> = observer(({ className, withInput = false, withSearch = false, hint, values, onSelect, onChange = () => { } }) => {
+const Selector: FC<SelectorProps> = observer(({ className, withInput = false, withSearch = false, hint, values, selectedValue = '', onSelect, onChange = () => { } }) => {
     const NOT_SELECTED = "Не вибрано";
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedValue: '',
@@ -27,15 +27,12 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
     }));
 
     useEffect(() => {
-        if (![...values.values()].includes(localStore.selectedValue)) {
-            localStore.selectedValue = '';
-        }
-    }, [values])
+        localStore.selectedValue = selectedValue;
+    }, [selectedValue])
 
     const select = (key: any, value: string) => {
         localStore.selectedValue = value;
         localStore.isOpen = false;
-
         onSelect(key);
     }
 

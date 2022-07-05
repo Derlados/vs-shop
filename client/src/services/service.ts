@@ -1,4 +1,4 @@
-import { AxiosError, AxiosRequestConfig } from "axios";
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { axiosInstance } from ".";
 
 export class Service {
@@ -10,11 +10,23 @@ export class Service {
         this.errorMessage = '';
     }
 
+    protected async execute<T>(request: Promise<AxiosResponse<T, any>>): Promise<T> {
+        this.errorMessage = '';
+
+        try {
+            const { data } = await request;
+            return data;
+        } catch (e) {
+            this.errorHandler(e);
+            throw new Error()
+        }
+    }
+
     protected errorHandler(error: AxiosError | unknown) {
-        if (error instanceof AxiosError) {
+        if (error instanceof AxiosError && error.response?.status !== 500) {
             this.errorMessage = error.message;
         } else {
-
+            this.errorMessage = 'Запит не може бути опрацьований, спробуйте пізніше';
         }
     }
 

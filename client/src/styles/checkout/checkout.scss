@@ -13,7 +13,6 @@
 
         @media (max-width: $tablet-horizontal) {
             width: 100%;
-            max-width: 700px;
         }
     }
 
@@ -85,7 +84,6 @@
 
         @media (max-width: $tablet-horizontal) {
             width: 100%;
-            max-width: 700px;
             margin: 20px 0px 0px 0px;
         }
     }
@@ -154,7 +152,7 @@
 
     &__order-accept {
         color: white;
-        padding: 15px;
+        height: 52px;
         border-radius: 50px;
         background-color: $primary;
         margin-top: 20px;
@@ -171,5 +169,16 @@
         height: 1px;
         background-color: #dee0e4;
         margin-bottom: 20px;
+    }
+
+    &__loader-cont {
+        width: 32px;
+        height: 32px;
+    }
+
+    &__error {
+        margin-top: 15px;
+        font-size: 14px;
+        color: red;
     }
 }

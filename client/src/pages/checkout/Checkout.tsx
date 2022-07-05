@@ -3,6 +3,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { nanoid } from 'nanoid';
 import React, { useEffect } from 'react';
 import Input from '../../components/Input';
+import Loader from '../../lib/Loader/Loader';
 import Selector from '../../lib/Selector/Selector';
 import cart from '../../store/cart';
 import orders from '../../store/orders';
@@ -15,54 +16,57 @@ interface LocalStore {
     lastName: string;
     phone: string;
     email: string;
-    address: string;
+    settlement: string;
+    warehouse: string;
     additionalInfo: string;
-    isEmailValid: boolean;
+    isFormValid: boolean;
+    isSending: boolean;
+    isSentSuccessfully: boolean;
 }
 
+const phoneMask = '+38 999 999 99 99';
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
+const PHONE_REGEX = /(\+38 ([0-9]){3} ([0-9]){3} ([0-9]){2} ([0-9]+){2})/;
 
 const Checkout = observer(() => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         firstName: '',
         lastName: '',
-        phone: '+38 ',
+        phone: "",
         email: '',
-        address: '',
+        settlement: '',
+        warehouse: '',
         additionalInfo: '',
-        isEmailValid: true
+        isFormValid: true,
+        isSending: false,
+        isSentSuccessfully: false
     }))
 
-    const onChangeEmail = (email: string) => {
-        localStore.isEmailValid = EMAIL_REGEX.test(email)
-        localStore.email = email;
-    }
-
-    const onChangePhone = (phone: string) => {
-        phone = phone.replaceAll(' ', '');
-        if (phone.length <= 13) {
-            phone = phone.slice(3, phone.length)
-            localStore.phone = "+38 ";
-            localStore.phone += `${phone.substring(0, 3)} ${phone.substring(3, 6)} ${phone.substring(6, 8)} ${phone.substring(8, phone.length)}`.replace(/\s+$/, '');
+    const tryPlaceOrder = async () => {
+        localStore.isFormValid = true;
+        if (!validate()) {
+            localStore.isFormValid = false;
+            return;
         }
-    }
 
-    const tryPlaceOrder = () => {
-        if (localStore.firstName && localStore.lastName && localStore.phone.length === 17
-            && localStore.email && localStore.isEmailValid && localStore.address) {
-            const order: IOrder = {
-                client: `${localStore.lastName} ${localStore.firstName}`,
-                phone: localStore.phone,
-                email: localStore.email,
-                address: localStore.address,
-                additionalInfo: localStore.additionalInfo,
-                totalPrice: cart.totalPrice,
-                isComplete: false,
-                orderProducts: cart.cartProducts
-            }
-
-            //TODO
+        const order: IOrder = {
+            client: `${localStore.lastName} ${localStore.firstName}`,
+            phone: localStore.phone,
+            email: localStore.email,
+            address: `${localStore.settlement} - ${localStore.warehouse}`,
+            additionalInfo: localStore.additionalInfo,
+            totalPrice: cart.totalPrice,
+            isComplete: false,
+            orderProducts: cart.cartProducts
         }
+
+        localStore.isSending = true;
+        const success = await orders.placeOrder(order);
+        if (success) {
+            localStore.isSentSuccessfully = true;
+        }
+        localStore.isSending = false;
+
     }
 
     const getSettlementValues = (settlements: ISettlement[]) => {
@@ -108,41 +112,80 @@ const Checkout = observer(() => {
         return settlementFullName;
     }
 
+    const onSelectSettlement = (settlementRef: string) => {
+        const selectedSettlement = orders.settlements.find(s => s.ref == settlementRef)
+        if (selectedSettlement) {
+            localStore.settlement = getSettlementFullName(selectedSettlement);
+            localStore.warehouse = '';
+        }
+        orders.selectSettlement(settlementRef);
+    }
+
+    const validate = () => {
+        return localStore.firstName !== '' && localStore.lastName !== '' && localStore.phone.length === 17
+            && EMAIL_REGEX.test(localStore.email) && localStore.settlement !== '' && localStore.warehouse !== '';
+    }
+
     return (
         <div className='checkout rlt'>
             <div className='checkout__details clt'>
-                <div className='checkout__title'>Billing Details</div>
+                <div className='checkout__title'>Деталі замовлення</div>
                 <div className='checkout__inputs-row rlc'>
-                    <Input className='checkout__input' hint="Ім'я" value={localStore.firstName} onChange={(v) => localStore.firstName = v.target.value} />
-                    <Input className='checkout__input' hint="Призвіще" value={localStore.lastName} onChange={(v) => localStore.lastName = v.target.value} />
+                    <Input className={classNames('checkout__input', {
+                        'checkout__input_invalid': !localStore.isFormValid && localStore.firstName === ''
+                    })}
+                        hint="Ім'я"
+                        value={localStore.firstName}
+                        onChange={(v) => localStore.firstName = v.target.value}
+                    />
+                    <Input className={classNames('checkout__input', {
+                        'checkout__input_invalid': !localStore.isFormValid && localStore.lastName === ''
+                    })}
+                        hint="Призвіще"
+                        value={localStore.lastName}
+                        onChange={(v) => localStore.lastName = v.target.value}
+                    />
                 </div>
                 <div className='checkout__inputs-row rlc'>
-                    <Input className='checkout__input' hint='Номер телефону' value={localStore.phone} onChange={(v) => onChangePhone(v.target.value)} />
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': !localStore.isEmailValid
-                    })} hint='Електронна пошта' value={localStore.email} onChange={(v) => onChangeEmail(v.target.value)} />
+                        'checkout__input_invalid': !localStore.isFormValid && !PHONE_REGEX.test(localStore.phone)
+                    })}
+                        mask={phoneMask}
+                        placeholder="+38 ___ ___ __ __"
+                        hint='Номер телефону'
+                        value={localStore.phone}
+                        onChange={(v) => localStore.phone = v.target.value}
+                    />
+                    <Input className={classNames('checkout__input', {
+                        'checkout__input_invalid': !localStore.isFormValid && !EMAIL_REGEX.test(localStore.email)
+                    })}
+                        hint='Електронна пошта'
+                        value={localStore.email}
+                        onChange={(v) => localStore.email = v.target.value}
+                    />
                 </div>
                 <Selector
                     className='checkout__selector'
                     withInput={true}
                     hint={'Населений пункт України'}
                     values={getSettlementValues(orders.settlements)}
-                    onSelect={(ref: string) => orders.selectSettlement(ref)}
-                    onChange={(v) => orders.findSettlements(v)} />
+                    onSelect={onSelectSettlement}
+                    onChange={(searchString: string) => orders.findSettlements(searchString)} />
                 <Selector
                     className='checkout__selector'
                     withInput={true}
                     withSearch={true}
                     hint={'Адреса точки видачі'}
                     values={getWarehouseValues(orders.warehouses)}
-                    onSelect={(v: string) => localStore.address = v} />
+                    selectedValue={localStore.warehouse}
+                    onSelect={(warehouse: string) => localStore.warehouse = warehouse} />
                 <div className='checkout__additional-info'>
-                    <div className='checkout__additional-head'>Additional information</div>
+                    <div className='checkout__additional-head'>Додаткова інформація</div>
                     <textarea className='checkout__additional-area' placeholder='Notes about your order, e.g. special notes for delivery' onChange={(v) => localStore.additionalInfo = v.target.value}></textarea>
                 </div>
             </div>
             <div className='checkout__order clt'>
-                <div className='checkout__title'>Your order</div>
+                <div className='checkout__title'>Ваше замовлення</div>
                 <div className='checkout__order-container clc'>
                     <div className='checkout__order-head rlc'>
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Product</div>
@@ -167,8 +210,21 @@ const Checkout = observer(() => {
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cart.totalPrice.toFixed(2)} ₴</div>
                     </div>
                 </div>
-                <div className='checkout__order-accept ccc' onClick={tryPlaceOrder}>PLACE ORDER</div>
+                <div className='checkout__order-accept ccc' onClick={tryPlaceOrder}>
+                    {localStore.isSending ?
+                        <div className='checkout__loader-cont'>
+                            <Loader color='white' />
+                        </div>
+                        :
+                        'ОФОРМИТИ ЗАМОВЛЕННЯ'
+                    }
+                </div>
+                <div className='checkout__error'>* {orders.apiError}</div>
             </div>
+            {localStore.isSentSuccessfully &&
+                <div>
+                </div>
+            }
         </div>
     )
 });
