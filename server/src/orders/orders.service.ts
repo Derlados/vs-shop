@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import e from 'express';
 import { Product } from 'src/products/models/product.model';
-import { Between, In, LessThan, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { CompleteOrdersDto } from './dto/complete-orders.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderProductDto } from './dto/order-product.dto';
@@ -30,6 +29,7 @@ export class OrderService {
     }
 
     async createOrder(dto: CreateOrderDto) {
+        console.log(dto);
         const insertId = (await this.orderRepository.insert({ ...dto, orderProducts: [] })).raw.insertId;
         await this.addOrderProducts(insertId, dto.orderProducts);
         return this.getOrderById(insertId);

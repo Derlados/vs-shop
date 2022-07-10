@@ -54,18 +54,11 @@ class ProductService extends Service {
         return data;
     }
 
-    private getProductDto(product: IProduct) {
+    private getProductDto(p: IProduct) {
+        const { id, images, attributes, discountPercent, userId, ...product } = p;
         return {
-            product: {
-                title: product.title,
-                description: product.description,
-                price: product.price,
-                oldPrice: product.oldPrice,
-                isNew: product.isNew,
-                count: product.count,
-                categoryId: product.categoryId
-            },
-            attributes: Object.fromEntries(product.attributes)
+            product: product,
+            attributes: Object.fromEntries(attributes)
         }
     }
 

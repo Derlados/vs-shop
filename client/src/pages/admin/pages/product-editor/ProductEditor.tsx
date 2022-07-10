@@ -218,7 +218,7 @@ const ProductEditor = observer(() => {
             <div className='admin-general__line'></div>
             <div className='product-editor__form'>
                 <div className='product-editor__form-head rlc'>
-                    <div className='admin-general__subtitle'>Голов1не</div>
+                    <div className='admin-general__subtitle'>Головне</div>
                     <div className='admin-general__clear-btn' onClick={onClear}>Clear</div>
                 </div>
                 <div className='product-editor__images-editor clc'>

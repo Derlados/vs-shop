@@ -88,7 +88,7 @@ const CategoryEditor = observer(() => {
             shop.editCategory(localStore.id, categoryDto, localStore.img);
         }
 
-        onClear();
+        // onClear();
     }
 
     const onClear = () => {

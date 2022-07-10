@@ -1,6 +1,7 @@
 import { Exclude } from "class-transformer";
 import { Category } from "src/category/models/category.model";
 import { OrderProduct } from "src/orders/models/order-products.model";
+import { SessionCartItem } from "src/session-cart/model/session-cart-item.model";
 import { User } from "src/users/models/user.model";
 import { AfterLoad, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Image } from "./image.model";
@@ -58,6 +59,10 @@ export class Product {
     @OneToMany(() => OrderProduct, op => op.product)
     @Exclude()
     orderProducts: OrderProduct[]
+
+    @OneToMany(() => SessionCartItem, cartItem => cartItem.product)
+    @Exclude()
+    sessionCartItems: SessionCartItem[]
 
     @AfterLoad()
     getDiscountPercent() {

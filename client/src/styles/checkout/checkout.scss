@@ -181,4 +181,39 @@
         font-size: 14px;
         color: red;
     }
+
+    &__modal {
+        width: 400px;
+        height: 250px;
+    }
+
+    &__modal-success {}
+
+    &__modal-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        color: white;
+        background-color: $primary-green;
+        font-size: 48px;
+    }
+
+    &__modal-text {
+        margin: 20px 0px;
+        font-size: 18px;
+    }
+
+    &__modal-btn-back {
+        width: 100%;
+        background-color: $primary;
+        border-radius: 40px;
+        color: white;
+        padding: 15px;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &:hover {
+            background-color: $hover-primary;
+        }
+    }
 }

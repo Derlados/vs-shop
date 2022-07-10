@@ -41,6 +41,14 @@ class Cart {
             this.cartProducts = [];
         }
     }
+
+    clearProducts() {
+        this.cartProducts = [];
+    }
+
+    private saveCartLocal() {
+
+    }
 }
 
 export default new Cart();

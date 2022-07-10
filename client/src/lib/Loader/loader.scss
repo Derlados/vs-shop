@@ -8,6 +8,7 @@
     width: 80px;
     height: 80px;
 
+
     &_dark:after {
         border: 5px solid $primary;
         border-color: $primary transparent $primary transparent;
@@ -26,11 +27,12 @@
 
     &:after {
         content: " ";
-        display: block;
-        max-width: 70%;
-        max-height: 70%;
-        width: 64px;
-        height: 64px;
+        display: flex;
+        flex: 1;
+        max-width: calc(100% - 10px);
+        max-height: calc(100% - 10px);
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
         animation: lds-dual-ring 1.2s linear infinite;
     }

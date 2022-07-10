@@ -2,8 +2,10 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { nanoid } from 'nanoid';
 import React, { useEffect } from 'react';
+import { Navigate, NavLink } from 'react-router-dom';
 import Input from '../../components/Input';
 import Loader from '../../lib/Loader/Loader';
+import Modal from '../../lib/Modal/Modal';
 import Selector from '../../lib/Selector/Selector';
 import cart from '../../store/cart';
 import orders from '../../store/orders';
@@ -43,6 +45,10 @@ const Checkout = observer(() => {
     }))
 
     const tryPlaceOrder = async () => {
+        if (localStore.isSentSuccessfully) {
+            return;
+        }
+
         localStore.isFormValid = true;
         if (!validate()) {
             localStore.isFormValid = false;
@@ -64,6 +70,7 @@ const Checkout = observer(() => {
         const success = await orders.placeOrder(order);
         if (success) {
             localStore.isSentSuccessfully = true;
+            cart.clearProducts();
         }
         localStore.isSending = false;
 
@@ -124,6 +131,10 @@ const Checkout = observer(() => {
     const validate = () => {
         return localStore.firstName !== '' && localStore.lastName !== '' && localStore.phone.length === 17
             && EMAIL_REGEX.test(localStore.email) && localStore.settlement !== '' && localStore.warehouse !== '';
+    }
+
+    if (cart.cartProducts.length === 0) {
+        return <Navigate to={'/home'} />
     }
 
     return (
@@ -210,21 +221,21 @@ const Checkout = observer(() => {
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cart.totalPrice.toFixed(2)} ₴</div>
                     </div>
                 </div>
-                <div className='checkout__order-accept ccc' onClick={tryPlaceOrder}>
-                    {localStore.isSending ?
-                        <div className='checkout__loader-cont'>
-                            <Loader color='white' />
+                <div className='checkout__order-accept ccc' onClick={tryPlaceOrder}>ОФОРМИТИ ЗАМОВЛЕННЯ</div>
+                {orders.apiError && <div className='checkout__error'>* {orders.apiError}</div>}
+            </div>
+            <Modal isActive={localStore.isSending || localStore.isSentSuccessfully} setActive={() => { }} >
+                <div className='checkout__modal ccc'>
+                    {localStore.isSending && <Loader />}
+                    {localStore.isSentSuccessfully &&
+                        <div className='checkout__modal-success ccc'>
+                            <div className='checkout__modal-icon ccc'>✓</div>
+                            <div className='checkout__modal-text'>Ваше замовлення надіслано успішно !</div>
+                            <NavLink to={'/home'} className='checkout__modal-btn-back ccc'>До головної</NavLink>
                         </div>
-                        :
-                        'ОФОРМИТИ ЗАМОВЛЕННЯ'
                     }
                 </div>
-                <div className='checkout__error'>* {orders.apiError}</div>
-            </div>
-            {localStore.isSentSuccessfully &&
-                <div>
-                </div>
-            }
+            </Modal>
         </div>
     )
 });
