@@ -6,9 +6,11 @@ import { SessionCart } from "./session-cart.model";
 @Entity('session-cart-items')
 export class SessionCartItem {
     @PrimaryColumn({ name: "session_cart_id", type: "bigint", nullable: false })
+    @Exclude()
     cartId: number;
 
     @PrimaryColumn({ name: "product_id", type: "int", nullable: false })
+    @Exclude()
     productId: number;
 
     @Column({ type: "int", nullable: false })
@@ -16,11 +18,9 @@ export class SessionCartItem {
 
     @ManyToOne(() => SessionCart, cart => cart.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
     @JoinColumn({ name: "session_cart_id" })
-    @Exclude()
     cart: SessionCart;
 
     @ManyToOne(() => Product, product => product.id, { onDelete: "CASCADE", onUpdate: "CASCADE" })
     @JoinColumn({ name: "product_id" })
-    @Exclude()
     product: Product;
 }

@@ -16,6 +16,6 @@ export class SessionCartModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(DecryptSessionCartMiddleware)
-      .forRoutes({ path: 'session-cart', method: RequestMethod.ALL });
+      .forRoutes({ path: 'session-cart/:id', method: RequestMethod.ALL }, { path: 'session-cart/:id/*', method: RequestMethod.ALL });
   }
 }

@@ -3,7 +3,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { nanoid } from 'nanoid';
 import React, { useEffect } from 'react';
 import { Navigate, NavLink } from 'react-router-dom';
-import Input from '../../components/Input';
+import Input from '../../lib/Input/Input';
 import Loader from '../../lib/Loader/Loader';
 import Modal from '../../lib/Modal/Modal';
 import Selector from '../../lib/Selector/Selector';

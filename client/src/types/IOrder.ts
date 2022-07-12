@@ -1,4 +1,4 @@
-import { ICartProduct } from "./ICartProuct";
+import { ICartProduct } from "./ICartProduct";
 
 export interface IOrder {
     client: string;

@@ -146,13 +146,13 @@
     }
 
     &__actions {
+        height: 70px;
         position: relative;
         padding-bottom: 20px;
         border-bottom: 1px solid $primary-gray;
     }
 
     &__count-actions {
-        height: 100%;
         border: solid 1px $primary-gray;
         padding: 0px 12px 0px 12px;
         line-height: 46px;

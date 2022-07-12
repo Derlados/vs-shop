@@ -4,7 +4,9 @@ import React, { FC, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cart from '../../store/cart';
 import '../../styles/header/cart-quick.scss';
+import { ICartProduct } from '../../types/ICartProduct';
 import { IProduct } from '../../types/IProduct';
+import CartCountEditor from '../cart/CartCountEditor';
 
 interface CartQuickViewProps {
     isOpen: boolean;
@@ -35,6 +37,19 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
         onClose();
     }
 
+    const incrementCount = (cartProduct: ICartProduct) => {
+        cart.changeCount(cartProduct.product.id, cartProduct.count + 1)
+    }
+
+    const decrementCount = (cartProduct: ICartProduct) => {
+        cart.changeCount(cartProduct.product.id, cartProduct.count - 1)
+    }
+
+    const onChangeCount = (cartProduct: ICartProduct, newCount: number) => {
+        cart.changeCount(cartProduct.product.id, newCount)
+    }
+
+
     return (
         <div className={classNames("cart-quick", {
             "cart-quick_hide": !isOpen
@@ -52,11 +67,19 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
                                 <li key={cp.product.id} className='cart-quick__product rlt'>
                                     <img className='cart-quick__product-img' alt='' src={cp.product.images[0].url} onClick={() => openProductInfo(cp.product)} />
                                     <div className='cart-quick__product-desc'>
-                                        <div className='cart-quick__product-head rcc'>
+                                        <div className='cart-quick__product-head rct'>
                                             <div className='cart-quick__product-title' onClick={() => openProductInfo(cp.product)}>{cp.product.title}</div>
                                             <div className='cart-quick__close cart-quick__close_delete' onClick={() => onDeleteProduct(cp.product)}></div>
                                         </div>
-                                        <span className='cart-quick__product-count' >{cp.count} x <span className='cart-quick__product-price'>{cp.product.price} ₴</span></span>
+                                        <div className='cart-quick__product-count rlc'>
+                                            <CartCountEditor
+                                                decrement={() => decrementCount(cp)}
+                                                increment={() => incrementCount(cp)}
+                                                onChange={(count) => onChangeCount(cp, count)}
+                                                selectedCount={cp.count}
+                                            />
+                                            <span className='cart-quick__product-price'>{cp.product.price * cp.count} ₴</span>
+                                        </div>
                                     </div>
                                 </li>
                             ))}

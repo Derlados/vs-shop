@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import InputMask from "react-input-mask";
-import '../styles/components/input.scss';
+import './input.scss';
 
 
 interface InputProps {

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react'
-import CartButton from '../../../../components/CartButton';
+import CartButton from '../../../../components/cart/CartButton';
 import cart from '../../../../store/cart';
 import { ProductCardProps } from './Product';
 import '../../../../styles/product/product-card-large.scss';

@@ -1,0 +1,24 @@
+@import '../../general/colors.scss';
+
+.cart-count-editor {
+    height: 100%;
+    border: solid 1px $primary-gray;
+    padding: 0px 12px 0px 12px;
+    margin-right: 15px;
+
+    &__btn {
+        height: 100%;
+        width: 12px;
+        font-size: 20px;
+        cursor: pointer;
+        color: rgb(68, 68, 68);
+    }
+
+    &__count {
+        width: 32px;
+        font-size: 14px;
+        border: none;
+        outline: none;
+        text-align: center;
+    }
+}

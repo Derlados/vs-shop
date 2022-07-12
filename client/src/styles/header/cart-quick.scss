@@ -17,7 +17,7 @@
         background-color: transparent;
     }
 
-    &_hide > &__container {
+    &_hide>&__container {
         right: -400px;
 
         @media (max-width: $mobile-vertical) {
@@ -38,8 +38,10 @@
         padding: 20px;
         transition: 0.25s;
         overflow-y: scroll;
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */    
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
 
         &::-webkit-scrollbar {
             display: none;
@@ -79,7 +81,7 @@
             -webkit-transform: rotate(45deg);
             transform: rotate(45deg);
             background-color: $primary;
-            
+
         }
 
         &::after {
@@ -94,10 +96,12 @@
             -webkit-transform: rotate(-45deg);
             transform: rotate(-45deg);
             background-color: $primary;
-        }    
+        }
 
         &_anim {
-            &:hover::before, &:hover::after  {
+
+            &:hover::before,
+            &:hover::after {
                 -webkit-transform: rotate(0deg);
                 transform: rotate(0deg);
             }
@@ -107,7 +111,8 @@
             height: 16px;
             width: 16px;
 
-            &:hover::before, &:hover::after  {
+            &:hover::before,
+            &:hover::after {
                 background-color: rgb(255, 103, 103);
             }
 
@@ -119,7 +124,7 @@
             &::after {
                 width: 14px;
                 background-color: black;
-            } 
+            }
         }
     }
 
@@ -176,6 +181,7 @@
     }
 
     &__product-count {
+        height: 40px;
         font-size: 18px;
         color: gray;
     }
@@ -190,7 +196,7 @@
         justify-content: space-between !important;
         margin-bottom: 25px;
     }
-    
+
     &__price-text {
         font-weight: bold;
     }

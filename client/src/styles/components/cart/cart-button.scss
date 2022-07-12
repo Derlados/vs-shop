@@ -1,4 +1,4 @@
-@import '../general/colors.scss';
+@import '../../general/colors.scss';
 
 .cart-button {
     border-radius: 5px;
@@ -12,29 +12,29 @@
         background-color: $primary;
 
         &:hover {
-            background-color: $primary-dark !important;
+            background-color: $primary-dark  !important;
         }
     }
 
-    &_primary > &__btn {
+    &_primary>&__btn {
         color: white;
     }
 
-    &_primary > &__img {
+    &_primary>&__img {
         background-color: white;
     }
-        
+
     &_added {
         cursor: default;
         background-color: $primary-dark;
         pointer-events: none;
     }
 
-    &_added >  &__btn {
+    &_added>&__btn {
         color: white;
     }
 
-    &_added >  &__img {
+    &_added>&__img {
         background-color: white;
     }
 
@@ -42,11 +42,11 @@
         background-color: $primary;
     }
 
-    &:hover > &__btn {
+    &:hover>&__btn {
         color: white;
     }
 
-    &:hover > &__img {
+    &:hover>&__img {
         background-color: white;
     }
 
@@ -54,7 +54,7 @@
         width: 18px;
         height: 19px;
         mask-size: contain;
-        mask-image: url('../../assets/images/shopping-bag.svg');
+        mask-image: url('../../../assets/images/shopping-bag.svg');
         mask-repeat: no-repeat;
         background-color: $primary-dark;
         transition: 0.4s;
@@ -68,4 +68,3 @@
         color: $primary-dark;
     }
 }
-        

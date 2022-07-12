@@ -1,11 +1,12 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import CartButton from '../../../components/CartButton';
+import CartButton from '../../../components/cart/CartButton';
 import cart from '../../../store/cart';
 import { ProductProps } from '../../shop/components/product-card/Product';
 import 'swiper/css';
 import { IImage } from '../../../types/IImage';
+import CartCountEditor from '../../../components/cart/CartCountEditor';
 
 interface LocalStore {
     swiper: any;
@@ -50,9 +51,9 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
         }
     }
 
-    const handleCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.value !== '' && +event.target.value >= 1 && +event.target.value <= product.count) {
-            localStore.selectedCount = +event.target.value;
+    const handleCountChange = (count: number) => {
+        if (count >= 1 && count <= product.count) {
+            localStore.selectedCount = count;
         }
     }
 
@@ -125,11 +126,14 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
                     </div>
                 }
                 <div className='product__actions rlc'>
-                    {!cart.findById(product.id) && <div className='product__count-actions rlc'>
-                        <span className='product__count-btn ccc' onClick={decrementCount}>-</span>
-                        <input className='product__count ccc' value={localStore.selectedCount} onChange={handleCountChange} type="number" maxLength={3} />
-                        <span className='product__count-btn ccc' onClick={incrementCount}>+</span>
-                    </div>}
+                    {!cart.findById(product.id) &&
+                        <CartCountEditor
+                            decrement={decrementCount}
+                            increment={incrementCount}
+                            onChange={handleCountChange}
+                            selectedCount={localStore.selectedCount}
+                        />
+                    }
                     <CartButton color="primary" isActive={cart.findById(product.id) === undefined} onClick={onAddToCart} />
                 </div>
                 <span className='product__avalibility'>Availibility: <span className='product__avalibility-status product__avalibility-status_green'>{product.count} available</span></span>
