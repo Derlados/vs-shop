@@ -78,7 +78,7 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
                                                 onChange={(count) => onChangeCount(cp, count)}
                                                 selectedCount={cp.count}
                                             />
-                                            <span className='cart-quick__product-price'>{cp.product.price * cp.count} ₴</span>
+                                            <span className='cart-quick__product-price'>{(cp.product.price * cp.count).toFixed(2)} ₴</span>
                                         </div>
                                     </div>
                                 </li>

@@ -12,9 +12,9 @@ const CartCountEditor: FC<CartCountEditorProps> = ({ decrement, increment, onCha
 
     return (
         <div className='cart-count-editor rlc'>
-            <span className='cart-count-editor__btn ccc' onClick={decrement}>-</span>
+            <div className='cart-count-editor__btn ccc' onClick={decrement}>-</div>
             <input className='cart-count-editor__count ccc' value={selectedCount} onChange={(v) => onChange(v.target.value !== '' ? +v.target.value : 1)} type="number" />
-            <span className='cart-count-editor__btn ccc' onClick={increment}>+</span>
+            <div className='cart-count-editor__btn ccc' onClick={increment}>+</div>
         </div>
     )
 }

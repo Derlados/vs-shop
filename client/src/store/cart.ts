@@ -10,12 +10,14 @@ class Cart {
     private readonly LOCAL_STORAGE_CART_ID = "CART_ID";
     cartId: string;
     cartProducts: ICartProduct[];
+    isInit: boolean;
 
     constructor() {
         makeAutoObservable(this);
 
         this.cartId = localStorage.getItem(this.LOCAL_STORAGE_CART_ID) ?? '';
         this.cartProducts = [];
+        this.isInit = false;
         this.init();
     }
 
@@ -23,12 +25,12 @@ class Cart {
         if (this.cartId) {
             try {
                 this.cartProducts = await sessionCartService.getCart(this.cartId)
-                return;
             } catch (ignored) { }
+        } else {
+            this.cartId = await sessionCartService.createCart();
+            localStorage.setItem(this.LOCAL_STORAGE_CART_ID, this.cartId);
         }
-
-        this.cartId = await sessionCartService.createCart();
-        localStorage.setItem(this.LOCAL_STORAGE_CART_ID, this.cartId);
+        this.isInit = true;
     }
 
     get totalPrice(): number {

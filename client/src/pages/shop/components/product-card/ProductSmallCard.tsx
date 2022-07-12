@@ -24,12 +24,12 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ urlFull, product, add
                 <img className='product-card__img' alt='' src={getMainImage(product)?.url ?? require('../../../../assets/images/no-photos.png')} />
             </NavLink>
             <span className='product-card__brand'>Intel Corp</span>
-            <NavLink className='product-card__name-cont' to={`${urlFull}`}>
+            <NavLink className='product-card__name-cont ccc' to={`${urlFull}`}>
                 <span className='product-card__name'>{product.title}</span>
             </NavLink>
             <div className='product-card__price rlc'>
-                <span className='product-card__current-price'>{product.price}{SpecSymbols.NBSP}₴</span>
-                {product.oldPrice !== product.price && <span className='product-card__old-price'>{product.oldPrice}{SpecSymbols.NBSP}₴</span>}
+                <span className='product-card__current-price'>{product.price}₴</span>
+                {product.oldPrice !== product.price && <span className='product-card__old-price'>{product.oldPrice}₴</span>}
             </div>
             <CartButton isActive={cart.findById(product.id) === undefined} onClick={() => addToCart(product)} />
         </div>

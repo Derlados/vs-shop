@@ -137,10 +137,12 @@
     }
 
     &__name {
-        height: 100%;
         font-size: 14px;
+        font-weight: 600;
         line-height: 18px;
+        text-align: center;
         cursor: pointer;
+
 
         text-overflow: ellipsis;
         overflow: hidden;
@@ -157,7 +159,7 @@
 
     &__current-price {
         font-size: 18px;
-        margin: 15px 0px;
+        margin: 8px 0px 15px 0px;
 
         @media (max-width: $mobile-vertical) {
             font-size: 16px;
@@ -172,8 +174,8 @@
     &__old-price {
         text-decoration: line-through;
         color: gray;
-        margin-left: 5px;
         font-size: 16px;
+        margin: 8px 0px 15px 5px;
 
         @media (max-width:$mobile-vertical) {
             font-size: 14px;

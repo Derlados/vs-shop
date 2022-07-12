@@ -133,6 +133,15 @@ const Checkout = observer(() => {
             && EMAIL_REGEX.test(localStore.email) && localStore.settlement !== '' && localStore.warehouse !== '';
     }
 
+    console.log(cart.isInit)
+    if (!cart.isInit) {
+        return (
+            <div className='checkout ccc'>
+                <Loader />
+            </div>
+        )
+    }
+
     if (cart.cartProducts.length === 0) {
         return <Navigate to={'/home'} />
     }
