@@ -4,6 +4,15 @@ import orderService from "../services/order/order.service";
 import { IOrder } from "../types/IOrder";
 import { ISettlement } from "../types/ISettlement";
 
+export enum OrderSorts {
+    NONE,
+    DATE_ASC,
+    DATE_DESC,
+    PRICE_ASC,
+    PRICE_DESC,
+    STATUS_ASC,
+    STATUS_DESC
+}
 
 class OrderStore {
     apiError: string;
@@ -11,6 +20,7 @@ class OrderStore {
     settlements: ISettlement[];
     warehouses: string[];
     selectedSettlementRef: string;
+    selectedSort: OrderSorts;
 
     constructor() {
         makeAutoObservable(this);
@@ -29,6 +39,14 @@ class OrderStore {
             { ref: "db5c8892-391c-11dd-90d9-001a92567626", name: "Полтава", region: '', area: "Полтавська обл.", settlementType: "місто" }
         ];
         this.warehouses = [];
+        this.selectedSort = OrderSorts.NONE;
+    }
+
+    get filteredOrders(): IOrder[] {
+        switch (this.selectedSort) {
+
+        }
+        return [];
     }
 
     async findSettlements(searchString: string) {
@@ -47,11 +65,10 @@ class OrderStore {
         }
     }
 
-    async getOrders() {
+    async fetchOrders() {
         if (this.orders.length == 0) {
             this.orders = await orderService.getAll();
         }
-        return this.orders;
     }
 
     async placeOrder(order: IOrder): Promise<boolean> {

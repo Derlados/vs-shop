@@ -17,7 +17,7 @@ import Checkout from './pages/checkout/Checkout';
 import ProductInfo from './pages/product/ProductInfo';
 import Shop from './pages/shop/Shop';
 import HomePageEditor from './pages/admin/components/HomePageEditor';
-import Page404 from './pages/Page404/Page404';
+import Page404 from './pages/page404/Page404';
 
 const App = () => {
     return (

@@ -8,7 +8,7 @@ import Loader from '../../lib/Loader/Loader';
 import Modal from '../../lib/Modal/Modal';
 import Selector from '../../lib/Selector/Selector';
 import cart from '../../store/cart';
-import orders from '../../store/orders';
+import orders from '../../store/order';
 import '../../styles/checkout/checkout.scss';
 import { IOrder } from '../../types/IOrder';
 import { ISettlement } from '../../types/ISettlement';

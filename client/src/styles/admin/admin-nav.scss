@@ -11,7 +11,7 @@
         padding-left: 15px;
         margin-bottom: 25px;
     }
-    
+
     &__link {
         text-decoration: none;
     }
@@ -24,38 +24,38 @@
         &:hover {
             background-color: #E6E7EB;
         }
- 
-        &:hover > .admin-nav__icon {
+
+        &:hover>.admin-nav__icon {
             background-color: $primary-admin;
         }
-         
-        &:hover > .admin-nav__title {
+
+        &:hover>.admin-nav__title {
             color: $primary-admin;
         }
 
         &_active {
             background-color: #E6E7EB;
 
-            & > .admin-nav__icon {
+            &>.admin-nav__icon {
                 background-color: $primary-admin;
             }
-           
-            & > .admin-nav__title {
+
+            &>.admin-nav__title {
                 color: $primary-admin;
             }
         }
-  
+
     }
 
     &__icon {
         content: '';
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         mask-repeat: no-repeat;
         mask-size: contain;
         background-color: gray;
         margin-right: 10px;
-        
+
 
         &_orders {
             mask-image: url('../../assets/images/order-delivery.svg');
@@ -80,6 +80,6 @@
 
     &__title {
         font-weight: bold;
-        font-size: 18px;
+        font-size: 16px;
     }
 }

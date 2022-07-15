@@ -1,3 +1,212 @@
+@import '../general/colors.scss';
+
 .orders {
-    
+    &__title {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 10px 0px;
+    }
+
+    &__content {
+        border: 1px solid $primary-gray;
+        border-radius: 5px;
+        padding: 15px;
+    }
+
+    &__head {
+        justify-content: space-between !important;
+    }
+
+    &__orders-count {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 10px 0px;
+    }
+
+    &__actions {
+        flex: 1;
+        max-width: 450px;
+        height: 35px;
+    }
+
+    &__search {
+        flex: 1;
+        height: 100%;
+
+        border: 1px solid $primary-gray;
+        border-radius: 5px;
+        margin: 0px 15px;
+        padding: 0px 10px;
+        outline: none;
+    }
+
+    &__export {
+        height: 100%;
+        border: 1px solid $primary-gray;
+        border-radius: 5px;
+        padding: 0px 20px;
+        background-color: $primary-admin;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 18px;
+        cursor: pointer;
+    }
+
+    &__list-header {
+        justify-content: space-between !important;
+        margin: 10px 0px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: $primary-dark;
+    }
+
+    &__column {
+        flex: 1;
+        font-weight: bold;
+
+        &_value {
+            font-weight: normal;
+        }
+
+        &_touchable {
+            cursor: pointer;
+        }
+
+        &_small {
+            flex: 0.5;
+        }
+    }
+
+    &__column-text {
+        color: white;
+        position: relative;
+        height: 100%;
+        padding-right: 15px;
+
+        &_sort {
+            &::after {
+                position: absolute;
+                right: 0;
+                top: 4px;
+                content: ' ';
+                border-bottom: 5px solid rgb(155, 155, 155) !important;
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                cursor: pointer;
+            }
+
+            &::before {
+                position: absolute;
+                right: 0;
+                bottom: 4px;
+                content: ' ';
+                border-top: 5px solid rgb(155, 155, 155) !important;
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                cursor: pointer;
+            }
+        }
+
+        &_sort-asc {
+            &::after {
+                border-bottom: 5px solid rgba(177, 177, 177, 0.6) !important;
+            }
+
+            &::before {
+                border-top: 5px solid white !important;
+            }
+        }
+
+        &_sort-desc {
+            &::after {
+                border-bottom: 5px solid white !important;
+            }
+
+            &::before {
+                border-top: 5px solid rgba(177, 177, 177, 0.6) !important;
+            }
+        }
+    }
+
+    &__list {}
+
+    &__item {
+        border-bottom: 1px solid $primary-gray;
+        padding: 20px 10px;
+    }
+
+    &__status {
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        color: white;
+
+        &_yellow {
+            background-color: #ef9e01;
+        }
+
+        &_red {
+            background-color: #c12c2d;
+        }
+
+        &_green {
+            background-color: #028f10;
+        }
+    }
+
+    &__short-info {
+        width: 100%;
+    }
+
+    &__extended-info {
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    &__ex-info-column {
+        flex: 1;
+    }
+
+    &__ex-info-row {
+        margin-bottom: 10px;
+
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+
+    &__ex-info-text {
+        font-size: 14px;
+
+        &_attr {
+            min-width: 80px;
+        }
+
+        &_value {
+
+            font-weight: normal;
+            color: gray;
+        }
+    }
+
+    &__ex-info-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    &__total-price {
+        margin-top: 15px;
+        font-size: 20px;
+        font-weight: bold;
+
+        span {
+            padding-left: 10px;
+        }
+    }
+
+    &__loader {
+        min-height: 300px;
+    }
 }

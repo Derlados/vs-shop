@@ -127,7 +127,7 @@ const CategoryEditor = observer(() => {
 
     return (
         <div className='category-editor clt'>
-            <div className='category-editor__title'>Categories</div>
+            <div className='category-editor__title'>Категорії</div>
             <div className='category-editor__created-categories rlc'>
                 {shop.categories.map((category) => (
                     <CategoryCard key={category.routeName} category={category} onClick={() => onEdit(category)} />
