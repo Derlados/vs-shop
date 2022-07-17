@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/products/models/product.model';
 import { Between, In, Repository } from 'typeorm';
-import { CompleteOrdersDto } from './dto/complete-orders.dto';
+import { ChangeStatusDto } from './dto/change-status-order.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderProductDto } from './dto/order-product.dto';
 import { OrderProduct } from './models/order-products.model';
@@ -22,22 +22,23 @@ export class OrderService {
 
     async getOrders(startDate?: Date, endDate?: Date) {
         if (!startDate || !endDate) {
-            return this.orderRepository.find({ relations: ["orderProducts"] });
+            return this.orderRepository.find({ relations: ["orderProducts", "payment", "orderProducts.product"] });
         } else {
-            return this.orderRepository.find({ where: { createdAt: Between(startDate, endDate) }, relations: ["orderProducts"] })
+
+            return this.orderRepository.find({ where: { createdAt: Between(startDate, endDate) }, relations: ["orderProducts", "payment", "orderProducts.product"] })
         }
     }
 
     async createOrder(dto: CreateOrderDto) {
-        console.log(dto);
-        const insertId = (await this.orderRepository.insert({ ...dto, orderProducts: [] })).raw.insertId;
+        const { payment, ...order } = dto;
+        const insertId = (await this.orderRepository.insert({ ...order, paymentId: payment.id, orderProducts: [] })).raw.insertId;
         await this.addOrderProducts(insertId, dto.orderProducts);
         return this.getOrderById(insertId);
     }
 
-    async completeOrders(dto: CompleteOrdersDto) {
+    async changeStatus(id: number, dto: ChangeStatusDto) {
         try {
-            await this.orderRepository.update({ id: In(dto.orderIds) }, { isComplete: true });
+            await this.orderRepository.update({ id: id }, { status: dto.newStatus });
         } catch (e) {
             throw new NotFoundException("Заказ не найден")
         }

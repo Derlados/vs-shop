@@ -10,7 +10,7 @@ import Selector from '../../lib/Selector/Selector';
 import cart from '../../store/cart';
 import orders from '../../store/order';
 import '../../styles/checkout/checkout.scss';
-import { IOrder } from '../../types/IOrder';
+import { IOrder, OrderStatus } from '../../types/IOrder';
 import { ISettlement } from '../../types/ISettlement';
 
 interface LocalStore {
@@ -56,14 +56,17 @@ const Checkout = observer(() => {
         }
 
         const order: IOrder = {
+            id: -1,
             client: `${localStore.lastName} ${localStore.firstName}`,
             phone: localStore.phone,
             email: localStore.email,
             address: `${localStore.settlement} - ${localStore.warehouse}`,
             additionalInfo: localStore.additionalInfo,
             totalPrice: cart.totalPrice,
-            isComplete: false,
-            orderProducts: cart.cartProducts
+            orderProducts: cart.cartProducts,
+            payment: { id: 1, method: 'Накладенний платіж' },
+            createdAt: new Date(),
+            status: OrderStatus.NOT_PROCESSED
         }
 
         localStore.isSending = true;
@@ -129,11 +132,10 @@ const Checkout = observer(() => {
     }
 
     const validate = () => {
-        return localStore.firstName !== '' && localStore.lastName !== '' && localStore.phone.length === 17
+        return localStore.firstName !== '' && localStore.lastName !== '' && PHONE_REGEX.test(localStore.phone)
             && EMAIL_REGEX.test(localStore.email) && localStore.settlement !== '' && localStore.warehouse !== '';
     }
 
-    console.log(cart.isInit)
     if (!cart.isInit) {
         return (
             <div className='checkout ccc'>

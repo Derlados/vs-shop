@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import novaposhtaService from "../services/novaposhta/novaposhta.service";
 import orderService from "../services/order/order.service";
-import { IOrder } from "../types/IOrder";
+import { IOrder, IPayment } from "../types/IOrder";
 import { ISettlement } from "../types/ISettlement";
 
 export enum OrderSorts {
@@ -17,6 +17,9 @@ export enum OrderSorts {
 class OrderStore {
     apiError: string;
     orders: IOrder[];
+
+    allPayments: IPayment[];
+
     settlements: ISettlement[];
     warehouses: string[];
     selectedSettlementRef: string;

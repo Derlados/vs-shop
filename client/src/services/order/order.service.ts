@@ -6,13 +6,10 @@ import { Service } from "../service";
 class OrderService extends Service {
 
     async createOrder(order: IOrder): Promise<IOrder> {
+        const { id, payment, status, createdAt: date, orderProducts, ...orderInfo } = order;
         const body = {
-            client: order.client,
-            phone: order.phone,
-            email: order.email,
-            address: order.address,
-            additionalInfo: order.additionalInfo,
-            totalPrice: order.totalPrice,
+            ...orderInfo,
+            payment: { id: order.payment.id },
             orderProducts: order.orderProducts.map(op => { return { id: op.product.id, count: op.count } })
         }
 
@@ -22,6 +19,7 @@ class OrderService extends Service {
 
     async getAll(): Promise<IOrder[]> {
         const { data } = await axiosInstance.get<IOrder[]>(this.API_URL, { headers: headersJSON() });
+        data.forEach(order => order.createdAt = new Date(order.createdAt ?? ''));
         return data;
     }
 

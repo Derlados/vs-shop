@@ -75,7 +75,7 @@ const OrderList = observer(() => {
                     </div>
                     :
                     <ul className='orders__list'>
-                        {([...Array(9)]).map(order => (
+                        {order.orders.map(order => (
                             <OrderItem order={order} />
                         ))}
                     </ul>

@@ -1,5 +1,6 @@
 import { Product } from "src/products/models/product.model";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Payment } from "../../payments/models/payment.model";
 import { OrderProduct } from "./order-products.model";
 
 @Entity('orders')
@@ -22,15 +23,22 @@ export class Order {
     @Column({ type: "text", nullable: true })
     additionalInfo?: string;
 
+    @Column({ name: "payment_id", type: 'number', nullable: false })
+    paymentId: number;
+
     @Column({ type: "decimal", nullable: false })
     totalPrice: number;
 
-    @Column({ type: "boolean", default: false })
-    isComplete: boolean;
+    @Column({ type: "varchar", length: 100, default: 'Не оброблено' })
+    status: string;
 
-    @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP()" })
+    @Column({ name: "created_at", type: "datetime", default: () => "CURRENT_TIMESTAMP()" })
     createdAt: Date;
 
     @OneToMany(() => OrderProduct, op => op.order)
     orderProducts: Product[];
+
+    @ManyToOne(() => Payment, payment => payment.orders)
+    @JoinColumn({ name: "payment_id" })
+    payment: Payment;
 }

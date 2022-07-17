@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
 import { IsArray, IsEmail, isEmail, IsNumber, IsOptional, IsPhoneNumber, IsString, Max, MaxLength, ValidateNested } from "class-validator";
 import { OrderProductDto } from "./order-product.dto";
+import { PaymentInfoDto } from "./payment-info.dto";
 
 export class CreateOrderDto {
     @IsString()
@@ -18,6 +19,10 @@ export class CreateOrderDto {
     @IsString()
     @MaxLength(200)
     address: string;
+
+    @ValidateNested()
+    @Type(() => PaymentInfoDto)
+    payment: PaymentInfoDto;
 
     @IsOptional()
     @IsString()

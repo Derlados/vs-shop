@@ -40,7 +40,7 @@ export class SessionCartController {
         return this.sessionCartService.deleteProduct(id, productId);
     }
 
-    @Delete('/:id/products/clear')
+    @Delete('/:id/clear')
     clearCart(@Param('id') id: number) {
         return this.sessionCartService.clearCart(id);
     }

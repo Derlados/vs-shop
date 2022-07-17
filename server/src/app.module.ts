@@ -20,10 +20,11 @@ import { Order } from './orders/models/order.model';
 import { OrderProduct } from './orders/models/order-products.model';
 import { RolesModule } from './roles/roles.module';
 import { Role } from './roles/models/role.model';
-import { AddressesModule } from './addresses/addresses.module';
 import { SessionCartModule } from './session-cart/session-cart.module';
 import { SessionCart } from './session-cart/model/session-cart.model';
 import { SessionCartItem } from './session-cart/model/session-cart-item.model';
+import { PaymentsModule } from './payments/payments.module';
+import { Payment } from './payments/models/payment.model';
 
 @Module({
     imports: [
@@ -38,7 +39,7 @@ import { SessionCartItem } from './session-cart/model/session-cart-item.model';
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DATABASE,
-            entities: [Product, Image, Attribute, Value, Category, User, Filter, Order, OrderProduct, Role, SessionCart, SessionCartItem],
+            entities: [Product, Image, Attribute, Value, Category, User, Filter, Order, OrderProduct, Role, SessionCart, SessionCartItem, Payment],
             synchronize: true,
         }),
         ServeStaticModule.forRoot({
@@ -55,8 +56,8 @@ import { SessionCartItem } from './session-cart/model/session-cart-item.model';
         FilesModule,
         OrderModule,
         RolesModule,
-        AddressesModule,
         SessionCartModule,
+        PaymentsModule,
     ],
     controllers: [],
     providers: [],

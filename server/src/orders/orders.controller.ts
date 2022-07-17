@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
-import { CompleteOrdersDto } from './dto/complete-orders.dto';
+import { ChangeStatusDto } from './dto/change-status-order.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderService } from './orders.service';
 
@@ -15,6 +15,7 @@ export class OrderController {
     @Get()
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @UseInterceptors(ClassSerializerInterceptor)
     getOrders(@Query('startDate') startDate: Date, @Query('endDate') endDate: Date) {
         return this.ordersService.getOrders(startDate, endDate);
     }
@@ -31,20 +32,13 @@ export class OrderController {
         return this.ordersService.createOrder(dto);
     }
 
-    @Put('/complete')
+    @Put(':id/complete')
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    competeOrders(@Body() dto: CompleteOrdersDto) {
-        return this.ordersService.completeOrders(dto);
+    changeStatus(@Param('id') id: number, @Body() dto: ChangeStatusDto) {
+        return this.ordersService.changeStatus(id, dto);
     }
 
-    //TODO
-    @Put(':id')
-    @Roles(RoleValues.SELLER)
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    editOrder(@Param('id') id: number) {
-        // this.ordersService.deleteOrders([id]);
-    }
 
     @Delete(':id')
     @Roles(RoleValues.SELLER)
