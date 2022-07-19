@@ -5,7 +5,7 @@ export interface IOrder {
     id: number;
     client: string;
     phone: string;
-    email: string;
+    email?: string;
     address: string;
     additionalInfo: string;
     totalPrice: number;

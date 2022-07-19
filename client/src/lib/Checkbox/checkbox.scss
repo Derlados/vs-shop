@@ -1,0 +1,49 @@
+@import '../../styles/general/colors.scss';
+
+.checkbox {
+    margin: 5px 0px;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    cursor: pointer;
+
+    &__input {
+        position: absolute;
+        opacity: 0;
+        height: 0;
+        width: 0;
+
+        &:checked~.checkbox__checkmark {
+            background-color: $primary-admin;
+        }
+
+        &:checked~.checkbox__checkmark::after {
+            display: block;
+        }
+    }
+
+    &__checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 26px;
+        width: 26px;
+        border: 1px solid $third-gray;
+        background-color: white;
+
+        &:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: calc(50% - 4px);
+            top: calc(50% - 7px);
+            width: 4px;
+            height: 8px;
+            border: 2px solid white;
+            border-width: 0 4px 4px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    }
+}

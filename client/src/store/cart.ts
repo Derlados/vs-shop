@@ -65,7 +65,7 @@ class Cart {
         return this.cartProducts.find(cp => cp.product.id == id);
     }
 
-    async clearProducts() {
+    async clearUserProducts() {
         await sessionCartService.clearCart(this.cartId);
         this.cartProducts = [];
     }

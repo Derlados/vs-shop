@@ -16,7 +16,7 @@
 
     &__input-title {
         height: 100%;
-        width: 150px;
+        min-width: 150px;
         padding: 0px 15px;
         color: gray;
         font-size: 15px;
@@ -106,52 +106,5 @@
         font-size: 24px;
         font-weight: bold;
         margin: 10px 0px;
-    }
-
-    &__checkbox-cont {
-        margin: 5px 0px;
-        width: 24px;
-        height: 24px;
-        position: relative;
-        cursor: pointer;
-    }
-
-    &__checkbox {
-        position: absolute;
-        opacity: 0;
-        height: 0;
-        width: 0;
-
-        &:checked~.admin-general__checkmark {
-            background-color: $primary-admin;
-        }
-
-        &:checked~.admin-general__checkmark::after {
-            display: block;
-        }
-    }
-
-    &__checkmark {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 28px;
-        width: 28px;
-        border: 1px solid $third-gray;
-
-        &:after {
-            content: "";
-            position: absolute;
-            display: none;
-            left: calc(50% - 4px);
-            top: calc(50% - 8px);
-            width: 5px;
-            height: 10px;
-            border: 2px solid white;
-            border-width: 0 4px 4px 0;
-            -webkit-transform: rotate(45deg);
-            -ms-transform: rotate(45deg);
-            transform: rotate(45deg);
-        }
     }
 }

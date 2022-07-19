@@ -12,6 +12,7 @@ export class CreateOrderDto {
     @MaxLength(20)
     phone: string;
 
+    @IsOptional()
     @IsEmail()
     @MaxLength(50)
     email: string;

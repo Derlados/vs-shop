@@ -20,7 +20,7 @@ export class OrderService {
         return this.orderRepository.find({ where: { id: id }, relations: ["orderProducts"] });
     }
 
-    async getOrders(startDate?: Date, endDate?: Date) {
+    async getOrders(page?: number, startDate?: Date, endDate?: Date, searchString?: string) {
         if (!startDate || !endDate) {
             return this.orderRepository.find({ relations: ["orderProducts", "payment", "orderProducts.product"] });
         } else {

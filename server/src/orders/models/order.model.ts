@@ -14,7 +14,7 @@ export class Order {
     @Column({ type: "varchar", length: 20, nullable: false })
     phone: string;
 
-    @Column({ type: "varchar", length: 50, nullable: false })
+    @Column({ type: "varchar", length: 50, nullable: true })
     email: string;
 
     @Column({ type: "varchar", length: 200, nullable: false })
@@ -26,7 +26,7 @@ export class Order {
     @Column({ name: "payment_id", type: 'number', nullable: false })
     paymentId: number;
 
-    @Column({ type: "decimal", nullable: false })
+    @Column({ type: "decimal", precision: 10, scale: 2, nullable: false })
     totalPrice: number;
 
     @Column({ type: "varchar", length: 100, default: 'Не оброблено' })

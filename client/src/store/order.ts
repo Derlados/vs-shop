@@ -17,6 +17,7 @@ export enum OrderSorts {
 class OrderStore {
     apiError: string;
     orders: IOrder[];
+    maxOrders: number;
 
     allPayments: IPayment[];
 
@@ -24,6 +25,10 @@ class OrderStore {
     warehouses: string[];
     selectedSettlementRef: string;
     selectedSort: OrderSorts;
+
+    selectedPage: number;
+    selectedAll: boolean;
+    selectedOrderIds: Set<number>;
 
     constructor() {
         makeAutoObservable(this);
@@ -43,6 +48,9 @@ class OrderStore {
         ];
         this.warehouses = [];
         this.selectedSort = OrderSorts.NONE;
+        this.selectedPage = 1;
+        this.selectedAll = false;
+        this.selectedOrderIds = new Set<number>();
     }
 
     get filteredOrders(): IOrder[] {
@@ -70,17 +78,61 @@ class OrderStore {
 
     async fetchOrders() {
         if (this.orders.length == 0) {
-            this.orders = await orderService.getAll();
+            const orders = await orderService.getAll();
+            this.orders.push(...orders);
+
+            if (this.selectedAll) {
+                orders.forEach(o => this.selectedOrderIds.add(o.id));
+            }
         }
     }
 
     async placeOrder(order: IOrder): Promise<boolean> {
         try {
-            orderService.createOrder(order);
+            await orderService.createOrder(order);
             return true;
         } catch (e) {
             this.apiError = orderService.getError();
             return false;
+        }
+    }
+
+    toggleSelectAll() {
+        this.selectedAll = !this.selectedAll;
+        if (this.selectedAll) {
+            this.orders.forEach(o => this.selectedOrderIds.add(o.id));
+        } else {
+            this.selectedOrderIds.clear();
+        }
+    }
+
+    toggleSelectOrder(orderId: number) {
+        if (!this.selectedOrderIds.has(orderId)) {
+            this.selectedOrderIds.add(orderId);
+        } else {
+            this.selectedOrderIds.delete(orderId);
+        }
+        this.selectedAll = this.selectedOrderIds.size === this.maxOrders;
+    }
+
+    async nextPage() {
+        ++this.selectedPage;
+        //TOOD fetchProducts(page);
+    }
+
+    async backPage() {
+        if (this.selectedPage == 1) {
+            return;
+        }
+        --this.selectedPage;
+        //TOOD fetchProducts(page);
+    }
+
+    async deleteSelectedOrders() {
+        if (this.selectedAll) {
+            //TODO удалить всё
+        } else {
+            //TODO удалить выделенную часть
         }
     }
 }

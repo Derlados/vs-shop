@@ -29,6 +29,21 @@
         height: 35px;
     }
 
+    &__delete-btn {
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: 0.4s;
+        mask-size: contain;
+        mask-image: url('../../assets/images/delete.svg');
+        background-color: $primary-dark;
+
+        &:hover {
+            background-color: rgb(255, 75, 75);
+        }
+    }
+
     &__search {
         flex: 1;
         height: 100%;
@@ -129,11 +144,15 @@
         }
     }
 
+    &__column-checker {
+        margin-right: 20px;
+    }
+
     &__list {}
 
     &__item {
         border-bottom: 1px solid $primary-gray;
-        padding: 20px 10px;
+        padding: 15px 10px;
     }
 
     &__status {
@@ -155,13 +174,39 @@
         }
     }
 
+    &__arrow {
+        margin-left: 3px;
+        content: "";
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-right: 3px solid black;
+        border-top: 3px solid black;
+        transform: rotate(225deg);
+        cursor: pointer;
+        transition: 0.15s;
+
+        &_active {
+            transform: rotate(135deg);
+        }
+    }
+
     &__short-info {
         width: 100%;
     }
 
     &__extended-info {
+        max-height: 0px;
         width: 100%;
-        margin-top: 30px;
+        transition: 0.15s;
+        transform: scaleY(0);
+        transform-origin: top;
+
+        &_visible {
+            margin-top: 30px;
+            max-height: 700px;
+            transform: scaleY(1);
+        }
     }
 
     &__ex-info-column {
@@ -208,5 +253,37 @@
 
     &__loader {
         min-height: 300px;
+    }
+
+    &__pagination {
+        height: 35px;
+        margin-top: 10px;
+    }
+
+    &__pagination-arrow {
+        width: 35px;
+        height: 35px;
+        background-color: $primary-admin;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    &__page-number {
+        min-width: 60px;
+        height: 100%;
+        padding: 15px;
+        outline: none;
+        margin: 0px 10px;
+        font-size: 14px;
+        border: 1px solid $primary-gray;
     }
 }

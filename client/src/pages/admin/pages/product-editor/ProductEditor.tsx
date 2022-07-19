@@ -3,6 +3,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { customAlphabet, nanoid } from 'nanoid';
 import { ChangeEvent, useEffect, useRef } from 'react';
 import CategoryList from '../../../../components/CategoryList';
+import Checkbox from '../../../../lib/Checkbox/Checkbox';
 import FileUploader from '../../../../lib/FileUploader/FileUploader';
 import catalog from '../../../../store/catalog';
 import shop from '../../../../store/shop';
@@ -266,11 +267,7 @@ const ProductEditor = observer(() => {
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Новий ?: </div>
-                        <label className='admin-general__checkbox-cont rcc'>
-                            <input className='admin-general__checkbox' type="checkbox" checked={localStore.product.isNew} onChange={toggleIsNew} />
-                            <span className='admin-general__checkmark'></span>
-                        </label>
-
+                        <Checkbox checked={localStore.product.isNew} onChange={toggleIsNew} />
                     </div>
                     <div className='admin-general__subtitle'>Характеристики</div>
                     <ul className='product-editor__attributes clc'>

@@ -12,12 +12,20 @@ export class OrderController {
 
     constructor(private ordersService: OrderService) { }
 
-    @Get()
+    @Get([
+        'page=:page;date-period=:startDate,:endDate',
+        'date-period=:startDate,:endDate',
+        'page=:page',
+        'page=:page;date-period=:startDate,:endDate/search',
+        'date-period=:startDate,:endDate/search',
+        'page=:page/search',
+        ''
+    ])
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
-    getOrders(@Query('startDate') startDate: Date, @Query('endDate') endDate: Date) {
-        return this.ordersService.getOrders(startDate, endDate);
+    getOrders(@Param('startDate') startDate?: Date, @Param('endDate') endDate?: Date, @Param('page') page?: number, @Query('text') searchText?: string) {
+        return this.ordersService.getOrders(page, startDate, endDate, searchText);
     }
 
     @Get('/:id')

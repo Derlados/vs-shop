@@ -10,7 +10,9 @@ import Selector from '../../lib/Selector/Selector';
 import cart from '../../store/cart';
 import orders from '../../store/order';
 import '../../styles/checkout/checkout.scss';
+import { ICartProduct } from '../../types/ICartProduct';
 import { IOrder, OrderStatus } from '../../types/IOrder';
+import { IProduct } from '../../types/IProduct';
 import { ISettlement } from '../../types/ISettlement';
 
 interface LocalStore {
@@ -24,6 +26,8 @@ interface LocalStore {
     isFormValid: boolean;
     isSending: boolean;
     isSentSuccessfully: boolean;
+    copyTotal: number;
+    copyProducts: ICartProduct[];
 }
 
 const phoneMask = '+38 999 999 99 99';
@@ -41,9 +45,10 @@ const Checkout = observer(() => {
         additionalInfo: '',
         isFormValid: true,
         isSending: false,
-        isSentSuccessfully: false
+        isSentSuccessfully: false,
+        copyTotal: -1,
+        copyProducts: []
     }))
-
     const tryPlaceOrder = async () => {
         if (localStore.isSentSuccessfully) {
             return;
@@ -59,7 +64,7 @@ const Checkout = observer(() => {
             id: -1,
             client: `${localStore.lastName} ${localStore.firstName}`,
             phone: localStore.phone,
-            email: localStore.email,
+            email: localStore.email != '' ? localStore.email : undefined,
             address: `${localStore.settlement} - ${localStore.warehouse}`,
             additionalInfo: localStore.additionalInfo,
             totalPrice: cart.totalPrice,
@@ -73,10 +78,11 @@ const Checkout = observer(() => {
         const success = await orders.placeOrder(order);
         if (success) {
             localStore.isSentSuccessfully = true;
-            cart.clearProducts();
+            localStore.copyTotal = cart.totalPrice;
+            localStore.copyProducts = [...cart.cartProducts];
+            cart.clearUserProducts();
         }
         localStore.isSending = false;
-
     }
 
     const getSettlementValues = (settlements: ISettlement[]) => {
@@ -92,6 +98,7 @@ const Checkout = observer(() => {
 
             return 0;
         })
+
         for (const settlement of settlements) {
             settlementValues.set(settlement.ref, getSettlementFullName(settlement));
         }
@@ -133,7 +140,7 @@ const Checkout = observer(() => {
 
     const validate = () => {
         return localStore.firstName !== '' && localStore.lastName !== '' && PHONE_REGEX.test(localStore.phone)
-            && EMAIL_REGEX.test(localStore.email) && localStore.settlement !== '' && localStore.warehouse !== '';
+            && (localStore.email == '' || EMAIL_REGEX.test(localStore.email)) && localStore.settlement !== '' && localStore.warehouse !== '';
     }
 
     if (!cart.isInit) {
@@ -144,7 +151,7 @@ const Checkout = observer(() => {
         )
     }
 
-    if (cart.cartProducts.length === 0) {
+    if (cart.cartProducts.length === 0 && localStore.copyProducts.length === 0) {
         return <Navigate to={'/home'} />
     }
 
@@ -179,9 +186,9 @@ const Checkout = observer(() => {
                         onChange={(v) => localStore.phone = v.target.value}
                     />
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': !localStore.isFormValid && !EMAIL_REGEX.test(localStore.email)
+                        'checkout__input_invalid': !localStore.isFormValid && (!EMAIL_REGEX.test(localStore.email) && localStore.email != '')
                     })}
-                        hint='Електронна пошта'
+                        hint="Електронна пошта (не обов'язково)"
                         value={localStore.email}
                         onChange={(v) => localStore.email = v.target.value}
                     />
@@ -214,7 +221,7 @@ const Checkout = observer(() => {
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
                     </div>
                     <ul className='checkout__order-product-list'>
-                        {cart.cartProducts.map(cp => (
+                        {(cart.cartProducts.length != 0 ? cart.cartProducts : localStore.copyProducts).map(cp => (
                             <li key={cp.product.id} className='checkout__order-product rlc'>
                                 <div className='checkout__order-text'>{cp.product.title} × {cp.count}</div>
                                 <div className='checkout__order-text'>{cp.product.price * cp.count} ₴</div>
@@ -229,7 +236,7 @@ const Checkout = observer(() => {
                     <div className='checkout__line'></div>
                     <div className='checkout__total rlc'>
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
-                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cart.totalPrice.toFixed(2)} ₴</div>
+                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cart.totalPrice !== 0 ? cart.totalPrice.toFixed(2) : localStore.copyTotal.toFixed(2)} ₴</div>
                     </div>
                 </div>
                 <div className='checkout__order-accept ccc' onClick={tryPlaceOrder}>ОФОРМИТИ ЗАМОВЛЕННЯ</div>

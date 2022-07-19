@@ -6,6 +6,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import Loader from '../../../../lib/Loader/Loader';
+import Checkbox from '../../../../lib/Checkbox/Checkbox';
 
 interface LocalStore {
     isLoading: boolean;
@@ -31,13 +32,17 @@ const OrderList = observer(() => {
             <div className='orders__title'>Замовлення</div>
             <div className='orders__content'>
                 <div className='orders__head rlc'>
-                    <div className='orders__orders-count'>Замовлення ({order.orders.length})</div>
+                    <div className='orders__actions rlc'>
+                        <div className='orders__orders-count'>Замовлення ({order.orders.length})</div>
+                        <div className='orders__delete-btn'></div>
+                    </div>
                     <div className='orders__actions rlc'>
                         <input className='orders__search ccc' placeholder='Search ...' />
                         <div className='orders__export ccc'>Export table</div>
                     </div>
                 </div>
                 <div className='orders__list-header rcc'>
+                    <Checkbox className='orders__column-checker' checked={order.selectedAll} onChange={() => order.toggleSelectAll()} />
                     <div className='orders__column orders__column_small'>
                         <span className='orders__column-text'>ID</span>
                     </div>
@@ -76,12 +81,16 @@ const OrderList = observer(() => {
                     :
                     <ul className='orders__list'>
                         {order.orders.map(order => (
-                            <OrderItem order={order} />
+                            <OrderItem key={order.id} order={order} />
                         ))}
                     </ul>
                 }
             </div>
-
+            <div className='orders__pagination rrc'>
+                <div className='orders__pagination-arrow ccc' onClick={() => order.backPage()}>{'<'}</div>
+                <div className='orders__page-number ccc'>{order.selectedPage}</div>
+                <div className='orders__pagination-arrow ccc' onClick={() => order.nextPage()}>{'>'}</div>
+            </div>
         </div>
     )
 });

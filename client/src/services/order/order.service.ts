@@ -19,7 +19,7 @@ class OrderService extends Service {
 
     async getAll(): Promise<IOrder[]> {
         const { data } = await axiosInstance.get<IOrder[]>(this.API_URL, { headers: headersJSON() });
-        data.forEach(order => order.createdAt = new Date(order.createdAt ?? ''));
+        data.forEach(order => order.createdAt = new Date(order.createdAt));
         return data;
     }
 
