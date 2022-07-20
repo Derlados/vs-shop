@@ -1,15 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OrderSorts } from 'src/constants/OrderSrots';
+import { PageElements } from 'src/lib/types/PageElements';
 import { Product } from 'src/products/models/product.model';
-import { Between, In, Repository } from 'typeorm';
+import { Between, FindConditions, In, LessThanOrEqual, Like, MoreThanOrEqual, Raw, Repository } from 'typeorm';
 import { ChangeStatusDto } from './dto/change-status-order.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { GetOrdersQuery } from './dto/get-orders-query.dto';
 import { OrderProductDto } from './dto/order-product.dto';
 import { OrderProduct } from './models/order-products.model';
 import { Order } from './models/order.model';
 
 @Injectable()
 export class OrderService {
+    private readonly ITEMS_PER_PAGE = 7;
+
     constructor(@InjectRepository(Order) private orderRepository: Repository<Order>,
         @InjectRepository(OrderProduct) private orderProductsRepository: Repository<OrderProduct>,
         @InjectRepository(Product) private productsRepository: Repository<Product>) {
@@ -20,12 +25,65 @@ export class OrderService {
         return this.orderRepository.find({ where: { id: id }, relations: ["orderProducts"] });
     }
 
-    async getOrders(page?: number, startDate?: Date, endDate?: Date, searchString?: string) {
-        if (!startDate || !endDate) {
-            return this.orderRepository.find({ relations: ["orderProducts", "payment", "orderProducts.product"] });
-        } else {
+    async getOrders(query: GetOrdersQuery): Promise<PageElements<Order>> {
+        let whereOrStatements: FindConditions<Order>[] = [];
+        let whereAndStatement: FindConditions<Order> = {};
 
-            return this.orderRepository.find({ where: { createdAt: Between(startDate, endDate) }, relations: ["orderProducts", "payment", "orderProducts.product"] })
+        if (query.startDate && query.endDate) {
+            // Необходимо брать для последнего дня полночь следующего за ним
+            const nextEndDate = new Date(query.endDate);
+            nextEndDate.setDate(nextEndDate.getDate() + 1)
+
+            whereAndStatement.createdAt = Between(query.startDate, nextEndDate)
+        }
+
+        if (query.search) {
+            whereOrStatements.push({ address: Like(`%${query.search}%`) });
+            whereOrStatements.push({ client: Like(`%${query.search}%`) });
+            whereOrStatements.push({ email: Like(`%${query.search}%`) });
+            whereOrStatements.push({ phone: Like(`%${query.search}%`) });
+            // whereStatement.payment = { method: Like(`%${query.search}%`) };
+        }
+
+        const whereStatement = whereOrStatements.length !== 0 ? whereOrStatements.map(w => { return { ...w, ...whereAndStatement } }) : whereAndStatement;
+
+        let orderStatement = {};
+        if (query.sort) {
+            switch (query.sort) {
+                case OrderSorts.DATE_ASC:
+                    orderStatement = { createdAt: 'ASC' }
+                    break;
+                case OrderSorts.DATE_DESC:
+                    orderStatement = { createdAt: 'DESC' }
+                    break;
+                case OrderSorts.PRICE_ASC:
+                    orderStatement = { totalPrice: 'ASC' }
+                    break;
+                case OrderSorts.PRICE_DESC:
+                    orderStatement = { totalPrice: 'DESC' }
+                    break;
+            }
+        }
+
+        const selectedPage = query.page ?? 1;
+
+        const ordersPromise = this.orderRepository.find({
+            where: whereStatement,
+            order: orderStatement,
+            take: this.ITEMS_PER_PAGE,
+            skip: this.ITEMS_PER_PAGE * (selectedPage - 1),
+            relations: ["orderProducts", "payment", "orderProducts.product"]
+        })
+        const countPromise = this.orderRepository.count({ where: whereOrStatements, order: orderStatement })
+
+        const [orders, count] = [await ordersPromise, await countPromise];
+        const maxPages = count % this.ITEMS_PER_PAGE == 0 ? count / this.ITEMS_PER_PAGE : Math.floor(count / this.ITEMS_PER_PAGE) + 1;
+
+        return {
+            elements: orders,
+            maxElements: count,
+            currentPage: selectedPage,
+            maxPages: maxPages
         }
     }
 

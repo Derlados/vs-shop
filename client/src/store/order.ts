@@ -5,13 +5,13 @@ import { IOrder, IPayment } from "../types/IOrder";
 import { ISettlement } from "../types/ISettlement";
 
 export enum OrderSorts {
-    NONE,
-    DATE_ASC,
-    DATE_DESC,
-    PRICE_ASC,
-    PRICE_DESC,
-    STATUS_ASC,
-    STATUS_DESC
+    NONE = 'none',
+    DATE_ASC = 'date-asc',
+    DATE_DESC = 'date-desc',
+    PRICE_ASC = 'price-asc',
+    PRICE_DESC = 'price-desc',
+    STATUS_ASC = 'status-asc',
+    STATUS_DESC = 'status-desc'
 }
 
 class OrderStore {

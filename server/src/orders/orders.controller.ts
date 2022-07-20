@@ -1,10 +1,12 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { OrderSorts } from 'src/constants/OrderSrots';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { ChangeStatusDto } from './dto/change-status-order.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { GetOrdersQuery } from './dto/get-orders-query.dto';
 import { OrderService } from './orders.service';
 
 @Controller('orders')
@@ -12,20 +14,12 @@ export class OrderController {
 
     constructor(private ordersService: OrderService) { }
 
-    @Get([
-        'page=:page;date-period=:startDate,:endDate',
-        'date-period=:startDate,:endDate',
-        'page=:page',
-        'page=:page;date-period=:startDate,:endDate/search',
-        'date-period=:startDate,:endDate/search',
-        'page=:page/search',
-        ''
-    ])
+    @Get()
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
-    getOrders(@Param('startDate') startDate?: Date, @Param('endDate') endDate?: Date, @Param('page') page?: number, @Query('text') searchText?: string) {
-        return this.ordersService.getOrders(page, startDate, endDate, searchText);
+    getOrders(@Query() query: GetOrdersQuery) {
+        return this.ordersService.getOrders(query);
     }
 
     @Get('/:id')

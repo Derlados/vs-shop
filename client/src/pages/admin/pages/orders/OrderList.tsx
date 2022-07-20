@@ -66,12 +66,8 @@ const OrderList = observer(() => {
                     <div className='orders__column orders__column_touchable'>
                         <span className='orders__column-text'>Спосіб оплати</span>
                     </div>
-                    <div className='orders__column orders__column_touchable'
-                        onClick={() => order.selectedSort == OrderSorts.STATUS_DESC ? order.selectedSort = OrderSorts.STATUS_ASC : order.selectedSort = OrderSorts.STATUS_DESC}>
-                        <span className={classNames('orders__column-text orders__column-text_sort', {
-                            'orders__column-text_sort-asc': order.selectedSort == OrderSorts.STATUS_ASC,
-                            'orders__column-text_sort-desc': order.selectedSort == OrderSorts.STATUS_DESC
-                        })}>Статус</span>
+                    <div className='orders__column orders__column_touchable'>
+                        <span className='orders__column-text'>Статус</span>
                     </div>
                 </div>
                 {localStore.isLoading ?
