@@ -11,6 +11,7 @@
         border: 1px solid $primary-gray;
         border-radius: 5px;
         padding: 15px;
+
     }
 
     &__head {
@@ -25,8 +26,29 @@
 
     &__actions {
         flex: 1;
-        max-width: 450px;
         height: 35px;
+    }
+
+    &__date-interval {
+        margin-right: 10px;
+    }
+
+    &__date-picker {
+        padding: 5px;
+        outline: none;
+
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    &__date-hyphen {
+        margin: 0px 10px;
+        font-size: 18px;
+        font-weight: bold;
     }
 
     &__delete-btn {
@@ -57,6 +79,7 @@
 
     &__export {
         height: 100%;
+        width: 130px;
         border: 1px solid $primary-gray;
         border-radius: 5px;
         padding: 0px 20px;
@@ -148,7 +171,16 @@
         margin-right: 20px;
     }
 
-    &__list {}
+    &__list {
+
+        &_loading {
+            li {
+                pointer-events: none;
+                opacity: 0.4;
+            }
+        }
+
+    }
 
     &__item {
         border-bottom: 1px solid $primary-gray;

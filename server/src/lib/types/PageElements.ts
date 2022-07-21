@@ -1,6 +1,6 @@
 export interface PageElements<T> {
     elements: T[];
-    maxElements?: number;
+    maxElements: number;
     currentPage: number;
-    maxPages?: number;
+    maxPages: number;
 }

@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { computed, makeAutoObservable } from "mobx";
 import novaposhtaService from "../services/novaposhta/novaposhta.service";
 import orderService from "../services/order/order.service";
 import { IOrder, IPayment } from "../types/IOrder";
@@ -18,17 +18,24 @@ class OrderStore {
     apiError: string;
     orders: IOrder[];
     maxOrders: number;
+    maxPages: number;
 
     allPayments: IPayment[];
 
     settlements: ISettlement[];
     warehouses: string[];
     selectedSettlementRef: string;
-    selectedSort: OrderSorts;
 
+    selectedSort: OrderSorts;
     selectedPage: number;
+    searchString: string;
+    startDate: Date;
+    endDate: Date;
+
     selectedAll: boolean;
     selectedOrderIds: Set<number>;
+
+    isLoading: boolean;
 
     constructor() {
         makeAutoObservable(this);
@@ -47,17 +54,15 @@ class OrderStore {
             { ref: "db5c8892-391c-11dd-90d9-001a92567626", name: "Полтава", region: '', area: "Полтавська обл.", settlementType: "місто" }
         ];
         this.warehouses = [];
+
         this.selectedSort = OrderSorts.NONE;
         this.selectedPage = 1;
+        this.searchString = '';
+        this.startDate = new Date("2022-01-01");
+        this.endDate = new Date();
+
         this.selectedAll = false;
         this.selectedOrderIds = new Set<number>();
-    }
-
-    get filteredOrders(): IOrder[] {
-        switch (this.selectedSort) {
-
-        }
-        return [];
     }
 
     async findSettlements(searchString: string) {
@@ -76,15 +81,16 @@ class OrderStore {
         }
     }
 
-    async fetchOrders() {
-        if (this.orders.length == 0) {
-            const orders = await orderService.getAll();
-            this.orders.push(...orders);
 
-            if (this.selectedAll) {
-                orders.forEach(o => this.selectedOrderIds.add(o.id));
-            }
-        }
+
+    async fetchOrders() {
+        const pageOrders = await orderService.getOrders(this.selectedPage, this.startDate, this.endDate, this.selectedSort, this.searchString);
+        this.orders = pageOrders.elements;
+        this.selectedPage = pageOrders.currentPage;
+        this.maxPages = pageOrders.maxPages;
+        this.maxOrders = pageOrders.maxElements;
+
+        this.selectedOrderIds.clear();
     }
 
     async placeOrder(order: IOrder): Promise<boolean> {
@@ -112,12 +118,27 @@ class OrderStore {
         } else {
             this.selectedOrderIds.delete(orderId);
         }
-        this.selectedAll = this.selectedOrderIds.size === this.maxOrders;
+        this.selectedAll = this.selectedOrderIds.size === this.orders.length;
+    }
+
+    async setSearchString(searchString: string) {
+        this.searchString = searchString;
+    }
+
+    async setDateInterval(startDate: Date, endDate: Date) {
+        if (startDate > endDate) {
+            return;
+        }
+
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     async nextPage() {
+        if (this.selectedPage == this.maxPages) {
+            return;
+        }
         ++this.selectedPage;
-        //TOOD fetchProducts(page);
     }
 
     async backPage() {
@@ -125,7 +146,6 @@ class OrderStore {
             return;
         }
         --this.selectedPage;
-        //TOOD fetchProducts(page);
     }
 
     async deleteSelectedOrders() {

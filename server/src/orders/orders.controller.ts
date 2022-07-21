@@ -19,6 +19,10 @@ export class OrderController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     getOrders(@Query() query: GetOrdersQuery) {
+        if (query.search) {
+            query.search = decodeURI(query.search);
+        }
+
         return this.ordersService.getOrders(query);
     }
 

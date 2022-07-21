@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { axiosInstance, headersJSON } from "..";
+import { PageElements } from "../../lib/types/PageElements";
+import { OrderSorts } from "../../store/order";
 import { IOrder } from "../../types/IOrder";
 import { Service } from "../service";
 
@@ -19,9 +21,17 @@ class OrderService extends Service {
         return data;
     }
 
-    async getAll(): Promise<IOrder[]> {
-        const { data } = await axiosInstance.get<IOrder[]>(this.API_URL, { headers: headersJSON() });
-        data.forEach(order => order.createdAt = new Date(order.createdAt));
+    async getOrders(page?: number, startDate?: Date, endDate?: Date, sort?: OrderSorts, search?: string): Promise<PageElements<IOrder>> {
+        const params = {
+            page: page,
+            startDate: startDate?.toLocaleDateString('en-CA'),
+            endDate: endDate?.toLocaleDateString('en-CA'),
+            sort: sort,
+            search: search ? encodeURI(search) : undefined
+        }
+
+        const { data } = await axiosInstance.get<PageElements<IOrder>>(this.API_URL, { params: params, headers: headersJSON() });
+        data.elements.forEach(order => order.createdAt = new Date(order.createdAt));
         return data;
     }
 

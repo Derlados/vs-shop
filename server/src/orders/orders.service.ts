@@ -13,7 +13,7 @@ import { Order } from './models/order.model';
 
 @Injectable()
 export class OrderService {
-    private readonly ITEMS_PER_PAGE = 7;
+    private readonly ITEMS_PER_PAGE = 15;
 
     constructor(@InjectRepository(Order) private orderRepository: Repository<Order>,
         @InjectRepository(OrderProduct) private orderProductsRepository: Repository<OrderProduct>,
@@ -74,7 +74,7 @@ export class OrderService {
             skip: this.ITEMS_PER_PAGE * (selectedPage - 1),
             relations: ["orderProducts", "payment", "orderProducts.product"]
         })
-        const countPromise = this.orderRepository.count({ where: whereOrStatements, order: orderStatement })
+        const countPromise = this.orderRepository.count({ where: whereStatement, order: orderStatement })
 
         const [orders, count] = [await ordersPromise, await countPromise];
         const maxPages = count % this.ITEMS_PER_PAGE == 0 ? count / this.ITEMS_PER_PAGE : Math.floor(count / this.ITEMS_PER_PAGE) + 1;
