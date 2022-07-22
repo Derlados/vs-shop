@@ -165,7 +165,15 @@
                 border-top: 5px solid rgba(177, 177, 177, 0.6) !important;
             }
         }
+
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
+
 
     &__column-checker {
         margin-right: 20px;
@@ -203,6 +211,10 @@
 
         &_green {
             background-color: #028f10;
+        }
+
+        &_gray {
+            background-color: gray;
         }
     }
 
@@ -273,8 +285,33 @@
         margin-bottom: 15px;
     }
 
-    &__total-price {
+    &__ex-info-footer {
         margin-top: 15px;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    &__status-editor {}
+
+    &__status-item {
+        margin: 0px 5px;
+        cursor: pointer;
+        transition: 0.2s;
+
+        &:first-child {
+            margin: 0;
+        }
+
+        &_inactive {
+            opacity: 0.3;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    &__total-price {
         font-size: 20px;
         font-weight: bold;
 
@@ -318,4 +355,6 @@
         font-size: 14px;
         border: 1px solid $primary-gray;
     }
+
+
 }

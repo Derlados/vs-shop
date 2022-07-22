@@ -6,6 +6,7 @@ import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { ChangeStatusDto } from './dto/change-status-order.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { EditSelectedOrdersDto } from './dto/edit-selected-orders.dto';
 import { GetOrdersQuery } from './dto/get-orders-query.dto';
 import { OrderService } from './orders.service';
 
@@ -38,7 +39,16 @@ export class OrderController {
         return this.ordersService.createOrder(dto);
     }
 
-    @Put(':id/complete')
+    @Put()
+    @Roles(RoleValues.SELLER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    editSelectedOrders(@Body() dto: EditSelectedOrdersDto) {
+        if (dto.toDeleteIds) {
+            return this.ordersService.deleteOrders(dto.toDeleteIds)
+        }
+    }
+
+    @Put(':id/status')
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     changeStatus(@Param('id') id: number, @Body() dto: ChangeStatusDto) {
@@ -46,10 +56,4 @@ export class OrderController {
     }
 
 
-    @Delete(':id')
-    @Roles(RoleValues.SELLER)
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    deleteOrder(@Param('id') id: number) {
-        this.ordersService.deleteOrders([id]);
-    }
 }

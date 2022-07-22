@@ -9,20 +9,22 @@ import Loader from '../../../../lib/Loader/Loader';
 import Checkbox from '../../../../lib/Checkbox/Checkbox';
 
 interface LocalStore {
+    isInit: boolean;
     isLoading: boolean;
     timer: NodeJS.Timeout;
 }
 
 const OrderList = observer(() => {
     const localStore = useLocalObservable<LocalStore>(() => ({
+        isInit: false,
         isLoading: false,
         timer: setTimeout(() => { }, 0)
     }))
 
     // Отложенная загрузка, когда пользователь
-    const setLoadingTimer = (callBack: Function) => {
+    const setLoadingTimer = (callBack: Function, delay: number) => {
         clearTimeout(localStore.timer);
-        localStore.timer = setTimeout(() => callBack(), 200);
+        localStore.timer = setTimeout(() => callBack(), delay);
     }
 
     useEffect(() => {
@@ -31,7 +33,8 @@ const OrderList = observer(() => {
             localStore.isLoading = false;
         }
 
-        setLoadingTimer(() => fetchOrders());
+        setLoadingTimer(() => fetchOrders(), localStore.isInit ? 400 : 0);
+        localStore.isInit = true;
         localStore.isLoading = true;
     }, [orders.startDate, orders.endDate, orders.selectedPage, orders.searchString, orders.selectedSort])
 
@@ -43,7 +46,7 @@ const OrderList = observer(() => {
                 <div className='orders__head rlc'>
                     <div className='orders__actions rlc'>
                         <div className='orders__orders-count'>Замовлення ({orders.maxOrders})</div>
-                        <div className='orders__delete-btn'></div>
+                        <div className='orders__delete-btn' onClick={() => orders.deleteSelectedOrders()}></div>
                     </div>
                     <div className='orders__actions rlc'>
                         <div className='orders__date-interval rlc'>

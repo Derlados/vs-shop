@@ -1,6 +1,8 @@
-import { IsArray, IsNumber, IsString } from "class-validator";
+import { IsArray, IsEnum, IsNumber, IsString } from "class-validator";
+import { OrderStatus } from "src/constants/OrderStatus";
 
 export class ChangeStatusDto {
     @IsString()
-    newStatus: string;
+    @IsEnum(OrderStatus)
+    status: OrderStatus;
 }

@@ -1,7 +1,7 @@
 import { computed, makeAutoObservable } from "mobx";
 import novaposhtaService from "../services/novaposhta/novaposhta.service";
 import orderService from "../services/order/order.service";
-import { IOrder, IPayment } from "../types/IOrder";
+import { IOrder, IPayment, OrderStatus } from "../types/IOrder";
 import { ISettlement } from "../types/ISettlement";
 
 export enum OrderSorts {
@@ -81,8 +81,6 @@ class OrderStore {
         }
     }
 
-
-
     async fetchOrders() {
         const pageOrders = await orderService.getOrders(this.selectedPage, this.startDate, this.endDate, this.selectedSort, this.searchString);
         this.orders = pageOrders.elements;
@@ -149,10 +147,27 @@ class OrderStore {
     }
 
     async deleteSelectedOrders() {
-        if (this.selectedAll) {
-            //TODO удалить всё
-        } else {
-            //TODO удалить выделенную часть
+        if (this.selectedOrderIds.size == 0) {
+            return;
+        }
+
+        const selectedOrderIds = [...this.selectedOrderIds.values()];
+        try {
+            await orderService.deleteSelectedOrders(selectedOrderIds);
+            this.orders = this.orders.filter(o => !selectedOrderIds.includes(o.id));
+            this.selectedOrderIds.clear();
+
+            this.fetchOrders();
+        } catch (e) {
+            console.log(orderService.getError());
+        }
+    }
+
+    async changeStatus(orderId: number, newStatus: OrderStatus) {
+        const order = this.orders.find(o => o.id == orderId);
+        if (order) {
+            const updatedStatus = await orderService.changeOrderStatus(orderId, newStatus);
+            order.status = updatedStatus;
         }
     }
 }

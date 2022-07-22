@@ -95,16 +95,16 @@ export class OrderService {
     }
 
     async changeStatus(id: number, dto: ChangeStatusDto) {
-        try {
-            await this.orderRepository.update({ id: id }, { status: dto.newStatus });
-        } catch (e) {
+        const res = await this.orderRepository.update({ id: id }, { status: dto.status });
+        if (res.affected == 1) {
+            return { updatedStatus: dto.status };
+        } else {
             throw new NotFoundException("Заказ не найден")
         }
     }
 
     async deleteOrders(orderIds: number[]) {
-        this.orderRepository.delete({ id: In(orderIds) });
-        //TODO
+        await this.orderRepository.delete({ id: In(orderIds) });
     }
 
     private async addOrderProducts(orderId: number, orderProducts: OrderProductDto[]) {

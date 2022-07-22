@@ -74,9 +74,24 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
                         ))}
                     </div>
                 </div>
-                <div className='orders__total-price rrc'>Загальна сума: <span>{order.totalPrice} ₴</span></div>
+                <div className='orders__ex-info-footer rrc'>
+                    <ul className='rcc'>
+                        {Object.values(OrderStatus).map(status => (
+                            <li key={status} className={classNames('orders__status-item orders__status', {
+                                'orders__status_red': status == OrderStatus.NOT_PROCESSED,
+                                'orders__status_yellow': status == OrderStatus.PROCESSING,
+                                'orders__status_green': status == OrderStatus.PROCESSED,
+                                'orders__status-item_inactive': order.status !== status
+                            })}
+                                onClick={() => orders.changeStatus(order.id, status)}>
+                                {status}
+                            </li>
+                        ))}
+                    </ul>
+                    <div className='orders__total-price rlc'>Загальна сума: <span>{order.totalPrice} ₴</span></div>
+                </div>
             </div>
-        </li>
+        </li >
     )
 });
 
