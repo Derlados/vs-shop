@@ -41,7 +41,7 @@ const OrderList = observer(() => {
 
     return (
         <div className='orders'>
-            <div className='orders__title'>Замовлення</div>
+            <div className='admin-general__title'>Замовлення</div>
             <div className='orders__content'>
                 <div className='orders__head rlc'>
                     <div className='orders__actions rlc'>

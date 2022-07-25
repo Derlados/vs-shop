@@ -7,10 +7,10 @@ interface CheckboxProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ className, checked, onChange }) => {
+const Checkbox: FC<CheckboxProps> = ({ className = '', checked, onChange }) => {
 
     return (
-        <label className={`${className ?? ''} checkbox  rcc`}>
+        <label className={`${className} checkbox  rcc`}>
             <input className='checkbox__input' type="checkbox" checked={checked} onChange={onChange} />
             <span className='checkbox__checkmark'></span>
         </label>

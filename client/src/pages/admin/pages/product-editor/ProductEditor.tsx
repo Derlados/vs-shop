@@ -209,6 +209,7 @@ const ProductEditor = observer(() => {
 
     return (
         <div className='product-editor'>
+            <div className='admin-general__title'>Редактор продуктів</div>
             <div className='admin-general__subtitle'>Каталоги</div>
             <CategoryList categories={shop.categories} onClick={onSelectCategory} />
             <div className='admin-general__line'></div>

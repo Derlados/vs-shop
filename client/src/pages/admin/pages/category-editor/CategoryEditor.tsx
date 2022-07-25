@@ -127,7 +127,7 @@ const CategoryEditor = observer(() => {
 
     return (
         <div className='category-editor clt'>
-            <div className='category-editor__title'>Категорії</div>
+            <div className='admin-general__title'>Редактор каталогів</div>
             <div className='category-editor__created-categories rlc'>
                 {shop.categories.map((category) => (
                     <CategoryCard key={category.routeName} category={category} onClick={() => onEdit(category)} />
@@ -152,12 +152,12 @@ const CategoryEditor = observer(() => {
                 </div>
                 <div className='category-editor__right-form clt'>
                     <div className='category-editor__editor-head rlt'>
-                        <div className='category-editor__name'>Name and URL</div>
+                        <div className='category-editor__name'>Ім'я та посилання</div>
                         <div className='admin-general__clear-btn' onClick={onClear}>Clear</div>
                     </div>
                     <input className='admin-general__input' placeholder='category name' value={localStore.name} onChange={(v) => localStore.name = v.target.value} />
                     <input className='admin-general__input' placeholder='category url name' value={localStore.routeName} onChange={(v) => localStore.routeName = v.target.value} />
-                    <div className='category-editor__key-attrs'>Key attributes</div>
+                    <div className='category-editor__key-attrs'>Ключові атрибути</div>
                     <ul className='category-editor__key-attr-list'>
                         {localStore.attributes.map((attr, index) => (
                             <li key={attr.id} className='category-editor__key-attr-item rlc'>

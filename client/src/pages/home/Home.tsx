@@ -6,20 +6,19 @@ import SliderProducts from '../../components/SliderProducts';
 import catalog from '../../store/catalog';
 import shop from '../../store/shop';
 import '../../styles/home/home.scss';
+import { ILargeBanner } from '../../types/ILargeBanner';
+import BannerList from './components/BannerList';
+import LargeBanner from './components/LargeBanner';
 
 const Home = observer(() => {
+    const banners: ILargeBanner[] = [
+        { title: 'Organic Fruits\nSummer Drinks', img: 'https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-2.jpg', subtitle: 'fresh New pack Brusting Fruits', link: 'http://localhost:3000/processors' },
+        { title: 'Organic Fruits\nSummer Drinks', img: 'https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-1.jpg', subtitle: 'fresh New pack Brusting Fruits', link: '' },
+    ]
+
     return (
         <div className='home ccc'>
-            <div className='home__board ccc'>
-                <div className='home__board-container rlc'>
-                    <div className='home__board-info clc'>
-                        <div className='home__board-title'>{"Organic Fruits\nSummer drinks"}</div>
-                        <div className='home__board-subtitle'>{"Freeze Dried Fruits pineapple Coconut"}</div>
-                        <div className='home__board-btn'>SHOP NOW</div>
-                    </div>
-                </div>
-
-            </div>
+            <BannerList banners={banners} />
             <div className='home__features'>
                 <ul className='home__feature-list rcc'>
                     <li className='home__feature-item rlc'>

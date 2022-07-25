@@ -55,7 +55,7 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
 
     return (
         <div className={`${className} selector`}>
-            <div className='selector__hint'>{hint}</div>
+            {hint !== '' && <div className='selector__hint'>{hint}</div>}
             <div className={classNames('selector__container', {
                 'selector__container_open': localStore.isOpen
             })}>

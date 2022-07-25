@@ -16,8 +16,8 @@ import Home from './pages/home/Home';
 import Checkout from './pages/checkout/Checkout';
 import ProductInfo from './pages/product/ProductInfo';
 import Shop from './pages/shop/Shop';
-import HomePageEditor from './pages/admin/components/HomePageEditor';
 import Page404 from './pages/page404/Page404';
+import HomeEditor from './pages/admin/pages/home-editor/HomeEditor';
 
 const App = () => {
     return (
@@ -25,7 +25,7 @@ const App = () => {
             <Routes>
                 <Route path='admin' element={<ProtectedRoute isAuth={user.isAuth} roles={[UserRoles.ADMIN, UserRoles.SELLER]} element={<Admin />} />}>
                     <Route path='dashboard' element={<DashBoard />} />
-                    <Route path='home' element={<HomePageEditor />} />
+                    <Route path='home' element={<HomeEditor />} />
                     <Route path='categories' element={<CategoryEditor />} />
                     <Route path='products' element={<ProductEditor />} />
                     <Route path='orders' element={<OrderList />} />

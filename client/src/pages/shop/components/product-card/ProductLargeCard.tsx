@@ -25,7 +25,7 @@ const ProductLargeCard: FC<ProductCardProps> = observer(({ product, urlFull, add
                 </div>
             </div>
             <div className='product-card-large__info clt'>
-                <NavLink to={urlFull}>
+                <NavLink to={urlFull} className="rlc">
                     <span className='product-card__name product-card-large__title product-card__name_large'>{product.title}</span>
                 </NavLink>
                 <span className='product-card__brand product-card__brand_large'>STUDIO DESIGN</span>

@@ -3,22 +3,31 @@
 
 .home {
 
-    &__board {
+    &__banner-slider {
+        width: 100vw;
+    }
+
+    &__banner {
+        position: relative;
+        display: flex;
+        justify-content: space-between !important;
+        width: 100%;
+        height: 100%;
+        max-width: 100vw;
+    }
+
+    &__banner-img {
         width: 100vw;
         height: 65vh;
         min-height: 500px;
-        background-image: url('https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-2.jpg');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-    }
 
-    &__board-container {
-        width: 100%;
-        padding: 0px 20px 0px 20px;
-        justify-content: space-between !important;
-        max-width: 1600px;
-        height: 100%;
+        @media (max-width: $mobile-vertical) {
+            height: 45vh;
+            min-height: 350px;
+        }
     }
 
     &__board-img {
@@ -26,12 +35,26 @@
         height: 100%;
     }
 
-    &__board-info {}
+    &__banner-info {
+        position: absolute;
+        top: calc(50% - 200px);
+        left: calc((100vw - 1600px)/ 2);
+        min-height: 400px;
 
-    &__board-title {
+        @media (max-width: $desctop) {
+            left: 20px;
+        }
+
+        @media (max-width: $mobile-vertical) {
+            top: calc(50% - 175px);
+            min-height: 350px;
+        }
+    }
+
+    &__banner-title {
         white-space: pre-line;
-        font-size: 48px;
-        line-height: 52px;
+        font-size: 52px;
+        line-height: 56px;
         padding-bottom: 20px;
 
         @media (max-width: $mobile-vertical) {
@@ -40,10 +63,10 @@
         }
     }
 
-    &__board-subtitle {
+    &__banner-subtitle {
         color: gray;
-        font-size: 18px;
-        padding-bottom: 20px;
+        font-size: 22px;
+        padding-bottom: 24px;
 
         @media (max-width: $mobile-vertical) {
             font-size: 16px;
@@ -51,7 +74,7 @@
         }
     }
 
-    &__board-btn {
+    &__banner-btn {
         border-radius: 25px;
         padding: 10px 25px 10px 25px;
         background-color: $primary;
