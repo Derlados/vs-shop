@@ -31,6 +31,12 @@ export class Product {
     @Column({ type: "int", nullable: false })
     count: number;
 
+    @Column({ type: "int", default: 0 })
+    sold: number;
+
+    @Column({ type: "boolean", default: false })
+    isBestseller: boolean;
+
     @Column({ name: "category_id", type: "number", nullable: false })
     categoryId: number;
 
