@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ShopInfo } from "./shop-info.model";
 
@@ -7,6 +8,7 @@ export class Banner {
     id: number;
 
     @Column({ name: 'shop_info_id', type: 'int' })
+    @Exclude()
     shopInfoId: number;
 
     @Column({ type: 'text' })

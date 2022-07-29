@@ -1,14 +1,21 @@
-import React, { FC } from 'react'
+import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
+import React, { FC, useEffect } from 'react'
 import { NavLink } from 'react-router-dom';
-import { ILargeBanner } from '../../../types/ILargeBanner'
+import { IBanner } from '../../../types/ILargeBanner'
 
-interface LargeBannerProps {
-    info: ILargeBanner;
+interface BannerProps {
+    info: IBanner;
+    size?: "full-screen" | "container";
 }
 
-const LargeBanner: FC<LargeBannerProps> = ({ info }) => {
+const Banner: FC<BannerProps> = observer(({ info, size = "full-screen" }) => {
+
     return (
-        <div className='home__banner ccc'>
+        <div className={classNames('home__banner ccc', {
+            'home__banner_full-screen': size == "full-screen",
+            'home__banner_container': size == "container",
+        })}>
             <div className='home__banner-img' style={{
                 backgroundImage: `url('${info.img}')`
             }}>
@@ -24,6 +31,6 @@ const LargeBanner: FC<LargeBannerProps> = ({ info }) => {
 
         </div>
     )
-}
+});
 
-export default LargeBanner
+export default Banner

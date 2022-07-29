@@ -6,14 +6,14 @@ import SliderProducts from '../../components/SliderProducts';
 import catalog from '../../store/catalog';
 import shop from '../../store/shop';
 import '../../styles/home/home.scss';
-import { ILargeBanner } from '../../types/ILargeBanner';
+import { IBanner } from '../../types/ILargeBanner';
 import BannerList from './components/BannerList';
-import LargeBanner from './components/LargeBanner';
+import Banner from './components/Banner';
 
 const Home = observer(() => {
-    const banners: ILargeBanner[] = [
-        { title: 'Organic Fruits\nSummer Drinks', img: 'https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-2.jpg', subtitle: 'fresh New pack Brusting Fruits', link: 'http://localhost:3000/processors' },
-        { title: 'Organic Fruits\nSummer Drinks', img: 'https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-1.jpg', subtitle: 'fresh New pack Brusting Fruits', link: '' },
+    const banners: IBanner[] = [
+        { id: 10001, title: 'Organic Fruits\nSummer Drinks', img: 'https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-2.jpg', subtitle: 'fresh New pack Brusting Fruits', link: 'http://localhost:3000/processors' },
+        { id: 10002, title: 'Organic Fruits\nSummer Drinks', img: 'https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-1.jpg', subtitle: 'fresh New pack Brusting Fruits', link: '' },
     ]
 
     return (

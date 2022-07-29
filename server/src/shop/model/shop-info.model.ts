@@ -1,6 +1,7 @@
 import { type } from "os";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Banner } from "./banner.model";
+import { Contact } from "./contact.model";
 
 @Entity("shop-info")
 export class ShopInfo {
@@ -11,16 +12,10 @@ export class ShopInfo {
     smallBanner: string;
 
     @Column({ type: 'simple-json', default: '[]' })
-    contacts: ShopInfo.Contact[];
+    contacts: Contact[];
 
     @OneToMany(() => Banner, b => b.shopInfo)
     banners: Banner[];
 }
 
 
-export namespace ShopInfo {
-    export class Contact {
-        name: string;
-        url: string;
-    }
-}

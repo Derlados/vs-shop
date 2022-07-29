@@ -1,7 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import categoriesService from "../services/categories/categories.service";
 import { CreateCategoryDto } from "../services/categories/dto/create-category.dto";
+import shopService from "../services/shop/shop.service";
 import { ICategory } from "../types/ICategory";
+import { IContact } from "../types/IContact";
+import { IBanner } from "../types/ILargeBanner";
 import { IProduct } from "../types/IProduct";
 
 class ShopStore {
@@ -9,21 +12,33 @@ class ShopStore {
     bestSellers: IProduct[];
     newProducts: IProduct[];
 
+    banners: IBanner[];
+    smallBanner: string;
+    contacts: IContact[];
+
     constructor() {
         makeAutoObservable(this);
 
         this.categories = [];
         this.bestSellers = [];
         this.newProducts = [];
-        this.fetchAll();
+        this.fetchAllInfo();
     }
 
     get categoryRoutes(): string[] {
         return this.categories.map(c => c.routeName);
     }
 
-    async fetchAll() {
-        this.categories = await categoriesService.getAllCategories();
+    async fetchAllInfo() {
+        const categoriesPromise = categoriesService.getAllCategories();
+        const shopInfoPromise = shopService.getShopInfo();
+
+        const [categories, shopInfo] = [await categoriesPromise, await shopInfoPromise];
+        this.categories = categories;
+
+        this.banners = shopInfo.banners;
+        this.smallBanner = shopInfo.smallBanner;
+        this.contacts = shopInfo.contacts;
     }
 
     async addCategory(data: CreateCategoryDto, img: File) {
@@ -45,14 +60,41 @@ class ShopStore {
         this.categories.splice(this.categories.findIndex(c => c.id === id), 1);
     }
 
-
-
     getCategoryById(id: number) {
         return this.categories.find((c) => c.id === id)
     }
 
     getCategoryByRoute(routeName: string) {
         return this.categories.find((c) => c.routeName === routeName)
+    }
+
+    async addBanner(banner: IBanner, img: File) {
+        const newBanner = await shopService.addBanner(banner, img);
+        this.banners.push(newBanner);
+    }
+
+    async editBanner(banner: IBanner, img: File) {
+        const updatedBanner = await shopService.editBanner(banner, img);
+        const updatedIndex = this.banners.findIndex(b => b.id == updatedBanner.id);
+        this.banners[updatedIndex] = updatedBanner;
+    }
+
+    async deleteBanner(id: number) {
+        const deletedBannerIndex = this.banners.findIndex(b => b.id == id);
+        if (deletedBannerIndex !== - 1) {
+            await shopService.deleteBanner(id);
+            this.banners.splice(deletedBannerIndex, 1)
+        }
+    }
+
+    async editSmallBanner(img: File) {
+        const smallBanner = await shopService.editSmallBanner(img);
+        this.smallBanner = smallBanner;
+    }
+
+    async editContacts(contacts: IContact[]) {
+        const updatedContacts = await shopService.editContacts(contacts);
+        this.contacts = updatedContacts;
     }
 }
 

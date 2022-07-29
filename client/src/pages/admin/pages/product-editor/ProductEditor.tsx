@@ -135,7 +135,6 @@ const ProductEditor = observer(() => {
             localStore.uploadedFiles.splice(indexToDelete, 1);
         }
 
-
         if (!REGEX.BLOB.test(image.url)) {
             localStore.deletedImagesId.push(image.id);
         }
@@ -205,7 +204,6 @@ const ProductEditor = observer(() => {
 
         return true;
     }
-
 
     return (
         <div className='product-editor'>

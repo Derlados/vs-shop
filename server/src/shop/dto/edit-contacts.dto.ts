@@ -1,10 +1,10 @@
 import { Type } from "class-transformer";
 import { IsArray, ValidateNested } from "class-validator";
-import { ShopInfo } from "../model/shop-info.model";
+import { Contact } from "../model/contact.model";
 
 export class EditContactsDto {
     @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => ShopInfo.Contact)
-    contacts: ShopInfo.Contact[];
+    @Type(() => Contact)
+    contacts: Contact[];
 }

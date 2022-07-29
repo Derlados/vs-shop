@@ -1,19 +1,26 @@
+import classNames from 'classnames';
 import React, { FC } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { ILargeBanner } from '../../../types/ILargeBanner'
-import LargeBanner from './LargeBanner';
+import { IBanner } from '../../../types/ILargeBanner'
+import Banner from './Banner';
 
 interface BannerListProps {
-    banners: ILargeBanner[];
+    banners: IBanner[];
+    bannerSize?: "full-screen" | "container";
 }
 
-const BannerList: FC<BannerListProps> = ({ banners }) => {
+const BannerList: FC<BannerListProps> = ({ banners, bannerSize = "full-screen" }) => {
 
     return (
-        <div>
+        <div className={classNames('home__banner-slider-wrap', {
+            'home__banner-slider-wrap_container': bannerSize === "container",
+        })}>
             {banners.length !== 0 &&
                 <Swiper
-                    className='home__banner-slider'
+                    className={classNames('home__banner-slider', {
+                        'home__banner-slider_full-screen': bannerSize === "full-screen",
+                        'home__banner-slider_container': bannerSize === "container",
+                    })}
                     slidesPerView='auto'
                     spaceBetween={0}
                     direction="horizontal"
@@ -24,7 +31,7 @@ const BannerList: FC<BannerListProps> = ({ banners }) => {
                     {
                         banners.map(b => (
                             <SwiperSlide key={b.img} className='home__banner-slide'>
-                                <LargeBanner info={b} />
+                                <Banner info={b} size={bannerSize} />
                             </SwiperSlide>
                         ))
                     }

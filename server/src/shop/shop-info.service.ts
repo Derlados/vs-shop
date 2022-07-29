@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { ShopInfo } from './model/shop-info.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Banner } from './model/banner.model';
+import { Contact } from './model/contact.model';
 
 @Injectable()
 export class ShopInfoService {
@@ -19,15 +20,15 @@ export class ShopInfoService {
         private fileService: FilesService) { }
 
     async getShopInfo() {
-        return this.shopInfoRepository.findOne({ id: this.SHOP_INFO_ID });
+        return this.shopInfoRepository.findOne({ where: { id: this.SHOP_INFO_ID }, relations: ["banners"] });
     }
 
-    async addLargeBanner(dto: CreateLargeBannerDto, img: Express.Multer.File) {
+    async addLargeBanner(dto: CreateLargeBannerDto, img: Express.Multer.File): Promise<Banner> {
         const imgUrl = await this.fileService.createFile(img);
-        return this.bannerRepository.save({ ...dto, img: imgUrl })
+        return this.bannerRepository.save({ ...dto, shopInfoId: this.SHOP_INFO_ID, img: imgUrl })
     }
 
-    async editLargeBanner(id: number, dto: CreateLargeBannerDto, img: Express.Multer.File) {
+    async editLargeBanner(id: number, dto: CreateLargeBannerDto, img: Express.Multer.File): Promise<Banner> {
         const imgUrl = await this.fileService.createFile(img);
         return this.bannerRepository.save({ ...dto, id: id, img: imgUrl })
     }
@@ -45,7 +46,7 @@ export class ShopInfoService {
         return imgUrl;
     }
 
-    async updateContacts(newContacts: ShopInfo.Contact[]) {
+    async updateContacts(newContacts: Contact[]) {
         await this.shopInfoRepository.update({ id: this.SHOP_INFO_ID }, { contacts: newContacts });
         return newContacts;
     }
