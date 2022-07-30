@@ -23,14 +23,19 @@ export class ShopInfoService {
         return this.shopInfoRepository.findOne({ where: { id: this.SHOP_INFO_ID }, relations: ["banners"] });
     }
 
-    async addLargeBanner(dto: CreateLargeBannerDto, img: Express.Multer.File): Promise<Banner> {
+    async addBanner(dto: CreateLargeBannerDto, img: Express.Multer.File): Promise<Banner> {
         const imgUrl = await this.fileService.createFile(img);
         return this.bannerRepository.save({ ...dto, shopInfoId: this.SHOP_INFO_ID, img: imgUrl })
     }
 
-    async editLargeBanner(id: number, dto: CreateLargeBannerDto, img: Express.Multer.File): Promise<Banner> {
-        const imgUrl = await this.fileService.createFile(img);
-        return this.bannerRepository.save({ ...dto, id: id, img: imgUrl })
+    async editBanner(id: number, dto: CreateLargeBannerDto, img?: Express.Multer.File): Promise<Banner> {
+        if (img) {
+            const imgUrl = await this.fileService.createFile(img);
+            return this.bannerRepository.save({ ...dto, id: id, img: imgUrl })
+        }
+
+        await this.bannerRepository.update({ id: id }, { ...dto })
+        return this.bannerRepository.findOne({ id: id });
     }
 
     async deleteLargeBanner(id: number) {

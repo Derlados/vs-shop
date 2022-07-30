@@ -24,6 +24,12 @@ export class ProductsController {
         return this.productService.getProductsByCategory(categoryId);
     }
 
+    @Get('bestsellers')
+    @UseInterceptors(ClassSerializerInterceptor)
+    getBestsellers() {
+        return this.productService.getBestSellers();
+    }
+
     @Get('filter')
     @UseInterceptors(ClassSerializerInterceptor)
     getFilteredProducts() {
@@ -69,10 +75,24 @@ export class ProductsController {
         return this.productService.updateImages(id, req.user.userId, dto, images)
     }
 
+    @Put(':id([0-9]+)/bestseller')
+    @Roles(RoleValues.SELLER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    setBestsellerStatus(@Req() req, @Param('id') id: number) {
+        return this.productService.setBestsellerStatus(id, req.user.userId);
+    }
+
     @Delete(':id([0-9]+)')
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     deleteProduct(@Req() req, @Param('id') id: number) {
         return this.productService.deleteProduct(id, req.user.userId);
+    }
+
+    @Delete(':id([0-9]+)/bestseller')
+    @Roles(RoleValues.SELLER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    deleteBestsellerStatus(@Req() req, @Param('id') id: number) {
+        return this.productService.deleteBestsellerStatus(id, req.user.userId);
     }
 }

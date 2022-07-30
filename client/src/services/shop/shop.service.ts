@@ -23,18 +23,20 @@ class ShopService extends Service {
         return data;
     }
 
-    async editBanner(updatedBanner: IBanner, img: File): Promise<IBanner> {
+    async editBanner(updatedBanner: IBanner, img?: File): Promise<IBanner> {
         const { id, img: image, ...bannerData } = updatedBanner;
 
         const formData = serialize(bannerData);
-        formData.append('image', img);
+        if (img) {
+            formData.append('image', img);
+        }
 
         const { data } = await axiosInstance.put(`${this.API_URL}/banner/${id}`, formData, { headers: headers() });
         return data;
     }
 
     async deleteBanner(id: number) {
-        const { data } = await axiosInstance.delete(`${this.API_URL}/banner/${id}`);
+        const { data } = await axiosInstance.delete(`${this.API_URL}/banner/${id}`, { headers: headers() });
         return data;
     }
 

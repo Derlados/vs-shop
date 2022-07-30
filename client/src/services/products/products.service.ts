@@ -20,6 +20,11 @@ class ProductService extends Service {
         return this.parseProducts(data);
     }
 
+    async getBestsellers(): Promise<IProduct[]> {
+        const { data } = await axiosInstance.get(`${this.API_URL}/bestsellers`, { headers: headersJSON() });
+        return data;
+    }
+
     async addProducts(product: IProduct): Promise<IProduct> {
         const { data } = await axiosInstance.post<IProduct>(`${this.API_URL}`, this.getProductDto(product), { headers: headersJSON() });
         return this.parseProduct(data);
@@ -49,8 +54,18 @@ class ProductService extends Service {
         return data;
     }
 
+    async setBestsellerStatus(id: number) {
+        const { data } = await axiosInstance.put(`${this.API_URL}/${id}/bestseller`, {}, { headers: headersJSON() });
+        return data;
+    }
+
     async deleteProduct(id: number) {
         const { data } = await axiosInstance.delete<IProduct>(`${this.API_URL}/${id}`, { headers: headersJSON() });
+        return data;
+    }
+
+    async deleteBestsellerStatus(id: number) {
+        const { data } = await axiosInstance.delete(`${this.API_URL}/${id}/bestseller`, { headers: headersJSON() });
         return data;
     }
 

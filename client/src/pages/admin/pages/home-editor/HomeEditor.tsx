@@ -19,7 +19,7 @@ import { NavLink } from 'react-router-dom';
 
 interface LocalStore {
     banner: IBanner;
-    bannerImgFile: File | null;
+    bannerImgFile?: File;
     contacts: IContact[];
     isLoading: boolean;
 }
@@ -39,7 +39,6 @@ const HomeEditor = observer(() => {
 
     const localStore = useLocalObservable<LocalStore>(() => ({
         banner: getBannerTemplate(),
-        bannerImgFile: null,
         contacts: [],
         isLoading: true
     }))
@@ -85,8 +84,6 @@ const HomeEditor = observer(() => {
             localStore.bannerImgFile = image;
             localStore.banner.img = URL.createObjectURL(image);
 
-            console.log(localStore.banner.img)
-
             if (inputRef.current) {
                 inputRef.current.value = '';
             }
@@ -104,27 +101,38 @@ const HomeEditor = observer(() => {
         }
     }
 
-    const onAcceptBanner = () => {
+    const onSelectBanner = (banner: IBanner) => {
+        localStore.banner = JSON.parse(JSON.stringify(banner));
+    }
+
+    const onAcceptBanner = async () => {
         if (!validateBanner()) {
             return;
         }
 
-        if (localStore.bannerImgFile) {
-            if (localStore.banner.id == -1) {
-                shop.addBanner(localStore.banner, localStore.bannerImgFile);
-            } else {
-                shop.editBanner(localStore.banner, localStore.bannerImgFile)
+        if (localStore.banner.id == -1) {
+            if (localStore.bannerImgFile) {
+                await shop.addBanner(localStore.banner, localStore.bannerImgFile);
             }
+        } else {
+            await shop.editBanner(localStore.banner, localStore.bannerImgFile)
         }
+
+        onClearBanner();
     }
 
-    const OnClearBanner = () => {
+    const onClearBanner = () => {
         localStore.banner = getBannerTemplate();
-        localStore.bannerImgFile = null;
+        localStore.bannerImgFile = undefined;
+    }
+
+    const onDeleteBanner = async () => {
+        await shop.deleteBanner(localStore.banner.id);
+        onClearBanner();
     }
 
     const validateBanner = () => {
-        return localStore.bannerImgFile && localStore.banner.link !== '' && localStore.banner.subtitle !== '' && localStore.banner.title !== ''
+        return (localStore.bannerImgFile || localStore.banner.id !== -1) && localStore.banner.link !== '' && localStore.banner.subtitle !== '' && localStore.banner.title !== ''
     }
 
     if (localStore.isLoading) {
@@ -141,9 +149,12 @@ const HomeEditor = observer(() => {
             <div className='home-editor__banner clc'>
                 <div className='admin-general__subtitle'>Великі банери на головному меню</div>
                 <div className='home-editor__banner-view'>
-                    <BannerList banners={shop.banners} bannerSize="container" />
+                    <BannerList banners={shop.banners} bannerSize="container" onClick={onSelectBanner} />
                 </div>
-                <div className='admin-general__subtitle'>Створення нового або редагування</div>
+                <div className='home-editor__banner-view-head rcc'>
+                    <div className='admin-general__subtitle'>Створення нового або редагування</div>
+                    <div className='admin-general__clear-btn' onClick={onClearBanner}>Clear</div>
+                </div>
 
                 {localStore.banner.img == '' ?
                     <div className='home-editor__uploader-wrap ccc'>
@@ -156,12 +167,11 @@ const HomeEditor = observer(() => {
                         <FileUploader inputRef={inputRef} className='home-editor__file-uploader' onUploadImage={onUploadBannerImg} multiple={false} >
                             <Banner info={localStore.banner} size="container" />
                         </FileUploader>
-
                     </div>
                 }
                 <div className='home-editor__input-row rcc'>
                     <span className='admin-general__input-title'>Заголовок: </span>
-                    <input className='admin-general__input' value={localStore.banner.title} onChange={(v) => localStore.banner.title = v.target.value} />
+                    <textarea className='admin-general__input' value={localStore.banner.title} onChange={(v) => localStore.banner.title = v.target.value} />
                 </div>
                 <div className='home-editor__input-row rcc'>
                     <span className='admin-general__input-title'>Підзаголовок: </span>
@@ -173,7 +183,7 @@ const HomeEditor = observer(() => {
                 </div>
                 <div className='rcc home-editor__btn-row'>
                     <div className='admin-general__action-btn admin-general__action-btn_accept ccc' onClick={onAcceptBanner}>Accept</div>
-                    <div className='admin-general__action-btn admin-general__action-btn_delete ccc' onClick={OnClearBanner}>Clear</div>
+                    {localStore.banner.id !== -1 && <div className='admin-general__action-btn admin-general__action-btn_delete ccc' onClick={onDeleteBanner}>Delete</div>}
                 </div>
             </div>
             <div className='home-editor__small-banners'>
@@ -205,7 +215,7 @@ const HomeEditor = observer(() => {
                     <div key={p.id} className='home-editor__product rlc'>
                         <img className='home-editor__product-img' src={p.images.find(img => img.isMain)?.url ?? p.images[0].url} />
                         <span className='home-editor__product-name'>{p.title}</span>
-                        <Checkbox className='home-editor__product-checkbox' checked={true} onChange={() => { }} />
+                        <Checkbox className='home-editor__product-checkbox' checked={p.isBestseller} onChange={(v) => catalog.setBestsellerStatus(p.id, v.target.checked)} />
                     </div>
                 ))}
             </div>

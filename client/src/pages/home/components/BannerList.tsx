@@ -7,9 +7,10 @@ import Banner from './Banner';
 interface BannerListProps {
     banners: IBanner[];
     bannerSize?: "full-screen" | "container";
+    onClick?: (banner: IBanner) => void;
 }
 
-const BannerList: FC<BannerListProps> = ({ banners, bannerSize = "full-screen" }) => {
+const BannerList: FC<BannerListProps> = ({ banners, bannerSize = "full-screen", onClick = (banner: IBanner) => { } }) => {
 
     return (
         <div className={classNames('home__banner-slider-wrap', {
@@ -30,7 +31,7 @@ const BannerList: FC<BannerListProps> = ({ banners, bannerSize = "full-screen" }
                 >
                     {
                         banners.map(b => (
-                            <SwiperSlide key={b.img} className='home__banner-slide'>
+                            <SwiperSlide key={b.img} className='home__banner-slide' onClick={() => onClick(b)}>
                                 <Banner info={b} size={bannerSize} />
                             </SwiperSlide>
                         ))

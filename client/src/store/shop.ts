@@ -73,7 +73,7 @@ class ShopStore {
         this.banners.push(newBanner);
     }
 
-    async editBanner(banner: IBanner, img: File) {
+    async editBanner(banner: IBanner, img?: File) {
         const updatedBanner = await shopService.editBanner(banner, img);
         const updatedIndex = this.banners.findIndex(b => b.id == updatedBanner.id);
         this.banners[updatedIndex] = updatedBanner;

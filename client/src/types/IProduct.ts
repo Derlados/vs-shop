@@ -7,6 +7,7 @@ export interface IProduct {
     price: number;
     oldPrice: number;
     isNew: boolean;
+    isBestseller: boolean;
     count: number;
     categoryId: number;
     userId: number;

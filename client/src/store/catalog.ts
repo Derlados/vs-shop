@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import categoriesService from "../services/categories/categories.service";
 import productsService from "../services/products/products.service";
+import shopService from "../services/shop/shop.service";
 import { ICategory } from "../types/ICategory";
 import { IFilters, IRange } from "../types/IFilters";
 import { IProduct } from "../types/IProduct";
@@ -193,6 +194,21 @@ class CatalogStore {
         const updatedProduct = await productsService.editProduct(id, product);
         updatedProduct.images = await productsService.editProductImages(updatedProduct.id, images, deletedImagesId, newMainImageId);
         this.products[this.products.findIndex(p => p.id === id)] = updatedProduct;
+    }
+
+    public async setBestsellerStatus(id: number, isBestseller: boolean) {
+        const product = this.products.find(p => p.id === id);
+        if (!product) {
+            return;
+        }
+
+        if (isBestseller) {
+            productsService.setBestsellerStatus(id)
+        } else {
+            productsService.deleteBestsellerStatus(id)
+        }
+
+        product.isBestseller = isBestseller;
     }
 
     public async deleteProduct(id: number) {

@@ -34,6 +34,11 @@ export class ProductsService {
         return products;
     }
 
+    async getBestSellers(): Promise<Product[]> {
+        const products = await this.productRepository.find({ where: { isBestseller: true }, relations: ["images"] });
+        return products;
+    }
+
     async getProductById(id: number): Promise<Product> {
         const product = await this.productRepository.findOne({ where: { id: id }, relations: ["values", "values.attribute", "images"] });
         if (!product) {
@@ -130,12 +135,21 @@ export class ProductsService {
         return this.imageRepository.find({ productId: productId })
     }
 
+    async setBestsellerStatus(productId: number, userId: number) {
+        await this.productRepository.update({ id: productId, userId: userId }, { isBestseller: true })
+    }
+
     async deleteProduct(id: number, userId: number) {
         const result = await this.productRepository.delete({ id: id, userId: userId });
         if (result.affected == 0) {
             throw new NotFoundException("Товар не найден");
         }
     }
+
+    async deleteBestsellerStatus(productId: number, userId: number) {
+        await this.productRepository.update({ id: productId, userId: userId }, { isBestseller: false })
+    }
+
 
     //TODO можно оптимизировать
     private async addAttributes(productId: number, attributes: Map<string, string>) {
