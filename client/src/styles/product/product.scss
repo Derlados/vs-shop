@@ -203,19 +203,28 @@
         color: white;
     }
 
-    &__avalibility {
+    &__availability {
         font-size: 18px;
         font-weight: bold;
         padding: 15px 0px 10px 0px;
     }
 
-    &__avalibility-status {
+    &__availability-status {
         font-size: 18px;
         margin-left: 10px;
 
         &_green {
             color: rgb(22, 212, 22);
         }
+
+        &_yellow {
+            color: rgb(255, 222, 73);
+        }
+
+        &_gray {
+            color: rgb(192, 192, 192);
+        }
+
     }
 
     &__share-actions {}

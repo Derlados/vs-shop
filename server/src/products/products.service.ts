@@ -34,7 +34,7 @@ export class ProductsService {
         return products;
     }
 
-    async getBestSellers(): Promise<Product[]> {
+    async getBestsellers(): Promise<Product[]> {
         const products = await this.productRepository.find({ where: { isBestseller: true }, relations: ["images"] });
         return products;
     }
@@ -48,26 +48,27 @@ export class ProductsService {
         return product;
     }
 
-    async getProductsByCategory(categoryId: number) {
+    async getProductsByCategory(categoryId: number): Promise<Product[]> {
         return this.productRepository.find({ where: { category: { id: categoryId } }, relations: ["category", "values", "values.attribute", "images"] });
     }
 
-    async getProductsBySeller(userId: number) {
-        return this.productRepository.find({ where: { userId: userId }, relations: ["values", "values.attribute", "images"] });
+    async getProductCount(userId: number, productId: number) {
+        const product = await this.productRepository.findOne({ id: productId, userId: userId });
+        return { count: product.count };
     }
 
     /** TODO: Если работа на клиенте будет неоптимальной - фильтровать будет сервер */
-    async getFilteredProducts(attributes: Map<string, string[]>) {
-        attributes = new Map([
-            ["attr1", ["val1", "val3", "val4"]],
-            ["attr2", ["val1", "val3", "val4"]],
-        ])
+    // async getFilteredProducts(attributes: Map<string, string[]>) {
+    //     attributes = new Map([
+    //         ["attr1", ["val1", "val3", "val4"]],
+    //         ["attr2", ["val1", "val3", "val4"]],
+    //     ])
 
-        const products = this.productRepository.find({ relations: ["category", "values", "values.attribute"] });
+    //     const products = this.productRepository.find({ relations: ["category", "values", "values.attribute"] });
 
 
-        return products;
-    }
+    //     return products;
+    // }
 
     async createProduct(userId: number, dto: CreateProductDto, attributes: Map<string, string>): Promise<Product> {
         const result = await this.productRepository.insert({ ...dto, userId: userId });
@@ -149,7 +150,6 @@ export class ProductsService {
     async deleteBestsellerStatus(productId: number, userId: number) {
         await this.productRepository.update({ id: productId, userId: userId }, { isBestseller: false })
     }
-
 
     //TODO можно оптимизировать
     private async addAttributes(productId: number, attributes: Map<string, string>) {

@@ -20,9 +20,8 @@ export class CreateProductDto {
     count: number;
 
     @IsNumber()
-    categoryId: number;
+    maxByOrder: number;
 
-    @IsOptional()
-    @IsBoolean()
-    isBestSeller: boolean = false;
+    @IsNumber()
+    categoryId: number;
 }

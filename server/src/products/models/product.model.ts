@@ -1,5 +1,6 @@
 import { Exclude } from "class-transformer";
 import { Category } from "src/category/models/category.model";
+import { AvailableStatus } from "src/constants/AvailabilityStatus";
 import { OrderProduct } from "src/orders/models/order-products.model";
 import { SessionCartItem } from "src/session-cart/model/session-cart-item.model";
 import { User } from "src/users/models/user.model";
@@ -7,7 +8,7 @@ import { AfterLoad, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany,
 import { Image } from "./image.model";
 import { Value } from "./value.model";
 
-@Entity("product")
+@Entity("products")
 export class Product {
 
     @PrimaryGeneratedColumn("increment")
@@ -29,12 +30,13 @@ export class Product {
     isNew: boolean;
 
     @Column({ type: "int", nullable: false })
+    @Exclude()
     count: number;
 
-    @Column({ type: "int", default: 0 })
-    sold: number;
+    @Column({ name: "max_by_order", type: "int", default: 1 })
+    maxByOrder: number;
 
-    @Column({ type: "boolean", default: false })
+    @Column({ name: "is_bestseller", type: "boolean", default: false })
     isBestseller: boolean;
 
     @Column({ name: "category_id", type: "number", nullable: false })
@@ -42,6 +44,8 @@ export class Product {
 
     @Column({ name: "user_id", type: "number", nullable: false })
     userId: number;
+
+    availability: AvailableStatus;
 
     discountPercent: number;
 
@@ -69,6 +73,17 @@ export class Product {
     @OneToMany(() => SessionCartItem, cartItem => cartItem.product)
     @Exclude()
     sessionCartItems: SessionCartItem[]
+
+    @AfterLoad()
+    getAvailability() {
+        if (this.count > this.maxByOrder * 2) {
+            this.availability = AvailableStatus.IN_STOCK;
+        } else if (this.count > 0 && this.count <= this.maxByOrder * 2) {
+            this.availability = AvailableStatus.IN_STOKE_FEW;
+        } else {
+            this.availability = AvailableStatus.OUT_OF_STOCK;
+        }
+    }
 
     @AfterLoad()
     getDiscountPercent() {

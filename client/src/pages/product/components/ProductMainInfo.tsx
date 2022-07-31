@@ -7,6 +7,8 @@ import { ProductProps } from '../../shop/components/product-card/Product';
 import 'swiper/css';
 import { IImage } from '../../../types/IImage';
 import CartCountEditor from '../../../components/cart/CartCountEditor';
+import classNames from 'classnames';
+import { AvailableStatus } from '../../../types/IProduct';
 
 interface LocalStore {
     swiper: any;
@@ -40,7 +42,7 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
 
 
     const incrementCount = () => {
-        if (localStore.selectedCount < product.count) {
+        if (localStore.selectedCount < product.maxByOrder) {
             ++localStore.selectedCount;
         }
     }
@@ -52,7 +54,7 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
     }
 
     const handleCountChange = (count: number) => {
-        if (count >= 1 && count <= product.count) {
+        if (count >= 1 && count <= product.maxByOrder) {
             localStore.selectedCount = count;
         }
     }
@@ -136,7 +138,13 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
                     }
                     <CartButton color="primary" isActive={cart.findById(product.id) === undefined} onClick={onAddToCart} />
                 </div>
-                <span className='product__avalibility'>Availibility: <span className='product__avalibility-status product__avalibility-status_green'>{product.count} available</span></span>
+                <span className='product__availability'>Availibility:
+                    <span className={classNames('product__availability-status', {
+                        'product__availability-status_green': product.availability === AvailableStatus.IN_STOCK,
+                        'product__availability-status_yellow': product.availability === AvailableStatus.IN_STOKE_FEW,
+                        'product__availability-status_gray': product.availability === AvailableStatus.OUT_OF_STOCK,
+                    })}>{product.availability}</span>
+                </span>
                 <div className='product__share-actions rlc'>
                     <span className='product__share'>Share: </span>
                     <div className='product__share-action product__share-action_facebook'></div>

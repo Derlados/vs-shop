@@ -70,7 +70,7 @@ class ProductService extends Service {
     }
 
     private getProductDto(p: IProduct) {
-        const { id, images, attributes, discountPercent, userId, ...product } = p;
+        const { id, images, attributes, discountPercent, userId, availability, ...product } = p;
         return {
             product: product,
             attributes: Object.fromEntries(attributes)

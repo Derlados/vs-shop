@@ -91,6 +91,14 @@ export class OrderService {
         const { payment, ...order } = dto;
         const insertId = (await this.orderRepository.insert({ ...order, paymentId: payment.id, orderProducts: [] })).raw.insertId;
         await this.addOrderProducts(insertId, dto.orderProducts);
+
+        await this.orderProductsRepository.query(`
+            UPDATE order_products 
+            JOIN products ON products.id = order_products.product_id  
+            SET products.count = products.count - order_products.count
+            WHERE order_id = ${insertId}
+        `);
+
         return this.getOrderById(insertId);
     }
 

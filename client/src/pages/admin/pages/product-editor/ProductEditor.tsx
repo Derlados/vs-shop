@@ -11,7 +11,7 @@ import '../../../../styles/admin/admin-general.scss';
 import '../../../../styles/admin/product-editor.scss';
 import { ICategory } from '../../../../types/ICategory';
 import { IImage } from '../../../../types/IImage';
-import { IProduct } from '../../../../types/IProduct';
+import { AvailableStatus, IProduct } from '../../../../types/IProduct';
 import { REGEX } from '../../../../values/regex';
 import Product from '../../../shop/components/product-card/Product';
 import { ViewMode } from '../../../shop/components/ProductCatalog';
@@ -46,6 +46,8 @@ const ProductEditor = observer(() => {
             oldPrice: 0,
             isNew: false,
             isBestseller: false,
+            availability: AvailableStatus.IN_STOCK,
+            maxByOrder: 0,
             count: 0,
             discountPercent: 0,
             attributes: new Map<string, string>(),
@@ -54,7 +56,7 @@ const ProductEditor = observer(() => {
     }))
     localStore.product.discountPercent = Math.floor((1 - localStore.product.price / localStore.product.oldPrice) * 100);
 
-    const getProductTemplate = () => {
+    const getProductTemplate = (): IProduct => {
         const attributes = new Map<string, string>();
         if (localStore && localStore.selectedCategory) {
             for (const attr of localStore.selectedCategory.keyAttributes) {
@@ -72,7 +74,8 @@ const ProductEditor = observer(() => {
             oldPrice: 0,
             isNew: false,
             isBestseller: false,
-            count: 0,
+            availability: AvailableStatus.IN_STOCK,
+            maxByOrder: 0,
             discountPercent: 0,
             attributes: attributes,
             images: []
@@ -265,6 +268,10 @@ const ProductEditor = observer(() => {
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Кількість: </div>
                         <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count} onChange={(v) => localStore.product.count = Number(v.target.value)} />
+                    </div>
+                    <div className='rlc'>
+                        <div className='admin-general__input-title'>Кількість на замовлення: </div>
+                        <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.maxByOrder} onChange={(v) => localStore.product.maxByOrder = Number(v.target.value)} />
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Новий ?: </div>

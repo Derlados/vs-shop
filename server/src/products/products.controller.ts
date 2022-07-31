@@ -14,7 +14,7 @@ export class ProductsController {
 
     @Get()
     @UseInterceptors(ClassSerializerInterceptor)
-    getProductList() {
+    getProductList(@Req() req) {
         return this.productService.getProducts();
     }
 
@@ -27,27 +27,27 @@ export class ProductsController {
     @Get('bestsellers')
     @UseInterceptors(ClassSerializerInterceptor)
     getBestsellers() {
-        return this.productService.getBestSellers();
+        return this.productService.getBestsellers();
     }
 
-    @Get('filter')
+    @Get(':id([0-9]+)/count')
+    @Roles(RoleValues.SELLER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
-    getFilteredProducts() {
-        return this.productService.getFilteredProducts(new Map());
+    getAvailableCount(@Req() req, @Param('id') id: number) {
+        return this.productService.getProductCount(req.user.userId, id);
     }
+
+    // @Get('filter')
+    // @UseInterceptors(ClassSerializerInterceptor)
+    // getFilteredProducts() {
+    //     return this.productService.getFilteredProducts(new Map());
+    // }
 
     @Get(':id([0-9]+)')
     @UseInterceptors(ClassSerializerInterceptor)
     getProductInfo(@Param('id') id: number) {
         return this.productService.getProductById(id);
-    }
-
-    @Get('customer')
-    @Roles(RoleValues.SELLER)
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @UseInterceptors(ClassSerializerInterceptor)
-    getSellerProducts(@Req() req) {
-        return this.productService.getProductsBySeller(req.user.userId);
     }
 
     @Post()

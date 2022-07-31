@@ -27,7 +27,8 @@ export class OrderController {
         return this.ordersService.getOrders(query);
     }
 
-    @Get('/:id')
+
+    @Get(':id')
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     getOrder(@Param('id') id: number) {
@@ -54,6 +55,4 @@ export class OrderController {
     changeStatus(@Param('id') id: number, @Body() dto: ChangeStatusDto) {
         return this.ordersService.changeStatus(id, dto);
     }
-
-
 }

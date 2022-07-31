@@ -4,7 +4,6 @@ import { SessionCartController } from './session-cart.controller';
 import { DecryptSessionCartMiddleware } from './middlewares/decrypt-session-cart.middleware';
 import { SessionCart } from './model/session-cart.model';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Product } from 'src/products/models/product.model';
 import { SessionCartItem } from './model/session-cart-item.model';
 
 @Module({
