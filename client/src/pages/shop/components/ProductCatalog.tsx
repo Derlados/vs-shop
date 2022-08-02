@@ -8,6 +8,7 @@ import Pagination from './Pagination';
 import Product from './product-card/Product';
 import ProductQuickModal from './product-card/ProductQuickModal';
 import ProductGrid from './ProductGrid';
+import AOS from 'aos';
 
 const MAX_PRODUCTS_BY_PAGE = 24;
 

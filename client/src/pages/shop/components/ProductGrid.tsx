@@ -59,7 +59,7 @@ const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPer
     }
 
     return (
-        <div className='ccc catalog__product-grid-cont'>
+        <div className='ccc catalog__product-grid-cont' >
             <div className={classNames('catalog__products-grid', {
                 'rlt': viewMode === ViewMode.GRID,
                 'clc': viewMode === ViewMode.LIST

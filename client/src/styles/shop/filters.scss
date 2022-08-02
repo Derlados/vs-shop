@@ -110,7 +110,8 @@
 
     &__attr-item {
         cursor: pointer;
-        margin: 10px 0px 10px 0px;
+        padding: 10px 0px 10px 0px;
+        border-bottom: 1px solid gainsboro;
 
         &:hover>.filters__checkmark {
             border: 1px solid $primary;

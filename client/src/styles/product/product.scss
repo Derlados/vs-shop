@@ -81,17 +81,11 @@
         transition: 0.4s;
         z-index: 99;
         -webkit-touch-callout: none;
-        /* iOS Safari */
         -webkit-user-select: none;
-        /* Safari */
         -khtml-user-select: none;
-        /* Konqueror HTML */
         -moz-user-select: none;
-        /* Firefox */
         -ms-user-select: none;
-        /* Internet Explorer/Edge */
         user-select: none;
-        /* Non-prefixed version, currently supported by Chrome and Opera */
 
         &:hover {
             color: white;
@@ -129,12 +123,14 @@
     &__old-price {
         text-decoration: line-through;
         color: gray;
-        font-size: 20px;
+        font-size: 22px;
+        font-weight: bold;
     }
 
     &__current-price {
         margin-right: 10px;
         font-size: 22px;
+        font-weight: bold;
     }
 
     &__desc {

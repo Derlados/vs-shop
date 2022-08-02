@@ -50,7 +50,7 @@ const Shop = observer(() => {
 
     if (!localStore.isLoaded && catalog.products.length !== 0) {
         return (
-            <div className='shop clt'>
+            <div className='shop clt' >
                 <CatalogNav />
                 <div className='rct'>
                     <Filters isOpen={localStore.isFilterOpen} onClose={onCloseFilters} />

@@ -2,6 +2,8 @@
 @import '../general/resolutions.scss';
 
 .checkout {
+    margin-top: 20px;
+
     @media (max-width: $tablet-horizontal) {
         margin-top: 20px;
         flex-direction: column !important;

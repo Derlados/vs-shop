@@ -10,6 +10,7 @@
         "@types/node": "^16.11.26",
         "@types/react": "^17.0.39",
         "@types/react-dom": "^17.0.13",
+        "aos": "^2.3.4",
         "axios": "^0.27.2",
         "class-validator": "^0.13.2",
         "classnames": "^2.3.1",
@@ -54,6 +55,7 @@
         ]
     },
     "devDependencies": {
+        "@types/aos": "^3.0.4",
         "@types/react-input-mask": "^3.0.1"
     }
 }

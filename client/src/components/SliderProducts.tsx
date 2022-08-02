@@ -6,12 +6,14 @@ import Product from '../pages/shop/components/product-card/Product';
 import '../styles/components/slider-products.scss';
 import { Resolutions } from '../values/resolutions';
 import { IProduct } from '../types/IProduct';
+import ProductQuickModal from '../pages/shop/components/product-card/ProductQuickModal';
 
 interface LocalStore {
     swiper: any;
     slidesPerView: number;
+    selectedProduct: IProduct;
+    isOpenQuick: boolean;
 }
-
 interface SliderProductsProps {
     title: string;
     products: IProduct[];
@@ -26,8 +28,22 @@ const MAX_PER_MOBILE_VERTICAL = 2;
 const SliderProducts: FC<SliderProductsProps> = observer(({ products, title, slidesPerView = 6 }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         swiper: null,
-        slidesPerView: slidesPerView
+        slidesPerView: slidesPerView,
+        isOpenQuick: false,
+        selectedProduct: products[0]
     }));
+
+    const closeQuickView = () => {
+        document.body.style.overflowY = "";
+        localStore.isOpenQuick = false;
+    }
+
+    const openQuickView = (product: IProduct) => {
+        document.body.style.overflowY = "hidden";
+        localStore.selectedProduct = product;
+        localStore.isOpenQuick = true;
+    }
+
 
     useEffect(() => {
         window.addEventListener("resize", () => {
@@ -53,6 +69,7 @@ const SliderProducts: FC<SliderProductsProps> = observer(({ products, title, sli
 
     return (
         <div className='slider-products clc'>
+            {localStore.selectedProduct && <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />}
             <div className='slider-products__head rlc'>
                 <div className='slider-products__title'>{title}</div>
                 <div className='slider-products__arrows rlc'>
@@ -67,12 +84,11 @@ const SliderProducts: FC<SliderProductsProps> = observer(({ products, title, sli
                     spaceBetween={10}
                     slidesPerView={localStore.slidesPerView}
                     direction="horizontal"
-                    loop={true}
                     onSwiper={(sw) => localStore.swiper = sw}
                 >
                     {products.map((product, index) => (
                         <SwiperSlide key={index} className="slider-products__slider">
-                            <Product type="small" product={product} />
+                            <Product type="small" product={product} containerSize="small" onOpenQuickView={openQuickView} />
                         </SwiperSlide>
                     ))}
                 </Swiper>

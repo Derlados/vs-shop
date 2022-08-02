@@ -3,7 +3,7 @@
 
 .product-card-large {
     width: 100%;
-    border: solid 1px $primary-gray;
+    border: solid 1px gainsboro;
     margin-bottom: 20px;
     padding: 20px;
 
@@ -32,19 +32,25 @@
     }
 
     &__title {
-        font-size: 24px;
+        font-size: 18px;
         font-weight: bold;
-        margin-bottom: 7px;
+        margin-bottom: 5px;
 
         @media (max-width: $tablet-vertical) {
             font-size: 16px !important;
         }
     }
 
+    &__brand {
+        font-size: 14px;
+        color: #a9a9a9;
+        margin-bottom: 15px;
+    }
+
     &__img {
         width: 100%;
         height: auto;
-        border: solid 1px $primary-gray;
+        border: solid 1px gainsboro;
     }
 
     &__info {
@@ -58,15 +64,26 @@
     }
 
     &__price {
-        font-size: 20px !important;
+        margin-bottom: 10px;
+
+    }
+
+    &__current-price {
+        font-size: 18px;
+        font-weight: bold;
 
         @media (max-width: $tablet-vertical) {
-            font-size: 18px !important;
+            font-size: 16px !important;
         }
     }
 
     &__old-price {
-        font-size: 18px !important;
+        font-size: 16px;
+        font-weight: bold;
+        margin-left: 10px;
+
+        color: gray;
+        text-decoration: line-through;
 
         @media (max-width: $tablet-vertical) {
             font-size: 16px !important;

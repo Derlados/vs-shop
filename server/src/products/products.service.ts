@@ -39,6 +39,11 @@ export class ProductsService {
         return products;
     }
 
+    async getNewProducts(): Promise<Product[]> {
+        const products = await this.productRepository.find({ where: { isNew: true }, relations: ["images"] });
+        return products;
+    }
+
     async getProductById(id: number): Promise<Product> {
         const product = await this.productRepository.findOne({ where: { id: id }, relations: ["values", "values.attribute", "images"] });
         if (!product) {

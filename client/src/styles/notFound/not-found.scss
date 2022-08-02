@@ -13,12 +13,22 @@
     }
 
     &__text {
+        text-align: center;
         font-size: 20px;
         margin-bottom: 20px;
 
         &_large {
             font-size: 42px;
             font-weight: bold;
+        }
+
+        @media (max-width: $mobile-vertical) {
+            font-size: 16px;
+
+            &_large {
+                font-size: 32px;
+                font-weight: bold;
+            }
         }
     }
 

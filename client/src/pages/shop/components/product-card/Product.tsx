@@ -12,22 +12,26 @@ import ProductSmallCard from './ProductSmallCard';
 
 export interface ProductProps {
     product: IProduct;
+    animated?: boolean;
+
     addToCart: (product: IProduct, count?: number) => void;
     getMainImage: (product: IProduct) => IImage;
 }
 
 export interface ProductCardProps extends ProductProps {
+    containerSize?: "default" | "small";
     onOpenQuickView: (product: IProduct) => void;
     urlFull: string;
 }
 
 interface CreateProductCardProps {
     product: IProduct;
+    containerSize?: "default" | "small";
     type: "small" | "large" | "quick-view" | "full-view";
     onOpenQuickView?: (IProduct: IProduct) => void;
 }
 
-const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQuickView = () => { } }) => {
+const Product: FC<CreateProductCardProps> = observer(({ type, containerSize = "default", product, onOpenQuickView = () => { } }) => {
     const { catalog: category } = useParams();
 
     const addToCart = (product: IProduct, count: number = 1) => {
@@ -44,6 +48,7 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                 <ProductSmallCard
                     product={product}
                     urlFull={`/${category}/${product.id}`}
+                    containerSize={containerSize}
                     addToCart={addToCart}
                     onOpenQuickView={onOpenQuickView}
                     getMainImage={getMainImage}
@@ -55,6 +60,7 @@ const Product: FC<CreateProductCardProps> = observer(({ type, product, onOpenQui
                 <ProductLargeCard
                     product={product}
                     urlFull={`/${category}/${product.id}`}
+                    containerSize={containerSize}
                     addToCart={addToCart}
                     onOpenQuickView={onOpenQuickView}
                     getMainImage={getMainImage}

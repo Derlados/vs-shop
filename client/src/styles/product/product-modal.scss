@@ -11,8 +11,10 @@
     background-color: rgba(0, 0, 0, 0.26);
     z-index: -1;
     opacity: 0;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
     padding: 20px;
 
     &::-webkit-scrollbar {
@@ -90,7 +92,8 @@
             transition: 0.4s;
         }
 
-        &:hover::after, &:hover::before {
+        &:hover::after,
+        &:hover::before {
             background-color: $hover-primary;
         }
     }

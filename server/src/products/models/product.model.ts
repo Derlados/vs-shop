@@ -10,7 +10,6 @@ import { Value } from "./value.model";
 
 @Entity("products")
 export class Product {
-
     @PrimaryGeneratedColumn("increment")
     id: number;
 

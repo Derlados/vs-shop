@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import categoriesService from "../services/categories/categories.service";
 import { CreateCategoryDto } from "../services/categories/dto/create-category.dto";
+import productsService from "../services/products/products.service";
 import shopService from "../services/shop/shop.service";
 import { ICategory } from "../types/ICategory";
 import { IContact } from "../types/IContact";
@@ -9,19 +10,23 @@ import { IProduct } from "../types/IProduct";
 
 class ShopStore {
     categories: ICategory[];
-    bestSellers: IProduct[];
+    bestsellers: IProduct[];
     newProducts: IProduct[];
 
     banners: IBanner[];
     smallBanner: string;
     contacts: IContact[];
 
+    isInit: boolean;
+
     constructor() {
         makeAutoObservable(this);
 
         this.categories = [];
-        this.bestSellers = [];
+        this.bestsellers = [];
         this.newProducts = [];
+        this.contacts = [];
+        this.isInit = false;
         this.fetchAllInfo();
     }
 
@@ -32,13 +37,19 @@ class ShopStore {
     async fetchAllInfo() {
         const categoriesPromise = categoriesService.getAllCategories();
         const shopInfoPromise = shopService.getShopInfo();
+        const bestsellersPromise = productsService.getBestsellers();
+        const newProductsPromise = productsService.getNewProducts();
 
-        const [categories, shopInfo] = [await categoriesPromise, await shopInfoPromise];
+        const [categories, shopInfo, bestsellers, newProducts] = [await categoriesPromise, await shopInfoPromise, await bestsellersPromise, await newProductsPromise];
+
         this.categories = categories;
-
         this.banners = shopInfo.banners;
         this.smallBanner = shopInfo.smallBanner;
         this.contacts = shopInfo.contacts;
+        this.bestsellers = bestsellers;
+        this.newProducts = newProducts;
+
+        this.isInit = true;
     }
 
     async addCategory(data: CreateCategoryDto, img: File) {

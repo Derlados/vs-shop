@@ -18,8 +18,18 @@ import ProductInfo from './pages/product/ProductInfo';
 import Shop from './pages/shop/Shop';
 import Page404 from './pages/page404/Page404';
 import HomeEditor from './pages/admin/pages/home-editor/HomeEditor';
+import { useEffect } from 'react';
+import AOS from 'aos';
 
 const App = () => {
+
+    useEffect(() => {
+        AOS.init({
+            once: true,
+            duration: 1000
+        });
+    }, [])
+
     return (
         <div className='app cct'>
             <Routes>

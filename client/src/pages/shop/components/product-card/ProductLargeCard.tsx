@@ -26,12 +26,12 @@ const ProductLargeCard: FC<ProductCardProps> = observer(({ product, urlFull, add
             </div>
             <div className='product-card-large__info clt'>
                 <NavLink to={urlFull} className="rlc">
-                    <span className='product-card__name product-card-large__title product-card__name_large'>{product.title}</span>
+                    <span className='product-card-large__title'>{product.title}</span>
                 </NavLink>
-                <span className='product-card__brand product-card__brand_large'>STUDIO DESIGN</span>
-                <div className='product-card__price rlc'>
-                    <span className='product-card__current-price  product-card-large__price'>{product.price}{SpecSymbols.NBSP}₴</span>
-                    {product.oldPrice !== product.price && <span className='product-card__old-price  product-card-large__old-price'>{product.oldPrice}{SpecSymbols.NBSP}₴</span>}
+                <span className='product-card-large__brand'>STUDIO DESIGN</span>
+                <div className='product-card-large__price rlc'>
+                    <span className='product-card-large__current-price'>{product.price}₴</span>
+                    {product.oldPrice !== product.price && <span className='product-card-large__old-price'>{product.oldPrice}₴</span>}
                 </div>
                 <div className='product-card-large__desc'>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit.</div>
                 <div className='rlc'>

@@ -30,6 +30,12 @@ export class ProductsController {
         return this.productService.getBestsellers();
     }
 
+    @Get('new')
+    @UseInterceptors(ClassSerializerInterceptor)
+    getNewProducts() {
+        return this.productService.getNewProducts();
+    }
+
     @Get(':id([0-9]+)/count')
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)

@@ -1,7 +1,10 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
+import shop from '../../store/shop';
 import '../../styles/components/footer.scss';
 
-const Footer = () => {
+const Footer = observer(() => {
     return (
         <footer className='footer ccc'>
             <img className='footer__logo footer__logo_top' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' />
@@ -10,12 +13,13 @@ const Footer = () => {
                 <div className='footer__block rcc'>
                     <div className='footer__text'>Соц. мережі:</div>
                     <ul className='footer__contacts rcc'>
-                        <li className='footer__contact-item'>
-                            <div className='footer__icon footer__icon_facebook'></div>
-                        </li>
-                        <li className='footer__contact-item'>
-                            <div className='footer__icon footer__icon_telegram'></div>
-                        </li>
+                        {shop.contacts.map(c => (
+                            <li key={c.name} className='footer__contact-item'>
+                                <NavLink to={c.url}>
+                                    <div className={`footer__icon ${c.icon}`}></div>
+                                </NavLink>
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div className='footer__block rlc'>
@@ -30,6 +34,6 @@ const Footer = () => {
             <div className='footer__text footer__copyright'>© Copyright 2021. All Rights Reserved.</div>
         </footer>
     )
-}
+});
 
 export default Footer

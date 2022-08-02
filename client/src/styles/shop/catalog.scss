@@ -13,14 +13,22 @@
     }
 
     &__product-container {
-        width: calc(25% - 7px);
+        width: calc(25% - 4px);
 
-        @media (max-width: $laptop) {
-            width: calc(33.33% - 7px);
+        @media (max-width: $desctop) {
+            width: calc(33.33% - 4px);
         }
 
-        @media (max-width: $tablet-vertical) {
-            width: calc(50% - 7px);
+        @media (max-width: $laptop) {
+            width: calc(50% - 4px);
+        }
+
+        @media (max-width: $tablet-horizontal) {
+            width: calc(33.33% - 4px);
+        }
+
+        @media (max-width: $tablet-horizontal) {
+            width: calc(50% - 4px);
         }
 
         &_large {
@@ -145,7 +153,6 @@
             }
         }
     }
-
 
     &__sort {
         position: relative;

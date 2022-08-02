@@ -1,24 +1,35 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react'
-import { NavLink } from 'react-router-dom';
 import CategoryList from '../../components/CategoryList';
 import SliderProducts from '../../components/SliderProducts';
-import catalog from '../../store/catalog';
 import shop from '../../store/shop';
 import '../../styles/home/home.scss';
-import { IBanner } from '../../types/ILargeBanner';
 import BannerList from './components/BannerList';
-import Banner from './components/Banner';
+import Loader from '../../lib/Loader/Loader';
+import "aos/dist/aos.css";
+import { IProduct } from '../../types/IProduct';
+
+interface LocalStore {
+    selectedProduct: IProduct;
+    isOpenQuick: boolean;
+}
 
 const Home = observer(() => {
-    const banners: IBanner[] = [
-        { id: 10001, title: 'Organic Fruits\nSummer Drinks', img: 'https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-2.jpg', subtitle: 'fresh New pack Brusting Fruits', link: 'http://localhost:3000/processors' },
-        { id: 10002, title: 'Organic Fruits\nSummer Drinks', img: 'https://template.hasthemes.com/ecolife/ecolife/assets/images/slider-image/sample-1.jpg', subtitle: 'fresh New pack Brusting Fruits', link: '' },
-    ]
+
+    const closeQuickView = () => {
+
+    }
+
+    if (!shop.isInit) {
+        return (
+            <div className='home ccc'>
+                <Loader />
+            </div>
+        )
+    }
 
     return (
         <div className='home ccc'>
-            <BannerList banners={banners} />
+            <BannerList banners={shop.banners} />
             <div className='home__features'>
                 <ul className='home__feature-list rcc'>
                     <li className='home__feature-item rlc'>
@@ -51,11 +62,11 @@ const Home = observer(() => {
                     </li>
                 </ul>
             </div>
-            <SliderProducts title="Best sellers" slidesPerView={5} products={[...shop.bestSellers.slice(0, 8)]} />
+            <SliderProducts title="Best sellers" slidesPerView={5} products={[...shop.bestsellers.slice(0, 10)]} />
             <div className='home__category-title'>Catalog</div>
             <CategoryList categories={shop.categories} />
             <img className='home__banner' alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/banner-image/4.jpg' />
-            <SliderProducts title="Resenly added" products={[...shop.newProducts.slice(0, 8)]} />
+            <SliderProducts title="Resenly added" products={[...shop.newProducts.slice(0, 10)]} />
         </div>
     )
 });
