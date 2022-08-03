@@ -1,4 +1,4 @@
-import Header from './components/header/Header';
+import Header from './components/header/Header/Header';
 import './styles/app.scss';
 import './styles/general/position.css'
 import { Navigate, Route, Routes } from 'react-router-dom';

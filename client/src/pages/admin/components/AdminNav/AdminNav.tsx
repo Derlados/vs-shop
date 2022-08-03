@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React, { useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { adminRoutes } from '../../../navigation/routes'
-import '../../../styles/admin/admin-nav.scss';
+import { adminRoutes } from '../../../../navigation/routes'
+import './admin-nav.scss';
 
 const AdminNav = () => {
     const location = useLocation();

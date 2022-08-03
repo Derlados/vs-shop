@@ -131,6 +131,10 @@
         width: 100%;
         padding: 10px;
 
+        @media (max-width: $tablet-vertical) {
+            padding: 7px;
+        }
+
         @media (max-width: $mobile-vertical) {
             padding: 5px;
         }
@@ -144,7 +148,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
 
-        @media (max-width: $mobile-vertical) {
+        @media (max-width: $tablet-vertical) {
             font-size: 14px;
         }
 
@@ -205,6 +209,22 @@
         &_large {
             width: 100%;
             justify-content: center;
+        }
+    }
+
+    &__availability {
+        margin-top: 5px;
+
+        &_green {
+            color: rgb(8, 168, 8);
+        }
+
+        &_yellow {
+            color: rgb(255, 222, 73);
+        }
+
+        &_gray {
+            color: rgb(192, 192, 192);
         }
     }
 }

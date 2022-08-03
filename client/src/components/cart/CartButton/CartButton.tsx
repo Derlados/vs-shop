@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { FC } from 'react';
-import '../../styles/components/cart/cart-button.scss';
-import { SpecSymbols } from '../../values/specSymbols';
+import './cart-button.scss';
+import { SpecSymbols } from '../../../values/specSymbols';
 
 interface CartButtonProps {
     className?: string;

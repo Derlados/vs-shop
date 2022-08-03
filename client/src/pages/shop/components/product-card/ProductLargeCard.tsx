@@ -1,11 +1,13 @@
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react'
-import CartButton from '../../../../components/cart/CartButton';
+import CartButton from '../../../../components/cart/CartButton/CartButton';
 import cart from '../../../../store/cart';
 import { ProductCardProps } from './Product';
 import '../../../../styles/product/product-card-large.scss';
 import { SpecSymbols } from '../../../../values/specSymbols';
 import { NavLink } from 'react-router-dom';
+import classNames from 'classnames';
+import { AvailableStatus } from '../../../../types/IProduct';
 
 const ProductLargeCard: FC<ProductCardProps> = observer(({ product, urlFull, addToCart, onOpenQuickView, getMainImage }) => {
     return (
@@ -34,8 +36,15 @@ const ProductLargeCard: FC<ProductCardProps> = observer(({ product, urlFull, add
                     {product.oldPrice !== product.price && <span className='product-card-large__old-price'>{product.oldPrice}₴</span>}
                 </div>
                 <div className='product-card-large__desc'>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit.</div>
-                <div className='rlc'>
-                    <CartButton color="primary" isActive={cart.findById(product.id) === undefined} onClick={() => addToCart(product)} />
+                <div className='product-card-large__footer rlc'>
+                    {product.availability !== AvailableStatus.OUT_OF_STOCK && <CartButton color="primary" isActive={cart.findById(product.id) === undefined} onClick={() => addToCart(product)} />}
+                    <div className={classNames('product-card__availability product-card-large__availability', {
+                        'product-card__availability_green': product.availability === AvailableStatus.IN_STOCK,
+                        'product-card__availability_yellow': product.availability === AvailableStatus.IN_STOKE_FEW,
+                        'product-card__availability_gray': product.availability === AvailableStatus.OUT_OF_STOCK,
+                    })}>
+                        {product.availability}
+                    </div>
                 </div>
             </div>
         </div>

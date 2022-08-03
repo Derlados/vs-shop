@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import cart from '../../store/cart';
-import '../../styles/header/cart-quick.scss';
-import { ICartProduct } from '../../types/ICartProduct';
-import { IProduct } from '../../types/IProduct';
-import CartCountEditor from '../cart/CartCountEditor';
+import cart from '../../../store/cart';
+import './cart-quick.scss';
+import { ICartProduct } from '../../../types/ICartProduct';
+import { IProduct } from '../../../types/IProduct';
+import CartCountEditor from '../../cart/CartCountEditor/CartCountEditor';
 
 interface CartQuickViewProps {
     isOpen: boolean;

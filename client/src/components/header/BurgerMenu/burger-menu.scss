@@ -1,5 +1,5 @@
-@import '../general/colors.scss';
-@import '../general/resolutions.scss';
+@import '../../../styles/general/colors.scss';
+@import '../../../styles/general/resolutions.scss';
 
 .burger-menu {
     width: 100%;
@@ -122,7 +122,7 @@
             width: 16px;
             height: 16px;
             padding-right: 7px;
-            mask-image: url('../../assets/images/favorite.svg');
+            mask-image: url('../../../assets/images/favorite.svg');
             background-color: $primary;
         }
     }
@@ -224,11 +224,11 @@
         mask-repeat: no-repeat;
 
         &_telegram {
-            mask-image: url('../../assets/images/telegram.svg');
+            mask-image: url('../../../assets/images/telegram.svg');
         }
 
         &_facebook {
-            mask-image: url('../../assets/images/facebook.svg');
+            mask-image: url('../../../assets/images/facebook.svg');
         }
     }
 }

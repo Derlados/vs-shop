@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import shop from '../../store/shop';
-import '../../styles/components/footer.scss';
+import './footer.scss';
 
 const Footer = observer(() => {
     return (

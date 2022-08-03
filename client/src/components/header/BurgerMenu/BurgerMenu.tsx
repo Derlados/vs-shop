@@ -2,9 +2,8 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { routes } from '../../navigation/routes';
-import shop from '../../store/shop';
-import '../../styles/header/burger-menu.scss';
+import shop from '../../../store/shop';
+import './burger-menu.scss';
 
 interface LocalStore {
     isCatalogListOpen: boolean;

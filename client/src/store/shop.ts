@@ -52,6 +52,10 @@ class ShopStore {
         this.isInit = true;
     }
 
+    getBestsellersByCategory(categoryId: number) {
+        return this.bestsellers.filter(b => b.categoryId === categoryId);
+    }
+
     async addCategory(data: CreateCategoryDto, img: File) {
         const newCategory = await categoriesService.createCategory(data);
         newCategory.img = await categoriesService.editCategoryImage(newCategory.id, img);

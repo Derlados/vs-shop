@@ -1,9 +1,9 @@
-@import '../general/colors.scss';
-@import '../general/resolutions.scss';
+@import '../../../../styles/general/colors.scss';
+@import '../../../../styles/general/resolutions.scss';
 
 .filters {
-    min-width: 300px;
-    padding: 0px 30px 0px 0px;
+    width: 100%;
+    margin-bottom: 15px;
 
     @media (max-width: $tablet-horizontal) {
         position: fixed;
@@ -79,7 +79,7 @@
 
     &__title {
         font-weight: bold;
-        font-size: 28px;
+        font-size: 24px;
         padding-bottom: 15px;
         color: black;
     }
@@ -88,30 +88,56 @@
         width: 100%;
         height: 1px;
         background-color: rgb(211, 211, 211);
-        margin-bottom: 20px;
     }
 
     &__price {
         margin: 15px 0px 15px 0px;
     }
 
-    &__attr {
-        padding: 8px 0px;
-    }
+    &__attr {}
 
     &__attr-name {
+        position: relative;
         font-size: 20px;
         font-weight: 500;
+        transition: 0.25s;
+        padding: 13px 0px;
+
+        &_touchable {
+            border-bottom: 1px solid #ededed;
+            cursor: pointer;
+
+            &::after {
+                content: '+';
+                height: 100%;
+                position: absolute;
+                right: 0;
+                font-size: 20px;
+                font-weight: bold;
+                color: $primary-dark;
+                transition: 0.25s;
+            }
+
+            &:hover,
+            &:hover::after {
+                color: $primary;
+            }
+        }
+
     }
 
     &__attr-list {
+        height: 0;
         list-style-type: none;
+        overflow: hidden;
+        margin-left: 10px;
+        transition: 0.25s;
     }
 
     &__attr-item {
         cursor: pointer;
-        padding: 10px 0px 10px 0px;
-        border-bottom: 1px solid gainsboro;
+        padding: 10px 0px 10px 10px;
+        border-bottom: 1px solid #ededed;
 
         &:hover>.filters__checkmark {
             border: 1px solid $primary;

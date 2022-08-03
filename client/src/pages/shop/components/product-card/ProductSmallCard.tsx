@@ -1,12 +1,14 @@
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
-import CartButton from '../../../../components/cart/CartButton';
+import CartButton from '../../../../components/cart/CartButton/CartButton';
 import cart from '../../../../store/cart';
 import { ProductCardProps } from './Product';
 import '../../../../styles/product/product-card.scss';
 import { SpecSymbols } from '../../../../values/specSymbols';
 import { NavLink } from 'react-router-dom';
 import "aos/dist/aos.css";
+import classNames from 'classnames';
+import { AvailableStatus } from '../../../../types/IProduct';
 
 const ProductSmallCard: FC<ProductCardProps> = observer(({ containerSize = 'default', urlFull, product, addToCart, onOpenQuickView, getMainImage }) => {
 
@@ -28,15 +30,24 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ containerSize = 'defa
             <div className='product-card__desc'>
                 <div className='product-card__title product-card__title_gray rlc'>Intel corp</div>
                 <NavLink className='product-card__title-cont ccc' to={`${urlFull}`}>
-                    <div className='product-card__title'>Steampunk Coffee Grinder nice tool</div>
+                    <div className='product-card__title'>{product.title}</div>
                 </NavLink>
-                <div className={`product-card__price-and-btn ${containerSize == 'default' ? 'rlc' : 'ccc'}`}>
+                <div className={`product-card__price-and-btn ${containerSize == 'default' ? 'rlc' : 'clc'}`}>
                     <div className={`product-card__prices ${containerSize == 'default' ? '' : 'product-card__prices_margin'} rlc`}>
                         <div className='product-card__current-price'>{product.price}₴</div>
                         {product.oldPrice !== product.price && <div className='product-card__old-price'>{product.oldPrice}₴</div>}
                     </div>
-                    <CartButton className={`product-card__cart-btn ${containerSize == 'default' ? '' : 'product-card__cart-btn_large'}`} isActive={cart.findById(product.id) === undefined} onClick={() => addToCart(product)} />
+                    {product.availability !== AvailableStatus.OUT_OF_STOCK && <CartButton className={`product-card__cart-btn ${containerSize == 'default' ? '' : 'product-card__cart-btn_large'}`} isActive={cart.findById(product.id) === undefined} onClick={() => addToCart(product)} />}
                 </div>
+                {containerSize === 'default' &&
+                    <div className={classNames('product-card__availability', {
+                        'product-card__availability_green': product.availability === AvailableStatus.IN_STOCK,
+                        'product-card__availability_yellow': product.availability === AvailableStatus.IN_STOKE_FEW,
+                        'product-card__availability_gray': product.availability === AvailableStatus.OUT_OF_STOCK,
+                    })}>
+                        {product.availability}
+                    </div>
+                }
             </div>
 
         </div>

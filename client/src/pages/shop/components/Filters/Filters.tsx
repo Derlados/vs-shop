@@ -1,19 +1,20 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React, { FC, useEffect } from 'react';
-import MultiRangeSlider from '../../../lib/MultiRangeSlider/MultiRangeSlider';
-import catalog from '../../../store/catalog';
-import shop from '../../../store/catalog';
-import { IFilters } from '../../../types/IFilters';
-import { IAttribute, ICkeckValue } from '../../../types/types'
+import { FC, useEffect } from 'react';
+import MultiRangeSlider from '../../../../lib/MultiRangeSlider/MultiRangeSlider';
+import catalog from '../../../../store/catalog';
+import shop from '../../../../store/catalog';
+import { ICkeckValue } from '../../../../types/types';
+import FilterItem from './FilterItem';
+import './filters.scss';
 
-interface ICheckAttribute {
+export interface ICheckAttribute {
     id: number;
     name: string;
     allValues: ICheckValue[];
 }
 
-interface ICheckValue {
+export interface ICheckValue {
     value: string;
     checked: boolean;
 }
@@ -42,7 +43,7 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
         }
     }, [catalog.filters.attributes]);
 
-    const onCheckedChange = (attribute: string, checkValue: ICkeckValue) => {
+    const onCheck = (attribute: string, checkValue: ICkeckValue) => {
         checkValue.checked = !checkValue.checked;
         if (checkValue.checked) {
             catalog.setFilter(attribute, checkValue.value)
@@ -64,7 +65,7 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
                 <div className='filters__title'>{catalog.category.name}</div>
                 <div className='filters__line'></div>
                 <div>
-                    <div className='filters__attr-name'>Price</div>
+                    <div className='filters__attr-name'>Ціна</div>
                     <div className='filters__price'>
                         <MultiRangeSlider
                             min={0}
@@ -73,19 +74,7 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
                             onAccept={onAcceptRange} />
                     </div>
                     {localStore.attributes.map(attr => (
-                        <div key={attr.id} className='filters__attr'>
-                            <div className='filters__attr-name'>{attr.name}</div>
-                            <ul className='filters__attr-list'>
-                                {attr.allValues.map(attrValue => (
-                                    <li key={`${attr.id}-${attrValue.value}`} className='filters__attr-item rlc'>
-                                        <label className='filters__attr-value rcc'>{attrValue.value}
-                                            <input className='filters__checkbox' type="checkbox" checked={attrValue.checked} onChange={() => onCheckedChange(attr.name, attrValue)} />
-                                            <span className='filters__checkmark'></span>
-                                        </label>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        <FilterItem key={attr.id} attribute={attr} onCheck={onCheck} />
                     ))}
                 </div>
             </div>

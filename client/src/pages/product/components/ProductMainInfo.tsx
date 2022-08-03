@@ -1,12 +1,12 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import CartButton from '../../../components/cart/CartButton';
+import CartButton from '../../../components/cart/CartButton/CartButton';
 import cart from '../../../store/cart';
 import { ProductProps } from '../../shop/components/product-card/Product';
 import 'swiper/css';
 import { IImage } from '../../../types/IImage';
-import CartCountEditor from '../../../components/cart/CartCountEditor';
+import CartCountEditor from '../../../components/cart/CartCountEditor/CartCountEditor';
 import classNames from 'classnames';
 import { AvailableStatus } from '../../../types/IProduct';
 

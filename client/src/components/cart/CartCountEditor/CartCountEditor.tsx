@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import '../../styles/components/cart/cart-count-editor.scss';
+import './cart-count-editor.scss';
 
 interface CartCountEditorProps {
     decrement: () => void;

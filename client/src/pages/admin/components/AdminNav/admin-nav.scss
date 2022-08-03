@@ -1,5 +1,5 @@
-@import '../general/resolutions.scss';
-@import '../general/colors.scss';
+@import '../../../../styles/general/resolutions.scss';
+@import '../../../../styles/general/colors.scss';
 
 .admin-nav {
     height: 100%;
@@ -58,23 +58,23 @@
 
 
         &_orders {
-            mask-image: url('../../assets/images/order-delivery.svg');
+            mask-image: url('../../../../assets/images/order-delivery.svg');
         }
 
         &_products {
-            mask-image: url('../../assets/images/product.svg');
+            mask-image: url('../../../../assets/images/product.svg');
         }
 
         &_categories {
-            mask-image: url('../../assets/images/categories.svg');
+            mask-image: url('../../../../assets/images/categories.svg');
         }
 
         &_dashboard {
-            mask-image: url('../../assets/images/shop.svg');
+            mask-image: url('../../../../assets/images/shop.svg');
         }
 
         &_home {
-            mask-image: url('../../assets/images/home.svg');
+            mask-image: url('../../../../assets/images/home.svg');
         }
     }
 

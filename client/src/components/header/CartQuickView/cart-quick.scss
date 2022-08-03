@@ -1,5 +1,6 @@
-@import '../general/colors.scss';
-@import '../general/resolutions.scss';
+@import '../../../styles/general/colors.scss';
+@import '../../../styles/general/resolutions.scss';
+
 
 .cart-quick {
     width: 100%;
@@ -224,7 +225,7 @@
         height: 250px;
         margin-bottom: 25px;
         mask-size: contain;
-        mask-image: url("../../assets/images/shopping-bag.svg");
+        mask-image: url("../../../assets/images/shopping-bag.svg");
         background-color: gray;
     }
 
