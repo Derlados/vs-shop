@@ -1,5 +1,5 @@
 .modal {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
@@ -7,7 +7,7 @@
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.308);
     pointer-events: none;
-    transition: 0.4s;
+    transition: opacity 0.4s;
     z-index: 99;
 
     &_active {

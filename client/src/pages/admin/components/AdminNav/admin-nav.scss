@@ -7,13 +7,33 @@
     padding: 15px;
     background-color: #F4F5F7;
 
+    @media (max-width: $laptop) {
+        padding: 5px;
+    }
+
     &__logo {
         padding-left: 15px;
         margin-bottom: 25px;
+
+        @media (max-width: $laptop) {
+            display: none;
+        }
+    }
+
+    &__list {
+
+        @media (max-width: $laptop) {
+            justify-content: center !important;
+        }
     }
 
     &__link {
         text-decoration: none;
+
+        @media (max-width: $laptop) {
+            display: flex;
+            justify-content: center !important;
+        }
     }
 
     &__item {
@@ -45,6 +65,14 @@
             }
         }
 
+        @media (max-width: $laptop) {
+            justify-content: center !important;
+
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            padding: 0px;
+        }
     }
 
     &__icon {
@@ -55,7 +83,6 @@
         mask-size: contain;
         background-color: gray;
         margin-right: 10px;
-
 
         &_orders {
             mask-image: url('../../../../assets/images/order-delivery.svg');
@@ -76,10 +103,18 @@
         &_home {
             mask-image: url('../../../../assets/images/home.svg');
         }
+
+        @media (max-width: $laptop) {
+            margin-right: 0px;
+        }
     }
 
     &__title {
         font-weight: bold;
         font-size: 16px;
+
+        @media (max-width: $laptop) {
+            display: none;
+        }
     }
 }

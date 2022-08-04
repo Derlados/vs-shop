@@ -5,7 +5,7 @@ import ProductCatalog from './components/ProductCatalog'
 import '../../styles/shop/shop.scss';
 import '../../styles/shop/catalog.scss';
 import '../../styles/shop/pagination.scss';
-import CatalogNav from '../../components/CatalogNav';
+import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Navigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';

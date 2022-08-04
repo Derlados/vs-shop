@@ -1,4 +1,3 @@
-import Header from './components/header/Header/Header';
 import './styles/app.scss';
 import './styles/general/position.css'
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -20,13 +19,16 @@ import Page404 from './pages/page404/Page404';
 import HomeEditor from './pages/admin/pages/home-editor/HomeEditor';
 import { useEffect } from 'react';
 import AOS from 'aos';
+import SwiperCore, { Autoplay } from 'swiper';
+import Contacts from './pages/contacts/Contacts';
 
 const App = () => {
 
     useEffect(() => {
+        SwiperCore.use([Autoplay])
         AOS.init({
             once: true,
-            duration: 1000
+            duration: 700
         });
     }, [])
 
@@ -45,6 +47,7 @@ const App = () => {
                 <Route path='/' element={<Main />} >
                     <Route path='/home' element={<Home />} />
                     <Route path='/checkout' element={<Checkout />} />
+                    <Route path='/contacts' element={<Contacts />} />
                     <Route path='/404_not_found' element={<Page404 />} />
                     <Route path='/:catalog' element={<Shop />} />
                     <Route path='/:catalog/:id' element={<ProductInfo />} />

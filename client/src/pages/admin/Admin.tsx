@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import AdminNav from './components/AdminNav/AdminNav'
-import '../../styles/admin/admin.scss';
+import './admin.scss';
 
 //TODO подключить Suspence для загрузки
 const Admin = () => {

@@ -8,6 +8,10 @@
     cursor: pointer;
     transition: 0.4s;
 
+    &_inactive {
+        cursor: default;
+    }
+
     &_primary {
         background-color: $primary;
 
@@ -66,5 +70,7 @@
         margin-left: 10px;
         transition: 0.4s;
         color: $primary-dark;
+
+
     }
 }

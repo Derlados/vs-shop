@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import '../styles/components/button-up.scss';
+import './button-up.scss';
 
 const ButtonUp = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);

@@ -2,8 +2,8 @@ import React, { ChangeEvent, useEffect, useRef } from 'react'
 import FileUploader from '../../../../lib/FileUploader/FileUploader'
 import BannerList from '../../../home/components/BannerList'
 import '../../../../styles/admin/admin-general.scss';
-import '../../../../styles/admin/home-editor.scss';
-import '../../../../styles/home/home.scss';
+import './home-editor.scss';
+import '../../../home/home.scss';
 import UploadArea from '../../components/UploadArea';
 import { IBanner } from '../../../../types/ILargeBanner';
 import { observer, useLocalObservable } from 'mobx-react-lite';
@@ -15,7 +15,6 @@ import catalog from '../../../../store/catalog';
 import Checkbox from '../../../../lib/Checkbox/Checkbox';
 import Loader from '../../../../lib/Loader/Loader';
 import Banner from '../../../home/components/Banner';
-import { NavLink } from 'react-router-dom';
 
 interface LocalStore {
     banner: IBanner;

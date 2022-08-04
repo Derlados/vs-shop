@@ -7,7 +7,6 @@
     transition: 0.4s;
     margin: 0px 0px 14px 0px;
     border: 1px solid rgb(235, 235, 235);
-    cursor: pointer;
 
     a {
         text-decoration: none;
@@ -147,6 +146,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        transition: 0.25s;
 
         @media (max-width: $tablet-vertical) {
             font-size: 14px;
@@ -154,6 +154,12 @@
 
         &_gray {
             color: #a9a9a9;
+        }
+    }
+
+    &__title-nav {
+        &:hover>.product-card__title {
+            color: $primary;
         }
     }
 
@@ -183,7 +189,7 @@
         font-weight: bold;
 
         @media (max-width: $mobile-vertical) {
-            font-size: 14px;
+            font-size: 16px;
         }
     }
 
@@ -195,8 +201,12 @@
         text-decoration: line-through;
 
         @media (max-width: $mobile-vertical) {
-            font-size: 14px;
+            font-size: 16px;
             padding-left: 5px;
+        }
+
+        @media (max-width: 400px) {
+            display: none;
         }
     }
 

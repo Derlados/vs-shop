@@ -27,8 +27,8 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
             <div className='orders__short-info rlc'>
                 <Checkbox className='orders__column-checker' checked={orders.selectedOrderIds.has(order.id)} onChange={() => orders.toggleSelectOrder(order.id)} />
                 <span className='orders__column orders__column_value orders__column_small'>{order.id}</span>
-                <span className='orders__column orders__column_value'>{order.client}</span>
-                <span className='orders__column orders__column_value'>{order.createdAt.toLocaleDateString("ua-UA")} {order.createdAt.toLocaleTimeString("ua-UA")}</span>
+                <span className='orders__column orders__column_optional orders__column_value'>{order.client}</span>
+                <span className='orders__column orders__column_optional-second orders__column_value'>{order.createdAt.toLocaleDateString("ua-UA", { hour: '2-digit', minute: '2-digit' })}</span>
                 <span className='orders__column orders__column_value'>{order.totalPrice} ₴</span>
                 <span className='orders__column orders__column_value'>{order.payment.method}</span>
                 <div className='orders__column orders__column_value'>
@@ -45,7 +45,7 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
             <div className={classNames('orders__extended-info ctc', {
                 'orders__extended-info_visible': localStore.extendedInfo
             })}>
-                <div className='rlt'>
+                <div className='orders__ex-info-content rlt'>
                     <div className='orders__ex-info-column'>
                         <div className='orders__ex-info-row orders__ex-info-title'>Загальна інформація</div>
                         <div className='orders__ex-info-row rlt'>
@@ -64,12 +64,16 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
                             <span className='orders__ex-info-text orders__ex-info-text_attr'>Адреса: </span>
                             <span className='orders__ex-info-text orders__ex-info-text_value'>{order.address}</span>
                         </div>
+                        <div className='orders__ex-info-row rlt'>
+                            <span className='orders__ex-info-text orders__ex-info-text_attr'>Дата: </span>
+                            <span className='orders__ex-info-text orders__ex-info-text_value'>{order.createdAt.toLocaleDateString("ua-UA", { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
                     </div>
                     <div className='orders__ex-info-column'>
                         <div className='orders__ex-info-row orders__ex-info-title'>Список товарів</div>
                         {order.orderProducts.map(op => (
                             <div key={`${order.id}-${op.product.id}`} className='orders__ex-info-row rlt'>
-                                <span className='orders__ex-info-text orders__ex-info-text_value'>- {op.product.title} X {op.count}<b> - {op.product.price * op.count} ₴</b></span>
+                                <span className='orders__ex-info-text orders__ex-info-text_value'>- {op.product.title} X {op.count}<b> - {(op.product.price * op.count).toFixed(2)} ₴</b></span>
                             </div>
                         ))}
                     </div>

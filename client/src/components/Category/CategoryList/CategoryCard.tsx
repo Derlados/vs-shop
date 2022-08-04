@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { NavLink } from 'react-router-dom';
-import { ICategory } from '../types/ICategory';
+import { ICategory } from '../../../types/ICategory';
 
 interface CategoryCardProps {
     category: ICategory;

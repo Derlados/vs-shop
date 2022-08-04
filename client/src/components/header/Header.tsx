@@ -2,13 +2,13 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { ChangeEvent, KeyboardEvent, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom';
-import cart from '../../../store/cart';
-import catalog from '../../../store/catalog';
-import shop from '../../../store/shop';
+import cart from '../../store/cart';
+import catalog from '../../store/catalog';
+import shop from '../../store/shop';
 import './header.scss';
-import { SpecSymbols } from '../../../values/specSymbols';
-import BurgerMenu from '../BurgerMenu/BurgerMenu';
-import CartQuickView from '../CartQuickView/CartQuickView';
+import { SpecSymbols } from '../../values/specSymbols';
+import CartQuickView from './CartQuickView/CartQuickView';
+import BurgerMenu from './BurgerMenu/BurgerMenu';
 
 interface LocalStore {
     isCartOpen: boolean;

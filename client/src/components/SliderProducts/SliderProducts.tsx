@@ -2,11 +2,11 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FC, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import Product from '../pages/shop/components/product-card/Product';
-import '../styles/components/slider-products.scss';
-import { Resolutions } from '../values/resolutions';
-import { IProduct } from '../types/IProduct';
-import ProductQuickModal from '../pages/shop/components/product-card/ProductQuickModal';
+import Product from '../../pages/shop/components/product-card/Product';
+import './slider-products.scss';
+import { Resolutions } from '../../values/resolutions';
+import { IProduct } from '../../types/IProduct';
+import ProductQuickModal from '../../pages/shop/components/product-card/ProductQuickModal';
 
 interface LocalStore {
     swiper: any;

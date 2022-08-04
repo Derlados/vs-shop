@@ -1,5 +1,5 @@
-@import '../general/colors.scss';
-@import '../general/resolutions.scss';
+@import '../../styles/general/colors.scss';
+@import '../../styles/general/resolutions.scss';
 
 .auth {
     width: 100%;
@@ -13,7 +13,7 @@
     &__container {
         width: 100%;
         max-width: $mobile-vertical;
-        background-color:white;
+        background-color: white;
         padding: 30px;
         box-shadow: 0px 0px 10px black;
 
@@ -21,17 +21,17 @@
             padding: 20px 15px 20px 15px;
             height: 100vh;
         }
-    } 
+    }
 
     &__input {
         width: 100%;
-        margin-top: 20px; 
+        margin-top: 20px;
         padding: 10px;
         outline: none;
         border: 1px solid rgb(209, 209, 209);
-    
+
         &_invalid {
-             border: 1px solid rgb(255, 132, 132);
+            border: 1px solid rgb(255, 132, 132);
         }
     }
 
@@ -39,7 +39,7 @@
         width: 100%;
         border-radius: 25px;
         padding: 10px;
-        background-color:  $primary-admin;
+        background-color: $primary-admin;
         text-align: center;
         font-size: 24px;
         color: white;
@@ -48,7 +48,7 @@
         transition: 0.4s;
 
         &:hover {
-            background-color:  $primary-admin-hover;
+            background-color: $primary-admin-hover;
         }
 
         @media (max-width: $mobile-vertical) {

@@ -4,8 +4,8 @@ import '../../styles/product/product.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import Product from '../shop/components/product-card/Product';
 import { Navigate, useParams } from 'react-router-dom';
-import CatalogNav from '../../components/CatalogNav';
-import SliderProducts from '../../components/SliderProducts';
+import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
+import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import { IProduct } from '../../types/IProduct';
 import Loader from '../../lib/Loader/Loader';
 

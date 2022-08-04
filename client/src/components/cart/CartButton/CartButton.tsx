@@ -23,7 +23,7 @@ const CartButton: FC<CartButtonProps> = ({ className = '', isActive, onClick, co
         )
     } else {
         return (
-            <div className={`${className} cart-button cart-button_added rlc`}>
+            <div className={`${className} cart-button cart-button_inactive cart-button_added rlc`}>
                 <div className='cart-button__img' ></div>
                 <span className='cart-button__btn '>У{SpecSymbols.NBSP}кошику</span>
             </div>

@@ -5,7 +5,7 @@ import { SessionCart } from "./session-cart.model";
 
 @Entity('session-cart-items')
 export class SessionCartItem {
-    @PrimaryColumn({ name: "session_cart_id", type: "bigint", nullable: false })
+    @PrimaryColumn({ name: "session_cart_id", type: "int", nullable: false })
     @Exclude()
     cartId: number;
 

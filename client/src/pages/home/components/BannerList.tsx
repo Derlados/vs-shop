@@ -27,7 +27,8 @@ const BannerList: FC<BannerListProps> = ({ banners, bannerSize = "full-screen", 
                     direction="horizontal"
                     loop={true}
                     draggable={true}
-                    onSwiper={(sw) => { }}
+                    speed={1000}
+                    autoplay={banners.length !== 1 ? { delay: 5000 } : false}
                 >
                     {
                         banners.map(b => (

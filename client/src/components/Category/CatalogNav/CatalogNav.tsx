@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { ILink } from '../navigation/routes';
-import catalog from '../store/catalog';
-import shop from '../store/shop';
-import '../styles/components/catalog-nav.scss';
+import { ILink } from '../../../navigation/routes';
+import catalog from '../../../store/catalog';
+import shop from '../../../store/shop';
+import './catalog-nav.scss';
 
 const CatalogNav = () => {
     const [routes, setRoutes] = useState<ILink[]>([

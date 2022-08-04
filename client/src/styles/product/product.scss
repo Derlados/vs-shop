@@ -110,6 +110,10 @@
         font-weight: bold;
         font-size: 24px;
         padding-bottom: 10px;
+
+        @media (max-width: $mobile-vertical) {
+            font-size: 20px;
+        }
     }
 
     &__price {
@@ -118,6 +122,7 @@
         font-size: 18px;
         padding-bottom: 10px;
         border-bottom: 1px solid $primary-gray;
+
     }
 
     &__old-price {
@@ -125,12 +130,20 @@
         color: gray;
         font-size: 22px;
         font-weight: bold;
+
+        @media (max-width: $mobile-vertical) {
+            font-size: 18px;
+        }
     }
 
     &__current-price {
         margin-right: 10px;
         font-size: 22px;
         font-weight: bold;
+
+        @media (max-width: $mobile-vertical) {
+            font-size: 18px;
+        }
     }
 
     &__desc {
@@ -139,6 +152,11 @@
         line-height: 24px;
         text-align: justify;
         padding: 20px 0px 20px 0px;
+
+        @media (max-width: $mobile-vertical) {
+            font-size: 14px;
+            line-height: 20px;
+        }
     }
 
     &__actions {

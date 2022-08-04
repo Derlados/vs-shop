@@ -6,7 +6,7 @@ import cart from '../../../store/cart';
 import './cart-quick.scss';
 import { ICartProduct } from '../../../types/ICartProduct';
 import { IProduct } from '../../../types/IProduct';
-import CartCountEditor from '../../cart/CartCountEditor/CartCountEditor';
+import CartCountEditor from '../../Cart/CartCountEditor/CartCountEditor';
 
 interface CartQuickViewProps {
     isOpen: boolean;

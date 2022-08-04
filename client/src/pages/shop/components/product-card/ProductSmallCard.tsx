@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
-import CartButton from '../../../../components/cart/CartButton/CartButton';
+import CartButton from '../../../../components/Cart/CartButton/CartButton';
 import cart from '../../../../store/cart';
 import { ProductCardProps } from './Product';
 import '../../../../styles/product/product-card.scss';
@@ -29,7 +29,7 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ containerSize = 'defa
             <div className='product-card__line'></div>
             <div className='product-card__desc'>
                 <div className='product-card__title product-card__title_gray rlc'>Intel corp</div>
-                <NavLink className='product-card__title-cont ccc' to={`${urlFull}`}>
+                <NavLink className='product-card__title-nav ccc' to={`${urlFull}`}>
                     <div className='product-card__title'>{product.title}</div>
                 </NavLink>
                 <div className={`product-card__price-and-btn ${containerSize == 'default' ? 'rlc' : 'clc'}`}>

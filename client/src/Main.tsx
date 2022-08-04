@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import ButtonUp from './components/ButtonUp'
-import Footer from './components/footer/Footer'
-import Header from './components/header/Header/Header'
+import ButtonUp from './components/ButtonUp/ButtonUp'
+import Footer from './components/Footer/Footer'
+import Header from './components/Header/Header'
 
 const Main = () => {
     return (

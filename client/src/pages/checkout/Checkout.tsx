@@ -9,7 +9,7 @@ import Modal from '../../lib/Modal/Modal';
 import Selector from '../../lib/Selector/Selector';
 import cart from '../../store/cart';
 import orders from '../../store/order';
-import '../../styles/checkout/checkout.scss';
+import './checkout.scss';
 import { ICartProduct } from '../../types/ICartProduct';
 import { IOrder, OrderStatus } from '../../types/IOrder';
 import { IProduct } from '../../types/IProduct';
@@ -49,6 +49,7 @@ const Checkout = observer(() => {
         copyTotal: -1,
         copyProducts: []
     }))
+
     const tryPlaceOrder = async () => {
         if (localStore.isSentSuccessfully) {
             return;

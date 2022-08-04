@@ -4,7 +4,7 @@ import { SessionCartItem } from "./session-cart-item.model";
 
 @Entity('session-cart')
 export class SessionCart {
-    @PrimaryGeneratedColumn({ name: "session_cart_id", type: "bigint" })
+    @PrimaryGeneratedColumn({ name: "session_cart_id", type: "int" })
     id: number;
 
     @Column({ name: "created_at", type: "datetime", default: () => "CURRENT_TIMESTAMP()" })

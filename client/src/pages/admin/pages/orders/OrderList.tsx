@@ -1,7 +1,7 @@
 
 import orders, { OrderSorts } from '../../../../store/order'
 import OrderItem from './compoentns/OrderItem'
-import '../../../../styles/admin/orders.scss';
+import './orders.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { useEffect } from 'react';
@@ -63,12 +63,12 @@ const OrderList = observer(() => {
                     <div className='orders__column orders__column_small'>
                         <span className='orders__column-text'>ID</span>
                     </div>
-                    <div className='orders__column'>
+                    <div className='orders__column orders__column_optional'>
                         <span className='orders__column-text'>Клієнт</span>
                     </div>
-                    <div className='orders__column orders__column_touchable'
+                    <div className='orders__column orders__column_optional-second  orders__column_touchable'
                         onClick={() => orders.selectedSort == OrderSorts.DATE_DESC ? orders.selectedSort = OrderSorts.DATE_ASC : orders.selectedSort = OrderSorts.DATE_DESC}>
-                        <span className={classNames('orders__column-text orders__column-text_sort', {
+                        <span className={classNames('orders__column-text  orders__column-text_sort', {
                             'orders__column-text_sort-asc': orders.selectedSort == OrderSorts.DATE_ASC,
                             'orders__column-text_sort-desc': orders.selectedSort == OrderSorts.DATE_DESC
                         })}>Дата замовлення</span>

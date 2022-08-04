@@ -1,15 +1,15 @@
 import React, { ChangeEvent, ChangeEventHandler, useRef } from 'react'
 import shop from '../../../../store/shop';
-import '../../../../styles/home/home.scss';
-import '../../../../styles/admin/category-editor.scss';
+import '../../../home/home.scss';
+import './category-editor.scss';
 import '../../../../styles/admin/admin-general.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ICategory } from '../../../../types/ICategory';
 import { nanoid } from 'nanoid';
 import { CreateCategoryDto } from '../../../../services/categories/dto/create-category.dto';
-import CategoryCard from '../../../../components/CategoryCard';
 import FileUploader from '../../../../lib/FileUploader/FileUploader';
 import classNames from 'classnames';
+import CategoryCard from '../../../../components/Category/CategoryList/CategoryCard';
 
 
 interface IKeyAttribute {

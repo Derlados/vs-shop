@@ -1,23 +1,14 @@
 import { observer } from 'mobx-react-lite';
-import CategoryList from '../../components/CategoryList';
-import SliderProducts from '../../components/SliderProducts';
+import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import shop from '../../store/shop';
-import '../../styles/home/home.scss';
+import './home.scss';
 import BannerList from './components/BannerList';
 import Loader from '../../lib/Loader/Loader';
 import "aos/dist/aos.css";
 import { IProduct } from '../../types/IProduct';
-
-interface LocalStore {
-    selectedProduct: IProduct;
-    isOpenQuick: boolean;
-}
+import CategoryList from '../../components/Category/CategoryList/CategoryList';
 
 const Home = observer(() => {
-
-    const closeQuickView = () => {
-
-    }
 
     if (!shop.isInit) {
         return (

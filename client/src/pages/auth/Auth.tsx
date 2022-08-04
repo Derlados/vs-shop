@@ -4,7 +4,7 @@ import React, { ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/users/auth.service';
 import user from '../../store/user';
-import '../../styles/auth/auth.scss';
+import './auth.scss';
 
 interface LocalStore {
     email: string;

@@ -2,13 +2,13 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { customAlphabet, nanoid } from 'nanoid';
 import { ChangeEvent, useEffect, useRef } from 'react';
-import CategoryList from '../../../../components/CategoryList';
+import CategoryList from '../../../../components/Category/CategoryList/CategoryList';
 import Checkbox from '../../../../lib/Checkbox/Checkbox';
 import FileUploader from '../../../../lib/FileUploader/FileUploader';
 import catalog from '../../../../store/catalog';
 import shop from '../../../../store/shop';
 import '../../../../styles/admin/admin-general.scss';
-import '../../../../styles/admin/product-editor.scss';
+import './product-editor.scss';
 import { ICategory } from '../../../../types/ICategory';
 import { IImage } from '../../../../types/IImage';
 import { AvailableStatus, IProduct } from '../../../../types/IProduct';
@@ -295,7 +295,7 @@ const ProductEditor = observer(() => {
             </div>
             <div className='admin-general__line'></div>
             <div className='admin-general__subtitle'>Передогляд</div>
-            <div className='product-editor__prev rcc'>
+            <div className='product-editor__prev rct'>
                 <div className='product-editor__prev-product product-editor__prev-product_quick-view'>
                     <Product product={localStore.product} type='full-view' />
                 </div>
