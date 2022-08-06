@@ -1,20 +1,19 @@
 import { observer } from 'mobx-react-lite';
-import React, { FC } from 'react'
-import CartButton from '../../../../components/Cart/CartButton/CartButton';
-import cart from '../../../../store/cart';
-import { ProductCardProps } from './Product';
-import '../../../../styles/product/product-card-large.scss';
-import { SpecSymbols } from '../../../../values/specSymbols';
+import { FC } from 'react'
+import CartButton from '../../Cart/CartButton/CartButton';
+import cart from '../../../store/cart';
+import { SimpleProductCardProps } from '../ProductCard';
+import './product-card-large.scss';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
-import { AvailableStatus } from '../../../../types/IProduct';
+import { AvailableStatus } from '../../../types/IProduct';
 
-const ProductLargeCard: FC<ProductCardProps> = observer(({ product, urlFull, addToCart, onOpenQuickView, getMainImage }) => {
+const ProductLargeCard: FC<SimpleProductCardProps> = observer(({ product, urlFull, addToCart, onOpenQuickView, getMainImage }) => {
     return (
         <div className='product-card-large rlt'>
             <div className='product-card-large__img-container'>
                 <NavLink to={urlFull}>
-                    <img className='product-card__img product-card-large__img' alt='' src={getMainImage(product)?.url ?? require('../../../../assets/images/no-photos.png')} />
+                    <img className='product-card__img product-card-large__img' alt='' src={getMainImage(product)?.url ?? require('../../../assets/images/no-photos.png')} />
                 </NavLink>
                 <div className='product-card__labels product-card__labels_large ccc'>
                     {product.isNew && <div className='product-card__label product-card__label_green'>New</div>}
@@ -30,7 +29,7 @@ const ProductLargeCard: FC<ProductCardProps> = observer(({ product, urlFull, add
                 <NavLink to={urlFull} className="rlc">
                     <span className='product-card-large__title'>{product.title}</span>
                 </NavLink>
-                <span className='product-card-large__brand'>STUDIO DESIGN</span>
+                <span className='product-card-large__brand'>{product.brand}</span>
                 <div className='product-card-large__price rlc'>
                     <span className='product-card-large__current-price'>{product.price}₴</span>
                     {product.oldPrice !== product.price && <span className='product-card-large__old-price'>{product.oldPrice}₴</span>}

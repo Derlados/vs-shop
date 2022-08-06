@@ -1,12 +1,10 @@
 import classNames from 'classnames';
 import { FC, useEffect } from 'react';
 import { IProduct } from '../../../types/IProduct';
-import Product from './product-card/Product';
-import { ViewMode } from './ProductCatalog';
-import '../../../styles/shop/catalog.scss';
-import Pagination from './Pagination';
+import ProductCard from '../../../components/ProductCard/ProductCard';
+import { ViewMode } from './ProductCatalog/ProductCatalog';
+import Pagination from '../../../lib/Pagination/Pagination';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import catalog from '../../../store/catalog';
 
 interface ProductGridProps {
     products: IProduct[];
@@ -69,7 +67,7 @@ const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPer
                         'catalog__product-container_large': viewMode === ViewMode.LIST,
                         'catalog__product-container_inactive-links': onSelectProduct !== undefined
                     })} onClick={onSelectProduct ? () => onSelectProduct(product) : () => { }}>
-                        <Product
+                        <ProductCard
                             type={viewMode === ViewMode.GRID ? 'small' : 'large'}
                             product={product}
                             onOpenQuickView={onOpenQuickView} />

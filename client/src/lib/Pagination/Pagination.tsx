@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { FC, useEffect, useState } from 'react';
+import './pagination.scss';
 
 interface PaginationProps {
     pageWindow?: number;

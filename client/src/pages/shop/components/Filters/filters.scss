@@ -1,5 +1,5 @@
-@import '../../../../styles/general/colors.scss';
-@import '../../../../styles/general/resolutions.scss';
+@import '../../../../styles/constants/colors.scss';
+@import '../../../../styles/constants/resolutions.scss';
 
 .filters {
     width: 100%;
@@ -109,7 +109,6 @@
 
             &::after {
                 content: '+';
-                height: 100%;
                 position: absolute;
                 right: 0;
                 font-size: 20px;

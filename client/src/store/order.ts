@@ -151,7 +151,7 @@ class OrderStore {
             return;
         }
 
-        const selectedOrderIds = [...this.selectedOrderIds.values()];
+        const selectedOrderIds = Array.from(this.selectedOrderIds);
         try {
             await orderService.deleteSelectedOrders(selectedOrderIds);
             this.orders = this.orders.filter(o => !selectedOrderIds.includes(o.id));

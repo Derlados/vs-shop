@@ -1,4 +1,4 @@
-@import '../../styles/general/colors.scss';
+@import '../../styles/constants/colors.scss';
 
 .container {
   width: 270px;
@@ -105,48 +105,54 @@
 
 
 .slider {
-    &__form {
-      justify-content: space-between !important;
-      width: 270px;
-      padding-top: 30px;
-    }
+  &__form {
+    justify-content: space-between !important;
+    width: 270px;
+    padding-top: 30px;
+  }
 
-    &__input {
-        width: 70px; 
-        height: 30px;
-        border-radius: 5px;
-        border: solid 1px rgb(190, 190, 190);  
-        outline: none;
-        padding: 5px;
-    }
+  &__input {
+    width: 70px;
+    height: 30px;
+    border-radius: 5px;
+    border: solid 1px rgb(190, 190, 190);
+    outline: none;
+    padding: 5px;
+  }
 
-    &__dash {
-      padding: 0px 5px 0px 5px;
-    }
+  &__dash {
+    padding: 0px 5px 0px 5px;
+  }
 
-    &__accept {
-      border-radius: 5px;
-      background-color: $primary;
-      color: white;
-      padding: 5px;
-      cursor: pointer;
-      width: 70px;
-      height: 30px;
-      transition: 0.4s;
-      -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-      -khtml-user-select: none; /* Konqueror HTML */
-      -moz-user-select: none; /* Old versions of Firefox */
-      -ms-user-select: none; /* Internet Explorer/Edge */
-      user-select: none; /* Non-prefixed version, currently */
+  &__accept {
+    border-radius: 5px;
+    background-color: $primary;
+    color: white;
+    padding: 5px;
+    cursor: pointer;
+    width: 70px;
+    height: 30px;
+    transition: 0.4s;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently */
 
-      &:hover {
-        background-color: $hover-primary;
-      }
+    &:hover {
+      background-color: $hover-primary;
     }
+  }
 
-    &__accept_disable {
-      pointer-events: none;
-      background-color: #c9c9c9;
-    }
+  &__accept_disable {
+    pointer-events: none;
+    background-color: #c9c9c9;
+  }
 }

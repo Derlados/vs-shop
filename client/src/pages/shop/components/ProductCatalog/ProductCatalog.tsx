@@ -1,14 +1,12 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import { FC } from 'react';
-import catalog from '../../../store/catalog'
-import { IProduct } from '../../../types/IProduct';
-import CatalogSettings from './CatalogSettings';
-import Pagination from './Pagination';
-import Product from './product-card/Product';
-import ProductQuickModal from './product-card/ProductQuickModal';
-import ProductGrid from './ProductGrid';
-import AOS from 'aos';
+import catalog from '../../../../store/catalog'
+import { IProduct } from '../../../../types/IProduct';
+import CatalogSettings from '../CatalogSettings';
+import ProductQuickModal from '../../../../components/ProductCard/ProductQuickModal/ProductQuickModal';
+import ProductGrid from '../ProductGrid';
+import './catalog.scss';
 
 const MAX_PRODUCTS_BY_PAGE = 24;
 

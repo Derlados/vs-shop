@@ -1,10 +1,8 @@
 import React, { Suspense } from 'react'
 import Filters from './components/Filters/Filters'
-import Pagination from './components/Pagination'
-import ProductCatalog from './components/ProductCatalog'
-import '../../styles/shop/shop.scss';
-import '../../styles/shop/catalog.scss';
-import '../../styles/shop/pagination.scss';
+import Pagination from '../../lib/Pagination/Pagination'
+import ProductCatalog from './components/ProductCatalog/ProductCatalog'
+import './shop.scss';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Navigate, useParams } from 'react-router-dom';

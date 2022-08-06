@@ -2,11 +2,11 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FC, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import Product from '../../pages/shop/components/product-card/Product';
+import ProductCard from '../ProductCard/ProductCard';
 import './slider-products.scss';
 import { Resolutions } from '../../values/resolutions';
 import { IProduct } from '../../types/IProduct';
-import ProductQuickModal from '../../pages/shop/components/product-card/ProductQuickModal';
+import ProductQuickModal from '../ProductCard/ProductQuickModal/ProductQuickModal';
 
 interface LocalStore {
     swiper: any;
@@ -88,7 +88,7 @@ const SliderProducts: FC<SliderProductsProps> = observer(({ products, title, sli
                 >
                     {products.map((product, index) => (
                         <SwiperSlide key={index} className="slider-products__slider">
-                            <Product type="small" product={product} containerSize="small" onOpenQuickView={openQuickView} />
+                            <ProductCard type="small" product={product} containerSize="small" onOpenQuickView={openQuickView} />
                         </SwiperSlide>
                     ))}
                 </Swiper>

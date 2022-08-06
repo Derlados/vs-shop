@@ -3,6 +3,7 @@ import { IImage } from "./IImage";
 export interface IProduct {
     id: number;
     title: string;
+    brand: string;
     description: string;
     price: number;
     oldPrice: number;

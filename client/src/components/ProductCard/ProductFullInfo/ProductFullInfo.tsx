@@ -1,12 +1,12 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import CartButton from '../../../components/Cart/CartButton/CartButton';
+import CartButton from '../../Cart/CartButton/CartButton';
 import cart from '../../../store/cart';
-import { ProductProps } from '../../shop/components/product-card/Product';
+import { ProductCardProps } from '../ProductCard';
 import 'swiper/css';
 import { IImage } from '../../../types/IImage';
-import CartCountEditor from '../../../components/Cart/CartCountEditor/CartCountEditor';
+import CartCountEditor from '../../Cart/CartCountEditor/CartCountEditor';
 import classNames from 'classnames';
 import { AvailableStatus } from '../../../types/IProduct';
 
@@ -16,11 +16,11 @@ interface LocalStore {
     selectedImage: string;
 }
 
-interface ProductMainInfoProps extends ProductProps {
+interface ProductFullInfoProps extends ProductCardProps {
     isExtended?: boolean;
 }
 
-const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart, isExtended = false }) => {
+const ProductFullInfo: FC<ProductFullInfoProps> = observer(({ product, addToCart, isExtended = false }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         swiper: null,
         selectedCount: 1,
@@ -155,4 +155,4 @@ const ProductMainInfo: FC<ProductMainInfoProps> = observer(({ product, addToCart
     )
 });
 
-export default ProductMainInfo
+export default ProductFullInfo

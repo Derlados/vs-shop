@@ -22,6 +22,7 @@ class CatalogStore {
 
     public selectedSort: SortType;
     public selectedPriceRange: IRange;
+    public selectedBrands: string[];
     public searchString: string;
     public selectedFilters: Map<string, string[]>;
 
@@ -43,6 +44,7 @@ class CatalogStore {
 
         this.selectedSort = SortType.NOT_SELECTED;
         this.selectedPriceRange = this.priceRange;
+        this.selectedBrands = [];
         this.searchString = '';
         this.selectedFilters = new Map();
     }
@@ -71,6 +73,11 @@ class CatalogStore {
         }
 
         return range;
+    }
+
+    get brands(): string[] {
+        const brands = new Set(this.products.map(p => p.brand));
+        return Array.from(brands);
     }
 
     async init(categoryRoute: string) {
@@ -113,6 +120,11 @@ class CatalogStore {
 
         // По цене 
         filteredProducts = products.filter(p => p.price >= this.selectedPriceRange.min && p.price <= this.selectedPriceRange.max);
+
+        // По бренду
+        if (this.selectedBrands.length !== 0) {
+            filteredProducts = products.filter(p => this.selectedBrands.includes(p.brand));
+        }
 
 
         // По ключевому слову
@@ -166,6 +178,14 @@ class CatalogStore {
         this.selectedPriceRange = { min: min, max: max };
     }
 
+    public selectBrand(brand: string) {
+        this.selectedBrands.push(brand);
+    }
+
+    public deselectBrand(brand: string) {
+        this.selectedBrands = this.selectedBrands.filter(b => b !== brand);
+    }
+
     public setSortType(sortType: SortType) {
         this.selectedSort = sortType;
     }
@@ -175,7 +195,7 @@ class CatalogStore {
         values?.push(value);
     }
 
-    public deleteFilter(attribute: string, value: string) {
+    public deselectFilter(attribute: string, value: string) {
         const values = this.selectedFilters.get(attribute);
         values?.splice(values?.findIndex(v => v === value), 1);
     }

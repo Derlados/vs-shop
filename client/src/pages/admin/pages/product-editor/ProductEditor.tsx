@@ -13,8 +13,8 @@ import { ICategory } from '../../../../types/ICategory';
 import { IImage } from '../../../../types/IImage';
 import { AvailableStatus, IProduct } from '../../../../types/IProduct';
 import { REGEX } from '../../../../values/regex';
-import Product from '../../../shop/components/product-card/Product';
-import { ViewMode } from '../../../shop/components/ProductCatalog';
+import ProductCard from '../../../../components/ProductCard/ProductCard';
+import { ViewMode } from '../../../shop/components/ProductCatalog/ProductCatalog';
 import ProductGrid from '../../../shop/components/ProductGrid';
 
 const MAX_PRODUCTS_BY_PAGE = 8;
@@ -41,6 +41,7 @@ const ProductEditor = observer(() => {
             categoryId: -1,
             userId: -1,
             title: '',
+            brand: '',
             description: '',
             price: 0,
             oldPrice: 0,
@@ -69,6 +70,7 @@ const ProductEditor = observer(() => {
             categoryId: -1,
             userId: -1,
             title: '',
+            brand: '',
             description: '',
             price: 0,
             oldPrice: 0,
@@ -196,8 +198,8 @@ const ProductEditor = observer(() => {
     }
 
     const validate = (): boolean => {
-        const { title, description, price, oldPrice, attributes } = localStore.product;
-        if (!title || !description || !price || !oldPrice) {
+        const { title, brand, description, price, oldPrice, attributes } = localStore.product;
+        if (!title || !brand || !description || !price || !oldPrice) {
             return false;
         }
 
@@ -246,12 +248,17 @@ const ProductEditor = observer(() => {
                                     </div>
                                 ))}
                             </div>
-                        </div>}
+                        </div>
+                    }
                 </div>
                 <div className='product-editor__chars'>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Назва: </div>
                         <input className='admin-general__input' placeholder='Введіть назву' value={localStore.product.title} onChange={(v) => localStore.product.title = v.target.value} />
+                    </div>
+                    <div className='rlc'>
+                        <div className='admin-general__input-title'>Бренд: </div>
+                        <input className='admin-general__input' placeholder='Введіть бренд' value={localStore.product.brand} onChange={(v) => localStore.product.brand = v.target.value} />
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Опис: </div>
@@ -267,7 +274,7 @@ const ProductEditor = observer(() => {
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Кількість: </div>
-                        <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count} onChange={(v) => localStore.product.count = Number(v.target.value)} />
+                        <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count ?? ''} onChange={(v) => localStore.product.count = Number(v.target.value)} />
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Кількість на замовлення: </div>
@@ -297,10 +304,10 @@ const ProductEditor = observer(() => {
             <div className='admin-general__subtitle'>Передогляд</div>
             <div className='product-editor__prev rct'>
                 <div className='product-editor__prev-product product-editor__prev-product_quick-view'>
-                    <Product product={localStore.product} type='full-view' />
+                    <ProductCard product={localStore.product} type='full-view' />
                 </div>
                 <div className='product-editor__prev-product product-editor__prev-product_small'>
-                    <Product product={localStore.product} type='small' />
+                    <ProductCard product={localStore.product} type='small' />
                 </div>
             </div>
         </div>

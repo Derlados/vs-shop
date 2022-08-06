@@ -1,16 +1,14 @@
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
-import CartButton from '../../../../components/Cart/CartButton/CartButton';
-import cart from '../../../../store/cart';
-import { ProductCardProps } from './Product';
-import '../../../../styles/product/product-card.scss';
-import { SpecSymbols } from '../../../../values/specSymbols';
+import CartButton from '../../Cart/CartButton/CartButton';
+import cart from '../../../store/cart';
+import { SimpleProductCardProps } from '../ProductCard';
 import { NavLink } from 'react-router-dom';
 import "aos/dist/aos.css";
 import classNames from 'classnames';
-import { AvailableStatus } from '../../../../types/IProduct';
+import { AvailableStatus } from '../../../types/IProduct';
 
-const ProductSmallCard: FC<ProductCardProps> = observer(({ containerSize = 'default', urlFull, product, addToCart, onOpenQuickView, getMainImage }) => {
+const ProductSmallCard: FC<SimpleProductCardProps> = observer(({ containerSize = 'default', urlFull, product, addToCart, onOpenQuickView, getMainImage }) => {
 
     return (
         <div className='product-card ccc'>
@@ -24,11 +22,11 @@ const ProductSmallCard: FC<ProductCardProps> = observer(({ containerSize = 'defa
                 </div>
             </div>
             <NavLink className='product-card__img-cont' to={`${urlFull}`}>
-                <img className='product-card__img' alt='' src={getMainImage(product)?.url ?? require('../../../../assets/images/no-photos.png')} />
+                <img className='product-card__img' alt='' src={getMainImage(product)?.url ?? require('../../../assets/images/no-photos.png')} />
             </NavLink>
             <div className='product-card__line'></div>
             <div className='product-card__desc'>
-                <div className='product-card__title product-card__title_gray rlc'>Intel corp</div>
+                <div className='product-card__title product-card__title_gray rlc'>{product.brand}</div>
                 <NavLink className='product-card__title-nav ccc' to={`${urlFull}`}>
                     <div className='product-card__title'>{product.title}</div>
                 </NavLink>

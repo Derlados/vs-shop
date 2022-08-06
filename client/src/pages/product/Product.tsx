@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react'
 import catalog from '../../store/catalog';
-import '../../styles/product/product.scss';
+import './product.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import Product from '../shop/components/product-card/Product';
+import ProductCard from '../../components/ProductCard/ProductCard';
 import { Navigate, useParams } from 'react-router-dom';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import SliderProducts from '../../components/SliderProducts/SliderProducts';
@@ -19,14 +19,13 @@ interface LocalStore {
     isLoading: boolean;
 }
 
-const ProductInfo: FC = observer(() => {
-
+const Product: FC = observer(() => {
     const { id, catalog: category } = useParams<ProductParams>();
     const localStore = useLocalObservable<LocalStore>(() => ({
         product: catalog.products[0],
         isLoading: true
     }));
-    console.log("render", localStore.isLoading, localStore.product);
+
 
     useEffect(() => {
         async function fetchProduct(category: string) {
@@ -54,7 +53,7 @@ const ProductInfo: FC = observer(() => {
             <div className='product ccc'>
                 <CatalogNav />
                 <div className='product__container rlc'>
-                    <Product product={localStore.product} type="full-view" />
+                    <ProductCard product={localStore.product} type="full-view" />
                 </div>
                 {/* Когда контент добавится  <ProductDesc /> */}
                 <SliderProducts title="You Might Also Like" products={[...catalog.products.slice(0, 8)]} />
@@ -71,4 +70,4 @@ const ProductInfo: FC = observer(() => {
     }
 });
 
-export default ProductInfo
+export default Product

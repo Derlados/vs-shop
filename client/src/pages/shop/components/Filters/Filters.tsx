@@ -20,6 +20,7 @@ export interface ICheckValue {
 }
 
 interface LocalStore {
+    brand: ICheckAttribute;
     attributes: ICheckAttribute[];
 }
 
@@ -30,6 +31,11 @@ interface FiltersProps {
 
 const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
+        brand: {
+            id: 0,
+            name: "Бренд",
+            allValues: []
+        },
         attributes: []
     }))
 
@@ -41,19 +47,30 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
                 allValues: attr.attribute.allValues.map(v => { return { value: v, checked: false } })
             })
         }
-    }, [catalog.filters.attributes]);
+
+        localStore.brand.allValues = catalog.brands.map((b) => { return { value: b, checked: false } })
+    }, [catalog.filters.attributes, catalog.brands]);
+
+    const onAcceptRange = (min: number, max: number) => {
+        shop.selectPriceRange(min, max);
+    }
+
+    const onCheckBrands = (ignore: string, checkValue: ICkeckValue) => {
+        checkValue.checked = !checkValue.checked;
+        if (checkValue.checked) {
+            catalog.selectBrand(checkValue.value);
+        } else {
+            catalog.deselectBrand(checkValue.value);
+        }
+    }
 
     const onCheck = (attribute: string, checkValue: ICkeckValue) => {
         checkValue.checked = !checkValue.checked;
         if (checkValue.checked) {
             catalog.setFilter(attribute, checkValue.value)
         } else {
-            catalog.deleteFilter(attribute, checkValue.value)
+            catalog.deselectFilter(attribute, checkValue.value)
         }
-    }
-
-    const onAcceptRange = (min: number, max: number) => {
-        shop.selectPriceRange(min, max);
     }
 
     return (
@@ -73,6 +90,7 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
                             onChange={({ min, max }) => { }}
                             onAccept={onAcceptRange} />
                     </div>
+                    <FilterItem attribute={localStore.brand} onCheck={onCheckBrands} />
                     {localStore.attributes.map(attr => (
                         <FilterItem key={attr.id} attribute={attr} onCheck={onCheck} />
                     ))}

@@ -1,5 +1,5 @@
-@import '../general/colors.scss';
-@import '../general/resolutions.scss';
+@import '../../../../styles/constants/colors.scss';
+@import '../../../../styles/constants/resolutions.scss';
 
 .catalog {
     &__product-grid-cont {
@@ -98,12 +98,12 @@
 
     &__view-grid {
         background-color: $primary;
-        mask-image: url('../../assets/images/grid.svg');
+        mask-image: url('../../../../assets/images/grid.svg');
     }
 
     &__view-list {
         background-color: $primary;
-        mask-image: url('../../assets/images/list.svg');
+        mask-image: url('../../../../assets/images/list.svg');
     }
 
     &__view-and-sort {
@@ -136,7 +136,7 @@
             left: 15px;
             height: 16px;
             width: 16px;
-            mask-image: url('../../assets/images/filter.svg');
+            mask-image: url('../../../../assets/images/filter.svg');
             background-color: white;
         }
 

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import React, { FC } from 'react'
 import shop, { SortType } from '../../../store/catalog';
-import { ViewMode } from './ProductCatalog';
+import { ViewMode } from './ProductCatalog/ProductCatalog';
 
 interface LocalStore {
     isOpenSort: boolean;

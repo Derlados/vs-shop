@@ -14,6 +14,7 @@ import { ICartProduct } from '../../types/ICartProduct';
 import { IOrder, OrderStatus } from '../../types/IOrder';
 import { IProduct } from '../../types/IProduct';
 import { ISettlement } from '../../types/ISettlement';
+import { REGEX } from '../../values/regex';
 
 interface LocalStore {
     firstName: string;
@@ -23,7 +24,7 @@ interface LocalStore {
     settlement: string;
     warehouse: string;
     additionalInfo: string;
-    isFormValid: boolean;
+    isValidForm: boolean;
     isSending: boolean;
     isSentSuccessfully: boolean;
     copyTotal: number;
@@ -31,7 +32,6 @@ interface LocalStore {
 }
 
 const phoneMask = '+38 999 999 99 99';
-const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const PHONE_REGEX = /(\+38 ([0-9]){3} ([0-9]){3} ([0-9]){2} ([0-9]+){2})/;
 
 const Checkout = observer(() => {
@@ -43,7 +43,7 @@ const Checkout = observer(() => {
         settlement: '',
         warehouse: '',
         additionalInfo: '',
-        isFormValid: true,
+        isValidForm: true,
         isSending: false,
         isSentSuccessfully: false,
         copyTotal: -1,
@@ -55,9 +55,9 @@ const Checkout = observer(() => {
             return;
         }
 
-        localStore.isFormValid = true;
+        localStore.isValidForm = true;
         if (!validate()) {
-            localStore.isFormValid = false;
+            localStore.isValidForm = false;
             return;
         }
 
@@ -141,7 +141,7 @@ const Checkout = observer(() => {
 
     const validate = () => {
         return localStore.firstName !== '' && localStore.lastName !== '' && PHONE_REGEX.test(localStore.phone)
-            && (localStore.email == '' || EMAIL_REGEX.test(localStore.email)) && localStore.settlement !== '' && localStore.warehouse !== '';
+            && (localStore.email == '' || REGEX.EMAIL_REGEX.test(localStore.email)) && localStore.settlement !== '' && localStore.warehouse !== '';
     }
 
     if (!cart.isInit) {
@@ -162,14 +162,14 @@ const Checkout = observer(() => {
                 <div className='checkout__title'>Деталі замовлення</div>
                 <div className='checkout__inputs-row rlc'>
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': !localStore.isFormValid && localStore.firstName === ''
+                        'checkout__input_invalid': !localStore.isValidForm && localStore.firstName === ''
                     })}
                         hint="Ім'я"
                         value={localStore.firstName}
                         onChange={(v) => localStore.firstName = v.target.value}
                     />
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': !localStore.isFormValid && localStore.lastName === ''
+                        'checkout__input_invalid': !localStore.isValidForm && localStore.lastName === ''
                     })}
                         hint="Призвіще"
                         value={localStore.lastName}
@@ -178,7 +178,7 @@ const Checkout = observer(() => {
                 </div>
                 <div className='checkout__inputs-row rlc'>
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': !localStore.isFormValid && !PHONE_REGEX.test(localStore.phone)
+                        'checkout__input_invalid': !localStore.isValidForm && !PHONE_REGEX.test(localStore.phone)
                     })}
                         mask={phoneMask}
                         placeholder="+38 ___ ___ __ __"
@@ -187,7 +187,7 @@ const Checkout = observer(() => {
                         onChange={(v) => localStore.phone = v.target.value}
                     />
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': !localStore.isFormValid && (!EMAIL_REGEX.test(localStore.email) && localStore.email != '')
+                        'checkout__input_invalid': !localStore.isValidForm && (!REGEX.EMAIL_REGEX.test(localStore.email) && localStore.email != '')
                     })}
                         hint="Електронна пошта (не обов'язково)"
                         value={localStore.email}

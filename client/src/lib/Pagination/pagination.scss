@@ -1,4 +1,4 @@
-@import '../general/colors.scss';
+@import '../../styles/constants/colors.scss';
 
 .pagination {
     margin-top: 20px;
@@ -28,8 +28,6 @@
             color: white;
         }
     }
-    
-    &__arrow {
 
-    }
+    &__arrow {}
 }

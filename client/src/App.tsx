@@ -1,5 +1,5 @@
-import './styles/app.scss';
-import './styles/general/position.css'
+import './styles/app/app.scss';
+import './styles/app/position.css'
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Auth from './pages/auth/Auth';
 import Main from './Main';
@@ -13,7 +13,7 @@ import ProductEditor from './pages/admin/pages/product-editor/ProductEditor';
 import OrderList from './pages/admin/pages/orders/OrderList';
 import Home from './pages/home/Home';
 import Checkout from './pages/checkout/Checkout';
-import ProductInfo from './pages/product/ProductInfo';
+import Product from './pages/product/Product';
 import Shop from './pages/shop/Shop';
 import Page404 from './pages/page404/Page404';
 import HomeEditor from './pages/admin/pages/home-editor/HomeEditor';
@@ -50,7 +50,7 @@ const App = () => {
                     <Route path='/contacts' element={<Contacts />} />
                     <Route path='/404_not_found' element={<Page404 />} />
                     <Route path='/:catalog' element={<Shop />} />
-                    <Route path='/:catalog/:id' element={<ProductInfo />} />
+                    <Route path='/:catalog/:id' element={<Product />} />
                     <Route path='/' element={<Navigate to='/home' />} />
                     <Route path='*' element={<Navigate to='/home' />} />
                 </Route>

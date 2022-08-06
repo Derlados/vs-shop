@@ -1,24 +1,21 @@
 import { observer } from 'mobx-react-lite';
-import React, { FC } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import cart from '../../../../store/cart';
-import catalog from '../../../../store/catalog';
-import shop from '../../../../store/shop';
-import { IImage } from '../../../../types/IImage';
-import { IProduct } from '../../../../types/IProduct';
-import ProductMainInfo from '../../../product/components/ProductMainInfo';
-import ProductLargeCard from './ProductLargeCard';
-import ProductSmallCard from './ProductSmallCard';
+import { FC } from 'react'
+import { useParams } from 'react-router-dom';
+import cart from '../../store/cart';
+import { IImage } from '../../types/IImage';
+import { IProduct } from '../../types/IProduct';
+import ProductFullInfo from './ProductFullInfo/ProductFullInfo';
+import ProductLargeCard from './ProductLargeCard/ProductLargeCard';
+import ProductSmallCard from './ProductSmallCard/ProductSmallCard';
+import './product-card.scss';
 
-export interface ProductProps {
+export interface ProductCardProps {
     product: IProduct;
-    animated?: boolean;
-
     addToCart: (product: IProduct, count?: number) => void;
     getMainImage: (product: IProduct) => IImage;
 }
 
-export interface ProductCardProps extends ProductProps {
+export interface SimpleProductCardProps extends ProductCardProps {
     containerSize?: "default" | "small";
     onOpenQuickView: (product: IProduct) => void;
     urlFull: string;
@@ -31,7 +28,7 @@ interface CreateProductCardProps {
     onOpenQuickView?: (IProduct: IProduct) => void;
 }
 
-const Product: FC<CreateProductCardProps> = observer(({ type, containerSize = "default", product, onOpenQuickView = () => { } }) => {
+const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize = "default", product, onOpenQuickView = () => { } }) => {
     const { catalog: category } = useParams();
 
     const addToCart = (product: IProduct, count: number = 1) => {
@@ -69,7 +66,7 @@ const Product: FC<CreateProductCardProps> = observer(({ type, containerSize = "d
         }
         case "quick-view": {
             return (
-                <ProductMainInfo
+                <ProductFullInfo
                     product={product}
                     addToCart={addToCart}
                     getMainImage={getMainImage}
@@ -78,7 +75,7 @@ const Product: FC<CreateProductCardProps> = observer(({ type, containerSize = "d
         }
         case "full-view": {
             return (
-                <ProductMainInfo
+                <ProductFullInfo
                     product={product}
                     addToCart={addToCart}
                     getMainImage={getMainImage}
@@ -89,4 +86,4 @@ const Product: FC<CreateProductCardProps> = observer(({ type, containerSize = "d
     }
 });
 
-export default Product
+export default ProductCard
