@@ -2,41 +2,57 @@
 import { validate } from 'class-validator';
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
+import shop from '../../store/shop';
+import { IMail } from '../../types/IMail';
 import { REGEX } from '../../values/regex';
 import './contacts.scss';
 
 interface LocalStore {
-    name: string;
-    email: string;
-    subject: string;
-    message: string;
+    mail: IMail;
     isValidForm: boolean;
+    isLoading: boolean;
+    isLoadedSuccessful: boolean;
 }
 
 const Contacts = observer(() => {
     const localStore = useLocalObservable<LocalStore>(() => ({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
+        mail: {
+            name: '',
+            email: '',
+            subject: '',
+            message: ''
+        },
         isValidForm: true,
+        isLoading: false,
+        isLoadedSuccessful: false,
     }))
 
     const phones = ['0(1234) 567 89012', '0(987) 567 890']
     const emails = ['info@demo.com', 'yourname@domain.com']
 
-    const trySendMessage = () => {
+    const trySendMessage = async () => {
+        if (localStore.isLoading || localStore.isLoadedSuccessful) {
+            return;
+        }
+
         if (!validate()) {
             localStore.isValidForm = false;
             return;
         }
 
-        //TODO
+        localStore.isLoading = true;
+        const success = await shop.sendMail(localStore.mail);
+        if (success) {
+            localStore.isLoadedSuccessful = true;
+        } else {
+            //TODO
+        }
+        localStore.isLoading = false;
     }
 
     const validate = () => {
-        return localStore.name !== '' && REGEX.EMAIL_REGEX.test(localStore.email) && localStore.email !== ''
-            && localStore.subject !== '' && localStore.message !== ''
+        const { name, email, subject, message } = localStore.mail;
+        return name !== '' && REGEX.EMAIL_REGEX.test(email) && email !== '' && subject !== '' && message !== '';
     }
 
     return (
@@ -70,18 +86,18 @@ const Contacts = observer(() => {
             <div className='contacts__form'>
                 <div className='contacts__input-row rlc'>
                     <input className={classNames('contacts__input', {
-                        'contacts__input_invalid': !localStore.isValidForm && localStore.name === ''
-                    })} placeholder={'Ім\'я *'} value={localStore.name} onChange={(v) => localStore.name = v.target.value} />
+                        'contacts__input_invalid': !localStore.isValidForm && localStore.mail.name === ''
+                    })} placeholder={'Ім\'я *'} value={localStore.mail.name} onChange={(v) => localStore.mail.name = v.target.value} />
                     <input className={classNames('contacts__input', {
-                        'contacts__input_invalid': !localStore.isValidForm && !REGEX.EMAIL_REGEX.test(localStore.email)
-                    })} placeholder='Електронна пошта *' value={localStore.email} onChange={(v) => localStore.email = v.target.value} />
+                        'contacts__input_invalid': !localStore.isValidForm && !REGEX.EMAIL_REGEX.test(localStore.mail.email)
+                    })} placeholder='Електронна пошта *' value={localStore.mail.email} onChange={(v) => localStore.mail.email = v.target.value} />
                 </div>
                 <input className={classNames('contacts__input', {
-                    'contacts__input_invalid': !localStore.isValidForm && localStore.subject === ''
-                })} placeholder='Тема повідомлення *' value={localStore.subject} onChange={(v) => localStore.subject = v.target.value} />
+                    'contacts__input_invalid': !localStore.isValidForm && localStore.mail.subject === ''
+                })} placeholder='Тема повідомлення *' value={localStore.mail.subject} onChange={(v) => localStore.mail.subject = v.target.value} />
                 <textarea className={classNames('contacts__input contacts__input_large', {
-                    'contacts__input_invalid': !localStore.isValidForm && localStore.message === ''
-                })} placeholder='Текст повідомлення *' value={localStore.message} onChange={(v) => localStore.message = v.target.value} />
+                    'contacts__input_invalid': !localStore.isValidForm && localStore.mail.message === ''
+                })} placeholder='Текст повідомлення *' value={localStore.mail.message} onChange={(v) => localStore.mail.message = v.target.value} />
             </div>
             <div className='contacts__form-btn ccc' onClick={trySendMessage}>Send message</div>
         </div>

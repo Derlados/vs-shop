@@ -5,12 +5,17 @@ import { ShopInfo } from "../../types/ShopInfo";
 import { Service } from "../service";
 import { serialize } from 'object-to-formdata';
 import { IContact } from "../../types/IContact";
+import { IMail } from "../../types/IMail";
 
 class ShopService extends Service {
 
     async getShopInfo(): Promise<ShopInfo> {
-        const { data } = await axiosInstance.get(this.API_URL);
+        const { data } = await axiosInstance.get(`${this.API_URL}/all-info`);
         return data;
+    }
+
+    async sendMail(mail: IMail) {
+        await this.execute(axiosInstance.post(`${this.API_URL}/email`, mail));
     }
 
     async addBanner(banner: IBanner, img: File): Promise<IBanner> {
@@ -60,4 +65,4 @@ class ShopService extends Service {
 
 }
 
-export default new ShopService('/shop-info');
+export default new ShopService('/shop');

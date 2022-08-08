@@ -25,7 +25,7 @@ import { SessionCart } from './session-cart/model/session-cart.model';
 import { SessionCartItem } from './session-cart/model/session-cart-item.model';
 import { PaymentsModule } from './payments/payments.module';
 import { Payment } from './payments/models/payment.model';
-import { ShopModule } from './shop/shop-info.module';
+import { ShopModule } from './shop/shop.module';
 import { ShopInfo } from './shop/model/shop-info.model';
 import { Banner } from './shop/model/banner.model';
 

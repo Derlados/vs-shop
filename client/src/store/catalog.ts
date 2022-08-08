@@ -108,6 +108,10 @@ class CatalogStore {
         return this.products.find(p => p.id === id);
     }
 
+    public async loadProductCount(product: IProduct) {
+        product.count = await productsService.getProductCount(product.id);
+    }
+
     private clear() {
         this.products = [];
         this.selectedFilters = new Map();

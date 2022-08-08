@@ -59,7 +59,7 @@ export class ProductsService {
 
     async getProductCount(userId: number, productId: number) {
         const product = await this.productRepository.findOne({ id: productId, userId: userId });
-        return { count: product.count };
+        return product.count;
     }
 
     /** TODO: Если работа на клиенте будет неоптимальной - фильтровать будет сервер */

@@ -5,6 +5,9 @@ export class CreateProductDto {
     title: string;
 
     @IsString()
+    brand: string;
+
+    @IsString()
     description: string;
 
     @IsNumber()

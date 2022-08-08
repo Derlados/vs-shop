@@ -10,17 +10,48 @@ import { ShopInfo } from './model/shop-info.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Banner } from './model/banner.model';
 import { Contact } from './model/contact.model';
+import { SendMailDto } from './dto/send-mail.dto';
+import { createTransport, Transporter } from 'nodemailer';
 
 @Injectable()
-export class ShopInfoService {
+export class ShopService {
     private readonly SHOP_INFO_ID: number = 1;
+    private readonly mailTransporter: Transporter;
 
     constructor(@InjectRepository(ShopInfo) private shopInfoRepository: Repository<ShopInfo>,
         @InjectRepository(Banner) private bannerRepository: Repository<Banner>,
-        private fileService: FilesService) { }
+        private fileService: FilesService) {
+
+        this.mailTransporter = createTransport({
+            host: process.env.SMTP_HOST,
+            port: Number(process.env.SMTP_PORT),
+            secure: true,
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASSWORD,
+            }
+        });
+    }
 
     async getShopInfo() {
         return this.shopInfoRepository.findOne({ where: { id: this.SHOP_INFO_ID }, relations: ["banners"] });
+    }
+
+    async sendMail(dto: SendMailDto) {
+        const htmlPath = path.join(__dirname, 'static', 'mail-template.html')
+        let html = fs.readFileSync(htmlPath).toString();
+        html = html.replace('{{name}}', dto.name);
+        html = html.replace('{{email}}', dto.email);
+        html = html.replace('{{subject}}', dto.subject);
+        html = html.replace('{{message}}', dto.message);
+
+        await this.mailTransporter.sendMail({
+            from: `${process.env.ORGANIZATION} '${dto.name}' <yfibltnb@gmail.com>`,
+            to: "derladoshome@gmail.com",
+            subject: dto.subject,
+            text: '',
+            html: html,
+        })
     }
 
     async addBanner(dto: CreateLargeBannerDto, img: Express.Multer.File): Promise<Banner> {

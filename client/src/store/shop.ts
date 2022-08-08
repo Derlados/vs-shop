@@ -6,9 +6,11 @@ import shopService from "../services/shop/shop.service";
 import { ICategory } from "../types/ICategory";
 import { IContact } from "../types/IContact";
 import { IBanner } from "../types/ILargeBanner";
+import { IMail } from "../types/IMail";
 import { IProduct } from "../types/IProduct";
 
 class ShopStore {
+    apiError: string;
     categories: ICategory[];
     bestsellers: IProduct[];
     newProducts: IProduct[];
@@ -54,6 +56,16 @@ class ShopStore {
 
     getBestsellersByCategory(categoryId: number) {
         return this.bestsellers.filter(b => b.categoryId === categoryId);
+    }
+
+    async sendMail(mail: IMail) {
+        try {
+            await shopService.sendMail(mail);
+            return true;
+        } catch (e) {
+            this.apiError = shopService.getError();
+            return false;
+        }
     }
 
     async addCategory(data: CreateCategoryDto, img: File) {

@@ -78,6 +78,7 @@ const ProductEditor = observer(() => {
             isBestseller: false,
             availability: AvailableStatus.IN_STOCK,
             maxByOrder: 0,
+            count: 0,
             discountPercent: 0,
             attributes: attributes,
             images: []
@@ -176,6 +177,7 @@ const ProductEditor = observer(() => {
 
     const onEdit = (product: IProduct) => {
         localStore.product = { ...product, images: JSON.parse(JSON.stringify(product.images)) }
+        catalog.loadProductCount(localStore.product);
         localStore.uploadedFiles = [];
         localStore.deletedImagesId = [];
     }
@@ -274,7 +276,11 @@ const ProductEditor = observer(() => {
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Кількість: </div>
-                        <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count ?? ''} onChange={(v) => localStore.product.count = Number(v.target.value)} />
+                        {localStore.product.count !== undefined ?
+                            <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count} onChange={(v) => localStore.product.count = Number(v.target.value)} />
+                            :
+                            <div className='admin-general__input'>Завантаження ...</div>
+                        }
                     </div>
                     <div className='rlc'>
                         <div className='admin-general__input-title'>Кількість на замовлення: </div>
