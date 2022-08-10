@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { FC, useEffect, useState } from 'react';
+import { Resolutions } from '../../values/resolutions';
 import './pagination.scss';
 
 interface PaginationProps {
-    pageWindow?: number;
+    maxPageWindow?: number;
     maxPages: number;
     currentPage: number;
     back: () => void;
@@ -12,12 +13,25 @@ interface PaginationProps {
     setPage: (page: number) => void;
 }
 
-const Pagination: FC<PaginationProps> = observer(({ pageWindow = 9, maxPages, currentPage, back, next, setPage }) => {
+const MAX_MOBILE_VERTICAL = 5;
+
+const Pagination: FC<PaginationProps> = observer(({ maxPageWindow = 9, maxPages, currentPage, back, next, setPage }) => {
+    const [pageWindow, setPageWindow] = useState(maxPageWindow);
     const [pages, setPages] = useState<Array<string>>([]);
 
     useEffect(() => {
+        window.addEventListener("resize", () => {
+            if (window.innerWidth <= Resolutions.MOBILE_VERtICAL) {
+                setPageWindow(MAX_MOBILE_VERTICAL);
+            } else {
+                setPageWindow(maxPageWindow);
+            }
+        })
+    }, [])
+
+    useEffect(() => {
         let pages: Array<string> = Array.from(Array(maxPages).keys()).map(i => (i + 1).toString());
-        if (maxPages <= 9) {
+        if (maxPages <= pageWindow) {
             setPages(pages);
             return;
         }
@@ -80,13 +94,13 @@ const Pagination: FC<PaginationProps> = observer(({ pageWindow = 9, maxPages, cu
 
     return (
         <ul className='pagination rcc'>
-            <li className='pagination__arrow pagination__item' onClick={onBack}>{'<'}</li>
+            <li className='pagination__arrow pagination__item ccc' onClick={onBack}>{'<'}</li>
             {pages.map((page, i) => (
-                <li key={i} className={classNames('pagination__arrow pagination__item', {
+                <li key={i} className={classNames('pagination__arrow pagination__item ccc', {
                     'pagination__item_active': page == currentPage.toString()
                 })} onClick={() => onClickPage(page)}>{page}</li>
             ))}
-            <li className='pagination__arrow pagination__item' onClick={onNext}>{'>'}</li>
+            <li className='pagination__arrow pagination__item ccc' onClick={onNext}>{'>'}</li>
         </ul>
     )
 });

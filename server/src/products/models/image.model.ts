@@ -9,7 +9,8 @@ export class Image {
     id: number;
 
     @Column({ type: 'text', nullable: false })
-    url: string;
+    @Exclude()
+    filename: string;
 
     @Column({ type: "boolean", default: false })
     isMain: boolean;
@@ -21,4 +22,11 @@ export class Image {
     @ManyToOne(() => Product, product => product.images, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'product_id' })
     product: Product;
+
+    url: string;
+
+    @AfterLoad()
+    getUrl() {
+        this.url = `${process.env.STATIC_API}/${this.filename}`
+    }
 }

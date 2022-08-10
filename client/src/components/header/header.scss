@@ -3,20 +3,36 @@
 
 
 .header {
+    position: relative;
     width: 100%;
     height: 90px;
 
+    &_focused {
+        @media (max-width: $mobile-vertical) {
+            .header__cart {
+                display: none;
+            }
+
+            .header__burger-menu {
+                display: none;
+            }
+
+            .quick-search__categories {
+                display: block;
+            }
+        }
+    }
 
     @media (max-width: $mobile-vertical) {
         height: 80px;
     }
 
     &__burger-menu {
-        display: none !important;
+        display: none;
         position: relative;
         min-width: 48px;
         height: 44px;
-        padding: 0px 10px 0px 10px;
+        padding: 0px 10px;
         margin-right: 10px;
 
         &::before,
@@ -38,8 +54,14 @@
             bottom: 0;
         }
 
+        &_hide {
+            @media (max-width: $mobile-vertical) {
+                display: none !important;
+            }
+        }
+
         @media (max-width: $tablet-horizontal) {
-            display: flex !important;
+            display: flex;
         }
     }
 
@@ -72,6 +94,7 @@
         @media (max-width: $mobile-vertical) {
             padding: 10px;
             height: 80px;
+            z-index: 50;
         }
     }
 
@@ -123,17 +146,6 @@
         }
     }
 
-    &__new-label {
-        position: absolute;
-        top: -12px;
-        right: -15px;
-        background-color: #3ec483;
-        padding: 3px 5px;
-        color: white;
-        font-size: 10px;
-        border-radius: 10px;
-    }
-
     &__nav-arrow {
         margin-left: 3px;
         position: relative;
@@ -166,25 +178,38 @@
         height: 40px;
         padding: 0px 15px;
         border-bottom: 1px solid #eee;
+        cursor: pointer;
+
+        &:hover .header__category-text {
+            color: $primary;
+            padding-left: 10px;
+        }
     }
 
     &__category-link {
+        height: 100%;
         text-decoration: none;
     }
 
     &__category-name {
+        position: relative;
         font-size: 14px;
         color: gray;
+    }
+
+    &__category-text {
         transition: 0.4s;
-        cursor: pointer;
+    }
 
-        @media (hover: hover) {
-            &:hover {
-                color: $primary;
-                padding-left: 10px;
-            }
-        }
-
+    &__new-label {
+        position: absolute;
+        top: -5px;
+        right: -25px;
+        background-color: #3ec483;
+        padding: 2px 4px;
+        color: white;
+        font-size: 10px;
+        border-radius: 10px;
     }
 
     &__action-area {
@@ -193,57 +218,6 @@
 
         @media (max-width: $tablet-horizontal) {
             max-width: 100%;
-        }
-    }
-
-    &__search {
-        width: 100%;
-        height: 100%;
-        border-radius: 25px;
-        outline: solid 2px $primary;
-    }
-
-    &__search-line {
-        width: 100%;
-        padding-left: 10px;
-
-        @media (max-width: $mobile-vertical) {
-            padding: 10px;
-        }
-    }
-
-    &__search-input {
-        flex: 1;
-        width: 100px;
-        padding-left: 10px;
-        outline: none;
-        border: none;
-        color: #494949;
-    }
-
-    &__icon_search {
-        width: 18px !important;
-        height: 18px !important;
-        cursor: pointer;
-        background-color: #757575 !important;
-
-    }
-
-    &__search-find {
-        height: 100%;
-        color: white;
-        border-radius: 0px 25px 25px 0px;
-        padding: 10px;
-        background-color: $primary;
-        cursor: pointer;
-        transition: 0.4s;
-
-        &:hover {
-            background-color: $hover-primary;
-        }
-
-        @media (max-width: $mobile-vertical) {
-            display: none;
         }
     }
 
@@ -257,6 +231,12 @@
 
         &:hover>.header__cart-total {
             color: $primary;
+        }
+
+        &_hide {
+            @media (max-width: $mobile-vertical) {
+                display: none;
+            }
         }
 
         @media (max-width: $mobile-vertical) {
@@ -275,10 +255,6 @@
         height: 26px;
         transition: 0.4s;
         background-color: black;
-
-        &_search {
-            mask-image: url('../../assets/images/search.svg');
-        }
 
         &_favorite {
             mask-image: url('../../assets/images/favorite.svg');
@@ -308,12 +284,32 @@
         margin-left: 10px;
 
         @media (max-width: $mobile-vertical) {
+            display: none;
             font-size: 14px;
         }
 
         @media (max-width: $mobile-mini) {
-            display: none;
+
             margin-left: 0px;
+        }
+    }
+
+    &__mask {
+        z-index: -1;
+        opacity: 0;
+
+        @media (max-width: $mobile-vertical) {
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.445);
+            transition: 0.25s;
+
+            &_open {
+                opacity: 1;
+                z-index: 40;
+            }
         }
     }
 }

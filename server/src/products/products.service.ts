@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilesService } from 'src/files/files.service';
-import { In, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
 import { Attribute } from './models/attribute.model';
@@ -30,22 +30,25 @@ export class ProductsService {
     }
 
     async getProducts(): Promise<Product[]> {
-        const products = await this.productRepository.find({ relations: ["values", "values.attribute", "images"] });
+        const products = await this.productRepository.find({ relations: ["values", "values.attribute", "images", "category"] });
         return products;
     }
 
     async getBestsellers(): Promise<Product[]> {
-        const products = await this.productRepository.find({ where: { isBestseller: true }, relations: ["images"] });
+        const products = await this.productRepository.find({ where: { isBestseller: true }, relations: ["images", "category"] });
         return products;
     }
 
     async getNewProducts(): Promise<Product[]> {
-        const products = await this.productRepository.find({ where: { isNew: true }, relations: ["images"] });
+        const products = await this.productRepository.find({ where: { isNew: true }, relations: ["images", "category"] });
         return products;
     }
 
     async getProductById(id: number): Promise<Product> {
-        const product = await this.productRepository.findOne({ where: { id: id }, relations: ["values", "values.attribute", "images"] });
+        const product = await this.productRepository.findOne({
+            where: { id: id },
+            relations: ["values", "values.attribute", "images", "category"]
+        });
         if (!product) {
             throw new NotFoundException("Товар не найден");
         }
@@ -54,7 +57,17 @@ export class ProductsService {
     }
 
     async getProductsByCategory(categoryId: number): Promise<Product[]> {
-        return this.productRepository.find({ where: { category: { id: categoryId } }, relations: ["category", "values", "values.attribute", "images"] });
+        return this.productRepository.find({
+            where: { category: { id: categoryId } },
+            relations: ["values", "values.attribute", "images", "category"]
+        });
+    }
+
+    async getProductsByText(text: string): Promise<Product[]> {
+        return this.productRepository.find({
+            where: [{ title: Like(`%${text}%`) }, { brand: Like(`%${text}%`) }],
+            relations: ["category", "values", "values.attribute", "images", "category"]
+        });
     }
 
     async getProductCount(userId: number, productId: number) {
@@ -78,6 +91,7 @@ export class ProductsService {
     async createProduct(userId: number, dto: CreateProductDto, attributes: Map<string, string>): Promise<Product> {
         const result = await this.productRepository.insert({ ...dto, userId: userId });
         const insertId = result.raw.insertId;
+
 
         await this.addAttributes(insertId, attributes);
         return this.getProductById(insertId);
@@ -193,11 +207,11 @@ export class ProductsService {
         }
 
         const productImages = await this.fileService.createFiles(images);
-        const newImages = [{ productId: productId, url: productImages.shift(), isMain: isFirstMain }];
+        const newImages = [{ productId: productId, filename: productImages.shift(), isMain: isFirstMain }];
         for (const image of productImages) {
             newImages.push({
                 productId: productId,
-                url: image,
+                filename: image,
                 isMain: false
             });
         }

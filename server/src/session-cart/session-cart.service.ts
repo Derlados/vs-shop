@@ -22,7 +22,7 @@ export class SessionCartService {
     }
 
     async getCartProducts(cartId: number) {
-        const cart = await this.sessionCartItemRepository.find({ where: { cartId: cartId }, relations: ["product", "product.images"] });
+        const cart = await this.sessionCartItemRepository.find({ where: { cartId: cartId }, relations: ["product", "product.images", "product.category"] });
         return cart;
     }
 

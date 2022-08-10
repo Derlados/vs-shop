@@ -8,11 +8,11 @@ import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 import { AvailableStatus } from '../../../types/IProduct';
 
-const ProductLargeCard: FC<SimpleProductCardProps> = observer(({ product, urlFull, addToCart, onOpenQuickView, getMainImage }) => {
+const ProductLargeCard: FC<SimpleProductCardProps> = observer(({ product, addToCart, onOpenQuickView, getMainImage }) => {
     return (
         <div className='product-card-large rlt'>
             <div className='product-card-large__img-container'>
-                <NavLink to={urlFull}>
+                <NavLink to={product.url}>
                     <img className='product-card__img product-card-large__img' alt='' src={getMainImage(product)?.url ?? require('../../../assets/images/no-photos.png')} />
                 </NavLink>
                 <div className='product-card__labels product-card__labels_large ccc'>
@@ -26,7 +26,7 @@ const ProductLargeCard: FC<SimpleProductCardProps> = observer(({ product, urlFul
                 </div>
             </div>
             <div className='product-card-large__info clt'>
-                <NavLink to={urlFull} className="rlc">
+                <NavLink to={product.url} className="rlc">
                     <span className='product-card-large__title'>{product.title}</span>
                 </NavLink>
                 <span className='product-card-large__brand'>{product.brand}</span>

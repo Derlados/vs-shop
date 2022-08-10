@@ -57,11 +57,14 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                                     <NavLink to={category.routeName} onClick={onClose}>- {category.name}</NavLink>
                                 </li>
                             ))}
+                            <li>
+                                <NavLink to={'./embroidery'} onClick={onClose}>- Вишивка</NavLink>
+                            </li>
                         </ul>
                     </li>
                     <li className='burger-menu__item burger-menu_underline'>
-                        <NavLink to={'/home'} onClick={onClose}>
-                            Вишивка
+                        <NavLink to={'/contacts'} onClick={onClose}>
+                            Контакти
                         </NavLink>
                     </li>
 

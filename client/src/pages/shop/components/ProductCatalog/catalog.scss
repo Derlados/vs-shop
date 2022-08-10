@@ -224,8 +224,6 @@
     &__sort-list {
         width: 200px;
         transform-origin: top;
-        transform: scale(0.5);
-        opacity: 0;
         pointer-events: none;
         overflow-y: hidden;
         position: absolute;
@@ -236,19 +234,17 @@
         border: solid 1px $primary-gray;
         background-color: white;
         z-index: 5;
+        transform: scale(0.5);
+        opacity: 0;
         transition: 0.25s;
+
         -webkit-touch-callout: none;
-        /* iOS Safari */
         -webkit-user-select: none;
-        /* Safari */
         -khtml-user-select: none;
-        /* Konqueror HTML */
         -moz-user-select: none;
-        /* Firefox */
         -ms-user-select: none;
-        /* Internet Explorer/Edge */
         user-select: none;
-        /* Non-prefixed version, currently supported by Chrome and Opera */
+
 
         &_open {
             transform: scale(1);

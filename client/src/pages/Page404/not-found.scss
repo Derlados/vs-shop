@@ -4,12 +4,18 @@
 
 .not-found {
     width: 100%;
+    padding: 50px 0px;
 
     &__404 {
         font-size: 144px;
         line-height: 148px;
         color: $primary;
         margin-bottom: 20px;
+
+        @media (max-width: $mobile-vertical) {
+            font-size: 112px;
+            line-height: 116px;
+        }
     }
 
     &__text {
@@ -26,7 +32,7 @@
             font-size: 16px;
 
             &_large {
-                font-size: 32px;
+                font-size: 28px;
                 font-weight: bold;
             }
         }
@@ -44,11 +50,19 @@
         &:hover {
             background-color: $hover-primary;
         }
+
+        @media (max-width: $mobile-vertical) {
+            padding: 10px;
+        }
     }
 
     &__button-text {
         color: white;
         font-size: 20px;
+
+        @media (max-width: $mobile-vertical) {
+            font-size: 16px;
+        }
     }
 
     &__button-icon {
@@ -59,5 +73,11 @@
         mask-image: url('../../assets/images/left.svg');
         background-color: white;
         margin-left: 10px;
+
+        @media (max-width: $mobile-vertical) {
+            width: 22px;
+            height: 22px;
+            margin-left: 5px;
+        }
     }
 }

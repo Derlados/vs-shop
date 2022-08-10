@@ -2,6 +2,7 @@
 import { validate } from 'class-validator';
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
+import SmallLoader from '../../lib/SmallLoader/SmallLoader';
 import shop from '../../store/shop';
 import { IMail } from '../../types/IMail';
 import { REGEX } from '../../values/regex';
@@ -44,8 +45,6 @@ const Contacts = observer(() => {
         const success = await shop.sendMail(localStore.mail);
         if (success) {
             localStore.isLoadedSuccessful = true;
-        } else {
-            //TODO
         }
         localStore.isLoading = false;
     }
@@ -99,7 +98,18 @@ const Contacts = observer(() => {
                     'contacts__input_invalid': !localStore.isValidForm && localStore.mail.message === ''
                 })} placeholder='Текст повідомлення *' value={localStore.mail.message} onChange={(v) => localStore.mail.message = v.target.value} />
             </div>
-            <div className='contacts__form-btn ccc' onClick={trySendMessage}>Send message</div>
+            {!localStore.isLoadedSuccessful ?
+                <div className='contacts__form-btn ccc' onClick={trySendMessage}>
+                    {!localStore.isLoading ?
+                        <div className='contacts__form-btn-text'>Відправити</div>
+                        :
+                        <SmallLoader className='contacts__loader' />
+                    }
+                </div>
+                :
+                <div className='contacts__success'>Відправлено успішно ✓</div>
+            }
+
         </div>
     )
 });

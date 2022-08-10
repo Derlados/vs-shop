@@ -47,6 +47,8 @@ export class Product {
     @Column({ name: "user_id", type: "number", nullable: false })
     userId: number;
 
+    url: string;
+
     availability: AvailableStatus;
 
     discountPercent: number;
@@ -55,6 +57,7 @@ export class Product {
 
     @ManyToOne(() => Category, (category) => category.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
     @JoinColumn({ name: "category_id" })
+    @Exclude()
     category: Category;
 
     @ManyToOne(() => User, (user) => user.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
@@ -75,6 +78,13 @@ export class Product {
     @OneToMany(() => SessionCartItem, cartItem => cartItem.product)
     @Exclude()
     sessionCartItems: SessionCartItem[]
+
+    @AfterLoad()
+    getUrl() {
+        if (this.category) {
+            this.url = `/${this.category?.routeName}/${this.id}`;
+        }
+    }
 
     @AfterLoad()
     getAvailability() {

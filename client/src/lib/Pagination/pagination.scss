@@ -1,4 +1,5 @@
 @import '../../styles/constants/colors.scss';
+@import '../../styles/constants/resolutions.scss';
 
 .pagination {
     margin-top: 20px;
@@ -10,7 +11,7 @@
         margin: 0px 5px 0px 5px;
         border-radius: 50%;
         display: inline;
-        padding: 10px;
+        padding: 9px;
         text-align: center;
         font-size: 16px;
         line-height: 18px;
@@ -26,6 +27,14 @@
         &_active {
             background-color: $primary;
             color: white;
+        }
+
+        @media (max-width: $mobile-mini) {
+            width: 30px;
+            height: 30px;
+            padding: 7px 5px;
+            font-size: 14px;
+            line-height: 16px;
         }
     }
 

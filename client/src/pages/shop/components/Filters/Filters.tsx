@@ -48,6 +48,7 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
             })
         }
 
+
         localStore.brand.allValues = catalog.brands.map((b) => { return { value: b, checked: false } })
     }, [catalog.filters.attributes, catalog.brands]);
 
@@ -90,7 +91,7 @@ const Filters: FC<FiltersProps> = observer(({ isOpen, onClose }) => {
                             onChange={({ min, max }) => { }}
                             onAccept={onAcceptRange} />
                     </div>
-                    <FilterItem attribute={localStore.brand} onCheck={onCheckBrands} />
+                    {localStore.brand.allValues.length !== 0 && <FilterItem attribute={localStore.brand} onCheck={onCheckBrands} />}
                     {localStore.attributes.map(attr => (
                         <FilterItem key={attr.id} attribute={attr} onCheck={onCheck} />
                     ))}

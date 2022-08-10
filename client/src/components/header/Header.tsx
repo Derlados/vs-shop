@@ -1,29 +1,34 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React, { ChangeEvent, KeyboardEvent, useEffect } from 'react'
-import { NavLink, useLocation } from 'react-router-dom';
+import { ChangeEvent, useEffect } from 'react'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import cart from '../../store/cart';
-import catalog from '../../store/catalog';
 import shop from '../../store/shop';
 import './header.scss';
 import { SpecSymbols } from '../../values/specSymbols';
 import CartQuickView from './CartQuickView/CartQuickView';
 import BurgerMenu from './BurgerMenu/BurgerMenu';
+import QuickSearch from './QuickSearch/QuickSearch';
 
 interface LocalStore {
     isCartOpen: boolean;
     searchString: string;
+    selectedRoute: string;
+    isFocused: boolean;
     isFixed: boolean;
     isMenuOpen: boolean;
     isCategoryList: boolean;
 }
 
 const Header = observer(() => {
+    const navigate = useNavigate();
     const location = useLocation();
 
     const localStore = useLocalObservable<LocalStore>(() => ({
         isCartOpen: false,
         searchString: '',
+        selectedRoute: '',
+        isFocused: false,
         isFixed: false,
         isMenuOpen: false,
         isCategoryList: false
@@ -35,18 +40,24 @@ const Header = observer(() => {
         })
     }, [])
 
-    const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            findBySearch();
-        }
-    }
-
     const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
         localStore.searchString = e.target.value;
     }
 
-    const findBySearch = () => {
-        catalog.setSearchString(localStore.searchString);
+    const onAcceptSearch = () => {
+        if (localStore.selectedRoute) {
+            navigate(`${localStore.selectedRoute}/search/?text=${localStore.searchString}`)
+        } else {
+            navigate(`/search/?text=${localStore.searchString}`)
+        }
+    }
+
+    const onSelectCategory = (route: string) => {
+        localStore.selectedRoute = route;
+    }
+
+    const onFocusChangeInput = (isFocused: boolean) => {
+        localStore.isFocused = isFocused;
     }
 
     const onOpenCart = () => {
@@ -78,11 +89,13 @@ const Header = observer(() => {
     }
 
     return (
-        <div className='header  rcc'>
+        <div className={classNames('header rcc', {
+            'header_focused': localStore.isFocused
+        })}>
             <div className={classNames('header__container rcc', {
                 'header__container_fixed': localStore.isFixed
             })}>
-                <div className={'header__burger-menu ccc'} onClick={onOpenMenu}>
+                <div className='header__burger-menu ccc' onClick={onOpenMenu}>
                     <div className='header__burger-menu-icon ccc'></div>
                 </div>
                 <NavLink to={'/home'}>
@@ -103,28 +116,34 @@ const Header = observer(() => {
                         <ul className='header__category-list'>
                             {shop.categories.map(category => (
                                 <li key={category.id} className='header__category-item clc' >
-                                    <NavLink className='header__category-link' to={`./${category.routeName}`} onClick={onCloseCatalogList}>
-                                        <div className='header__category-name'>{category.name}</div>
+                                    <NavLink className='header__category-link ccc' to={`./${category.routeName}`} onClick={onCloseCatalogList}>
+                                        <div className='header__category-name'>
+                                            <div className='header__category-text'>{category.name}</div>
+                                            {/* <div className='header__new-label'>New</div> */}
+                                        </div>
                                     </NavLink>
                                 </li>
                             ))}
+                            <li className='header__category-item clc' >
+                                <NavLink className='header__category-link ccc' to={`./embroidery`} onClick={onCloseCatalogList}>
+                                    <div className='header__category-name'>
+                                        <div className='header__category-text'>Вишивка</div>
+                                        <div className='header__new-label'>New</div>
+                                    </div>
+                                </NavLink>
+
+                            </li>
                         </ul>
                     </li>
                     <li className='header__nav-item'>
                         <NavLink className={classNames('header__nav-link', {
-                            'header__nav-link_active': location.pathname === '/embroidery'
-                        })} to={'./embroidery'}>Вишивка</NavLink>
-                        <div className='header__new-label'>New</div>
+                            'header__nav-link_active': location.pathname === '/contacts'
+                        })} to={'./contacts'}>Контакти</NavLink>
                     </li>
                 </ul>
                 <div className='header__action-area rrc'>
-                    <div className='header__search rcc'>
-                        <div className='header__search-line rcc'>
-                            <div className='header__icon header__icon_search' />
-                            <input className='header__search-input' placeholder='Хочу знайти ...' onChange={onChangeSearch} onKeyPress={handleKeyPress} />
-                        </div>
-                        <span className='header__search-find' onClick={findBySearch}>Пошук</span>
-                    </div>
+                    <QuickSearch value={localStore.searchString} categories={shop.categories} onFocus={() => onFocusChangeInput(true)}
+                        onAccept={onAcceptSearch} onChange={onChangeSearch} onSelectCategory={onSelectCategory} />
                     <div className='header__cart rcc' onClick={onOpenCart}>
                         <div className='header__cart-btn'>
                             <div className='header__icon header__icon_cart' />
@@ -136,6 +155,9 @@ const Header = observer(() => {
             </div>
             <BurgerMenu isOpen={localStore.isMenuOpen} onClose={onCloseMenu} />
             <CartQuickView isOpen={localStore.isCartOpen} onClose={onCloseCart} />
+            <div className={classNames('header__mask', {
+                'header__mask_open': localStore.isFocused
+            })} onClick={() => onFocusChangeInput(false)}></div>
         </div>
     )
 })

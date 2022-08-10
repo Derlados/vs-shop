@@ -5,6 +5,7 @@ export interface IProduct {
     title: string;
     brand: string;
     description: string;
+    url: string;
     price: number;
     oldPrice: number;
     isNew: boolean;

@@ -24,6 +24,12 @@ export class ProductsController {
         return this.productService.getProductsByCategory(categoryId);
     }
 
+    @Get('text=:text')
+    @UseInterceptors(ClassSerializerInterceptor)
+    getProductByText(@Param('text') text: string) {
+        return this.productService.getProductsByText(text);
+    }
+
     @Get('bestsellers')
     @UseInterceptors(ClassSerializerInterceptor)
     getBestsellers() {
@@ -61,7 +67,7 @@ export class ProductsController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     addProduct(@Req() req, @Body() dto: ReqCreateProductDto) {
-        return this.productService.createProduct(req.user.userId, dto.product, new Map(Object.entries(dto.attributes)));
+        return this.productService.createProduct(req.user.userId, dto.product, dto.attributes);
     }
 
     @Put(':id([0-9]+)')
@@ -69,7 +75,7 @@ export class ProductsController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     updateProduct(@Req() req, @Param('id') id: number, @Body() dto: ReqCreateProductDto) {
-        return this.productService.updateProduct(id, req.user.userId, dto.product, new Map(Object.entries(dto.attributes)));
+        return this.productService.updateProduct(id, req.user.userId, dto.product, dto.attributes);
     }
 
     @Put(':id/images')
