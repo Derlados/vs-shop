@@ -7,7 +7,7 @@ import { RolesGuard } from 'src/roles/roles.guard';
 import { ChangeStatusDto } from './dto/change-status-order.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { EditSelectedOrdersDto } from './dto/edit-selected-orders.dto';
-import { GetOrdersQuery } from './dto/get-orders-query.dto';
+import { GetOrdersQuery } from './query/get-orders.query';
 import { OrderService } from './orders.service';
 
 @Controller('orders')

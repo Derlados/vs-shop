@@ -185,7 +185,7 @@ const ProductEditor = observer(() => {
     }
 
     const onSelectCategory = (category: ICategory) => {
-        catalog.init(category.routeName);
+        catalog.fetchByCategory(category.routeName);
         localStore.selectedCategory = category;
         onClear();
     }

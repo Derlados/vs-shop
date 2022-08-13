@@ -30,7 +30,7 @@ const Product: FC = observer(() => {
     useEffect(() => {
         async function fetchProduct(category: string) {
             if (catalog.products.length == 0) {
-                await catalog.init(category);
+                await catalog.fetchByCategory(category);
             }
 
             const product = catalog.getProductById(Number(id))

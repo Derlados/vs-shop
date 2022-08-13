@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Not, Repository } from 'typeorm';
+import { FindConditions, In, Not, Repository } from 'typeorm';
 import { Category } from './models/category.model';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Attribute } from 'src/products/models/attribute.model';
@@ -20,7 +20,7 @@ export class CategoryService {
 
     }
 
-    async getCategories() {
+    async getAll() {
         return this.categoryRepository.find({ relations: ["filters", "filters.attribute", "products"] });
     }
 

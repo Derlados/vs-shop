@@ -1,7 +1,5 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { nanoid } from 'nanoid';
-import React, { useEffect } from 'react';
 import { Navigate, NavLink } from 'react-router-dom';
 import Input from '../../lib/Input/Input';
 import Loader from '../../lib/Loader/Loader';
@@ -12,9 +10,9 @@ import orders from '../../store/order';
 import './checkout.scss';
 import { ICartProduct } from '../../types/ICartProduct';
 import { IOrder, OrderStatus } from '../../types/IOrder';
-import { IProduct } from '../../types/IProduct';
 import { ISettlement } from '../../types/ISettlement';
 import { REGEX } from '../../values/regex';
+import settlement from '../../store/settlement';
 
 interface LocalStore {
     firstName: string;
@@ -131,12 +129,12 @@ const Checkout = observer(() => {
     }
 
     const onSelectSettlement = (settlementRef: string) => {
-        const selectedSettlement = orders.settlements.find(s => s.ref == settlementRef)
+        const selectedSettlement = settlement.settlements.find(s => s.ref == settlementRef)
         if (selectedSettlement) {
             localStore.settlement = getSettlementFullName(selectedSettlement);
             localStore.warehouse = '';
         }
-        orders.selectSettlement(settlementRef);
+        settlement.selectSettlement(settlementRef);
     }
 
     const validate = () => {
@@ -198,15 +196,15 @@ const Checkout = observer(() => {
                     className='checkout__selector'
                     withInput={true}
                     hint={'Населений пункт України'}
-                    values={getSettlementValues(orders.settlements)}
+                    values={getSettlementValues(settlement.settlements)}
                     onSelect={onSelectSettlement}
-                    onChange={(searchString: string) => orders.findSettlements(searchString)} />
+                    onChange={(searchString: string) => settlement.findSettlements(searchString)} />
                 <Selector
                     className='checkout__selector'
                     withInput={true}
                     withSearch={true}
                     hint={'Адреса точки видачі'}
-                    values={getWarehouseValues(orders.warehouses)}
+                    values={getWarehouseValues(settlement.warehouses)}
                     selectedValue={localStore.warehouse}
                     onSelect={(warehouse: string) => localStore.warehouse = warehouse} />
                 <div className='checkout__additional-info'>

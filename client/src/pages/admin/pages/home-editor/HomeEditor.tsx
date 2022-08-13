@@ -55,7 +55,7 @@ const HomeEditor = observer(() => {
 
     useEffect(() => {
         if (shop.categories.length !== 0) {
-            catalog.init(shop.categories[0].routeName)
+            catalog.fetchByCategory(shop.categories[0].routeName)
         }
     }, [shop.categories]);
 

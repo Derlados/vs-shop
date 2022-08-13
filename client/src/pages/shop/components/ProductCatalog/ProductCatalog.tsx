@@ -26,7 +26,6 @@ interface ProductCatalogProps {
 }
 
 const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => {
-
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedViewMode: ViewMode.GRID,
         selectedProduct: catalog.filteredProducts[0],

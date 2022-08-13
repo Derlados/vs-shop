@@ -44,6 +44,10 @@
         }
     }
 
+    &__content {
+        width: 100%;
+    }
+
     &__close-btn {
         display: none;
         position: absolute;
@@ -200,5 +204,24 @@
         }
     }
 
-    &__attr-value {}
+    &__categories {
+        width: 100%;
+    }
+
+    &__categories-item {
+        width: 100%;
+        padding: 10px 0px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    &__categories-link {
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+
+
+        &:hover {
+            color: $primary;
+        }
+    }
 }

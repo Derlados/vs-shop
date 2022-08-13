@@ -1,6 +1,5 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { validate } from 'class-validator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleValues } from 'src/roles/roles.enum';
@@ -15,7 +14,7 @@ export class CategoryController {
     @Get()
     @UseInterceptors(ClassSerializerInterceptor)
     getAllCategories() {
-        return this.categoryService.getCategories();
+        return this.categoryService.getAll();
     }
 
     @Get('/category=:category')

@@ -25,6 +25,15 @@ class ProductService extends Service {
         return data;
     }
 
+    async getProductByText(text: string): Promise<IProduct[]> {
+        const params = {
+            text: encodeURI(text)
+        }
+
+        const { data } = await axiosInstance.get(`${this.API_URL}/search`, { params: params, headers: headersJSON() });
+        return data;
+    }
+
     async getNewProducts(): Promise<IProduct[]> {
         const { data } = await axiosInstance.get(`${this.API_URL}/new`, { headers: headersJSON() });
         return data;

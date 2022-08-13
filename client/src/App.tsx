@@ -49,8 +49,8 @@ const App = () => {
                     <Route path='/checkout' element={<Checkout />} />
                     <Route path='/contacts' element={<Contacts />} />
                     <Route path='/404_not_found' element={<Page404 />} />
-                    <Route path='/search/?text=:text' element={<Shop />} />
-                    <Route path='/:catalog/search/?text=:text' element={<Shop />} />
+                    <Route path='/search' element={<Shop />} />
+                    <Route path='/:catalog/search' element={<Shop />} />
                     <Route path='/:catalog' element={<Shop />} />
                     <Route path='/:catalog/:id' element={<Product />} />
                     <Route path='/' element={<Navigate to='/home' />} />

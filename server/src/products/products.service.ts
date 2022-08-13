@@ -66,7 +66,7 @@ export class ProductsService {
     async getProductsByText(text: string): Promise<Product[]> {
         return this.productRepository.find({
             where: [{ title: Like(`%${text}%`) }, { brand: Like(`%${text}%`) }],
-            relations: ["category", "values", "values.attribute", "images", "category"]
+            relations: ["values", "values.attribute", "images", "category"]
         });
     }
 

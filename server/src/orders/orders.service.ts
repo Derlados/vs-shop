@@ -6,7 +6,7 @@ import { Product } from 'src/products/models/product.model';
 import { Between, FindConditions, In, LessThanOrEqual, Like, MoreThanOrEqual, Raw, Repository } from 'typeorm';
 import { ChangeStatusDto } from './dto/change-status-order.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { GetOrdersQuery } from './dto/get-orders-query.dto';
+import { GetOrdersQuery } from './query/get-orders.query';
 import { OrderProductDto } from './dto/order-product.dto';
 import { OrderProduct } from './models/order-products.model';
 import { Order } from './models/order.model';

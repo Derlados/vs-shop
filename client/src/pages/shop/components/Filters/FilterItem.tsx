@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect, useRef } from 'react'
-import { ICheckAttribute, ICheckValue } from './Filters';
+import { ICheckAttribute, ICheckValue } from './ProductFilters/ProductFilters';
 
 interface FilterItemProps {
     attribute: ICheckAttribute;

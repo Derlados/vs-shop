@@ -7,6 +7,7 @@ import { RolesGuard } from 'src/roles/roles.guard';
 import { ReqCreateProductDto } from './dto/req-create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
 import { ProductsService } from './products.service';
+import { GetProductsQuery } from './query/get-products.query';
 
 @Controller('products')
 export class ProductsController {
@@ -24,10 +25,10 @@ export class ProductsController {
         return this.productService.getProductsByCategory(categoryId);
     }
 
-    @Get('text=:text')
+    @Get('search')
     @UseInterceptors(ClassSerializerInterceptor)
-    getProductByText(@Param('text') text: string) {
-        return this.productService.getProductsByText(text);
+    getProductByText(@Query() query: GetProductsQuery) {
+        return this.productService.getProductsByText(query.text);
     }
 
     @Get('bestsellers')

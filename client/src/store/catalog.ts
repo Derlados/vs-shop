@@ -58,7 +58,7 @@ class CatalogStore {
 
     get priceRange(): IRange {
         const range: IRange = {
-            min: Number.MAX_VALUE,
+            min: 0,
             max: 0
         }
 
@@ -80,10 +80,7 @@ class CatalogStore {
         return Array.from(brands);
     }
 
-    async init(categoryRoute: string) {
-        if (categoryRoute == this.category.routeName) {
-            return;
-        }
+    async fetchByCategory(categoryRoute: string) {
         this.clear();
 
         this.category = await categoriesService.getCategoryByRouteName(categoryRoute);
@@ -93,6 +90,7 @@ class CatalogStore {
         this.products = await productsService.getProductsByCategory(this.category.id);
 
         this.selectedPriceRange = this.priceRange;
+
         const filterAttrs = await categoriesService.getFilters(this.category.id);
         this.filters = {
             priceRange: this.priceRange,
@@ -102,6 +100,12 @@ class CatalogStore {
         for (const attribute of this.filters.attributes) {
             this.selectedFilters.set(attribute.attribute.name, []);
         }
+    }
+
+    async fetchProductsByText(searchText: string) {
+        this.clear();
+        this.products = await productsService.getProductByText(searchText);
+        this.selectedPriceRange = this.priceRange;
     }
 
     public getProductById(id: number): IProduct | undefined {
@@ -114,6 +118,7 @@ class CatalogStore {
 
     private clear() {
         this.products = [];
+        this.searchString = '';
         this.selectedFilters = new Map();
     }
 
@@ -130,10 +135,10 @@ class CatalogStore {
             filteredProducts = products.filter(p => this.selectedBrands.includes(p.brand));
         }
 
-
         // По ключевому слову
+        const searchString = this.searchString.replace(/\s+/, ' ').toLowerCase();
         if (this.searchString) {
-            filteredProducts = filteredProducts.filter(p => p.title.toLowerCase().includes(this.searchString))
+            filteredProducts = filteredProducts.filter(p => p.title.toLowerCase().includes(searchString))
         }
 
         // По фильтрам
@@ -175,7 +180,7 @@ class CatalogStore {
     }
 
     public setSearchString(searchString: string) {
-        this.searchString = searchString.replace(/\s+/, ' ').toLowerCase();
+        this.searchString = searchString;
     }
 
     public selectPriceRange(min: number, max: number) {

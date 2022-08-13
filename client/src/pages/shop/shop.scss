@@ -1,4 +1,5 @@
 @import '../../styles/constants/resolutions.scss';
+@import '../../styles/constants/colors.scss';
 
 .shop {
     width: 100%;
@@ -10,11 +11,29 @@
     &__loader {}
 
     &__side-bar {
-        max-width: 300px;
+        min-width: 300px;
         padding-right: 30px;
 
         @media (max-width: $tablet-horizontal) {
             padding-right: 0px;
         }
+    }
+
+    &__nothing-found {}
+
+    &__nothing-found-text {
+        font-size: 28px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    &__nothing-found-icon {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 40px;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-image: url('../../assets/images/not-found.svg');
+        background-color: $primary-dark;
     }
 }

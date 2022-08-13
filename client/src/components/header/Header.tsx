@@ -9,6 +9,8 @@ import { SpecSymbols } from '../../values/specSymbols';
 import CartQuickView from './CartQuickView/CartQuickView';
 import BurgerMenu from './BurgerMenu/BurgerMenu';
 import QuickSearch from './QuickSearch/QuickSearch';
+import catalog from '../../store/catalog';
+import { useQuery } from '../../lib/hooks/useQuery';
 
 interface LocalStore {
     isCartOpen: boolean;
@@ -23,10 +25,11 @@ interface LocalStore {
 const Header = observer(() => {
     const navigate = useNavigate();
     const location = useLocation();
+    const searchText = (useQuery()).get("text");
 
     const localStore = useLocalObservable<LocalStore>(() => ({
         isCartOpen: false,
-        searchString: '',
+        searchString: searchText ?? '',
         selectedRoute: '',
         isFocused: false,
         isFixed: false,
