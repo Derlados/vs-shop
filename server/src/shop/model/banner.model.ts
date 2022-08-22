@@ -1,5 +1,5 @@
 import { Exclude } from "class-transformer";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ShopInfo } from "./shop-info.model";
 
 @Entity("banner")
@@ -26,4 +26,9 @@ export class Banner {
     @ManyToOne(() => ShopInfo, si => si.banners)
     @JoinColumn({ name: 'shop_info_id' })
     shopInfo: ShopInfo;
+
+    @AfterLoad()
+    getUrl() {
+        this.img = `${process.env.STATIC_API}/${this.img}`
+    }
 }

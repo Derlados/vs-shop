@@ -1,4 +1,5 @@
 import { IImage } from "./IImage";
+import { IProductAttribute } from "./IProductAttribyte";
 
 export interface IProduct {
     id: number;
@@ -16,7 +17,7 @@ export interface IProduct {
     categoryId: number;
     userId: number;
     discountPercent: number;
-    attributes: Map<string, string>;
+    attributes: IProductAttribute[];
     images: IImage[];
 }
 

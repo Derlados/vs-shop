@@ -6,8 +6,10 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
 import { Attribute } from './models/attribute.model';
 import { Image } from './models/image.model';
-import { Product } from './models/product.model';
+import { ProductAttribute, Product } from './models/product.model';
 import { Value } from './models/value.model';
+import cyrillicToTranslit from 'cyrillic-to-translit-js';
+import { CreateAttributeDto } from './dto/create-attribute.dto';
 
 // ЗАМЕТКА
 // const products = await this.productRepository.createQueryBuilder("product")
@@ -17,7 +19,6 @@ import { Value } from './models/value.model';
 //     .where("attributes.attribute IN ('attr2', 'attr1')")
 //     .getMany();
 
-
 @Injectable()
 export class ProductsService {
 
@@ -25,8 +26,7 @@ export class ProductsService {
         @InjectRepository(Attribute) private attributeRepository: Repository<Attribute>,
         @InjectRepository(Value) private valuesRepository: Repository<Value>,
         @InjectRepository(Image) private imageRepository: Repository<Image>,
-        private fileService: FilesService) {
-
+        private fileService: FilesService) {    
     }
 
     async getProducts(): Promise<Product[]> {
@@ -88,12 +88,11 @@ export class ProductsService {
     //     return products;
     // }
 
-    async createProduct(userId: number, dto: CreateProductDto, attributes: Map<string, string>): Promise<Product> {
+    async createProduct(userId: number, dto: CreateProductDto): Promise<Product> {
         const result = await this.productRepository.insert({ ...dto, userId: userId });
         const insertId = result.raw.insertId;
 
-
-        await this.addAttributes(insertId, attributes);
+        await this.addAttributes(insertId, dto.attributes);
         return this.getProductById(insertId);
     }
 
@@ -104,14 +103,14 @@ export class ProductsService {
      * @param attributes - аттрибути
      * @returns {Promise<Product>} обновленный объект 
      */
-    async updateProduct(id: number, userId: number, dto: CreateProductDto, attributes: Map<string, string>): Promise<Product> {
+    async updateProduct(id: number, userId: number, dto: CreateProductDto): Promise<Product> {
         const result = await this.productRepository.update({ id: id, userId: userId }, dto);
         if (result.affected == 0) {
             throw new NotFoundException("Товар не найден");
         }
 
         await this.valuesRepository.delete({ productId: id });
-        await this.addAttributes(id, attributes);
+        await this.addAttributes(id, dto.attributes);
 
         return this.getProductById(id);
     }
@@ -171,25 +170,26 @@ export class ProductsService {
     }
 
     //TODO можно оптимизировать
-    private async addAttributes(productId: number, attributes: Map<string, string>) {
+    private async addAttributes(productId: number, attributes: CreateAttributeDto[]) {
+        console.log(attributes[0]);
         const valuesToInsert: Map<number, string> = new Map();
 
         // Добавление новых атрибутов
-        for (const [attribute, value] of attributes.entries()) {
-            const selectedAttr = await this.attributeRepository.findOne({ name: attribute });
+        for (const attribute of attributes) {
+            const selectedAttr = await this.attributeRepository.findOne({ name: attribute.name });
 
             if (!selectedAttr) {
-                const result = await this.attributeRepository.insert({ name: attribute });
-                valuesToInsert.set(result.raw.insertId, value);
+                const result = await this.attributeRepository.insert({ name: attribute.name });
+                valuesToInsert.set(result.raw.insertId, attribute.value.name);
             } else {
-                valuesToInsert.set(selectedAttr.id, value);
+                valuesToInsert.set(selectedAttr.id,  attribute.value.name);
             }
         }
 
         // Добавление значений аттрибутов
         const values: any[] = [];
         for (const [attributeId, value] of valuesToInsert.entries()) {
-            values.push({ productId: productId, attributeId: attributeId, value: value });
+            values.push({ productId: productId, attributeId: attributeId, name: value });
         }
 
         await this.valuesRepository.insert(values);

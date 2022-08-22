@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Navigate, NavLink } from 'react-router-dom';
-import Input from '../../lib/Input/Input';
-import Loader from '../../lib/Loader/Loader';
-import Modal from '../../lib/Modal/Modal';
-import Selector from '../../lib/Selector/Selector';
+import Loader from '../../lib/components/Loader/Loader';
+import Modal from '../../lib/components/Modal/Modal';
+import Selector from '../../lib/components/Selector/Selector';
 import cart from '../../store/cart';
 import orders from '../../store/order';
 import './checkout.scss';
@@ -13,6 +12,7 @@ import { IOrder, OrderStatus } from '../../types/IOrder';
 import { ISettlement } from '../../types/ISettlement';
 import { REGEX } from '../../values/regex';
 import settlement from '../../store/settlement';
+import Input from '../../lib/components/Input/Input';
 
 interface LocalStore {
     firstName: string;

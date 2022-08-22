@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import ButtonUp from './components/ButtonUp/ButtonUp'
 import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
-import ScrollToTop from './lib/ScrollToTop/ScrollToTop'
+import ScrollToTop from './lib/components/ScrollToTop/ScrollToTop'
 
 const Main = () => {
     return (

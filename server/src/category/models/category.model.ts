@@ -30,6 +30,13 @@ export class Category {
 
     productsCount: number;
 
+
+    
+    @AfterLoad()
+    getImg() {
+        this.img = `${process.env.STATIC_API}/${this.img}`
+    }
+
     @AfterLoad()
     getKeyAttributes() {
         if (this.filters) {

@@ -1,5 +1,5 @@
 import { type } from "os";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Banner } from "./banner.model";
 import { Contact } from "./contact.model";
 
@@ -8,14 +8,19 @@ export class ShopInfo {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'text', default: '' })
+    @Column({ type: 'text' })
     smallBanner: string;
 
-    @Column({ type: 'simple-json', default: '[]' })
+    @Column({ type: 'simple-json' })
     contacts: Contact[];
 
     @OneToMany(() => Banner, b => b.shopInfo)
     banners: Banner[];
+
+    @AfterLoad()
+    getSmallBanner() {
+        this.smallBanner = `${process.env.STATIC_API}/${this.smallBanner}`
+    }
 }
 
 

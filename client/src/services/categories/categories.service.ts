@@ -17,7 +17,7 @@ class CategoryService extends Service {
     }
 
     async getFilters(categoryId: number): Promise<IFilterAttribute[]> {
-        const { data } = await axiosInstance.get<IFilterAttribute[]>(`${this.API_URL}/${categoryId}/filters`, { headers: headersJSON() });
+        const { data } = await axiosInstance.get<IFilterAttribute[]>(`${this.API_URL}/${categoryId}/filters`, { headers: headersJSON() }); 
         return data;
     }
 
@@ -27,7 +27,6 @@ class CategoryService extends Service {
     }
 
     async editCategory(id: number, body: CreateCategoryDto): Promise<ICategory> {
-        console.log(body);
         const { data } = await axiosInstance.put<ICategory>(`${this.API_URL}/${id}`, body, { headers: headersJSON() });
         return data;
     }

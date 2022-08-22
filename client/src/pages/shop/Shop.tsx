@@ -1,22 +1,23 @@
-import React, { Suspense } from 'react'
+
 import Filters from './components/Filters/Filters'
-import Pagination from '../../lib/Pagination/Pagination'
 import ProductCatalog from './components/ProductCatalog/ProductCatalog'
 import './shop.scss';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Navigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
 import shop from '../../store/shop';
 import catalog from '../../store/catalog';
-import Loader from '../../lib/Loader/Loader';
+import Loader from '../../lib/components/Loader/Loader';
 import PopularProducts from './components/PopularProducts/PopularProducts';
 import { IProduct } from '../../types/IProduct';
 import { useQuery } from '../../lib/hooks/useQuery';
 import FilterCategories, { IFilterCategory } from './components/Filters/FilterCategories/FilterCategories';
 import ProductFilters from './components/Filters/ProductFilters/ProductFilters';
+import { useEffect } from 'react';
+import { FilterUrlBuilder } from '../../lib/helpers/FiltersUrlBuilder';
 
 interface LocalStore {
+    filterUrlBuilder: FilterUrlBuilder;
     isLoaded: boolean;
     isFilterOpen: boolean;
     popularProducts: IProduct[];
@@ -24,15 +25,29 @@ interface LocalStore {
 }
 
 const Shop = observer(() => {
-    const { catalog: categoryRoute } = useParams();
+    const { catalog: categoryRoute, filters } = useParams();
     const searchText = (useQuery()).get("text");
 
     const localStore = useLocalObservable<LocalStore>(() => ({
+        filterUrlBuilder: new FilterUrlBuilder(),
         isLoaded: true,
         isFilterOpen: false,
         popularProducts: [],
         filterCategories: []
     }))
+
+    useEffect (() => {
+        if (!categoryRoute) {
+            return;
+        }
+
+        const filtersUrl = localStore.filterUrlBuilder.parse(filters ?? '').build();
+        console.log(filtersUrl);
+
+        if (filtersUrl !== filters) {
+            window.history.replaceState(null, "New Page Title", `${catalog.category.routeName}/${filtersUrl}`);
+        } 
+    }, [categoryRoute, filters])
 
     useEffect(() => {
         async function fetchProducts() {
@@ -102,9 +117,9 @@ const Shop = observer(() => {
         )
     }
 
-    if (!localStore.isLoaded && categoryRoute && catalog.filteredProducts.length === 0) {
-        return <Navigate to={'/404_not_found'} />
-    }
+    // if (!localStore.isLoaded && categoryRoute && catalog.filteredProducts.length === 0) {
+    //     return <Navigate to={'/404_not_found'} />
+    // }
 
     return (
         <div className='shop clt' >

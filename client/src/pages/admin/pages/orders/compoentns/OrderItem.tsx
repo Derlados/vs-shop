@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { FC } from 'react';
-import Checkbox from '../../../../../lib/Checkbox/Checkbox';
+import Checkbox from '../../../../../lib/components/Checkbox/Checkbox';
 import { IOrder, OrderStatus } from '../../../../../types/IOrder';
 import orders from '../../../../../store/order'
 import { observer, useLocalObservable } from 'mobx-react-lite';

@@ -2,7 +2,7 @@
 import { validate } from 'class-validator';
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import SmallLoader from '../../lib/SmallLoader/SmallLoader';
+import SmallLoader from '../../lib/components/SmallLoader/SmallLoader';
 import shop from '../../store/shop';
 import { IMail } from '../../types/IMail';
 import { REGEX } from '../../values/regex';

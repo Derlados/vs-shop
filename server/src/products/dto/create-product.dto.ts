@@ -1,4 +1,7 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { ProductAttribute } from "../models/product.model";
+import { CreateAttributeDto } from "./create-attribute.dto";
 
 export class CreateProductDto {
     @IsString()
@@ -27,4 +30,9 @@ export class CreateProductDto {
 
     @IsNumber()
     categoryId: number;
+
+    @IsArray()
+    @ValidateNested({each: true})
+    @Type(() => CreateAttributeDto)
+    attributes: CreateAttributeDto[];
 }

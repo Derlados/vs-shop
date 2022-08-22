@@ -5,7 +5,7 @@ import { ICheckAttribute, ICheckValue } from './ProductFilters/ProductFilters';
 
 interface FilterItemProps {
     attribute: ICheckAttribute;
-    onCheck: (attribute: string, checkValue: ICheckValue) => void;
+    onCheck: (attributeId: number, checkValue: ICheckValue) => void;
 }
 
 interface LocalStore {
@@ -36,12 +36,12 @@ const FilterItem: FC<FilterItemProps> = observer(({ attribute, onCheck }) => {
                 height: localStore.currentHeight
             }}>
                 {attribute.allValues.map(attrValue => (
-                    <li key={`${attribute.id}-${attrValue.value}`} className='filters__attr-item rlc'>
-                        <label className='filters__attr-value rcc'>{attrValue.value}
+                    <li key={`${attribute.id}-${attrValue.name}`} className='filters__attr-item rlc'>
+                        <label className='filters__attr-value rcc'>{attrValue.name}
                             <input className='filters__checkbox'
                                 type="checkbox"
                                 checked={attrValue.checked}
-                                onChange={() => onCheck(attribute.name, attrValue)}
+                                onChange={() => onCheck(attribute.id, attrValue)}
                             />
                             <span className='filters__checkmark'></span>
                         </label>

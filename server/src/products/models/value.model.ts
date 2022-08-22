@@ -1,15 +1,20 @@
 import { Exclude } from "class-transformer";
-import { Column, Entity, JoinColumn, JoinTable, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, Generated, JoinColumn, JoinTable, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { Attribute } from "./attribute.model";
 import { Product } from "./product.model";
 
 @Entity()
+@Unique(["productId", "attributeId"])
 export class Value {
-    @PrimaryColumn({ type: "int", name: "product_id", nullable: false })
+    @PrimaryGeneratedColumn("increment")
+    id: number;
+
+    @Column({ type: "int", name: "product_id", nullable: false })
     @Exclude()
     productId: number;
 
-    @PrimaryColumn({ type: "int", name: "attribute_id", nullable: false })
+    @Column({ type: "int", name: "attribute_id", nullable: false })
+    @Exclude()
     attributeId: number;
 
     @ManyToOne(() => Product, product => product.values, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
@@ -18,8 +23,9 @@ export class Value {
 
     @ManyToOne(() => Attribute, attr => attr.values, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: "attribute_id" })
+    @Exclude()
     attribute: Attribute;
 
     @Column({ type: "text", nullable: false })
-    value: string;
+    name: string;
 }

@@ -65,17 +65,17 @@ export class CategoryService {
     }
 
     private async addFilters(categoryId: number, newKeyAttributes: KeyAttributeDto[]) {
-        const attributesToInsert = newKeyAttributes.map(attr => { return { name: attr.name } });
+        const attributesToInsert = newKeyAttributes.map(attr => { return {  name: attr.name} });
         await this.attributeRepository.upsert(attributesToInsert, { conflictPaths: ["name"], skipUpdateIfNoValuesChanged: true });
         const attributes = await this.attributeRepository.find({ name: In(newKeyAttributes.map(attr => attr.name)) })
 
         const filterValues = [];
         for (const newAttr of newKeyAttributes) {
             filterValues.push({
-                attributeId: attributes.find(attr => attr.name == newAttr.name).id,
                 categoryId: categoryId,
+                attributeId: attributes.find(attr => attr.name == newAttr.name).id,
                 isRange: newAttr.isRange,
-                step: newAttr.step
+                step: newAttr.step ?? 1
             })
         }
 
@@ -84,6 +84,7 @@ export class CategoryService {
             .values(filterValues)
             .orIgnore()
             .execute()
+
 
         return this.getCategoryFilters(categoryId);
     }

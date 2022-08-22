@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef } from 'react'
-import FileUploader from '../../../../lib/FileUploader/FileUploader'
+import FileUploader from '../../../../lib/components/FileUploader/FileUploader'
 import BannerList from '../../../home/components/BannerList'
 import '../../../../styles/admin/admin-general.scss';
 import './home-editor.scss';
@@ -8,12 +8,12 @@ import UploadArea from '../../components/UploadArea';
 import { IBanner } from '../../../../types/ILargeBanner';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { IContact } from '../../../../types/IContact';
-import Selector from '../../../../lib/Selector/Selector';
+import Selector from '../../../../lib/components/Selector/Selector';
 import shop from '../../../../store/shop';
 import { ICategory } from '../../../../types/ICategory';
 import catalog from '../../../../store/catalog';
-import Checkbox from '../../../../lib/Checkbox/Checkbox';
-import Loader from '../../../../lib/Loader/Loader';
+import Checkbox from '../../../../lib/components/Checkbox/Checkbox';
+import Loader from '../../../../lib/components/Loader/Loader';
 import Banner from '../../../home/components/Banner';
 
 interface LocalStore {

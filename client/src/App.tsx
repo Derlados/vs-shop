@@ -6,7 +6,7 @@ import Main from './Main';
 import user from './store/user';
 import { UserRoles } from './types/IUser';
 import Admin from './pages/admin/Admin';
-import ProtectedRoute from './lib/ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from './lib/components/ProtectedRoute/ProtectedRoute';
 import DashBoard from './pages/admin/pages/dashboard/DashBoard';
 import CategoryEditor from './pages/admin/pages/category-editor/CategoryEditor';
 import ProductEditor from './pages/admin/pages/product-editor/ProductEditor';
@@ -15,12 +15,12 @@ import Home from './pages/home/Home';
 import Checkout from './pages/checkout/Checkout';
 import Product from './pages/product/Product';
 import Shop from './pages/shop/Shop';
-import Page404 from './pages/page404/Page404';
 import HomeEditor from './pages/admin/pages/home-editor/HomeEditor';
 import { useEffect } from 'react';
 import AOS from 'aos';
 import SwiperCore, { Autoplay } from 'swiper';
 import Contacts from './pages/contacts/Contacts';
+import Page404 from './pages/Page404/Page404';
 
 const App = () => {
 
@@ -52,7 +52,8 @@ const App = () => {
                     <Route path='/search' element={<Shop />} />
                     <Route path='/:catalog/search' element={<Shop />} />
                     <Route path='/:catalog' element={<Shop />} />
-                    <Route path='/:catalog/:id' element={<Product />} />
+                    <Route path='/:catalog/:filters' element={<Shop />}/>
+                    <Route path='/:name/:id' element={<Product />} />
                     <Route path='/' element={<Navigate to='/home' />} />
                     <Route path='*' element={<Navigate to='/home' />} />
                 </Route>

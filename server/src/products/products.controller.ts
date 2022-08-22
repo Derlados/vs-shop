@@ -4,7 +4,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
-import { ReqCreateProductDto } from './dto/req-create-product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
 import { ProductsService } from './products.service';
 import { GetProductsQuery } from './query/get-products.query';
@@ -67,16 +67,16 @@ export class ProductsController {
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
-    addProduct(@Req() req, @Body() dto: ReqCreateProductDto) {
-        return this.productService.createProduct(req.user.userId, dto.product, dto.attributes);
+    addProduct(@Req() req, @Body() dto: CreateProductDto) {
+        return this.productService.createProduct(req.user.userId, dto);
     }
 
     @Put(':id([0-9]+)')
     @Roles(RoleValues.SELLER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
-    updateProduct(@Req() req, @Param('id') id: number, @Body() dto: ReqCreateProductDto) {
-        return this.productService.updateProduct(id, req.user.userId, dto.product, dto.attributes);
+    updateProduct(@Req() req, @Param('id') id: number, @Body() dto: CreateProductDto) {
+        return this.productService.updateProduct(id, req.user.userId, dto);
     }
 
     @Put(':id/images')

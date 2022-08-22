@@ -38,7 +38,7 @@ export class Order {
     @OneToMany(() => OrderProduct, op => op.order)
     orderProducts: Product[];
 
-    @ManyToOne(() => Payment, payment => payment.orders)
+    @ManyToOne(() => Payment, payment => payment.orders, { onUpdate: "CASCADE", onDelete: "CASCADE" })
     @JoinColumn({ name: "payment_id" })
     payment: Payment;
 }

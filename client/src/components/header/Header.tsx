@@ -6,11 +6,11 @@ import cart from '../../store/cart';
 import shop from '../../store/shop';
 import './header.scss';
 import { SpecSymbols } from '../../values/specSymbols';
-import CartQuickView from './CartQuickView/CartQuickView';
-import BurgerMenu from './BurgerMenu/BurgerMenu';
-import QuickSearch from './QuickSearch/QuickSearch';
 import catalog from '../../store/catalog';
 import { useQuery } from '../../lib/hooks/useQuery';
+import QuickSearch from './QuickSearch/QuickSearch';
+import BurgerMenu from './BurgerMenu/BurgerMenu';
+import CartQuickView from './CartQuickView/CartQuickView';
 
 interface LocalStore {
     isCartOpen: boolean;

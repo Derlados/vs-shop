@@ -1,5 +1,3 @@
-import React from 'react'
-import FileUploader from '../../../lib/FileUploader/FileUploader'
 import '../../../styles/admin/admin-general.scss';
 
 const UploadArea = () => {

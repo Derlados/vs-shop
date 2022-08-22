@@ -4,7 +4,7 @@ import { AvailableStatus } from "src/constants/AvailabilityStatus";
 import { OrderProduct } from "src/orders/models/order-products.model";
 import { SessionCartItem } from "src/session-cart/model/session-cart-item.model";
 import { User } from "src/users/models/user.model";
-import { AfterLoad, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Image } from "./image.model";
 import { Value } from "./value.model";
 
@@ -53,7 +53,7 @@ export class Product {
 
     discountPercent: number;
 
-    attributes: Object;
+    attributes: ProductAttribute[];
 
     @ManyToOne(() => Category, (category) => category.products, { onDelete: "CASCADE", onUpdate: "CASCADE" })
     @JoinColumn({ name: "category_id" })
@@ -104,17 +104,14 @@ export class Product {
 
     @AfterLoad()
     getAttributes() {
+        this.attributes = [];
         if (!this.values) {
-            this.attributes = [];
             return;
         }
 
-        const mapAttr = new Map<string, string>();
         for (const value of this.values) {
-            mapAttr.set(value.attribute.name, value.value);
+            this.attributes.push({...value.attribute, value: value})
         }
-
-        this.attributes = Object.fromEntries(mapAttr);
     }
 
     @AfterLoad()
@@ -122,4 +119,10 @@ export class Product {
         this.price = Number(this.price);
         this.oldPrice = Number(this.oldPrice);
     }
+}
+
+export class ProductAttribute {
+    id: number;
+    name: string;
+    value: Value;
 }

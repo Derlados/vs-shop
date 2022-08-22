@@ -1,7 +1,6 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import CartButton from '../../Cart/CartButton/CartButton';
+import { Swiper, SwiperSlide } from 'swiper/react'
 import cart from '../../../store/cart';
 import { ProductCardProps } from '../ProductCard';
 import 'swiper/css';
@@ -9,6 +8,7 @@ import { IImage } from '../../../types/IImage';
 import CartCountEditor from '../../Cart/CartCountEditor/CartCountEditor';
 import classNames from 'classnames';
 import { AvailableStatus } from '../../../types/IProduct';
+import CartButton from '../../Cart/CartButton/CartButton';
 
 interface LocalStore {
     swiper: any;
@@ -118,10 +118,10 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({ product, addToCart
                 {isExtended &&
                     <div className='description__details rlc'>
                         <ul className='description__list'>
-                            {[...product.attributes].map(([attribute, value]) => (
-                                <li key={attribute} className='description__list-item rlt'>
-                                    <div className='description__list-item_attr'>{attribute}</div>
-                                    <div className='description__list-item_val'>{value}</div>
+                            {product.attributes.map(attribute => (
+                                <li key={attribute.name} className='description__list-item rlt'>
+                                    <div className='description__list-item_attr'>{attribute.name}</div>
+                                    <div className='description__list-item_val'>{attribute.value.name}</div>
                                 </li>
                             ))}
                         </ul>

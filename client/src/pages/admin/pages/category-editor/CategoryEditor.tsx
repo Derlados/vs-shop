@@ -7,9 +7,9 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ICategory } from '../../../../types/ICategory';
 import { nanoid } from 'nanoid';
 import { CreateCategoryDto } from '../../../../services/categories/dto/create-category.dto';
-import FileUploader from '../../../../lib/FileUploader/FileUploader';
 import classNames from 'classnames';
 import CategoryCard from '../../../../components/Category/CategoryList/CategoryCard';
+import FileUploader from '../../../../lib/components/FileUploader/FileUploader';
 
 
 interface IKeyAttribute {
@@ -88,7 +88,7 @@ const CategoryEditor = observer(() => {
             shop.editCategory(localStore.id, categoryDto, localStore.img);
         }
 
-        // onClear();
+        onClear();
     }
 
     const onClear = () => {
@@ -103,7 +103,7 @@ const CategoryEditor = observer(() => {
         localStore.name = category.name;
         localStore.routeName = category.routeName;
         localStore.imgUrl = category.img;
-        localStore.attributes = category.keyAttributes.map(attr => { return { id: nanoid(), value: attr.name } });
+        localStore.attributes = category.keyAttributes.map(attr => { return { id: attr.id.toString(), value: attr.name } });
         localStore.attributes.push({ id: nanoid(), value: '' })
     }
 

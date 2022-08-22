@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Navigate } from 'react-router-dom';
-import Auth from '../../pages/auth/Auth';
-import user from '../../store/user';
-import { UserRoles } from '../../types/IUser';
+import user from '../../../store/user';
+import { UserRoles } from '../../../types/IUser';
+
 
 interface ProtectedRouteProps {
     isAuth: boolean;

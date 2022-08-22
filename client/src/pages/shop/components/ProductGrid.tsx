@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react';
 import { IProduct } from '../../../types/IProduct';
 import ProductCard from '../../../components/ProductCard/ProductCard';
 import { ViewMode } from './ProductCatalog/ProductCatalog';
-import Pagination from '../../../lib/Pagination/Pagination';
+import Pagination from '../../../lib/components/Pagination/Pagination';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
 interface ProductGridProps {

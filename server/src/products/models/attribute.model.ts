@@ -1,6 +1,6 @@
 import { Exclude } from "class-transformer";
 import { Filter } from "src/category/models/filter.model";
-import { AfterLoad, Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { AfterLoad, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Value } from "./value.model";
 
 @Entity()
@@ -19,12 +19,20 @@ export class Attribute {
     @Exclude()
     filters: Filter[];
 
-    allValues: string[] = [];
+    allValues: Value[];
 
     @AfterLoad()
-    getAllValues() {
+    getAllValues() {        
         if (this.values) {
-            this.allValues = [...new Set(this.values.map(v => v.value))];
+            const uniqueValues =  new Map<string, Value>();
+            this.values.sort((a, b) => a.id - b.id)
+
+            for (const value of this.values) {
+                if (!uniqueValues.has(value.name)) {
+                    uniqueValues.set(value.name, value);
+                }
+            }
+            this.allValues = [...uniqueValues.values()];
         }
     }
 }

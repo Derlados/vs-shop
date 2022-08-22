@@ -1,8 +1,7 @@
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
-import MultiRangeSlider from '../../../../../lib/MultiRangeSlider/MultiRangeSlider'
+import MultiRangeSlider from '../../../../../lib/components/MultiRangeSlider/MultiRangeSlider'
 import catalog from '../../../../../store/catalog'
-import { ICkeckValue } from '../../../../../types/types'
 import FilterItem from '../FilterItem'
 
 export interface ICheckAttribute {
@@ -12,7 +11,8 @@ export interface ICheckAttribute {
 }
 
 export interface ICheckValue {
-    value: string;
+    id: number;
+    name: string;
     checked: boolean;
 }
 
@@ -36,32 +36,33 @@ const ProductFilters = observer(() => {
         for (const attr of catalog.filters.attributes) {
             localStore.attributes.push({
                 ...attr.attribute,
-                allValues: attr.attribute.allValues.map(v => { return { value: v, checked: false } })
+                allValues: (Array.from(attr.attribute.allValues))
+                    .map(v => { return { id: v.id, name: v.name, checked: false } })
             })
         }
 
-        localStore.brand.allValues = catalog.brands.map((b) => { return { value: b, checked: false } })
+        localStore.brand.allValues = catalog.brands.map((b) => { return { id: -1, name: b, checked: false } })
     }, [catalog.filters.attributes, catalog.brands]);
 
     const onAcceptRange = (min: number, max: number) => {
         catalog.selectPriceRange(min, max);
     }
 
-    const onCheckBrands = (ignore: string, checkValue: ICkeckValue) => {
+    const onCheckBrands = (ignore: number, checkValue: ICheckValue) => {
         checkValue.checked = !checkValue.checked;
         if (checkValue.checked) {
-            catalog.selectBrand(checkValue.value);
+            catalog.selectBrand(checkValue.name);
         } else {
-            catalog.deselectBrand(checkValue.value);
+            catalog.deselectBrand(checkValue.name);
         }
     }
 
-    const onCheck = (attribute: string, checkValue: ICkeckValue) => {
+    const onCheck = (attributeId: number, checkValue: ICheckValue) => {
         checkValue.checked = !checkValue.checked;
         if (checkValue.checked) {
-            catalog.setFilter(attribute, checkValue.value)
+            catalog.setFilter(attributeId, checkValue.name)
         } else {
-            catalog.deselectFilter(attribute, checkValue.value)
+            // catalog.deselectFilter(attributeId, checkValue.name)
         }
     }
 

@@ -7,7 +7,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import { IProduct } from '../../types/IProduct';
-import Loader from '../../lib/Loader/Loader';
+import Loader from '../../lib/components/Loader/Loader';
 
 type ProductParams = {
     catalog: string;

@@ -3,8 +3,8 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { customAlphabet, nanoid } from 'nanoid';
 import { ChangeEvent, useEffect, useRef } from 'react';
 import CategoryList from '../../../../components/Category/CategoryList/CategoryList';
-import Checkbox from '../../../../lib/Checkbox/Checkbox';
-import FileUploader from '../../../../lib/FileUploader/FileUploader';
+import Checkbox from '../../../../lib/components/Checkbox/Checkbox';
+import FileUploader from '../../../../lib/components/FileUploader/FileUploader';
 import catalog from '../../../../store/catalog';
 import shop from '../../../../store/shop';
 import '../../../../styles/admin/admin-general.scss';
@@ -16,6 +16,7 @@ import { REGEX } from '../../../../values/regex';
 import ProductCard from '../../../../components/ProductCard/ProductCard';
 import { ViewMode } from '../../../shop/components/ProductCatalog/ProductCatalog';
 import ProductGrid from '../../../shop/components/ProductGrid';
+import { IProductAttribute } from '../../../../types/IProductAttribyte';
 
 const MAX_PRODUCTS_BY_PAGE = 8;
 
@@ -52,17 +53,17 @@ const ProductEditor = observer(() => {
             maxByOrder: 0,
             count: 0,
             discountPercent: 0,
-            attributes: new Map<string, string>(),
+            attributes: [],
             images: []
         }
     }))
     localStore.product.discountPercent = Math.floor((1 - localStore.product.price / localStore.product.oldPrice) * 100);
 
     const getProductTemplate = (): IProduct => {
-        const attributes = new Map<string, string>();
+        const attributes: IProductAttribute[] = [];
         if (localStore && localStore.selectedCategory) {
             for (const attr of localStore.selectedCategory.keyAttributes) {
-                attributes.set(attr.name, '');
+                attributes.push({id: attr.id, name: attr.name, value: {id: -1, name: ''}})
             }
         }
 
@@ -158,6 +159,7 @@ const ProductEditor = observer(() => {
         if (!validate()) {
             return;
         }
+        console.log(localStore.product);
 
         // Проверка, если главным изображением стало одно из существующих - берет его id, иначе никакое id не передается
         const mainImage = getMainImg();
@@ -174,7 +176,7 @@ const ProductEditor = observer(() => {
             catalog.editProduct(localStore.product.id, localStore.product, files, localStore.deletedImagesId, newMainImageId);
         }
 
-        onClear();
+        // onClear();
     }
 
     const onEdit = (product: IProduct) => {
@@ -202,6 +204,10 @@ const ProductEditor = observer(() => {
     }
 
     const validate = (): boolean => {
+        if (localStore.uploadedFiles.length == 0 && localStore.product.images.length == 0) {
+            return false;
+        }
+
         const { title, brand, description, price, oldPrice, attributes } = localStore.product;
         if (!title || !brand || !description || !price || !oldPrice) {
             return false;
@@ -294,10 +300,10 @@ const ProductEditor = observer(() => {
                     </div>
                     <div className='admin-general__subtitle'>Характеристики</div>
                     <ul className='product-editor__attributes clc'>
-                        {[...localStore.product.attributes].map(([key, value]) => (
-                            <li key={key} className='product-editor__chars-editor rlc'>
-                                <div className='admin-general__input-title'>{key}:</div>
-                                <input type="text" className='admin-general__input product-editor__attribute-value' placeholder='Значення' value={value} onChange={(v) => localStore.product.attributes.set(key, v.target.value)} />
+                        {localStore.product.attributes.map(attr => (
+                            <li key={attr.name} className='product-editor__chars-editor rlc'>
+                                <div className='admin-general__input-title'>{attr.name}:</div>
+                                <input type="text" className='admin-general__input product-editor__attribute-value' placeholder='Значення' value={attr.value.name} onChange={(v) => attr.value.name = v.target.value} />
                             </li>
                         ))}
 

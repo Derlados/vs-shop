@@ -3,7 +3,7 @@ import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import shop from '../../store/shop';
 import './home.scss';
 import BannerList from './components/BannerList';
-import Loader from '../../lib/Loader/Loader';
+import Loader from '../../lib/components/Loader/Loader';
 import "aos/dist/aos.css";
 import { IProduct } from '../../types/IProduct';
 import CategoryList from '../../components/Category/CategoryList/CategoryList';

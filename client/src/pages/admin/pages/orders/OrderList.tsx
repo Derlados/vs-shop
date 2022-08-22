@@ -5,8 +5,8 @@ import './orders.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { useEffect } from 'react';
-import Loader from '../../../../lib/Loader/Loader';
-import Checkbox from '../../../../lib/Checkbox/Checkbox';
+import Loader from '../../../../lib/components/Loader/Loader';
+import Checkbox from '../../../../lib/components/Checkbox/Checkbox';
 
 interface LocalStore {
     isInit: boolean;

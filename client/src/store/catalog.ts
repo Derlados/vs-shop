@@ -1,11 +1,9 @@
 import { makeAutoObservable } from "mobx";
 import categoriesService from "../services/categories/categories.service";
 import productsService from "../services/products/products.service";
-import shopService from "../services/shop/shop.service";
 import { ICategory } from "../types/ICategory";
 import { IFilters, IRange } from "../types/IFilters";
 import { IProduct } from "../types/IProduct";
-import shop from "./shop";
 
 export enum SortType {
     NOT_SELECTED,
@@ -24,7 +22,7 @@ class CatalogStore {
     public selectedPriceRange: IRange;
     public selectedBrands: string[];
     public searchString: string;
-    public selectedFilters: Map<string, string[]>;
+    public selectedFilters: Map<number, string[]>;
 
     constructor() {
         makeAutoObservable(this);
@@ -98,7 +96,7 @@ class CatalogStore {
         }
 
         for (const attribute of this.filters.attributes) {
-            this.selectedFilters.set(attribute.attribute.name, []);
+            this.selectedFilters.set(attribute.attribute.id, []);
         }
     }
 
@@ -142,9 +140,9 @@ class CatalogStore {
         }
 
         // По фильтрам
-        for (const [attribute, values] of this.selectedFilters) {
+        for (const [attributeId, values] of this.selectedFilters) {
             if (values.length !== 0) {
-                filteredProducts = filteredProducts.filter(p => values.includes(p.attributes.get(attribute) ?? ''))
+                filteredProducts = filteredProducts.filter(p => values.includes(p.attributes.find(a => a.id === attributeId)?.value.name ?? ''));
             }
         }
 
@@ -199,14 +197,9 @@ class CatalogStore {
         this.selectedSort = sortType;
     }
 
-    public setFilter(attribute: string, value: string) {
-        const values = this.selectedFilters.get(attribute);
-        values?.push(value);
-    }
-
-    public deselectFilter(attribute: string, value: string) {
-        const values = this.selectedFilters.get(attribute);
-        values?.splice(values?.findIndex(v => v === value), 1);
+    public setFilter(attributeId: number, ...values: string[]) {
+        const attrValues = this.selectedFilters.get(attributeId);
+        attrValues?.push(...values);
     }
 
     /////////////////////////////////// CRUD ОПЕРАЦИИ ДЛЯ ПРОДУКТОВ В КАТАЛОГЕ //////////////////////////////////

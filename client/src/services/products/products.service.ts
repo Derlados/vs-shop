@@ -7,17 +7,17 @@ class ProductService extends Service {
 
     async getAllProducts(): Promise<IProduct[]> {
         const { data } = await axiosInstance.get<IProduct[]>(this.API_URL, { headers: headersJSON() });
-        return this.parseProducts(data);
+        return data;
     }
 
     async getProductsByCategory(categoryId: number): Promise<IProduct[]> {
         const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/category=${categoryId}`, { headers: headersJSON() });
-        return this.parseProducts(data);
+        return data;
     }
 
     async getProductsBySeller(sellerId: number): Promise<IProduct[]> {
         const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/seller/${sellerId}`, { headers: headersJSON() });
-        return this.parseProducts(data);
+        return data;
     }
 
     async getBestsellers(): Promise<IProduct[]> {
@@ -46,12 +46,12 @@ class ProductService extends Service {
 
     async addProducts(product: IProduct): Promise<IProduct> {
         const { data } = await axiosInstance.post<IProduct>(`${this.API_URL}`, this.getProductDto(product), { headers: headersJSON() });
-        return this.parseProduct(data);
+        return data;
     }
 
     async editProduct(id: number, product: IProduct): Promise<IProduct> {
         const { data } = await axiosInstance.put<IProduct>(`${this.API_URL}/${id}`, this.getProductDto(product), { headers: headersJSON() });
-        return this.parseProduct(data);
+        return data;
     }
 
     async editProductImages(id: number, images: File[], deletedImagesId?: number[], newMainImageId?: number): Promise<IImage[]> {
@@ -89,22 +89,10 @@ class ProductService extends Service {
     }
 
     private getProductDto(p: IProduct) {
-        const { id, images, attributes, discountPercent, userId, availability, ...product } = p;
-        return {
-            product: product,
-            attributes: Object.fromEntries(attributes)
-        }
-    }
-
-    private parseProducts(products: IProduct[]) {
-        products.forEach(p => this.parseProduct(p))
-        return products;
-    }
-
-    private parseProduct(product: IProduct) {
-        product.attributes = new Map(Object.entries(product.attributes));
+        const { id, images, discountPercent, userId, availability, ...product } = p;
         return product;
     }
+
 }
 
 export default new ProductService('/products');
