@@ -4,7 +4,7 @@ import ProductCatalog from './components/ProductCatalog/ProductCatalog'
 import './shop.scss';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import shop from '../../store/shop';
 import catalog from '../../store/catalog';
 import Loader from '../../lib/components/Loader/Loader';
@@ -18,36 +18,57 @@ import { FilterUrlBuilder } from '../../lib/helpers/FiltersUrlBuilder';
 
 interface LocalStore {
     filterUrlBuilder: FilterUrlBuilder;
-    isLoaded: boolean;
+    isLoadedData: boolean;
+    isInited: boolean;
     isFilterOpen: boolean;
     popularProducts: IProduct[];
     filterCategories: IFilterCategory[];
 }
 
 const Shop = observer(() => {
+    const navigate = useNavigate();
     const { catalog: categoryRoute, filters } = useParams();
     const searchText = (useQuery()).get("text");
 
     const localStore = useLocalObservable<LocalStore>(() => ({
         filterUrlBuilder: new FilterUrlBuilder(),
-        isLoaded: true,
+        isInited: false,
+        isLoadedData: false,
         isFilterOpen: false,
         popularProducts: [],
         filterCategories: []
     }))
 
-    useEffect (() => {
-        if (!categoryRoute) {
+    useEffect(() => {
+        if (!localStore.isLoadedData) {
+            return;
+        }
+
+        catalog.clearFilters();
+        if (!filters) {
+            localStore.isInited = true;
             return;
         }
 
         const filtersUrl = localStore.filterUrlBuilder.parse(filters ?? '').build();
-        console.log(filtersUrl);
 
         if (filtersUrl !== filters) {
             window.history.replaceState(null, "New Page Title", `${catalog.category.routeName}/${filtersUrl}`);
-        } 
-    }, [categoryRoute, filters])
+        }
+
+        if (localStore.filterUrlBuilder.priceRange) {
+            const { min, max } = localStore.filterUrlBuilder.priceRange;
+            catalog.selectPriceRange(min, max);
+        }
+
+        catalog.selectBrands(localStore.filterUrlBuilder.brands);
+        const selectedFilters = localStore.filterUrlBuilder.filters;
+        for (const [attributeId, valueIds] of selectedFilters) {
+            catalog.setFilter(attributeId, ...valueIds)
+        }
+
+        localStore.isInited = true;
+    }, [categoryRoute, filters, localStore.isLoadedData])
 
     useEffect(() => {
         async function fetchProducts() {
@@ -62,10 +83,10 @@ const Shop = observer(() => {
             }
 
             localStore.popularProducts = shop.getBestsellersByCategory(catalog.category.id);
-            localStore.isLoaded = false;
+            localStore.isLoadedData = true;
         }
 
-        localStore.isLoaded = true;
+        localStore.isLoadedData = false;
         fetchProducts();
     }, [categoryRoute, searchText]);
 
@@ -100,7 +121,36 @@ const Shop = observer(() => {
         document.body.style.overflowY = "";
     }
 
-    if (localStore.isLoaded) {
+    const onSelectPrice = (min: number, max: number) => {
+        localStore.filterUrlBuilder.setPriceRange({ min: min, max: max });
+        acceptFiltersChange();
+    }
+
+    const onSelectBrand = (brand: string, checked: boolean) => {
+        if (checked) {
+            localStore.filterUrlBuilder.selectBrand(brand)
+        } else {
+            localStore.filterUrlBuilder.deselectBrand(brand);
+        }
+
+        acceptFiltersChange();
+    }
+
+    const onSelectFilter = (attributeId: number, valueId: number, checked: boolean) => {
+        if (checked) {
+            localStore.filterUrlBuilder.selectFilter(attributeId, valueId)
+        } else {
+            localStore.filterUrlBuilder.deselectFilter(attributeId, valueId);
+        }
+
+        acceptFiltersChange();
+    }
+
+    const acceptFiltersChange = () => {
+        navigate(`/${catalog.category.routeName}/${localStore.filterUrlBuilder.build()}${searchText ? `/search/?text=${searchText}` : ''}`);
+    }
+
+    if (!localStore.isInited) {
         return (
             <div className='shop__loader ccc'>
                 <Loader />
@@ -108,7 +158,7 @@ const Shop = observer(() => {
         )
     }
 
-    if (!localStore.isLoaded && searchText !== null && catalog.filteredProducts.length === 0) {
+    if (localStore.isInited && !filters && searchText !== null && catalog.filteredProducts.length === 0) {
         return (
             <div className='shop__nothing-found ccc'>
                 <div className='shop__nothing-found-icon'></div>
@@ -117,9 +167,11 @@ const Shop = observer(() => {
         )
     }
 
-    // if (!localStore.isLoaded && categoryRoute && catalog.filteredProducts.length === 0) {
-    //     return <Navigate to={'/404_not_found'} />
-    // }
+
+    if (localStore.isInited && categoryRoute && catalog.products.length === 0) {
+        return <Navigate to={'/404_not_found'} />
+    }
+
 
     return (
         <div className='shop clt' >
@@ -128,7 +180,11 @@ const Shop = observer(() => {
                 <div className='shop__side-bar clt'>
                     <Filters isOpen={localStore.isFilterOpen} onClose={onCloseFilters} >
                         {categoryRoute ?
-                            <ProductFilters />
+                            <ProductFilters
+                                onCheckFilter={onSelectFilter}
+                                onCheckBrand={onSelectBrand}
+                                onSelectRange={onSelectPrice}
+                            />
                             :
                             <FilterCategories filterCategories={localStore.filterCategories} />
                         }
@@ -136,7 +192,14 @@ const Shop = observer(() => {
                     {localStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={localStore.popularProducts} />}
                 </div>
                 <div className='shop__content'>
-                    <ProductCatalog onOpenFilters={onOpenFilters} />
+                    {catalog.filteredProducts.length !== 0 ?
+                        <ProductCatalog onOpenFilters={onOpenFilters} />
+                        :
+                        <div className='shop__emprty-catalog rcc'>
+                            <div className='shop__empty-catalog-icon'></div>
+                            <div className='shop__nothing-found-text'>За даними фільтрами нічого не знайдено</div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

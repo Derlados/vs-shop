@@ -4,7 +4,7 @@ import cyrillicToTranslit from 'cyrillic-to-translit-js';
 
 ///TEMPLATE = brands=intel,amd;price=2000-3000;12-156,468;13-486;15-12,11,48;/
 
-const BRAND_REGEX = /brands=([a-z|\,]+)/;
+const BRAND_REGEX = /brands=([A-z|\,|-]+)/;
 const BRAND_PREFIX = 'brands=';
 const PRICE_REGEX = /price=([0-9]+-[0-9]+)/;
 const PRICE_PREFIX = 'price=';
@@ -17,7 +17,7 @@ export class FilterUrlBuilder {
     public filters: Map<number, number[]>; // <id аттрибута, id-шники значений>
     public priceRange?: IRange;
 
-    constructor () {
+    constructor() {
         this.filtersUrl = '';
         this.brands = [];
         this.filters = new Map();
@@ -48,7 +48,7 @@ export class FilterUrlBuilder {
 
                 const attributeId = Number(parts[0]);
                 const valueIds = parts[1].split(',').map(v => Number(v));
-            
+
                 this.filters.set(attributeId, valueIds);
             }
         }
@@ -56,7 +56,7 @@ export class FilterUrlBuilder {
         return this;
     }
 
-    setFilters(attributeId: number, ...values: number[]): FilterUrlBuilder {
+    selectFilter(attributeId: number, ...values: number[]): FilterUrlBuilder {
         if (!this.filters.has(attributeId)) {
             this.filters.set(attributeId, [])
         }
@@ -65,13 +65,17 @@ export class FilterUrlBuilder {
         return this;
     }
 
-    deselectFilters(attributeId: number, value: number) {
+    deselectFilter(attributeId: number, value: number) {
         const values = this.filters.get(attributeId);
         if (!values) {
             return;
         }
 
-        values.splice(values.findIndex(v => v === value), 1) 
+        values.splice(values.findIndex(v => v === value), 1)
+        if (values.length === 0) {
+            this.filters.delete(attributeId);
+        }
+
         return this;
     }
 
@@ -80,8 +84,8 @@ export class FilterUrlBuilder {
         return this;
     }
 
-    setBrands(...brands: string[]) {
-        this.brands.push(...brands.map(b => cyrillicToTranslit().transform(b, "_")));
+    selectBrand(brand: string) {
+        this.brands.push(cyrillicToTranslit().transform(brand, "_"))
         return this;
     }
 
@@ -98,13 +102,13 @@ export class FilterUrlBuilder {
         }
 
         if (this.priceRange) {
-            this.filtersUrl += `${PRICE_PREFIX}${this.priceRange.min}-${this.priceRange.max};`; 
+            this.filtersUrl += `${PRICE_PREFIX}${this.priceRange.min}-${this.priceRange.max};`;
         }
 
         for (const [attributeId, valueIds] of this.filters) {
             this.filtersUrl += `${attributeId}-${valueIds.join(',')};`;
         }
-        
+
         if (this.filtersUrl.length !== 0) {
             this.filtersUrl = this.filtersUrl.slice(0, -1);
         }

@@ -1,9 +1,11 @@
+import cyrillicToTranslit from "cyrillic-to-translit-js";
 import { makeAutoObservable } from "mobx";
 import categoriesService from "../services/categories/categories.service";
 import productsService from "../services/products/products.service";
 import { ICategory } from "../types/ICategory";
 import { IFilters, IRange } from "../types/IFilters";
 import { IProduct } from "../types/IProduct";
+import { IValue } from "../types/IValue";
 
 export enum SortType {
     NOT_SELECTED,
@@ -13,6 +15,7 @@ export enum SortType {
     DISCOUNT
 }
 
+//TODO Когда будет много товаров, логику фильтрации вынести на сервер
 class CatalogStore {
     public category: ICategory;
     public filters: IFilters;
@@ -20,9 +23,11 @@ class CatalogStore {
 
     public selectedSort: SortType;
     public selectedPriceRange: IRange;
-    public selectedBrands: string[];
+    public selectedTranslitBrands: string[]; // Все бренд переведены в английский транслит
     public searchString: string;
-    public selectedFilters: Map<number, string[]>;
+    public selectedFilters: Map<number, IValue[]>;
+
+
 
     constructor() {
         makeAutoObservable(this);
@@ -42,7 +47,7 @@ class CatalogStore {
 
         this.selectedSort = SortType.NOT_SELECTED;
         this.selectedPriceRange = this.priceRange;
-        this.selectedBrands = [];
+        this.selectedTranslitBrands = [];
         this.searchString = '';
         this.selectedFilters = new Map();
     }
@@ -79,7 +84,7 @@ class CatalogStore {
     }
 
     async fetchByCategory(categoryRoute: string) {
-        this.clear();
+        this.clearAll();
 
         this.category = await categoriesService.getCategoryByRouteName(categoryRoute);
         if (!this.category) {
@@ -101,7 +106,7 @@ class CatalogStore {
     }
 
     async fetchProductsByText(searchText: string) {
-        this.clear();
+        this.clearAll();
         this.products = await productsService.getProductByText(searchText);
         this.selectedPriceRange = this.priceRange;
     }
@@ -114,10 +119,24 @@ class CatalogStore {
         product.count = await productsService.getProductCount(product.id);
     }
 
-    private clear() {
+    public clearFilters() {
+        this.selectedTranslitBrands = [];
+        this.selectedPriceRange = this.priceRange;
+        for (const attribute of this.filters.attributes) {
+            this.selectedFilters.set(attribute.attribute.id, []);
+        }
+    }
+
+    private clearAll() {
         this.products = [];
         this.searchString = '';
-        this.selectedFilters = new Map();
+        this.selectedFilters.clear();
+        this.selectedTranslitBrands = [];
+        this.selectedPriceRange = this.priceRange;
+        this.filters = {
+            priceRange: { min: 0, max: 0 },
+            attributes: []
+        };
     }
 
     /////////////////////////////////// ФИЛЬТРАЦИЯ И СОРТИРОВКА ПРОДУКТОВ ///////////////////////////////////
@@ -129,8 +148,8 @@ class CatalogStore {
         filteredProducts = products.filter(p => p.price >= this.selectedPriceRange.min && p.price <= this.selectedPriceRange.max);
 
         // По бренду
-        if (this.selectedBrands.length !== 0) {
-            filteredProducts = products.filter(p => this.selectedBrands.includes(p.brand));
+        if (this.selectedTranslitBrands.length !== 0) {
+            filteredProducts = products.filter(p => this.selectedTranslitBrands.includes(cyrillicToTranslit().transform(p.brand, "_")));
         }
 
         // По ключевому слову
@@ -142,7 +161,8 @@ class CatalogStore {
         // По фильтрам
         for (const [attributeId, values] of this.selectedFilters) {
             if (values.length !== 0) {
-                filteredProducts = filteredProducts.filter(p => values.includes(p.attributes.find(a => a.id === attributeId)?.value.name ?? ''));
+                const valueNames = values.map(v => v.name);
+                filteredProducts = filteredProducts.filter(p => valueNames.includes(p.attributes.find(a => a.id === attributeId)?.value.name ?? ''));
             }
         }
 
@@ -185,21 +205,40 @@ class CatalogStore {
         this.selectedPriceRange = { min: min, max: max };
     }
 
-    public selectBrand(brand: string) {
-        this.selectedBrands.push(brand);
+    public selectBrands(translitBrands: string[]) {
+        this.selectedTranslitBrands.push(...translitBrands);
     }
 
-    public deselectBrand(brand: string) {
-        this.selectedBrands = this.selectedBrands.filter(b => b !== brand);
+    public hasSelectedBrand(brand: string) {
+        return this.selectedTranslitBrands.findIndex(b => b === brand) !== -1;
+    }
+
+    public setFilter(attributeId: number, ...valueids: number[]) {
+        const allValues = this.filters.attributes.find(a => a.attribute.id === attributeId)?.attribute.allValues;
+        if (allValues) {
+            const values: IValue[] = allValues.filter(v => valueids.includes(v.id));
+            this.selectedFilters.set(attributeId, values);
+        }
+
+        console.log(JSON.stringify(this.selectedFilters));
+    }
+
+    public hasSelectedFilter(attributeId: number, valueId: number) {
+        const values = this.selectedFilters.get(attributeId);
+        if (values && values.find(v => v.id === valueId)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
+    public countProductBtValue(attributeId: number, value: string) {
+        return this.filteredProducts.filter(p => (p.attributes.find(a => a.id === attributeId)?.value.name ?? '') === value).length;
     }
 
     public setSortType(sortType: SortType) {
         this.selectedSort = sortType;
-    }
-
-    public setFilter(attributeId: number, ...values: string[]) {
-        const attrValues = this.selectedFilters.get(attributeId);
-        attrValues?.push(...values);
     }
 
     /////////////////////////////////// CRUD ОПЕРАЦИИ ДЛЯ ПРОДУКТОВ В КАТАЛОГЕ //////////////////////////////////

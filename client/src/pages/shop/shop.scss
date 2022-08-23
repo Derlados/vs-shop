@@ -15,6 +15,7 @@
         padding-right: 30px;
 
         @media (max-width: $tablet-horizontal) {
+            min-width: 0px;
             padding-right: 0px;
         }
     }
@@ -34,6 +35,18 @@
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-image: url('../../assets/images/not-found.svg');
+        background-color: $primary-dark;
+    }
+
+    &__empty-catalog {}
+
+    &__empty-catalog-icon {
+        width: 70px;
+        height: 70px;
+        margin-right: 30px;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-image: url('../../assets/images/no-filter.svg');
         background-color: $primary-dark;
     }
 }

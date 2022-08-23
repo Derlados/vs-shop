@@ -142,12 +142,28 @@
     }
 
     &__attr-item {
-        cursor: pointer;
         padding: 10px 0px 10px 10px;
         border-bottom: 1px solid #ededed;
 
         &:hover>.filters__checkmark {
             border: 1px solid $primary;
+        }
+
+        &_disable {
+            .filters__attr-value {
+                cursor: auto;
+                pointer-events: none;
+                color: #9c9c9c;
+            }
+
+            .filters__checkmark {
+                background-color: #bdbdbd;
+                border: 1px solid #bdbdbd !important;
+
+                &::after {
+                    background: none;
+                }
+            }
         }
     }
 
