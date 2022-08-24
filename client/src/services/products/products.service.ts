@@ -20,6 +20,11 @@ class ProductService extends Service {
         return data;
     }
 
+    async getProductById(productId: number): Promise<IProduct> {
+        const { data } = await axiosInstance.get<IProduct>(`${this.API_URL}/${productId}`, { headers: headersJSON() });
+        return data;
+    }
+
     async getBestsellers(): Promise<IProduct[]> {
         const { data } = await axiosInstance.get(`${this.API_URL}/bestsellers`, { headers: headersJSON() });
         return data;

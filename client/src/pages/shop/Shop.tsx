@@ -15,8 +15,11 @@ import FilterCategories, { IFilterCategory } from './components/Filters/FilterCa
 import ProductFilters from './components/Filters/ProductFilters/ProductFilters';
 import { useEffect } from 'react';
 import { FilterUrlBuilder } from '../../lib/helpers/FiltersUrlBuilder';
+import { ICategory } from '../../types/ICategory';
+import { ROUTES } from '../../values/routes';
 
 interface LocalStore {
+    category?: ICategory;
     filterUrlBuilder: FilterUrlBuilder;
     isLoadedData: boolean;
     isInited: boolean;
@@ -51,9 +54,8 @@ const Shop = observer(() => {
         }
 
         const filtersUrl = localStore.filterUrlBuilder.parse(filters ?? '').build();
-
         if (filtersUrl !== filters) {
-            window.history.replaceState(null, "New Page Title", `${catalog.category.routeName}/${filtersUrl}`);
+            acceptFiltersChange(false);
         }
 
         if (localStore.filterUrlBuilder.priceRange) {
@@ -77,17 +79,24 @@ const Shop = observer(() => {
                 if (searchText) {
                     catalog.setSearchString(searchText);
                 }
+
+                localStore.category = shop.getCategoryByRoute(categoryRoute);
             } else if (searchText) {
                 await catalog.fetchProductsByText(searchText);
                 localStore.filterCategories = groupByCategories(catalog.filteredProducts);
             }
 
+
             localStore.popularProducts = shop.getBestsellersByCategory(catalog.category.id);
             localStore.isLoadedData = true;
         }
 
+        localStore.isInited = false;
         localStore.isLoadedData = false;
-        fetchProducts();
+
+        setTimeout(() => {
+            fetchProducts();
+        }, 70)
     }, [categoryRoute, searchText]);
 
     const groupByCategories = (products: IProduct[]): IFilterCategory[] => {
@@ -102,7 +111,7 @@ const Shop = observer(() => {
             if (category) {
                 filterCategories.push({
                     name: category.name,
-                    link: `/${category.routeName}/search/?text=${searchText}`,
+                    link: `/${ROUTES.CATEGORY_PREFIX}${category.routeName}/search/?text=${searchText}`,
                     productCount: productCount
                 })
             }
@@ -123,7 +132,7 @@ const Shop = observer(() => {
 
     const onSelectPrice = (min: number, max: number) => {
         localStore.filterUrlBuilder.setPriceRange({ min: min, max: max });
-        acceptFiltersChange();
+        acceptFiltersChange(true);
     }
 
     const onSelectBrand = (brand: string, checked: boolean) => {
@@ -133,7 +142,7 @@ const Shop = observer(() => {
             localStore.filterUrlBuilder.deselectBrand(brand);
         }
 
-        acceptFiltersChange();
+        acceptFiltersChange(true);
     }
 
     const onSelectFilter = (attributeId: number, valueId: number, checked: boolean) => {
@@ -143,11 +152,25 @@ const Shop = observer(() => {
             localStore.filterUrlBuilder.deselectFilter(attributeId, valueId);
         }
 
-        acceptFiltersChange();
+        acceptFiltersChange(true);
     }
 
-    const acceptFiltersChange = () => {
-        navigate(`/${catalog.category.routeName}/${localStore.filterUrlBuilder.build()}${searchText ? `/search/?text=${searchText}` : ''}`);
+    const acceptFiltersChange = (reload: boolean) => {
+        const filtersUrl = localStore.filterUrlBuilder.build();
+        let updatedRoute = `/${ROUTES.CATEGORY_PREFIX}${catalog.category.routeName}`;
+        if (filtersUrl !== '') {
+            updatedRoute += `/${filtersUrl};`
+        }
+
+        if (searchText) {
+            updatedRoute += `/search/?text=${searchText}`
+        }
+
+        if (reload) {
+            navigate(updatedRoute);
+        } else {
+            window.history.replaceState(null, "New Page Title", updatedRoute);
+        }
     }
 
     if (!localStore.isInited) {
@@ -167,15 +190,13 @@ const Shop = observer(() => {
         )
     }
 
-
     if (localStore.isInited && categoryRoute && catalog.products.length === 0) {
         return <Navigate to={'/404_not_found'} />
     }
 
-
     return (
         <div className='shop clt' >
-            <CatalogNav />
+            <CatalogNav routes={localStore.category ? [{ to: `/${ROUTES.CATEGORY_PREFIX}${categoryRoute}`, title: localStore.category.name }] : []} />
             <div className='rct'>
                 <div className='shop__side-bar clt'>
                     <Filters isOpen={localStore.isFilterOpen} onClose={onCloseFilters} >

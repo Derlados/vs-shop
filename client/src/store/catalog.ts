@@ -111,6 +111,16 @@ class CatalogStore {
         this.selectedPriceRange = this.priceRange;
     }
 
+    async fetchProductById(id: number): Promise<IProduct> {
+        let product = this.getProductById(id);
+        if (!product) {
+            product = await productsService.getProductById(id);
+
+        }
+
+        return product;
+    }
+
     public getProductById(id: number): IProduct | undefined {
         return this.products.find(p => p.id === id);
     }
@@ -233,8 +243,13 @@ class CatalogStore {
     }
 
     //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
-    public countProductBtValue(attributeId: number, value: string) {
+    public countProductByValue(attributeId: number, value: string) {
         return this.filteredProducts.filter(p => (p.attributes.find(a => a.id === attributeId)?.value.name ?? '') === value).length;
+    }
+
+    //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
+    public conntProductByBrand(brand: string) {
+        return this.filteredProducts.filter(p => (p.brand == brand)).length;
     }
 
     public setSortType(sortType: SortType) {

@@ -8,33 +8,45 @@ import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import { IProduct } from '../../types/IProduct';
 import Loader from '../../lib/components/Loader/Loader';
+import shop from '../../store/shop';
+import { ICategory } from '../../types/ICategory';
+import { ROUTES } from '../../values/routes';
 
 type ProductParams = {
-    catalog: string;
+    productName: string;
     id: string;
 };
 
 interface LocalStore {
-    product?: IProduct;
+    product: IProduct;
+    category: ICategory;
     isLoading: boolean;
 }
 
 const Product: FC = observer(() => {
-    const { id, catalog: category } = useParams<ProductParams>();
+    const { productName, id } = useParams<ProductParams>();
     const localStore = useLocalObservable<LocalStore>(() => ({
         product: catalog.products[0],
+        category: shop.categories[0],
         isLoading: true
     }));
-
+    console.log(productName, id);
 
     useEffect(() => {
-        async function fetchProduct(category: string) {
-            if (catalog.products.length == 0) {
-                await catalog.fetchByCategory(category);
+        async function fetchProduct(productId: number) {
+            const product = await catalog.fetchProductById(productId);
+            const category = shop.getCategoryById(product.categoryId);
+
+
+            if (!category || !product) {
+                localStore.isLoading = false;
+                return;
             }
 
-            const product = catalog.getProductById(Number(id))
+            localStore.category = category;
             localStore.product = product;
+
+            correctUrl();
             localStore.isLoading = false;
         }
 
@@ -43,20 +55,28 @@ const Product: FC = observer(() => {
             return;
         }
 
-        if (category) {
-            fetchProduct(category);
-        }
+        fetchProduct(Number(id));
     }, [id]);
+
+    const correctUrl = () => {
+        const translitProductName = localStore.product.url.split('/')[0];
+        if (translitProductName !== productName) {
+            window.history.replaceState(null, localStore.product.title, localStore.product.url);
+        }
+    }
 
     if (localStore.product) {
         return (
             <div className='product ccc'>
-                <CatalogNav />
+                <CatalogNav routes={[
+                    { to: `/${ROUTES.CATEGORY_PREFIX}${localStore.category.routeName}`, title: localStore.category.name },
+                    { to: `/${localStore.product.url}`, title: localStore.product.title },
+                ]} />
                 <div className='product__container rlc'>
                     <ProductCard product={localStore.product} type="full-view" />
                 </div>
                 {/* Когда контент добавится  <ProductDesc /> */}
-                <SliderProducts title="You Might Also Like" products={[...catalog.products.slice(0, 8)]} />
+                <SliderProducts title="Товари від цього ж бренду" products={[...catalog.products.slice(0, 8)]} />
             </div>
         )
     } else if (localStore.isLoading) {

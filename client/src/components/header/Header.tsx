@@ -11,6 +11,7 @@ import { useQuery } from '../../lib/hooks/useQuery';
 import QuickSearch from './QuickSearch/QuickSearch';
 import BurgerMenu from './BurgerMenu/BurgerMenu';
 import CartQuickView from './CartQuickView/CartQuickView';
+import { ROUTES } from '../../values/routes';
 
 interface LocalStore {
     isCartOpen: boolean;
@@ -49,7 +50,7 @@ const Header = observer(() => {
 
     const onAcceptSearch = () => {
         if (localStore.selectedRoute) {
-            navigate(`${localStore.selectedRoute}/search/?text=${localStore.searchString}`)
+            navigate(`${ROUTES.CATEGORY_PREFIX}${localStore.selectedRoute}/search/?text=${localStore.searchString}`)
         } else {
             navigate(`/search/?text=${localStore.searchString}`)
         }
@@ -119,7 +120,7 @@ const Header = observer(() => {
                         <ul className='header__category-list'>
                             {shop.categories.map(category => (
                                 <li key={category.id} className='header__category-item clc' >
-                                    <NavLink className='header__category-link ccc' to={`./${category.routeName}`} onClick={onCloseCatalogList}>
+                                    <NavLink className='header__category-link ccc' to={`./${ROUTES.CATEGORY_PREFIX}${category.routeName}`} onClick={onCloseCatalogList}>
                                         <div className='header__category-name'>
                                             <div className='header__category-text'>{category.name}</div>
                                             {/* <div className='header__new-label'>New</div> */}
@@ -128,7 +129,7 @@ const Header = observer(() => {
                                 </li>
                             ))}
                             <li className='header__category-item clc' >
-                                <NavLink className='header__category-link ccc' to={`./embroidery`} onClick={onCloseCatalogList}>
+                                <NavLink className='header__category-link ccc' to={`./${ROUTES.CATEGORY_PREFIX}embroidery`} onClick={onCloseCatalogList}>
                                     <div className='header__category-name'>
                                         <div className='header__category-text'>Вишивка</div>
                                         <div className='header__new-label'>New</div>

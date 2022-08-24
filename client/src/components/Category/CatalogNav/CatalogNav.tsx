@@ -1,50 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { FC } from 'react';
+import { NavLink } from 'react-router-dom';
 import { ILink } from '../../../navigation/routes';
-import catalog from '../../../store/catalog';
-import shop from '../../../store/shop';
 import './catalog-nav.scss';
 
-const CatalogNav = () => {
-    const [routes, setRoutes] = useState<ILink[]>([
-        {
-            to: '/home',
-            title: 'Головна'
-        }
-    ]);
-    const { catalog: categoryRoute, id } = useParams();
+interface CatalogNavProps {
+    routes: ILink[];
+}
 
-    useEffect(() => {
-        const newRoutes: ILink[] = [
-            {
-                to: '/home',
-                title: 'Головна'
-            }
-        ];
-
-        if (categoryRoute) {
-            const category = shop.getCategoryByRoute(categoryRoute);
-
-            if (category) {
-                newRoutes.push({
-                    to: `../${category.routeName}`,
-                    title: category.name
-                })
-            }
-        }
-
-        if (id && Number.isInteger(parseInt(id))) {
-            const product = catalog.getProductById(+id);
-            if (product) {
-                newRoutes.push({
-                    to: `../../${categoryRoute}/${product.id.toString()}`,
-                    title: product?.title
-                })
-            }
-        }
-
-        setRoutes(newRoutes);
-    }, [categoryRoute, id])
+const CatalogNav: FC<CatalogNavProps> = ({ routes }) => {
+    routes = [{ to: '/home', title: 'Головна' }, ...routes];
 
     return (
         <div className='catalog-nav'>

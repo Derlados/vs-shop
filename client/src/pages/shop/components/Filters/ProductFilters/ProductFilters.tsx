@@ -50,14 +50,14 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ onCheckFilter, onChe
                         return {
                             id: v.id,
                             name: v.name,
-                            productCount: catalog.countProductBtValue(attr.attribute.id, v.name),
+                            productCount: catalog.countProductByValue(attr.attribute.id, v.name),
                             checked: catalog.hasSelectedFilter(attr.attribute.id, v.id)
                         }
                     })
             })
         }
 
-        localStore.brand.allValues = catalog.brands.map((b) => { return { id: -1, name: b, productCount: 0, checked: catalog.hasSelectedBrand(cyrillicToTranslit().transform(b, "_")) } })
+        localStore.brand.allValues = catalog.brands.map((b) => { return { id: -1, name: b, productCount: catalog.conntProductByBrand(b), checked: catalog.hasSelectedBrand(cyrillicToTranslit().transform(b, "_")) } })
     }, [catalog.filters.attributes, catalog.brands, catalog.selectedFilters, catalog.selectedTranslitBrands]);
 
     const onCheckBrands = (ignore: number, checkValue: ICheckValue) => {

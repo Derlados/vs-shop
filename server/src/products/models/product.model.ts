@@ -1,4 +1,5 @@
 import { Exclude } from "class-transformer";
+import cyrillicToTranslit from "cyrillic-to-translit-js";
 import { Category } from "src/category/models/category.model";
 import { AvailableStatus } from "src/constants/AvailabilityStatus";
 import { OrderProduct } from "src/orders/models/order-products.model";
@@ -82,7 +83,7 @@ export class Product {
     @AfterLoad()
     getUrl() {
         if (this.category) {
-            this.url = `/${this.category?.routeName}/${this.id}`;
+            this.url = `/${cyrillicToTranslit().transform(this.title.toLowerCase(), "_")}/${this.id}`;
         }
     }
 
@@ -110,7 +111,7 @@ export class Product {
         }
 
         for (const value of this.values) {
-            this.attributes.push({...value.attribute, value: value})
+            this.attributes.push({ ...value.attribute, value: value })
         }
     }
 

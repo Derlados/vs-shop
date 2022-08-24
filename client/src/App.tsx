@@ -21,6 +21,7 @@ import AOS from 'aos';
 import SwiperCore, { Autoplay } from 'swiper';
 import Contacts from './pages/contacts/Contacts';
 import Page404 from './pages/Page404/Page404';
+import { ROUTES } from './values/routes';
 
 const App = () => {
 
@@ -50,11 +51,11 @@ const App = () => {
                     <Route path='/contacts' element={<Contacts />} />
                     <Route path='/404_not_found' element={<Page404 />} />
                     <Route path='/search' element={<Shop />} />
-                    <Route path='/:catalog/search' element={<Shop />} />
-                    <Route path='/:catalog' element={<Shop />} />
-                    <Route path='/:catalog/:filters' element={<Shop />} />
-                    <Route path='/:catalog/:filters/search' element={<Shop />} />
-                    <Route path='/:name/:id' element={<Product />} />
+                    <Route path='/:productName/:id' element={<Product />} />
+                    <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/search`} element={<Shop />} />
+                    <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog`} element={<Shop />} />
+                    <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/:filters`} element={<Shop />} />
+                    <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/:filters/search`} element={<Shop />} />
                     <Route path='/' element={<Navigate to='/home' />} />
                     <Route path='*' element={<Navigate to='/home' />} />
                 </Route>

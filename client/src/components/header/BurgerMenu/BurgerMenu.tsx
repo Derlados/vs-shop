@@ -3,6 +3,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import shop from '../../../store/shop';
+import { ROUTES } from '../../../values/routes';
 import './burger-menu.scss';
 
 interface LocalStore {
@@ -54,11 +55,11 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                         })}>
                             {shop.categories.map(category => (
                                 <li key={category.id}>
-                                    <NavLink to={category.routeName} onClick={onClose}>- {category.name}</NavLink>
+                                    <NavLink to={`/${ROUTES.CATEGORY_PREFIX}${category.routeName}`} onClick={onClose}>- {category.name}</NavLink>
                                 </li>
                             ))}
                             <li>
-                                <NavLink to={'./embroidery'} onClick={onClose}>- Вишивка</NavLink>
+                                <NavLink to={`./${ROUTES.CATEGORY_PREFIX}embroidery`} onClick={onClose}>- Вишивка</NavLink>
                             </li>
                         </ul>
                     </li>
