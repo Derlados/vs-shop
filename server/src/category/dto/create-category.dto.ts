@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsString, ValidateNested } from "class-validator";
 import { KeyAttributeDto } from "./key-attribute.dto";
 
 export class CreateCategoryDto {
@@ -8,6 +8,9 @@ export class CreateCategoryDto {
 
     @IsString()
     routeName: string;
+
+    @IsBoolean()
+    isNew: boolean;
 
     @IsArray()
     @ValidateNested({ each: true })

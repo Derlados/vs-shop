@@ -92,6 +92,12 @@
         font-size: 24px;
     }
 
+    &__is-new {
+        width: max-content !important;
+        min-width: 0px !important;
+        padding: 0px 15px 0px 0px !important;
+    }
+
     &__key-attrs {
         font-size: 24px;
         margin: 10px 0px;

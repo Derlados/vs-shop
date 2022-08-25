@@ -123,20 +123,11 @@ const Header = observer(() => {
                                     <NavLink className='header__category-link ccc' to={`./${ROUTES.CATEGORY_PREFIX}${category.routeName}`} onClick={onCloseCatalogList}>
                                         <div className='header__category-name'>
                                             <div className='header__category-text'>{category.name}</div>
-                                            {/* <div className='header__new-label'>New</div> */}
+                                            {category.isNew && <div className='header__new-label'>New</div>}
                                         </div>
                                     </NavLink>
                                 </li>
                             ))}
-                            <li className='header__category-item clc' >
-                                <NavLink className='header__category-link ccc' to={`./${ROUTES.CATEGORY_PREFIX}embroidery`} onClick={onCloseCatalogList}>
-                                    <div className='header__category-name'>
-                                        <div className='header__category-text'>Вишивка</div>
-                                        <div className='header__new-label'>New</div>
-                                    </div>
-                                </NavLink>
-
-                            </li>
                         </ul>
                     </li>
                     <li className='header__nav-item'>

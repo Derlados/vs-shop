@@ -19,6 +19,7 @@ type ProductParams = {
 
 interface LocalStore {
     product: IProduct;
+    relatedProducts: IProduct[];
     category: ICategory;
     isLoading: boolean;
 }
@@ -27,6 +28,7 @@ const Product: FC = observer(() => {
     const { productName, id } = useParams<ProductParams>();
     const localStore = useLocalObservable<LocalStore>(() => ({
         product: catalog.products[0],
+        relatedProducts: [],
         category: shop.categories[0],
         isLoading: true
     }));
@@ -37,7 +39,6 @@ const Product: FC = observer(() => {
             const product = await catalog.fetchProductById(productId);
             const category = shop.getCategoryById(product.categoryId);
 
-
             if (!category || !product) {
                 localStore.isLoading = false;
                 return;
@@ -45,6 +46,7 @@ const Product: FC = observer(() => {
 
             localStore.category = category;
             localStore.product = product;
+            localStore.relatedProducts = await catalog.fetchRelatedProducts(product, 10);
 
             correctUrl();
             localStore.isLoading = false;
@@ -76,7 +78,7 @@ const Product: FC = observer(() => {
                     <ProductCard product={localStore.product} type="full-view" />
                 </div>
                 {/* Когда контент добавится  <ProductDesc /> */}
-                <SliderProducts title="Товари від цього ж бренду" products={[...catalog.products.slice(0, 8)]} />
+                <SliderProducts title="Товари від цього ж бренду" products={localStore.relatedProducts} />
             </div>
         )
     } else if (localStore.isLoading) {
@@ -86,7 +88,7 @@ const Product: FC = observer(() => {
             </div>
         )
     } else {
-        return <Navigate to={'/404_not_found'} />
+        return <Navigate to={'/404_not_found'} replace />
     }
 });
 

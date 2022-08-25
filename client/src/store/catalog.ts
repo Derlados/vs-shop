@@ -35,6 +35,7 @@ class CatalogStore {
             id: -1,
             name: '',
             img: '',
+            isNew: false,
             routeName: '',
             keyAttributes: [],
             productsCount: 0
@@ -119,6 +120,13 @@ class CatalogStore {
         }
 
         return product;
+    }
+
+    async fetchRelatedProducts(product: IProduct, maxProducts: number): Promise<IProduct[]> {
+        const products = await productsService.getFilterProducts({ brands: [product.brand] });
+        const shuffledProducts = [...products].sort(() => 0.5 - Math.random());
+
+        return shuffledProducts.slice(0, maxProducts);
     }
 
     public getProductById(id: number): IProduct | undefined {

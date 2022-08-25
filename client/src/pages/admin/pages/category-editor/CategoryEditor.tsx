@@ -10,6 +10,7 @@ import { CreateCategoryDto } from '../../../../services/categories/dto/create-ca
 import classNames from 'classnames';
 import CategoryCard from '../../../../components/Category/CategoryList/CategoryCard';
 import FileUploader from '../../../../lib/components/FileUploader/FileUploader';
+import Checkbox from '../../../../lib/components/Checkbox/Checkbox';
 
 
 interface IKeyAttribute {
@@ -21,6 +22,7 @@ interface LocalStore {
     id: number;
     name: string;
     routeName: string;
+    isNew: boolean;
     attributes: IKeyAttribute[];
     imgUrl?: string;
     img?: File;
@@ -32,6 +34,7 @@ const CategoryEditor = observer(() => {
         id: -1,
         name: '',
         routeName: '',
+        isNew: false,
         attributes: [{ id: nanoid(), value: '' }]
     }))
 
@@ -63,6 +66,10 @@ const CategoryEditor = observer(() => {
 
     }
 
+    const toggleIsNew = () => {
+        localStore.isNew = !localStore.isNew;
+    }
+
     const onAccept = () => {
         if (!validate()) {
             return;
@@ -71,6 +78,7 @@ const CategoryEditor = observer(() => {
         const categoryDto: CreateCategoryDto = {
             name: localStore.name,
             routeName: localStore.routeName,
+            isNew: localStore.isNew,
             attributes: localStore.attributes.map(a => {
                 return {
                     name: a.value,
@@ -94,6 +102,7 @@ const CategoryEditor = observer(() => {
     const onClear = () => {
         localStore.id = -1;
         localStore.name = localStore.routeName = localStore.imgUrl = '';
+        localStore.isNew = false;
         localStore.attributes = [{ id: nanoid(), value: '' }];
         localStore.img = undefined;
     }
@@ -102,7 +111,9 @@ const CategoryEditor = observer(() => {
         localStore.id = category.id;
         localStore.name = category.name;
         localStore.routeName = category.routeName;
+        localStore.isNew = category.isNew;
         localStore.imgUrl = category.img;
+        console.log(localStore.attributes);
         localStore.attributes = category.keyAttributes.map(attr => { return { id: attr.id.toString(), value: attr.name } });
         localStore.attributes.push({ id: nanoid(), value: '' })
     }
@@ -157,6 +168,10 @@ const CategoryEditor = observer(() => {
                     </div>
                     <input className='admin-general__input' placeholder='category name' value={localStore.name} onChange={(v) => localStore.name = v.target.value} />
                     <input className='admin-general__input' placeholder='category url name' value={localStore.routeName} onChange={(v) => localStore.routeName = v.target.value} />
+                    <div className='rlc'>
+                        <div className='admin-general__input-title category-editor__is-new'>Новинка ?: </div>
+                        <Checkbox checked={localStore.isNew} onChange={toggleIsNew} />
+                    </div>
                     <div className='category-editor__key-attrs'>Ключові атрибути</div>
                     <ul className='category-editor__key-attr-list'>
                         {localStore.attributes.map((attr, index) => (

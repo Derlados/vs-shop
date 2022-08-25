@@ -65,7 +65,7 @@ export class CategoryService {
     }
 
     private async addFilters(categoryId: number, newKeyAttributes: KeyAttributeDto[]) {
-        const attributesToInsert = newKeyAttributes.map(attr => { return {  name: attr.name} });
+        const attributesToInsert = newKeyAttributes.map(attr => { return { name: attr.name } });
         await this.attributeRepository.upsert(attributesToInsert, { conflictPaths: ["name"], skipUpdateIfNoValuesChanged: true });
         const attributes = await this.attributeRepository.find({ name: In(newKeyAttributes.map(attr => attr.name)) })
 

@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from "class-validator";
 
-export class GetProductsQuery {
+export class SearchProductsQuery {
     @IsString()
     @IsOptional()
     text: string;

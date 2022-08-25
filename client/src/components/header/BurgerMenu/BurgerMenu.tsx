@@ -58,9 +58,6 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                                     <NavLink to={`/${ROUTES.CATEGORY_PREFIX}${category.routeName}`} onClick={onClose}>- {category.name}</NavLink>
                                 </li>
                             ))}
-                            <li>
-                                <NavLink to={`./${ROUTES.CATEGORY_PREFIX}embroidery`} onClick={onClose}>- Вишивка</NavLink>
-                            </li>
                         </ul>
                     </li>
                     <li className='burger-menu__item burger-menu_underline'>

@@ -7,7 +7,8 @@ import { RolesGuard } from 'src/roles/roles.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
 import { ProductsService } from './products.service';
-import { GetProductsQuery } from './query/get-products.query';
+import { FilterProductsQuery } from './query/filter-products.query';
+import { SearchProductsQuery } from './query/search-products.query';
 
 @Controller('products')
 export class ProductsController {
@@ -27,7 +28,7 @@ export class ProductsController {
 
     @Get('search')
     @UseInterceptors(ClassSerializerInterceptor)
-    getProductByText(@Query() query: GetProductsQuery) {
+    getProductByText(@Query() query: SearchProductsQuery) {
         return this.productService.getProductsByText(query.text);
     }
 
@@ -51,11 +52,21 @@ export class ProductsController {
         return this.productService.getProductCount(req.user.userId, id);
     }
 
-    // @Get('filter')
-    // @UseInterceptors(ClassSerializerInterceptor)
-    // getFilteredProducts() {
-    //     return this.productService.getFilteredProducts(new Map());
-    // }
+    //TODO
+    @Get('filter')
+    @UseInterceptors(ClassSerializerInterceptor)
+    getFilteredProducts(@Query() query: FilterProductsQuery) {
+        const brands = query.brands?.map(b => decodeURI(b));
+
+        return this.productService.getFilteredProducts({
+            limit: query.limit ? Number(query.limit) : null,
+            brands: brands ?? [],
+            priceRange: {
+                min: query.minPrice ? Number(query.minPrice) : 0,
+                max: query.maxPrice ? Number(query.maxPrice) : Number.MAX_VALUE
+            }
+        });
+    }
 
     @Get(':id([0-9]+)')
     @UseInterceptors(ClassSerializerInterceptor)

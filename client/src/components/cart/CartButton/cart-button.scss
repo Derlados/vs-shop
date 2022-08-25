@@ -15,9 +15,12 @@
     &_primary {
         background-color: $primary;
 
-        &:hover {
-            background-color: $primary-dark  !important;
+        @media (hover: hover) {
+            &:hover {
+                background-color: $primary-dark  !important;
+            }
         }
+
     }
 
     &_primary>&__btn {
@@ -42,9 +45,12 @@
         background-color: white;
     }
 
-    &:hover {
-        background-color: $primary;
+    @media (hover: hover) {
+        &:hover {
+            background-color: $primary;
+        }
     }
+
 
     &:hover>&__btn {
         color: white;

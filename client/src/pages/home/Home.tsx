@@ -53,11 +53,11 @@ const Home = observer(() => {
                     </li>
                 </ul>
             </div>
-            <SliderProducts title="Best sellers" slidesPerView={5} products={[...shop.bestsellers.slice(0, 10)]} />
+            <SliderProducts title="Хіт продажів" slidesPerView={5} products={[...shop.bestsellers.slice(0, 10)]} />
             <div className='home__category-title'>Catalog</div>
             <CategoryList categories={shop.categories} />
             <img className='home__banner' alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/banner-image/4.jpg' />
-            <SliderProducts title="Resenly added" products={[...shop.newProducts.slice(0, 10)]} />
+            <SliderProducts title="Нові товари" products={[...shop.newProducts.slice(0, 10)]} />
         </div>
     )
 });

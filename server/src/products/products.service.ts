@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilesService } from 'src/files/files.service';
-import { In, Like, Repository } from 'typeorm';
+import { Between, In, Like, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
 import { Attribute } from './models/attribute.model';
@@ -10,6 +10,7 @@ import { ProductAttribute, Product } from './models/product.model';
 import { Value } from './models/value.model';
 import cyrillicToTranslit from 'cyrillic-to-translit-js';
 import { CreateAttributeDto } from './dto/create-attribute.dto';
+import { Range } from 'src/lib/types/Range';
 
 // ЗАМЕТКА
 // const products = await this.productRepository.createQueryBuilder("product")
@@ -19,6 +20,12 @@ import { CreateAttributeDto } from './dto/create-attribute.dto';
 //     .where("attributes.attribute IN ('attr2', 'attr1')")
 //     .getMany();
 
+export interface FilterOptions {
+    limit: number;
+    brands: string[];
+    priceRange: Range;
+}
+
 @Injectable()
 export class ProductsService {
 
@@ -26,7 +33,7 @@ export class ProductsService {
         @InjectRepository(Attribute) private attributeRepository: Repository<Attribute>,
         @InjectRepository(Value) private valuesRepository: Repository<Value>,
         @InjectRepository(Image) private imageRepository: Repository<Image>,
-        private fileService: FilesService) {    
+        private fileService: FilesService) {
     }
 
     async getProducts(): Promise<Product[]> {
@@ -68,6 +75,16 @@ export class ProductsService {
             where: [{ title: Like(`%${text}%`) }, { brand: Like(`%${text}%`) }],
             relations: ["values", "values.attribute", "images", "category"]
         });
+    }
+
+    //TODO
+    async getFilteredProducts(filters: FilterOptions) {
+        const products = this.productRepository.find({
+            where: { brand: In(filters.brands), price: Between(filters.priceRange.min, filters.priceRange.max) },
+            take: filters.limit,
+            relations: ["values", "values.attribute", "images", "category"]
+        })
+        return products;
     }
 
     async getProductCount(userId: number, productId: number) {
@@ -182,7 +199,7 @@ export class ProductsService {
                 const result = await this.attributeRepository.insert({ name: attribute.name });
                 valuesToInsert.set(result.raw.insertId, attribute.value.name);
             } else {
-                valuesToInsert.set(selectedAttr.id,  attribute.value.name);
+                valuesToInsert.set(selectedAttr.id, attribute.value.name);
             }
         }
 

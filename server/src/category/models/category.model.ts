@@ -18,6 +18,9 @@ export class Category {
     @Column({ type: "varchar", length: 250, nullable: false, unique: true })
     routeName: string;
 
+    @Column({ name: "is_new", type: "boolean", nullable: false, default: false })
+    isNew: boolean;
+
     @OneToMany(() => Product, product => product.category)
     @Exclude()
     products: Product[]
@@ -31,7 +34,7 @@ export class Category {
     productsCount: number;
 
 
-    
+
     @AfterLoad()
     getImg() {
         this.img = `${process.env.STATIC_API}/${this.img}`
@@ -42,6 +45,7 @@ export class Category {
         if (this.filters) {
             this.keyAttributes = this.filters.map(filter => {
                 return {
+                    id: filter.attribute.id,
                     name: filter.attribute.name,
                     isRange: filter.isRange,
                     step: filter.step

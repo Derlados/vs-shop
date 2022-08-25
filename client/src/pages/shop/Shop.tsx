@@ -191,7 +191,7 @@ const Shop = observer(() => {
     }
 
     if (localStore.isInited && categoryRoute && catalog.products.length === 0) {
-        return <Navigate to={'/404_not_found'} />
+        return <Navigate to={'/404_not_found'} replace />
     }
 
     return (

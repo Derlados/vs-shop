@@ -1,7 +1,16 @@
+import QueryString from "qs";
 import { axiosInstance, headersJSON } from "..";
+import { IRange } from "../../types/IFilters";
 import { IImage } from "../../types/IImage";
 import { IProduct } from "../../types/IProduct";
 import { Service } from "../service";
+
+export interface FilterOptions {
+    limit?: number;
+    brands?: string[];
+    priceRange?: IRange;
+}
+
 
 class ProductService extends Service {
 
@@ -41,6 +50,11 @@ class ProductService extends Service {
 
     async getNewProducts(): Promise<IProduct[]> {
         const { data } = await axiosInstance.get(`${this.API_URL}/new`, { headers: headersJSON() });
+        return data;
+    }
+
+    async getFilterProducts(filters: FilterOptions): Promise<IProduct[]> {
+        const { data } = await axiosInstance.get(`${this.API_URL}/filter`, { params: filters, headers: headersJSON() });
         return data;
     }
 
