@@ -138,7 +138,7 @@ const CategoryEditor = observer(() => {
 
     return (
         <div className='category-editor clt'>
-            <div className='admin-general__title'>Редактор каталогів</div>
+            <div className='admin-general__title'>Редактор каталогов</div>
             <div className='category-editor__created-categories rlc'>
                 {shop.categories.map((category) => (
                     <CategoryCard key={category.routeName} category={category} onClick={() => onEdit(category)} />
@@ -147,7 +147,7 @@ const CategoryEditor = observer(() => {
             <div className='category-editor__line'></div>
             <div className='category-editor__form rlt'>
                 <div className='category-editor__left-form clc'>
-                    <FileUploader inputRef={inputRef} className='category-editor__edit-img-cont' onUploadImage={onUploadImage}>
+                    <FileUploader inputRef={inputRef} className='category-editor__edit-img-cont ccc' onUploadImage={onUploadImage}>
                         {!localStore.imgUrl ?
                             <div className='category-editor__edit-img-border'>
                                 <div className='category-editor__edit-img admin-general__edit-img-icon'></div>
@@ -156,31 +156,39 @@ const CategoryEditor = observer(() => {
                             <img className='category-editor__edit-img' src={localStore.imgUrl} />
                         }
                     </FileUploader>
-                    <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
-                        "admin-general__action-btn_inactive": !validate()
-                    })} onClick={onAccept}>Accept</div>
-                    {localStore.id !== -1 && <div className='category-editor__action-btn category-editor__action-btn_delete ccc' onClick={() => onDelete(localStore.id)}>Delete</div>}
+                    <div className='category-editor__desctop-actions ccc'>
+                        <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
+                            "admin-general__action-btn_inactive": !validate()
+                        })} onClick={onAccept}>Сохранить</div>
+                        {localStore.id !== -1 && <div className='category-editor__action-btn category-editor__action-btn_delete ccc' onClick={() => onDelete(localStore.id)}>Удалить</div>}
+                    </div>
                 </div>
                 <div className='category-editor__right-form clt'>
                     <div className='category-editor__editor-head rlt'>
-                        <div className='category-editor__name'>Ім'я та посилання</div>
-                        <div className='admin-general__clear-btn' onClick={onClear}>Clear</div>
+                        <div className='category-editor__name'>Имя и ссылка</div>
+                        <div className='admin-general__clear-btn' onClick={onClear}>Очистить</div>
                     </div>
-                    <input className='admin-general__input' placeholder='category name' value={localStore.name} onChange={(v) => localStore.name = v.target.value} />
-                    <input className='admin-general__input' placeholder='category url name' value={localStore.routeName} onChange={(v) => localStore.routeName = v.target.value} />
+                    <input className='admin-general__input' placeholder='Имя категории' value={localStore.name} onChange={(v) => localStore.name = v.target.value} />
+                    <input className='admin-general__input' placeholder='Имя категории на английском (маленькие буквы)' value={localStore.routeName} onChange={(v) => localStore.routeName = v.target.value} />
                     <div className='rlc'>
                         <div className='admin-general__input-title category-editor__is-new'>Новинка ?: </div>
                         <Checkbox checked={localStore.isNew} onChange={toggleIsNew} />
                     </div>
-                    <div className='category-editor__key-attrs'>Ключові атрибути</div>
+                    <div className='category-editor__key-attrs'>Ключевые аттрибуты</div>
                     <ul className='category-editor__key-attr-list'>
                         {localStore.attributes.map((attr, index) => (
                             <li key={attr.id} className='category-editor__key-attr-item rlc'>
-                                <input className='admin-general__input' placeholder='attribute name' value={attr.value} onChange={(v) => onChangeAttr(index, v.target.value)} />
+                                <input className='admin-general__input' placeholder='Имя аттрибута' value={attr.value} onChange={(v) => onChangeAttr(index, v.target.value)} />
                                 {localStore.attributes.length !== index + 1 && <div className='category-editor__del-attr ccc' onClick={() => deleteAttr(index)}>X</div>}
                             </li>
                         ))}
                     </ul>
+                </div>
+                <div className='category-editor__mobile-actions ccc'>
+                    <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
+                        "admin-general__action-btn_inactive": !validate()
+                    })} onClick={onAccept}>Сохранить</div>
+                    {localStore.id !== -1 && <div className='category-editor__action-btn category-editor__action-btn_delete ccc' onClick={() => onDelete(localStore.id)}>Удалить</div>}
                 </div>
             </div>
         </div>

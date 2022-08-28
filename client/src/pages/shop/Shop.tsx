@@ -94,9 +94,7 @@ const Shop = observer(() => {
         localStore.isInited = false;
         localStore.isLoadedData = false;
 
-        setTimeout(() => {
-            fetchProducts();
-        }, 70)
+        fetchProducts();
     }, [categoryRoute, searchText]);
 
     const groupByCategories = (products: IProduct[]): IFilterCategory[] => {

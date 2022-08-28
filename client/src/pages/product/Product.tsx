@@ -32,7 +32,6 @@ const Product: FC = observer(() => {
         category: shop.categories[0],
         isLoading: true
     }));
-    console.log(productName, id);
 
     useEffect(() => {
         async function fetchProduct(productId: number) {

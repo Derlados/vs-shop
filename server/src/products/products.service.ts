@@ -106,10 +106,12 @@ export class ProductsService {
     // }
 
     async createProduct(userId: number, dto: CreateProductDto): Promise<Product> {
-        const result = await this.productRepository.insert({ ...dto, userId: userId });
+        const { attributes, ...product } = dto;
+
+        const result = await this.productRepository.insert({ ...product, userId: userId });
         const insertId = result.raw.insertId;
 
-        await this.addAttributes(insertId, dto.attributes);
+        await this.addAttributes(insertId, attributes);
         return this.getProductById(insertId);
     }
 
@@ -121,14 +123,15 @@ export class ProductsService {
      * @returns {Promise<Product>} обновленный объект 
      */
     async updateProduct(id: number, userId: number, dto: CreateProductDto): Promise<Product> {
-        const result = await this.productRepository.update({ id: id, userId: userId }, dto);
+        const { attributes, ...product } = dto;
+
+        const result = await this.productRepository.update({ id: id, userId: userId }, product);
         if (result.affected == 0) {
             throw new NotFoundException("Товар не найден");
         }
 
         await this.valuesRepository.delete({ productId: id });
-        await this.addAttributes(id, dto.attributes);
-
+        await this.addAttributes(id, attributes);
         return this.getProductById(id);
     }
 
@@ -188,7 +191,6 @@ export class ProductsService {
 
     //TODO можно оптимизировать
     private async addAttributes(productId: number, attributes: CreateAttributeDto[]) {
-        console.log(attributes[0]);
         const valuesToInsert: Map<number, string> = new Map();
 
         // Добавление новых атрибутов

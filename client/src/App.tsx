@@ -42,7 +42,8 @@ const App = () => {
                     <Route path='categories' element={<CategoryEditor />} />
                     <Route path='products' element={<ProductEditor />} />
                     <Route path='orders' element={<OrderList />} />
-                    <Route path='*' element={<Navigate to={'./dashboard'} />} />
+                    <Route path='' element={<Navigate to='./dashboard' />} />
+                    <Route path='*' element={<Navigate to='./dashboard' />} />
                 </Route>
                 <Route path='auth' element={<Auth />} />
                 <Route path='/' element={<Main />} >

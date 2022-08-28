@@ -1,15 +1,31 @@
 import classNames from 'classnames';
-import React, { useEffect } from 'react'
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { NavLink, useLocation } from 'react-router-dom'
 import { adminRoutes } from '../../../../navigation/routes'
 import './admin-nav.scss';
 
-const AdminNav = () => {
+interface LocalStore {
+    isOpened: boolean;
+}
+
+const AdminNav = observer(() => {
     const location = useLocation();
+    const localstore = useLocalObservable<LocalStore>(() => ({
+        isOpened: false
+    }));
+
+    const toggleNavBar = () => {
+        localstore.isOpened = !localstore.isOpened;
+    }
 
     return (
-        <div className='admin-nav'>
+        <div className={classNames('admin-nav', {
+            'admin-nav_opened': localstore.isOpened
+        })} onClick={toggleNavBar}>
             <img className='admin-nav__logo' alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' />
+            <div className='admin-nav__item admin-nav__selected-item  rlc'>
+                <div className={`admin-nav__icon ${adminRoutes.find(r => r.to === location.pathname)?.img ?? ''}`}></div>
+            </div>
             <ul className='admin-nav__list'>
                 {adminRoutes.map(route => (
                     <NavLink className='admin-nav__link' key={route.to} to={route.to}>
@@ -25,6 +41,6 @@ const AdminNav = () => {
         </div>
 
     )
-}
+});
 
 export default AdminNav

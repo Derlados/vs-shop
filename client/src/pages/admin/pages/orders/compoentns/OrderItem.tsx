@@ -27,10 +27,10 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
             <div className='orders__short-info rlc'>
                 <Checkbox className='orders__column-checker' checked={orders.selectedOrderIds.has(order.id)} onChange={() => orders.toggleSelectOrder(order.id)} />
                 <span className='orders__column orders__column_value orders__column_small'>{order.id}</span>
-                <span className='orders__column orders__column_optional orders__column_value'>{order.client}</span>
-                <span className='orders__column orders__column_optional-second orders__column_value'>{order.createdAt.toLocaleDateString("ua-UA", { hour: '2-digit', minute: '2-digit' })}</span>
+                <span className='orders__column  orders__column_value orders__column_optional'>{order.client}</span>
+                <span className='orders__column orders__column_value orders__column_optional-second '>{order.createdAt.toLocaleDateString("ua-UA", { hour: '2-digit', minute: '2-digit' })}</span>
                 <span className='orders__column orders__column_value'>{order.totalPrice} ₴</span>
-                <span className='orders__column orders__column_value'>{order.payment.method}</span>
+                <span className='orders__column orders__column_value orders__column_optional-third'>{order.payment.method}</span>
                 <div className='orders__column orders__column_value'>
                     <span className={classNames('orders__status', {
                         'orders__status_red': order.status == OrderStatus.NOT_PROCESSED,
@@ -47,13 +47,13 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
             })}>
                 <div className='orders__ex-info-content rlt'>
                     <div className='orders__ex-info-column'>
-                        <div className='orders__ex-info-row orders__ex-info-title'>Загальна інформація</div>
+                        <div className='orders__ex-info-row orders__ex-info-title'>Общая информация</div>
                         <div className='orders__ex-info-row rlt'>
-                            <span className='orders__ex-info-text orders__ex-info-text_attr'>Клієнт: </span>
+                            <span className='orders__ex-info-text orders__ex-info-text_attr'>Клиент: </span>
                             <span className='orders__ex-info-text orders__ex-info-text_value'>{order.client}</span>
                         </div>
                         <div className='orders__ex-info-row rlt'>
-                            <span className='orders__ex-info-text orders__ex-info-text_attr'>Пошта: </span>
+                            <span className='orders__ex-info-text orders__ex-info-text_attr'>Почта: </span>
                             <span className='orders__ex-info-text orders__ex-info-text_value'>{order.email ?? 'Не вказано'}</span>
                         </div>
                         <div className='orders__ex-info-row rlt'>
@@ -61,7 +61,7 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
                             <span className='orders__ex-info-text orders__ex-info-text_value'>{order.phone}</span>
                         </div>
                         <div className='orders__ex-info-row rlt'>
-                            <span className='orders__ex-info-text orders__ex-info-text_attr'>Адреса: </span>
+                            <span className='orders__ex-info-text orders__ex-info-text_attr'>Адрес: </span>
                             <span className='orders__ex-info-text orders__ex-info-text_value'>{order.address}</span>
                         </div>
                         <div className='orders__ex-info-row rlt'>
@@ -70,7 +70,7 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
                         </div>
                     </div>
                     <div className='orders__ex-info-column'>
-                        <div className='orders__ex-info-row orders__ex-info-title'>Список товарів</div>
+                        <div className='orders__ex-info-row orders__ex-info-title'>Список товаров</div>
                         {order.orderProducts.map(op => (
                             <div key={`${order.id}-${op.product.id}`} className='orders__ex-info-row rlt'>
                                 <span className='orders__ex-info-text orders__ex-info-text_value'>- {op.product.title} X {op.count}<b> - {(op.product.price * op.count).toFixed(2)} ₴</b></span>
@@ -92,7 +92,7 @@ const OrderItem: FC<OrderItemProps> = observer(({ order }) => {
                             </li>
                         ))}
                     </ul>
-                    <div className='orders__total-price rlc'>Загальна сума: <span>{order.totalPrice} ₴</span></div>
+                    <div className='orders__total-price rlc'>Общая сумма: <span>{order.totalPrice} ₴</span></div>
                 </div>
             </div>
         </li >

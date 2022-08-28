@@ -79,7 +79,7 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
                     'selector__values_open': localStore.isOpen
                 })}>
                     {getValidValues().map(([key, value]) => (
-                        <li key={key} className={classNames('selector__value', {
+                        <li key={value} className={classNames('selector__value', {
                             'selector__value_selected': value == localStore.selectedValue
                         })} onMouseDown={() => select(key, value)}>{value}</li>
                     ))}

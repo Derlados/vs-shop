@@ -57,7 +57,7 @@ export class CategoryService {
     async editImage(id: number, image: Express.Multer.File) {
         const imgUrl = await this.fileService.createFile(image);
         await this.categoryRepository.update({ id: id }, { img: imgUrl });
-        return imgUrl;
+        return `${process.env.STATIC_API}/${imgUrl}`;
     }
 
     async deleteCategory(id: number) {

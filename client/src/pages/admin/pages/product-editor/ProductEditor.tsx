@@ -63,7 +63,7 @@ const ProductEditor = observer(() => {
         const attributes: IProductAttribute[] = [];
         if (localStore && localStore.selectedCategory) {
             for (const attr of localStore.selectedCategory.keyAttributes) {
-                attributes.push({id: attr.id, name: attr.name, value: {id: -1, name: ''}})
+                attributes.push({ id: attr.id, name: attr.name, value: { id: -1, name: '' } })
             }
         }
 
@@ -159,7 +159,6 @@ const ProductEditor = observer(() => {
         if (!validate()) {
             return;
         }
-        console.log(localStore.product);
 
         // Проверка, если главным изображением стало одно из существующих - берет его id, иначе никакое id не передается
         const mainImage = getMainImg();
@@ -176,7 +175,7 @@ const ProductEditor = observer(() => {
             catalog.editProduct(localStore.product.id, localStore.product, files, localStore.deletedImagesId, newMainImageId);
         }
 
-        // onClear();
+        onClear();
     }
 
     const onEdit = (product: IProduct) => {
@@ -224,19 +223,26 @@ const ProductEditor = observer(() => {
 
     return (
         <div className='product-editor'>
-            <div className='admin-general__title'>Редактор продуктів</div>
+            <div className='admin-general__title'>Редактор товаров</div>
             <div className='admin-general__subtitle'>Каталоги</div>
             <CategoryList categories={shop.categories} onClick={onSelectCategory} />
             <div className='admin-general__line'></div>
             <div className='product-editor__product-list'>
-                <div className='admin-general__subtitle'>Товари у каталозі "{localStore.selectedCategory?.name}"</div>
-                <ProductGrid products={catalog.products} viewMode={ViewMode.GRID} maxPerPage={MAX_PRODUCTS_BY_PAGE} onSelectProduct={onEdit} />
+                <div className='admin-general__subtitle'>Товары в каталоге "{localStore.selectedCategory?.name}"</div>
+                <div className='product-editor__grid'>
+                    <ProductGrid products={catalog.products} viewMode={ViewMode.GRID} maxPerPage={MAX_PRODUCTS_BY_PAGE} onSelectProduct={onEdit} />
+                </div>
+                <div className='product-editor__list'>
+                    {catalog.products.map(p => (
+                        <div></div>
+                    ))}
+                </div>
             </div>
             <div className='admin-general__line'></div>
             <div className='product-editor__form'>
                 <div className='product-editor__form-head rlc'>
-                    <div className='admin-general__subtitle'>Головне</div>
-                    <div className='admin-general__clear-btn' onClick={onClear}>Clear</div>
+                    <div className='admin-general__subtitle'>Главное</div>
+                    <div className='admin-general__clear-btn' onClick={onClear}>Очистить</div>
                 </div>
                 <div className='product-editor__images-editor clc'>
                     <FileUploader inputRef={inputRef} className='product-editor__uploader ccc' multiple={true} onUploadImage={onUploadImages}>
@@ -262,46 +268,46 @@ const ProductEditor = observer(() => {
                     }
                 </div>
                 <div className='product-editor__chars'>
-                    <div className='rlc'>
-                        <div className='admin-general__input-title'>Назва: </div>
+                    <div className='product-editor__input-wrap rlc'>
+                        <div className='admin-general__input-title'>Название: </div>
                         <input className='admin-general__input' placeholder='Введіть назву' value={localStore.product.title} onChange={(v) => localStore.product.title = v.target.value} />
                     </div>
-                    <div className='rlc'>
+                    <div className='product-editor__input-wrap rlc'>
                         <div className='admin-general__input-title'>Бренд: </div>
                         <input className='admin-general__input' placeholder='Введіть бренд' value={localStore.product.brand} onChange={(v) => localStore.product.brand = v.target.value} />
                     </div>
-                    <div className='rlc'>
-                        <div className='admin-general__input-title'>Опис: </div>
+                    <div className='product-editor__input-wrap rlc'>
+                        <div className='admin-general__input-title'>Описание: </div>
                         <textarea className='admin-general__input admin-general__input_textarea' placeholder='Введіть опис' value={localStore.product.description} onChange={(v) => localStore.product.description = v.target.value} />
                     </div>
-                    <div className='rlc'>
-                        <div className='admin-general__input-title'>Ціна: </div>
+                    <div className='product-editor__input-wrap rlc'>
+                        <div className='admin-general__input-title'>Цена: </div>
                         <input type="number" step={0.01} onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.price ?? ''} onChange={(v) => localStore.product.price = Number(v.target.value)} />
                     </div>
-                    <div className='rlc'>
-                        <div className='admin-general__input-title'>Минула ціна: </div>
+                    <div className='product-editor__input-wrap rlc'>
+                        <div className='admin-general__input-title'>Прошлая цена: </div>
                         <input type="number" step={0.01} onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.oldPrice} onChange={(v) => localStore.product.oldPrice = Number(v.target.value)} />
                     </div>
-                    <div className='rlc'>
-                        <div className='admin-general__input-title'>Кількість: </div>
+                    <div className='product-editor__input-wrap rlc'>
+                        <div className='admin-general__input-title'>Количество: </div>
                         {localStore.product.count !== undefined ?
                             <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count} onChange={(v) => localStore.product.count = Number(v.target.value)} />
                             :
-                            <div className='admin-general__input'>Завантаження ...</div>
+                            <div className='admin-general__input'>Загрузка ...</div>
                         }
                     </div>
-                    <div className='rlc'>
-                        <div className='admin-general__input-title'>Кількість на замовлення: </div>
+                    <div className='product-editor__input-wrap rlc'>
+                        <div className='admin-general__input-title'>Количество на заказ: </div>
                         <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.maxByOrder} onChange={(v) => localStore.product.maxByOrder = Number(v.target.value)} />
                     </div>
-                    <div className='rlc'>
-                        <div className='admin-general__input-title'>Новий ?: </div>
+                    <div className='product-editor__input-wrap rlc'>
+                        <div className='admin-general__input-title'>Новый ?: </div>
                         <Checkbox checked={localStore.product.isNew} onChange={toggleIsNew} />
                     </div>
                     <div className='admin-general__subtitle'>Характеристики</div>
                     <ul className='product-editor__attributes clc'>
                         {localStore.product.attributes.map(attr => (
-                            <li key={attr.name} className='product-editor__chars-editor rlc'>
+                            <li key={attr.name} className='product-editor__chars-editor product-editor__input-wrap rlc'>
                                 <div className='admin-general__input-title'>{attr.name}:</div>
                                 <input type="text" className='admin-general__input product-editor__attribute-value' placeholder='Значення' value={attr.value.name} onChange={(v) => attr.value.name = v.target.value} />
                             </li>
@@ -311,11 +317,11 @@ const ProductEditor = observer(() => {
                 </div>
                 <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
                     "admin-general__action-btn_inactive": !validate()
-                })} onClick={onAccept}>Accept</div>
-                {localStore.product.id !== -1 && <div className={'admin-general__action-btn admin-general__action-btn_delete ccc'} onClick={onDelete}>Delete</div>}
+                })} onClick={onAccept}>Сохранить</div>
+                {localStore.product.id !== -1 && <div className={'admin-general__action-btn admin-general__action-btn_delete ccc'} onClick={onDelete}>Удалить</div>}
             </div>
             <div className='admin-general__line'></div>
-            <div className='admin-general__subtitle'>Передогляд</div>
+            <div className='admin-general__subtitle'>Предпросмотр</div>
             <div className='product-editor__prev rct'>
                 <div className='product-editor__prev-product product-editor__prev-product_quick-view'>
                     <ProductCard product={localStore.product} type='full-view' />

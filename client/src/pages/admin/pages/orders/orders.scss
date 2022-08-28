@@ -13,6 +13,9 @@
         border-radius: 5px;
         padding: 15px;
 
+        @media (max-width: $mobile-vertical) {
+            padding: 10px;
+        }
     }
 
     &__head {
@@ -33,6 +36,11 @@
         flex: 1;
         min-height: 40px;
         width: 100%;
+
+        @media(max-width: $mobile-vertical) {
+            align-items: flex-start !important;
+            flex-direction: column !important;
+        }
     }
 
     &__date-interval {
@@ -72,6 +80,15 @@
         }
     }
 
+    &__search-and-export {
+        width: 100%;
+        justify-content: space-between !important;
+
+        @media (max-width: $mobile-vertical) {
+            margin-top: 10px;
+        }
+    }
+
     &__search {
         flex: 1;
         height: 40px;
@@ -81,6 +98,10 @@
         margin: 0px 15px;
         padding: 0px 10px;
         outline: none;
+
+        @media (max-width: $mobile-vertical) {
+            margin: 0px 15px 0px 0px;
+        }
     }
 
     &__export {
@@ -95,6 +116,11 @@
         font-size: 14px;
         line-height: 18px;
         cursor: pointer;
+
+        @media (max-width: $mobile-vertical) {
+            width: 120px;
+            padding: 0px 8px;
+        }
     }
 
     &__list-header {
@@ -129,6 +155,12 @@
 
         &_optional-second {
             @media (max-width: 900px) {
+                display: none;
+            }
+        }
+
+        &_optional-third {
+            @media (max-width: $mobile-vertical) {
                 display: none;
             }
         }
@@ -217,6 +249,10 @@
     &__item {
         border-bottom: 1px solid $primary-gray;
         padding: 15px 10px;
+
+        @media (max-width: $mobile-vertical) {
+            padding: 12px 5px;
+        }
     }
 
     &__status {
@@ -239,6 +275,11 @@
 
         &_gray {
             background-color: gray;
+        }
+
+        @media (max-width: $mobile-vertical) {
+            padding: 5px;
+            font-size: 13px;
         }
     }
 
@@ -326,6 +367,11 @@
         margin-top: 15px;
         justify-content: space-between;
         width: 100%;
+
+        @media (max-width: $mobile-vertical) {
+            align-items: flex-start !important;
+            flex-direction: column !important;
+        }
     }
 
     &__status-editor {}
@@ -354,6 +400,10 @@
 
         span {
             padding-left: 10px;
+        }
+
+        @media (max-width: $mobile-vertical) {
+            margin-top: 10px;
         }
     }
 

@@ -38,7 +38,7 @@ import { Banner } from './shop/model/banner.model';
         TypeOrmModule.forRoot({
             type: 'mysql',
             host: process.env.DB_HOST,
-            port: 3308,
+            port: Number(process.env.DB_PORT),
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DATABASE,
@@ -46,12 +46,12 @@ import { Banner } from './shop/model/banner.model';
             synchronize: true,
         }),
         ServeStaticModule.forRoot({
-            rootPath: join(__dirname, 'static'),
-            serveRoot: '/static'
+            rootPath: join(__dirname, '..', 'static'),
+            serveRoot: '/images'
         }),
-        // ServeStaticModule.forRoot({
-        //     rootPath: join(__dirname, 'client'),
-        // }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'client'),
+        }),
         ProductsModule,
         UsersModule,
         AuthModule,

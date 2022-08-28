@@ -41,12 +41,15 @@ const OrderList = observer(() => {
 
     return (
         <div className='orders'>
-            <div className='admin-general__title'>Замовлення</div>
+            <div className='admin-general__title'>Заказы</div>
             <div className='orders__content'>
                 <div className='orders__head rlc'>
                     <div className='orders__actions rlc'>
-                        <div className='orders__orders-count'>Замовлення ({orders.maxOrders})</div>
-                        <div className='orders__delete-btn' onClick={() => orders.deleteSelectedOrders()}></div>
+                        <div className='rlc'>
+                            <div className='orders__orders-count'>Заказы ({orders.maxOrders})</div>
+                            <div className='orders__delete-btn' onClick={() => orders.deleteSelectedOrders()}></div>
+
+                        </div>
                     </div>
                     <div className='orders__actions rlc'>
                         <div className='orders__date-interval rlc'>
@@ -54,8 +57,11 @@ const OrderList = observer(() => {
                             <div className='orders__date-hyphen'>-</div>
                             <input className='orders__date-picker' type="date" value={orders.endDate.toLocaleDateString('en-CA')} min="2022-01-01" max={new Date().toLocaleDateString('en-CA')} onChange={v => orders.setDateInterval(orders.startDate, new Date(v.target.value))} />
                         </div>
-                        <input className='orders__search ccc' value={orders.searchString} placeholder='Search ...' onChange={v => orders.setSearchString(v.target.value)} />
-                        <div className='orders__export ccc'>Export table</div>
+                        <div className='orders__search-and-export rlc'>
+                            <input className='orders__search ccc' value={orders.searchString} placeholder='Search ...' onChange={v => orders.setSearchString(v.target.value)} />
+                            <div className='orders__export ccc'>Export table</div>
+                        </div>
+
                     </div>
                 </div>
                 <div className='orders__list-header rcc'>
@@ -64,24 +70,24 @@ const OrderList = observer(() => {
                         <span className='orders__column-text'>ID</span>
                     </div>
                     <div className='orders__column orders__column_optional'>
-                        <span className='orders__column-text'>Клієнт</span>
+                        <span className='orders__column-text'>Клиент</span>
                     </div>
                     <div className='orders__column orders__column_optional-second  orders__column_touchable'
                         onClick={() => orders.selectedSort == OrderSorts.DATE_DESC ? orders.selectedSort = OrderSorts.DATE_ASC : orders.selectedSort = OrderSorts.DATE_DESC}>
                         <span className={classNames('orders__column-text  orders__column-text_sort', {
                             'orders__column-text_sort-asc': orders.selectedSort == OrderSorts.DATE_ASC,
                             'orders__column-text_sort-desc': orders.selectedSort == OrderSorts.DATE_DESC
-                        })}>Дата замовлення</span>
+                        })}>Дата заказа</span>
                     </div>
                     <div className='orders__column orders__column_touchable'
                         onClick={() => orders.selectedSort == OrderSorts.PRICE_DESC ? orders.selectedSort = OrderSorts.PRICE_ASC : orders.selectedSort = OrderSorts.PRICE_DESC}>
                         <span className={classNames('orders__column-text orders__column-text_sort', {
                             'orders__column-text_sort-asc': orders.selectedSort == OrderSorts.PRICE_ASC,
                             'orders__column-text_sort-desc': orders.selectedSort == OrderSorts.PRICE_DESC
-                        })}>Загальна сума</span>
+                        })}>Общая сумма</span>
                     </div>
-                    <div className='orders__column orders__column_touchable'>
-                        <span className='orders__column-text'>Спосіб оплати</span>
+                    <div className='orders__column orders__column_touchable  orders__column_optional-third'>
+                        <span className='orders__column-text'>Способ оплаты</span>
                     </div>
                     <div className='orders__column orders__column_touchable'>
                         <span className='orders__column-text'>Статус</span>

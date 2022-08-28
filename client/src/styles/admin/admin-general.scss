@@ -1,4 +1,5 @@
 @import '../constants/colors.scss';
+@import '../constants/resolutions.scss';
 
 .admin-general {
     &__title {
@@ -45,6 +46,16 @@
         padding: 0px 15px;
         color: gray;
         font-size: 15px;
+
+        @media (max-width: $mobile-vertical) {
+            width: 100%;
+            padding: 7px 0px;
+            font-weight: bold;
+
+            & br {
+                display: none;
+            }
+        }
     }
 
 

@@ -8,7 +8,7 @@ import * as fs from 'fs';
 export class FilesService {
     async createFile(file: Express.Multer.File): Promise<string> {
         const filename = uuid.v4() + '.jpg';
-        const filePath = path.join(__dirname, '..', 'static');
+        const filePath = path.join(__dirname, '..', '..', 'static');
         if (!fs.existsSync(filePath)) {
             fs.mkdirSync(filePath, { recursive: true })
         }
@@ -26,7 +26,7 @@ export class FilesService {
     }
 
     async deleteFile(filename: string) {
-        const filePath = path.join(__dirname, '..', 'static');
+        const filePath = path.join(__dirname, '..', '..', 'static');
         fs.rmSync(path.join(filePath, filename));
     }
 }

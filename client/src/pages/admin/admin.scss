@@ -10,10 +10,23 @@
         @media (max-width: $laptop) {
             min-width: 75px;
         }
+
+        @media (max-width: $mobile-horizontal) {
+            min-width: 0px;
+        }
     }
 
     &__content {
         flex: 1;
-        padding: 15px 25px;
+        width: 100%;
+        padding: 15px 15px;
+
+        @media (max-width: $mobile-horizontal) {
+            width: calc(100vw - 75px);
+        }
+
+        @media (max-width: $mobile-vertical) {
+            width: 100vw;
+        }
     }
 }

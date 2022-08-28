@@ -134,6 +134,10 @@ const HomeEditor = observer(() => {
         return (localStore.bannerImgFile || localStore.banner.id !== -1) && localStore.banner.link !== '' && localStore.banner.subtitle !== '' && localStore.banner.title !== ''
     }
 
+    const onSelectCategory = (category: ICategory) => {
+        catalog.fetchByCategory(category.routeName);
+    }
+
     if (localStore.isLoading) {
         return (
             <div className='home-editor__loader ccc'>
@@ -144,15 +148,15 @@ const HomeEditor = observer(() => {
 
     return (
         <div className='home-editor'>
-            <div className='admin-general__title'>Редактор головної сторінки</div>
+            <div className='admin-general__title'>Редактор главной страницы</div>
             <div className='home-editor__banner clc'>
-                <div className='admin-general__subtitle'>Великі банери на головному меню</div>
+                <div className='admin-general__subtitle'>Большие банеры в главном меню</div>
                 <div className='home-editor__banner-view'>
                     <BannerList banners={shop.banners} bannerSize="container" onClick={onSelectBanner} />
                 </div>
                 <div className='home-editor__banner-view-head rcc'>
-                    <div className='admin-general__subtitle'>Створення нового або редагування</div>
-                    <div className='admin-general__clear-btn' onClick={onClearBanner}>Clear</div>
+                    <div className='admin-general__subtitle'>Редактор баннера</div>
+                    <div className='admin-general__clear-btn' onClick={onClearBanner}>Очистить</div>
                 </div>
 
                 {localStore.banner.img == '' ?
@@ -173,11 +177,11 @@ const HomeEditor = observer(() => {
                     <textarea className='admin-general__input' value={localStore.banner.title} onChange={(v) => localStore.banner.title = v.target.value} />
                 </div>
                 <div className='home-editor__input-row rcc'>
-                    <span className='admin-general__input-title'>Підзаголовок: </span>
+                    <span className='admin-general__input-title'>Подзаголовок: </span>
                     <input className='admin-general__input' value={localStore.banner.subtitle} onChange={(v) => localStore.banner.subtitle = v.target.value} />
                 </div>
                 <div className='home-editor__input-row rcc'>
-                    <span className='admin-general__input-title'>Посилання<br></br>(без домену): </span>
+                    <span className='admin-general__input-title'>Ссылка <br></br>(без домену к примеру /home): </span>
                     <input className='admin-general__input' value={localStore.banner.link} onChange={(v) => localStore.banner.link = v.target.value} />
                 </div>
                 <div className='rcc home-editor__btn-row'>
@@ -186,15 +190,15 @@ const HomeEditor = observer(() => {
                 </div>
             </div>
             <div className='home-editor__small-banners'>
-                <div className='admin-general__subtitle'>Малий банер</div>
+                <div className='admin-general__subtitle'>Маленький банер</div>
                 <FileUploader inputRef={smallBannerUploader} className='home-editor__file-uploader' onUploadImage={onUploadSmallBannerImg} multiple={false}>
                     <img className='home-editor__small-banner' src={shop.smallBanner == '' ? require('../../../../assets/images/no-photo2.png') : shop.smallBanner} />
                 </FileUploader>
             </div>
             <div className='home-editor__contacts'>
-                <div className='admin-general__subtitle'>Контакти</div>
+                <div className='admin-general__subtitle'>Контакты</div>
                 {localStore.contacts.map(contact => (
-                    <div key={contact.name} className='rcc'>
+                    <div key={contact.name} className='home-editor__input-row  rcc'>
                         <span className='admin-general__input-title'>{contact.name}: </span>
                         <input className='admin-general__input' value={contact.url} onChange={(v) => contact.url = v.target.value} />
                     </div>
@@ -205,9 +209,9 @@ const HomeEditor = observer(() => {
                 </div>
             </div>
             <div className='home-editor__bestsellers clc'>
-                <div className='admin-general__subtitle'>Хіти продаж</div>
+                <div className='admin-general__subtitle'>Хиты продаж</div>
                 <div className='home-editor__product-filters rlc'>
-                    <Selector className='home-editor__selector' hint={''} values={getSelectorCategories(shop.categories)} selectedValue={shop.categories[0]?.name} onSelect={() => { }} />
+                    <Selector className='home-editor__selector' hint={''} values={getSelectorCategories(shop.categories)} selectedValue={shop.categories[0]?.name} onSelect={onSelectCategory} />
                     <input className='home-editor__search' placeholder='Search ...' />
                 </div>
                 {catalog.filteredProducts.map(p => (

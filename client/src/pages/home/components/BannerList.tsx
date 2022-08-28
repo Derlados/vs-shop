@@ -32,7 +32,7 @@ const BannerList: FC<BannerListProps> = ({ banners, bannerSize = "full-screen", 
                 >
                     {
                         banners.map(b => (
-                            <SwiperSlide key={b.img} className='home__banner-slide' onClick={() => onClick(b)}>
+                            <SwiperSlide key={b.id} className='home__banner-slide' onClick={() => onClick(b)}>
                                 <Banner info={b} size={bannerSize} />
                             </SwiperSlide>
                         ))
