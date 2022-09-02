@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react'
 import { NavLink } from 'react-router-dom';
 import { ICategory } from '../../../types/ICategory';
@@ -8,7 +9,7 @@ interface CategoryCardProps {
     onClick?: () => void;
 }
 
-const CategoryCard: FC<CategoryCardProps> = ({ category, onClick }) => {
+const CategoryCard: FC<CategoryCardProps> = observer(({ category, onClick }) => {
     return (
         <NavLink className='category-list__category-card  rlc' to={!onClick ? `/${ROUTES.CATEGORY_PREFIX}${category.routeName}` : ''} onClick={onClick}>
             <div className='category-list__category-text'>
@@ -19,6 +20,6 @@ const CategoryCard: FC<CategoryCardProps> = ({ category, onClick }) => {
             <img className='category-list__category-img' alt='' src={category.img} />
         </NavLink>
     )
-}
+});
 
 export default CategoryCard

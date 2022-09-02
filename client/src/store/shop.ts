@@ -11,7 +11,6 @@ import { IProduct } from "../types/IProduct";
 
 class ShopStore {
     apiError: string;
-    categories: ICategory[];
     bestsellers: IProduct[];
     newProducts: IProduct[];
 
@@ -24,7 +23,6 @@ class ShopStore {
     constructor() {
         makeAutoObservable(this);
 
-        this.categories = [];
         this.bestsellers = [];
         this.newProducts = [];
         this.contacts = [];
@@ -32,19 +30,15 @@ class ShopStore {
         this.fetchAllInfo();
     }
 
-    get categoryRoutes(): string[] {
-        return this.categories.map(c => c.routeName);
-    }
+
 
     async fetchAllInfo() {
-        const categoriesPromise = categoriesService.getAllCategories();
         const shopInfoPromise = shopService.getShopInfo();
         const bestsellersPromise = productsService.getBestsellers();
         const newProductsPromise = productsService.getNewProducts();
 
-        const [categories, shopInfo, bestsellers, newProducts] = [await categoriesPromise, await shopInfoPromise, await bestsellersPromise, await newProductsPromise];
+        const [shopInfo, bestsellers, newProducts] = [await shopInfoPromise, await bestsellersPromise, await newProductsPromise];
 
-        this.categories = categories;
         this.banners = shopInfo.banners;
         this.smallBanner = shopInfo.smallBanner;
         this.contacts = shopInfo.contacts;
@@ -68,32 +62,7 @@ class ShopStore {
         }
     }
 
-    async addCategory(data: CreateCategoryDto, img: File) {
-        const newCategory = await categoriesService.createCategory(data);
-        newCategory.img = await categoriesService.editCategoryImage(newCategory.id, img);
-        this.categories.push(newCategory);
-    }
 
-    async editCategory(id: number, data: CreateCategoryDto, img?: File) {
-        const updatedCategory = await categoriesService.editCategory(id, data);
-        if (img) {
-            updatedCategory.img = await categoriesService.editCategoryImage(updatedCategory.id, img);
-        }
-        this.categories[this.categories.findIndex(c => c.id === id)] = updatedCategory;
-    }
-
-    async deleteCategory(id: number) {
-        await categoriesService.deleteCategory(id);
-        this.categories.splice(this.categories.findIndex(c => c.id === id), 1);
-    }
-
-    getCategoryById(id: number) {
-        return this.categories.find((c) => c.id === id)
-    }
-
-    getCategoryByRoute(routeName: string) {
-        return this.categories.find((c) => c.routeName === routeName)
-    }
 
     async addBanner(banner: IBanner, img: File) {
         const newBanner = await shopService.addBanner(banner, img);

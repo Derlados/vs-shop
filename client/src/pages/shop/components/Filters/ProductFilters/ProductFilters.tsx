@@ -2,7 +2,7 @@ import cyrillicToTranslit from 'cyrillic-to-translit-js'
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import React, { FC, useEffect } from 'react'
 import MultiRangeSlider from '../../../../../lib/components/MultiRangeSlider/MultiRangeSlider'
-import catalog from '../../../../../store/catalog'
+import products from '../../../../../store/product'
 import FilterItem from '../FilterItem'
 
 export interface ICheckAttribute {
@@ -42,7 +42,7 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ onCheckFilter, onChe
 
     useEffect(() => {
         localStore.attributes = [];
-        for (const attr of catalog.filters.attributes) {
+        for (const attr of products.filters.attributes) {
             localStore.attributes.push({
                 ...attr.attribute,
                 allValues: (Array.from(attr.attribute.allValues))
@@ -50,15 +50,15 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ onCheckFilter, onChe
                         return {
                             id: v.id,
                             name: v.name,
-                            productCount: catalog.countProductByValue(attr.attribute.id, v.name),
-                            checked: catalog.hasSelectedFilter(attr.attribute.id, v.id)
+                            productCount: products.countProductByValue(attr.attribute.id, v.name),
+                            checked: products.hasSelectedFilter(attr.attribute.id, v.id)
                         }
                     })
             })
         }
 
-        localStore.brand.allValues = catalog.brands.map((b) => { return { id: -1, name: b, productCount: catalog.conntProductByBrand(b), checked: catalog.hasSelectedBrand(cyrillicToTranslit().transform(b, "_")) } })
-    }, [catalog.filters.attributes, catalog.brands, catalog.selectedFilters, catalog.selectedTranslitBrands]);
+        localStore.brand.allValues = products.brands.map((b) => { return { id: -1, name: b, productCount: products.conntProductByBrand(b), checked: products.hasSelectedBrand(cyrillicToTranslit().transform(b, "_")) } })
+    }, [products.filters.attributes, products.brands, products.selectedFilters, products.selectedTranslitBrands]);
 
     const onCheckBrands = (ignore: number, checkValue: ICheckValue) => {
         checkValue.checked = !checkValue.checked;
@@ -72,15 +72,15 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ onCheckFilter, onChe
 
     return (
         <div className='filters__content'>
-            <div className='filters__title'>{catalog.category.name}</div>
+            <div className='filters__title'>{products.category.name}</div>
             <div className='filters__line'></div>
             <div className='filters__attr-name'>Ціна</div>
             <div className='filters__price'>
                 <MultiRangeSlider
                     min={0}
-                    max={Math.ceil(catalog.priceRange.max)}
-                    selectedMin={catalog.selectedPriceRange.min}
-                    selectedMax={catalog.selectedPriceRange.max}
+                    max={Math.ceil(products.priceRange.max)}
+                    selectedMin={products.selectedPriceRange.min}
+                    selectedMax={products.selectedPriceRange.max}
                     onChange={({ min, max }) => { }}
                     onAccept={onSelectRange} />
             </div>

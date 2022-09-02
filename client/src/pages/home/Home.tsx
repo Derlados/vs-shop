@@ -7,6 +7,7 @@ import Loader from '../../lib/components/Loader/Loader';
 import "aos/dist/aos.css";
 import { IProduct } from '../../types/IProduct';
 import CategoryList from '../../components/Category/CategoryList/CategoryList';
+import catalog from '../../store/catalog';
 
 const Home = observer(() => {
 
@@ -55,7 +56,7 @@ const Home = observer(() => {
             </div>
             <SliderProducts title="Хіт продажів" slidesPerView={5} products={[...shop.bestsellers.slice(0, 10)]} />
             <div className='home__category-title'>Catalog</div>
-            <CategoryList categories={shop.categories} />
+            <CategoryList categories={catalog.categories} />
             <img className='home__banner' alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/banner-image/4.jpg' />
             <SliderProducts title="Нові товари" products={[...shop.newProducts.slice(0, 10)]} />
         </div>

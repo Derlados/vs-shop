@@ -11,6 +11,9 @@ import classNames from 'classnames';
 import CategoryCard from '../../../../components/Category/CategoryList/CategoryCard';
 import FileUploader from '../../../../lib/components/FileUploader/FileUploader';
 import Checkbox from '../../../../lib/components/Checkbox/Checkbox';
+import catalog from '../../../../store/catalog';
+import Selector from '../../../../lib/components/Selector/Selector';
+import { ICatalog } from '../../../../types/ICatalog';
 
 
 interface IKeyAttribute {
@@ -18,12 +21,24 @@ interface IKeyAttribute {
     value: string;
 }
 
-interface LocalStore {
+interface ICategoryTemplate {
     id: number;
+    catalogId: number;
     name: string;
     routeName: string;
     isNew: boolean;
     attributes: IKeyAttribute[];
+}
+
+interface ICatalogTemplate {
+    id: number;
+    name: string;
+}
+
+
+interface LocalStore {
+    category: ICategoryTemplate;
+    catalog: ICatalogTemplate;
     imgUrl?: string;
     img?: File;
 }
@@ -31,19 +46,27 @@ interface LocalStore {
 const CategoryEditor = observer(() => {
     const inputRef = useRef<HTMLInputElement>(null);
     const localStore = useLocalObservable<LocalStore>(() => ({
-        id: -1,
-        name: '',
-        routeName: '',
-        isNew: false,
-        attributes: [{ id: nanoid(), value: '' }]
+        category: {
+            id: -1,
+            catalogId: -1,
+            name: '',
+            routeName: '',
+            isNew: false,
+            attributes: [{ id: nanoid(), value: '' }],
+        },
+        catalog: {
+            id: -1,
+            name: ''
+        }
     }))
 
     const validate = (): boolean => {
-        if (!localStore.name || !localStore.routeName || localStore.attributes.length == 1) {
+        if (!localStore.category.name || !localStore.category.routeName
+            || localStore.category.attributes.length === 1 || localStore.category.catalogId === -1) {
             return false;
         }
 
-        if (localStore.id == -1 && !localStore.img) {
+        if (localStore.category.id == -1 && !localStore.img) {
             return false;
         }
 
@@ -51,71 +74,23 @@ const CategoryEditor = observer(() => {
     }
 
     const deleteAttr = (index: number) => {
-        localStore.attributes.splice(index, 1);
+        localStore.category.attributes.splice(index, 1);
     }
 
     const onChangeAttr = (index: number, newValue: string) => {
-        localStore.attributes[index].value = newValue;
-        if (localStore.attributes[localStore.attributes.length - 1].value !== '') {
-            localStore.attributes.push({ id: nanoid(), value: '' });
+        localStore.category.attributes[index].value = newValue;
+        if (localStore.category.attributes[localStore.category.attributes.length - 1].value !== '') {
+            localStore.category.attributes.push({ id: nanoid(), value: '' });
         }
 
-        if (localStore.attributes[localStore.attributes.length - 2].value === '') {
-            localStore.attributes.pop()
+        if (localStore.category.attributes[localStore.category.attributes.length - 2].value === '') {
+            localStore.category.attributes.pop()
         }
 
     }
 
     const toggleIsNew = () => {
-        localStore.isNew = !localStore.isNew;
-    }
-
-    const onAccept = () => {
-        if (!validate()) {
-            return;
-        }
-
-        const categoryDto: CreateCategoryDto = {
-            name: localStore.name,
-            routeName: localStore.routeName,
-            isNew: localStore.isNew,
-            attributes: localStore.attributes.map(a => {
-                return {
-                    name: a.value,
-                    isRange: false
-                }
-            })
-        }
-        categoryDto.attributes = categoryDto.attributes.filter(a => a.name !== '');
-
-        if (localStore.id == -1) {
-            if (localStore.img) {
-                shop.addCategory(categoryDto, localStore.img);
-            }
-        } else {
-            shop.editCategory(localStore.id, categoryDto, localStore.img);
-        }
-
-        onClear();
-    }
-
-    const onClear = () => {
-        localStore.id = -1;
-        localStore.name = localStore.routeName = localStore.imgUrl = '';
-        localStore.isNew = false;
-        localStore.attributes = [{ id: nanoid(), value: '' }];
-        localStore.img = undefined;
-    }
-
-    const onEdit = (category: ICategory) => {
-        localStore.id = category.id;
-        localStore.name = category.name;
-        localStore.routeName = category.routeName;
-        localStore.isNew = category.isNew;
-        localStore.imgUrl = category.img;
-        console.log(localStore.attributes);
-        localStore.attributes = category.keyAttributes.map(attr => { return { id: attr.id.toString(), value: attr.name } });
-        localStore.attributes.push({ id: nanoid(), value: '' })
+        localStore.category.isNew = !localStore.category.isNew;
     }
 
     const onUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -131,20 +106,148 @@ const CategoryEditor = observer(() => {
 
     }
 
-    const onDelete = (id: number) => {
-        shop.deleteCategory(id);
+    const onAccept = () => {
+        if (!validate()) {
+            return;
+        }
+
+        const { id: categoryId, attributes, ...categoryData } = localStore.category;
+        const categoryDto: CreateCategoryDto = {
+            ...categoryData,
+            attributes: attributes.filter(a => a.value !== '').map(a => {
+                return {
+                    name: a.value,
+                    isRange: false
+                }
+            })
+        }
+
+        if (categoryId == -1) {
+            if (localStore.img) {
+                catalog.addCategory(categoryDto, localStore.img);
+            }
+        } else {
+            catalog.editCategory(categoryId, categoryDto, localStore.img);
+        }
+
         onClear();
+    }
+
+    const onSelectCatalog = (catalogId: string) => {
+        localStore.category.catalogId = Number(catalogId);
+    }
+
+    const onClear = () => {
+        localStore.category = {
+            id: -1,
+            catalogId: -1,
+            name: '',
+            routeName: '',
+            isNew: false,
+            attributes: [{ id: nanoid(), value: '' }],
+        };
+        localStore.img = undefined;
+        localStore.imgUrl = undefined;
+    }
+
+    const onEdit = (category: ICategory) => {
+        const { keyAttributes, productsCount, ...categoryData } = category;
+        const attributes = category.keyAttributes.map(attr => { return { id: attr.id.toString(), value: attr.name } });
+        attributes.push({ id: nanoid(), value: '' })
+        localStore.category = { ...categoryData, attributes: attributes };
+        localStore.imgUrl = category.img;
+    }
+
+    const onDelete = (id: number, catalogId: number) => {
+        catalog.deleteCategory(id, catalogId);
+        onClear();
+    }
+
+    const getCatalogValues = (catalogs: ICatalog[]) => {
+        const values = new Map<string, string>();
+
+        for (const catalog of catalogs) {
+            values.set(catalog.id.toString(), catalog.name);
+        }
+
+        return values;
+    }
+
+
+    //////////////////////// РЕДАКТОР КАТАЛОГА //////////////////////////
+
+    const onSelectCatalogToEdit = (catalogId: number) => {
+        const editedCatalog = catalog.catalogs.find(c => c.id === catalogId);
+        if (editedCatalog) {
+            onClearCatalogEditor();
+            const { categories, ...catalogData } = editedCatalog;
+            localStore.catalog = catalogData;
+        }
+
+    }
+
+    const onChangeCatalogName = (newName: string) => {
+        localStore.catalog.name = newName;
+    }
+
+    const onAcceptCatalog = () => {
+        if (localStore.catalog.id === -1) {
+            catalog.addCatalog(localStore.catalog.name);
+        } else {
+            catalog.editCatalog(localStore.catalog.id, localStore.catalog.name);
+        }
+
+        onClearCatalogEditor();
+    }
+
+    const onDeleteCatalog = (catalogId: number) => {
+        catalog.deleteCatalog(catalogId);
+
+        if (localStore.catalog.id === catalogId) {
+            onClearCatalogEditor();
+        }
+    }
+
+    const onClearCatalogEditor = () => {
+        localStore.catalog = { id: -1, name: '' }
     }
 
     return (
         <div className='category-editor clt'>
-            <div className='admin-general__title'>Редактор каталогов</div>
+            <div className='admin-general__title'>Редактор каталогов и категорий</div>
             <div className='category-editor__created-categories rlc'>
-                {shop.categories.map((category) => (
+                {catalog.categories.map((category) => (
                     <CategoryCard key={category.routeName} category={category} onClick={() => onEdit(category)} />
                 ))}
             </div>
-            <div className='category-editor__line'></div>
+            <div className='admin-general__title'>Список каталогов</div>
+            <div className='category-editor__catalogs'>
+                <div className='category-editor__catalog-editor rlc'>
+                    <input className='admin-general__input'
+                        placeholder={localStore.catalog.id === -1 ? 'Введите название нового каталога' : `Введите новое название для каталога --${catalog.catalogs.find(c => c.id !== localStore.catalog.id)?.name}`}
+                        value={localStore.catalog.name}
+                        onChange={(e) => onChangeCatalogName(e.target.value)}
+                    />
+                    <div className='category-editor__catalog-editor-btn admin-general__btn admin-general__btn_add' onClick={onAcceptCatalog}>
+                        {localStore.catalog.id === -1 ? 'Добавить' : 'Изменить'}
+                    </div>
+                    <div className='category-editor__catalog-editor-btn admin-general__btn admin-general__btn_add' onClick={onClearCatalogEditor}>
+                        Очистить
+                    </div>
+                </div>
+                <ul className='category-editor__catalogs-list'>
+                    {catalog.catalogs.map(c => (
+                        <li key={c.id} className='category-editor__catalog-item rlc'  >
+                            <div className='category-editor__catalog-name' onClick={() => onSelectCatalogToEdit(c.id)}>{c.name}</div>
+                            <div className='category-editor__catalog-del-wrapper ccc' onClick={() => onDeleteCatalog(c.id)}>
+                                <div className='category-editor__catalog-del admin-general__btn-icon admin-general__btn-icon_del'></div>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div className='admin-general__title'>Создание категории</div>
             <div className='category-editor__form rlt'>
                 <div className='category-editor__left-form clc'>
                     <FileUploader inputRef={inputRef} className='category-editor__edit-img-cont ccc' onUploadImage={onUploadImage}>
@@ -160,26 +263,40 @@ const CategoryEditor = observer(() => {
                         <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
                             "admin-general__action-btn_inactive": !validate()
                         })} onClick={onAccept}>Сохранить</div>
-                        {localStore.id !== -1 && <div className='category-editor__action-btn category-editor__action-btn_delete ccc' onClick={() => onDelete(localStore.id)}>Удалить</div>}
+                        {localStore.category.id !== -1 &&
+                            <div className='category-editor__action-btn category-editor__action-btn_delete ccc'
+                                onClick={() => onDelete(localStore.category.id, localStore.category.catalogId)}>
+                                Удалить
+                            </div>
+                        }
                     </div>
                 </div>
                 <div className='category-editor__right-form clt'>
                     <div className='category-editor__editor-head rlt'>
-                        <div className='category-editor__name'>Имя и ссылка</div>
+                        <div className='category-editor__name'>Основная информация</div>
                         <div className='admin-general__clear-btn' onClick={onClear}>Очистить</div>
                     </div>
-                    <input className='admin-general__input' placeholder='Имя категории' value={localStore.name} onChange={(v) => localStore.name = v.target.value} />
-                    <input className='admin-general__input' placeholder='Имя категории на английском (маленькие буквы)' value={localStore.routeName} onChange={(v) => localStore.routeName = v.target.value} />
+
+                    <input className='admin-general__input' placeholder='Имя категории' value={localStore.category.name} onChange={(v) => localStore.category.name = v.target.value} />
+                    <input className='admin-general__input' placeholder='Имя категории на английском (маленькие буквы)' value={localStore.category.routeName} onChange={(v) => localStore.category.routeName = v.target.value} />
+                    <Selector
+                        className='admin-general__selector'
+                        hint={'Выберете каталог'}
+                        values={getCatalogValues(catalog.catalogs)}
+                        onSelect={onSelectCatalog}
+                        selectedId={localStore.category.catalogId.toString()}
+                    />
                     <div className='rlc'>
                         <div className='admin-general__input-title category-editor__is-new'>Новинка ?: </div>
-                        <Checkbox checked={localStore.isNew} onChange={toggleIsNew} />
+                        <Checkbox checked={localStore.category.isNew} onChange={toggleIsNew} />
                     </div>
+
                     <div className='category-editor__key-attrs'>Ключевые аттрибуты</div>
                     <ul className='category-editor__key-attr-list'>
-                        {localStore.attributes.map((attr, index) => (
+                        {localStore.category.attributes.map((attr, index) => (
                             <li key={attr.id} className='category-editor__key-attr-item rlc'>
                                 <input className='admin-general__input' placeholder='Имя аттрибута' value={attr.value} onChange={(v) => onChangeAttr(index, v.target.value)} />
-                                {localStore.attributes.length !== index + 1 && <div className='category-editor__del-attr ccc' onClick={() => deleteAttr(index)}>X</div>}
+                                {localStore.category.attributes.length !== index + 1 && <div className='category-editor__del-attr ccc' onClick={() => deleteAttr(index)}>X</div>}
                             </li>
                         ))}
                     </ul>
@@ -188,7 +305,7 @@ const CategoryEditor = observer(() => {
                     <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
                         "admin-general__action-btn_inactive": !validate()
                     })} onClick={onAccept}>Сохранить</div>
-                    {localStore.id !== -1 && <div className='category-editor__action-btn category-editor__action-btn_delete ccc' onClick={() => onDelete(localStore.id)}>Удалить</div>}
+                    {localStore.category.id !== -1 && <div className='category-editor__action-btn category-editor__action-btn_delete ccc' onClick={() => onDelete(localStore.category.id, localStore.category.catalogId)}>Удалить</div>}
                 </div>
             </div>
         </div>

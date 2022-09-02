@@ -1,303 +1,101 @@
-import cyrillicToTranslit from "cyrillic-to-translit-js";
 import { makeAutoObservable } from "mobx";
+import catalogsService from "../services/catalogs/catalogs.service";
 import categoriesService from "../services/categories/categories.service";
-import productsService from "../services/products/products.service";
+import { CreateCategoryDto } from "../services/categories/dto/create-category.dto";
+import { ICatalog } from "../types/ICatalog";
 import { ICategory } from "../types/ICategory";
-import { IFilters, IRange } from "../types/IFilters";
-import { IProduct } from "../types/IProduct";
-import { IValue } from "../types/IValue";
 
-export enum SortType {
-    NOT_SELECTED,
-    PRICE_ASC,
-    PRICE_DESC,
-    NEW,
-    DISCOUNT
-}
-
-//TODO Когда будет много товаров, логику фильтрации вынести на сервер
 class CatalogStore {
-    public category: ICategory;
-    public filters: IFilters;
-    public products: IProduct[];
-
-    public selectedSort: SortType;
-    public selectedPriceRange: IRange;
-    public selectedTranslitBrands: string[]; // Все бренд переведены в английский транслит
-    public searchString: string;
-    public selectedFilters: Map<number, IValue[]>;
-
-
+    catalogs: ICatalog[];
+    isInit: boolean;
 
     constructor() {
-        makeAutoObservable(this);
-        this.category = {
-            id: -1,
-            name: '',
-            img: '',
-            isNew: false,
-            routeName: '',
-            keyAttributes: [],
-            productsCount: 0
-        };
-        this.products = [];
-        this.filters = {
-            priceRange: { min: 0, max: 0 },
-            attributes: []
-        };
+        makeAutoObservable(this, {}, { deep: true });
 
-        this.selectedSort = SortType.NOT_SELECTED;
-        this.selectedPriceRange = this.priceRange;
-        this.selectedTranslitBrands = [];
-        this.searchString = '';
-        this.selectedFilters = new Map();
+        this.catalogs = [];
+        this.isInit = false;
+
+        this.fetchAll();
     }
 
-    get filteredProducts(): IProduct[] {
-        let products = [...this.products];
-        products = this.filterProducts(products);
-        products = this.sortProducts(products);
-        return products;
+    get categories(): ICategory[] {
+        const categories: ICategory[] = [];
+        for (const catalog of this.catalogs) {
+            categories.push(...catalog.categories);
+        }
+        console.log(this.catalogs, categories);
+        return categories;
     }
 
-    get priceRange(): IRange {
-        const range: IRange = {
-            min: 0,
-            max: 0
-        }
-
-        for (const product of this.products) {
-            if (product.price > range.max) {
-                range.max = product.price;
-            }
-
-            if (product.price < range.min) {
-                range.min = product.price;
-            }
-        }
-
-        return range;
+    get categoryRoutes(): string[] {
+        return this.categories.map(c => c.routeName);
     }
 
-    get brands(): string[] {
-        const brands = new Set(this.products.map(p => p.brand));
-        return Array.from(brands);
+    async fetchAll() {
+        this.catalogs = await catalogsService.getAll();
+        this.isInit = true;
     }
 
-    async fetchByCategory(categoryRoute: string) {
-        this.clearAll();
+    ///////////////////////// РАБОТА С КАТЕГОРИЯМИ ///////////////////////////////////
 
-        this.category = await categoriesService.getCategoryByRouteName(categoryRoute);
-        if (!this.category) {
-            return;
-        }
-        this.products = await productsService.getProductsByCategory(this.category.id);
+    getCategoryById(id: number) {
+        return this.categories.find((c) => c.id === id)
+    }
 
-        this.selectedPriceRange = this.priceRange;
+    getCategoryByRoute(routeName: string) {
+        return this.categories.find((c) => c.routeName === routeName)
+    }
 
-        const filterAttrs = await categoriesService.getFilters(this.category.id);
-        this.filters = {
-            priceRange: this.priceRange,
-            attributes: filterAttrs
-        }
+    async addCategory(data: CreateCategoryDto, img: File) {
+        const newCategory = await categoriesService.createCategory(data);
+        newCategory.img = await categoriesService.editCategoryImage(newCategory.id, img);
 
-        for (const attribute of this.filters.attributes) {
-            this.selectedFilters.set(attribute.attribute.id, []);
+        const catalog = this.catalogs.find(c => c.id === data.catalogId);
+        if (catalog) {
+            catalog.categories.push(newCategory);
         }
     }
 
-    async fetchProductsByText(searchText: string) {
-        this.clearAll();
-        this.products = await productsService.getProductByText(searchText);
-        this.selectedPriceRange = this.priceRange;
-    }
-
-    async fetchProductById(id: number): Promise<IProduct> {
-        let product = this.getProductById(id);
-        if (!product) {
-            product = await productsService.getProductById(id);
-
+    async editCategory(id: number, data: CreateCategoryDto, img?: File) {
+        const updatedCategory = await categoriesService.editCategory(id, data);
+        if (img) {
+            updatedCategory.img = await categoriesService.editCategoryImage(updatedCategory.id, img);
         }
 
-        return product;
-    }
-
-    async fetchRelatedProducts(product: IProduct, maxProducts: number): Promise<IProduct[]> {
-        const products = await productsService.getFilterProducts({ brands: [product.brand] });
-        const shuffledProducts = [...products].sort(() => 0.5 - Math.random());
-
-        return shuffledProducts.slice(0, maxProducts);
-    }
-
-    public getProductById(id: number): IProduct | undefined {
-        return this.products.find(p => p.id === id);
-    }
-
-    public async loadProductCount(product: IProduct) {
-        product.count = await productsService.getProductCount(product.id);
-    }
-
-    public clearFilters() {
-        this.selectedTranslitBrands = [];
-        this.selectedPriceRange = this.priceRange;
-        for (const attribute of this.filters.attributes) {
-            this.selectedFilters.set(attribute.attribute.id, []);
+        const catalog = this.catalogs.find(c => c.id !== data.catalogId);
+        if (catalog) {
+            catalog.categories[this.categories.findIndex(c => c.id === id)] = updatedCategory;
         }
     }
 
-    private clearAll() {
-        this.products = [];
-        this.searchString = '';
-        this.selectedFilters.clear();
-        this.selectedTranslitBrands = [];
-        this.selectedPriceRange = this.priceRange;
-        this.filters = {
-            priceRange: { min: 0, max: 0 },
-            attributes: []
-        };
+    async deleteCategory(id: number, catalogId: number) {
+        await categoriesService.deleteCategory(id);
+
+        const catalog = this.catalogs.find(c => c.id === catalogId);
+        if (catalog) {
+            catalog.categories.splice(catalog.categories.findIndex(c => c.id === id), 1);
+        }
+
     }
 
-    /////////////////////////////////// ФИЛЬТРАЦИЯ И СОРТИРОВКА ПРОДУКТОВ ///////////////////////////////////
+    ///////////////////////// РАБОТА С КАТАЛОГАМИ ////////////////////////////////////////
 
-    private filterProducts(products: IProduct[]) {
-        let filteredProducts = [];
-
-        // По цене 
-        filteredProducts = products.filter(p => p.price >= this.selectedPriceRange.min && p.price <= this.selectedPriceRange.max);
-
-        // По бренду
-        if (this.selectedTranslitBrands.length !== 0) {
-            filteredProducts = products.filter(p => this.selectedTranslitBrands.includes(cyrillicToTranslit().transform(p.brand, "_")));
-        }
-
-        // По ключевому слову
-        const searchString = this.searchString.replace(/\s+/, ' ').toLowerCase();
-        if (this.searchString) {
-            filteredProducts = filteredProducts.filter(p => p.title.toLowerCase().includes(searchString))
-        }
-
-        // По фильтрам
-        for (const [attributeId, values] of this.selectedFilters) {
-            if (values.length !== 0) {
-                const valueNames = values.map(v => v.name);
-                filteredProducts = filteredProducts.filter(p => valueNames.includes(p.attributes.find(a => a.id === attributeId)?.value.name ?? ''));
-            }
-        }
-
-        return filteredProducts;
+    async addCatalog(name: string) {
+        const newCatalog = await catalogsService.createCatalog(name);
+        this.catalogs.push(newCatalog);
     }
 
-    private sortProducts(products: IProduct[]): IProduct[] {
-        switch (this.selectedSort) {
-            case SortType.NOT_SELECTED: {
-                return products;
-            }
-            case SortType.PRICE_ASC: {
-                return products.sort((p1, p2) => {
-                    return p1.price > p2.price ? 1 : -1;
-                });
-            }
-            case SortType.PRICE_DESC: {
-                return products.sort((p1, p2) => {
-                    return p1.price < p2.price ? 1 : -1;
-                })
-            }
-            case SortType.NEW: {
-                return products.sort((p1, p2) => {
-                    return (!p1.isNew && p2.isNew) ? 1 : -1;
-                })
-            }
-            case SortType.DISCOUNT: {
-                return products.sort((p1, p2) => {
-                    return (p1.discountPercent == 0 && p2.discountPercent != 0) ? 1 : -1;
-                })
-            }
+    async editCatalog(id: number, name: string) {
+        const catalogIndex = this.catalogs.findIndex(c => c.id)
+        if (catalogIndex !== -1) {
+            const updatedCatalog = await catalogsService.editCatalog(id, name);
+            this.catalogs[catalogIndex] = { ...updatedCatalog, ...this.catalogs[catalogIndex] };
         }
     }
 
-    public setSearchString(searchString: string) {
-        this.searchString = searchString;
-    }
-
-    public selectPriceRange(min: number, max: number) {
-        this.selectedPriceRange = { min: min, max: max };
-    }
-
-    public selectBrands(translitBrands: string[]) {
-        this.selectedTranslitBrands.push(...translitBrands);
-    }
-
-    public hasSelectedBrand(brand: string) {
-        return this.selectedTranslitBrands.findIndex(b => b === brand) !== -1;
-    }
-
-    public setFilter(attributeId: number, ...valueids: number[]) {
-        const allValues = this.filters.attributes.find(a => a.attribute.id === attributeId)?.attribute.allValues;
-        if (allValues) {
-            const values: IValue[] = allValues.filter(v => valueids.includes(v.id));
-            this.selectedFilters.set(attributeId, values);
-        }
-
-        console.log(JSON.stringify(this.selectedFilters));
-    }
-
-    public hasSelectedFilter(attributeId: number, valueId: number) {
-        const values = this.selectedFilters.get(attributeId);
-        if (values && values.find(v => v.id === valueId)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
-    public countProductByValue(attributeId: number, value: string) {
-        return this.filteredProducts.filter(p => (p.attributes.find(a => a.id === attributeId)?.value.name ?? '') === value).length;
-    }
-
-    //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
-    public conntProductByBrand(brand: string) {
-        return this.filteredProducts.filter(p => (p.brand == brand)).length;
-    }
-
-    public setSortType(sortType: SortType) {
-        this.selectedSort = sortType;
-    }
-
-    /////////////////////////////////// CRUD ОПЕРАЦИИ ДЛЯ ПРОДУКТОВ В КАТАЛОГЕ //////////////////////////////////
-
-    public async addProduct(product: IProduct, images: File[], deletedImagesId?: number[], newMainImageId?: number) {
-        product.categoryId = this.category.id;
-        const newProduct = await productsService.addProducts(product);
-        newProduct.images = await productsService.editProductImages(newProduct.id, images, deletedImagesId, newMainImageId);
-        this.products.push(newProduct);
-    }
-
-    public async editProduct(id: number, product: IProduct, images: File[], deletedImagesId?: number[], newMainImageId?: number) {
-        product.categoryId = this.category.id;
-        const updatedProduct = await productsService.editProduct(id, product);
-        updatedProduct.images = await productsService.editProductImages(updatedProduct.id, images, deletedImagesId, newMainImageId);
-        this.products[this.products.findIndex(p => p.id === id)] = updatedProduct;
-    }
-
-    public async setBestsellerStatus(id: number, isBestseller: boolean) {
-        const product = this.products.find(p => p.id === id);
-        if (!product) {
-            return;
-        }
-
-        if (isBestseller) {
-            productsService.setBestsellerStatus(id)
-        } else {
-            productsService.deleteBestsellerStatus(id)
-        }
-
-        product.isBestseller = isBestseller;
-    }
-
-    public async deleteProduct(id: number) {
-        await productsService.deleteProduct(id);
-        this.products.splice(this.products.findIndex(p => p.id === id), 1);
+    async deleteCatalog(id: number) {
+        await catalogsService.deleteCatalog(id);
+        this.catalogs.splice(this.catalogs.findIndex(c => c.id === id), 1);
     }
 }
 

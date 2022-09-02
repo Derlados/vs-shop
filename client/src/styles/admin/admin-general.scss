@@ -26,6 +26,10 @@
         margin: 15px 0px;
     }
 
+    &__selector {
+        margin: 10px 0px;
+    }
+
     &__input {
         width: 100%;
         padding: 10px;
@@ -58,6 +62,33 @@
         }
     }
 
+    &__btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: white;
+        padding: 7px 25px;
+        cursor: pointer;
+        transition: 0.4s;
+
+        &_del {
+            background-color: #dd3333;
+        }
+
+        &_add {
+            background-color: $primary-admin;
+        }
+    }
+
+    &__btn-icon {
+        mask-size: contain;
+        cursor: pointer;
+
+        &_del {
+            mask-image: url('../../assets/images/delete.svg');
+        }
+    }
 
     &__clear-btn {
         color: white;

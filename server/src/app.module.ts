@@ -28,6 +28,8 @@ import { Payment } from './payments/models/payment.model';
 import { ShopModule } from './shop/shop.module';
 import { ShopInfo } from './shop/model/shop-info.model';
 import { Banner } from './shop/model/banner.model';
+import { CatalogsModule } from './catalogs/catalogs.module';
+import { Catalog } from './catalogs/models/catalog.model';
 
 @Module({
     imports: [
@@ -42,7 +44,7 @@ import { Banner } from './shop/model/banner.model';
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DATABASE,
-            entities: [Product, Image, Attribute, Value, Category, User, Filter, Order, OrderProduct, Role, SessionCart, SessionCartItem, Payment, ShopInfo, Banner],
+            entities: [Product, Image, Attribute, Value, Catalog, Category, User, Filter, Order, OrderProduct, Role, SessionCart, SessionCartItem, Payment, ShopInfo, Banner],
             synchronize: true,
         }),
         ServeStaticModule.forRoot({
@@ -62,6 +64,7 @@ import { Banner } from './shop/model/banner.model';
         SessionCartModule,
         PaymentsModule,
         ShopModule,
+        CatalogsModule,
     ],
     controllers: [],
     providers: [],

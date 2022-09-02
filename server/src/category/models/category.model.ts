@@ -1,6 +1,7 @@
 import { Exclude } from "class-transformer";
+import { Catalog } from "src/catalogs/models/catalog.model";
 import { Product } from "src/products/models/product.model";
-import { AfterLoad, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { IKeyAttribute } from "../types/IKeyAttribute";
 import { Filter } from "./filter.model";
 
@@ -8,6 +9,9 @@ import { Filter } from "./filter.model";
 export class Category {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({ name: "catalog_id", type: "int", nullable: false })
+    catalogId: number;
 
     @Column({ type: "varchar", length: 200, nullable: false, unique: true })
     name: string;
@@ -20,6 +24,11 @@ export class Category {
 
     @Column({ name: "is_new", type: "boolean", nullable: false, default: false })
     isNew: boolean;
+
+    @ManyToOne(() => Catalog, catalog => catalog.categories, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+    @JoinColumn({ name: "catalog_id" })
+    @Exclude()
+    catalog: Catalog;
 
     @OneToMany(() => Product, product => product.category)
     @Exclude()

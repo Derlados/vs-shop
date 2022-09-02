@@ -7,10 +7,10 @@ interface SelectorProps {
     className?: string;
     withInput?: boolean;
     withSearch?: boolean;
-    selectedValue?: string;
+    selectedId?: string;
     hint: string;
-    values: Map<any, string>;
-    onSelect: (value: any) => void;
+    values: Map<string, string>;
+    onSelect: (key: string, value: string) => void;
     onChange?: (value: string) => void;
 }
 
@@ -19,7 +19,7 @@ interface LocalStore {
     isOpen: boolean;
 }
 
-const Selector: FC<SelectorProps> = observer(({ className, withInput = false, withSearch = false, hint, values, selectedValue = '', onSelect, onChange = () => { } }) => {
+const Selector: FC<SelectorProps> = observer(({ className, withInput = false, withSearch = false, hint, values, selectedId = '', onSelect, onChange = () => { } }) => {
     const NOT_SELECTED = "Не вибрано";
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedValue: '',
@@ -27,13 +27,13 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
     }));
 
     useEffect(() => {
-        localStore.selectedValue = selectedValue;
-    }, [selectedValue])
+        localStore.selectedValue = values.get(selectedId) ?? '';
+    }, [selectedId])
 
-    const select = (key: any, value: string) => {
+    const select = (key: string, value: any) => {
         localStore.selectedValue = value;
         localStore.isOpen = false;
-        onSelect(key);
+        onSelect(key, value);
     }
 
     const inputOnChange = (value: string) => {
@@ -73,13 +73,13 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
                     :
                     <div className={classNames('selector__selected-value', {
                         'selector__selected-value_not-selected': !localStore.selectedValue
-                    })} onClick={toggleSelector}>{localStore.selectedValue ? localStore.selectedValue : NOT_SELECTED}</div>
+                    })} onClick={toggleSelector}>{localStore.selectedValue || NOT_SELECTED}</div>
                 }
                 <ul className={classNames('selector__values', {
                     'selector__values_open': localStore.isOpen
                 })}>
                     {getValidValues().map(([key, value]) => (
-                        <li key={value} className={classNames('selector__value', {
+                        <li key={key} className={classNames('selector__value', {
                             'selector__value_selected': value == localStore.selectedValue
                         })} onMouseDown={() => select(key, value)}>{value}</li>
                     ))}

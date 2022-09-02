@@ -1,4 +1,3 @@
-
 import Filters from './components/Filters/Filters'
 import ProductCatalog from './components/ProductCatalog/ProductCatalog'
 import './shop.scss';
@@ -6,7 +5,7 @@ import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import shop from '../../store/shop';
-import catalog from '../../store/catalog';
+import products from '../../store/product';
 import Loader from '../../lib/components/Loader/Loader';
 import PopularProducts from './components/PopularProducts/PopularProducts';
 import { IProduct } from '../../types/IProduct';
@@ -17,6 +16,7 @@ import { useEffect } from 'react';
 import { FilterUrlBuilder } from '../../lib/helpers/FiltersUrlBuilder';
 import { ICategory } from '../../types/ICategory';
 import { ROUTES } from '../../values/routes';
+import catalog from '../../store/catalog';
 
 interface LocalStore {
     category?: ICategory;
@@ -47,7 +47,7 @@ const Shop = observer(() => {
             return;
         }
 
-        catalog.clearFilters();
+        products.clearFilters();
         if (!filters) {
             localStore.isInited = true;
             return;
@@ -60,13 +60,13 @@ const Shop = observer(() => {
 
         if (localStore.filterUrlBuilder.priceRange) {
             const { min, max } = localStore.filterUrlBuilder.priceRange;
-            catalog.selectPriceRange(min, max);
+            products.selectPriceRange(min, max);
         }
 
-        catalog.selectBrands(localStore.filterUrlBuilder.brands);
+        products.selectBrands(localStore.filterUrlBuilder.brands);
         const selectedFilters = localStore.filterUrlBuilder.filters;
         for (const [attributeId, valueIds] of selectedFilters) {
-            catalog.setFilter(attributeId, ...valueIds)
+            products.setFilter(attributeId, ...valueIds)
         }
 
         localStore.isInited = true;
@@ -75,19 +75,19 @@ const Shop = observer(() => {
     useEffect(() => {
         async function fetchProducts() {
             if (categoryRoute) {
-                await catalog.fetchByCategory(categoryRoute)
+                await products.fetchByCategory(categoryRoute)
                 if (searchText) {
-                    catalog.setSearchString(searchText);
+                    products.setSearchString(searchText);
                 }
 
-                localStore.category = shop.getCategoryByRoute(categoryRoute);
+                localStore.category = catalog.getCategoryByRoute(categoryRoute);
             } else if (searchText) {
-                await catalog.fetchProductsByText(searchText);
-                localStore.filterCategories = groupByCategories(catalog.filteredProducts);
+                await products.fetchProductsByText(searchText);
+                localStore.filterCategories = groupByCategories(products.filteredProducts);
             }
 
 
-            localStore.popularProducts = shop.getBestsellersByCategory(catalog.category.id);
+            localStore.popularProducts = shop.getBestsellersByCategory(products.category.id);
             localStore.isLoadedData = true;
         }
 
@@ -105,7 +105,7 @@ const Shop = observer(() => {
 
         const filterCategories: IFilterCategory[] = [];
         for (const [categoryId, productCount] of categoryMap) {
-            const category = shop.getCategoryById(categoryId);
+            const category = catalog.getCategoryById(categoryId);
             if (category) {
                 filterCategories.push({
                     name: category.name,
@@ -155,7 +155,7 @@ const Shop = observer(() => {
 
     const acceptFiltersChange = (reload: boolean) => {
         const filtersUrl = localStore.filterUrlBuilder.build();
-        let updatedRoute = `/${ROUTES.CATEGORY_PREFIX}${catalog.category.routeName}`;
+        let updatedRoute = `/${ROUTES.CATEGORY_PREFIX}${products.category.routeName}`;
         if (filtersUrl !== '') {
             updatedRoute += `/${filtersUrl};`
         }
@@ -179,7 +179,7 @@ const Shop = observer(() => {
         )
     }
 
-    if (localStore.isInited && !filters && searchText !== null && catalog.filteredProducts.length === 0) {
+    if (localStore.isInited && !filters && searchText !== null && products.filteredProducts.length === 0) {
         return (
             <div className='shop__nothing-found ccc'>
                 <div className='shop__nothing-found-icon'></div>
@@ -188,7 +188,7 @@ const Shop = observer(() => {
         )
     }
 
-    if (localStore.isInited && categoryRoute && catalog.products.length === 0) {
+    if (localStore.isInited && categoryRoute && products.products.length === 0) {
         return <Navigate to={'/404_not_found'} replace />
     }
 
@@ -211,7 +211,7 @@ const Shop = observer(() => {
                     {localStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={localStore.popularProducts} />}
                 </div>
                 <div className='shop__content'>
-                    {catalog.filteredProducts.length !== 0 ?
+                    {products.filteredProducts.length !== 0 ?
                         <ProductCatalog onOpenFilters={onOpenFilters} />
                         :
                         <div className='shop__emprty-catalog rcc'>

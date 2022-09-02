@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import { FC } from 'react';
-import catalog from '../../../../store/catalog'
+import products from '../../../../store/product'
 import { IProduct } from '../../../../types/IProduct';
 import CatalogSettings from '../CatalogSettings';
 import ProductQuickModal from '../../../../components/ProductCard/ProductQuickModal/ProductQuickModal';
@@ -28,7 +28,7 @@ interface ProductCatalogProps {
 const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedViewMode: ViewMode.GRID,
-        selectedProduct: catalog.filteredProducts[0],
+        selectedProduct: products.filteredProducts[0],
         isOpenQuick: false
     }))
 
@@ -51,7 +51,7 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => 
         <div className='catalog ccc'>
             {localStore.selectedProduct && <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />}
             <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} onOpenFilters={onOpenFilters} />
-            <ProductGrid products={catalog.filteredProducts} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} maxPerPage={MAX_PRODUCTS_BY_PAGE} />
+            <ProductGrid products={products.filteredProducts} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} maxPerPage={MAX_PRODUCTS_BY_PAGE} />
         </div>
     )
 });

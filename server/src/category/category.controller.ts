@@ -32,6 +32,7 @@ export class CategoryController {
     @Post()
     @Roles(RoleValues.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @UseInterceptors(ClassSerializerInterceptor)
     addCategory(@Body() dto: CreateCategoryDto) {
         return this.categoryService.addCategory(dto);
     }
@@ -47,6 +48,7 @@ export class CategoryController {
     @Put(':id([0-9]+)')
     @Roles(RoleValues.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @UseInterceptors(ClassSerializerInterceptor)
     editCategory(@Param('id') id: number, @Body() dto: CreateCategoryDto) {
         return this.categoryService.editCategory(id, dto);
     }

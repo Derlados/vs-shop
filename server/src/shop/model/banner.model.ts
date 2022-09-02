@@ -23,7 +23,7 @@ export class Banner {
     @Column({ type: 'text' })
     link: string;
 
-    @ManyToOne(() => ShopInfo, si => si.banners)
+    @ManyToOne(() => ShopInfo, si => si.banners, { onDelete: "CASCADE", onUpdate: "CASCADE" })
     @JoinColumn({ name: 'shop_info_id' })
     shopInfo: ShopInfo;
 

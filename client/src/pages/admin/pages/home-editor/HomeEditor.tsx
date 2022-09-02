@@ -11,10 +11,11 @@ import { IContact } from '../../../../types/IContact';
 import Selector from '../../../../lib/components/Selector/Selector';
 import shop from '../../../../store/shop';
 import { ICategory } from '../../../../types/ICategory';
-import catalog from '../../../../store/catalog';
 import Checkbox from '../../../../lib/components/Checkbox/Checkbox';
 import Loader from '../../../../lib/components/Loader/Loader';
 import Banner from '../../../home/components/Banner';
+import catalog from '../../../../store/catalog';
+import product from '../../../../store/product';
 
 interface LocalStore {
     banner: IBanner;
@@ -54,15 +55,15 @@ const HomeEditor = observer(() => {
     }, [])
 
     useEffect(() => {
-        if (shop.categories.length !== 0) {
-            catalog.fetchByCategory(shop.categories[0].routeName)
+        if (catalog.categories.length !== 0) {
+            product.fetchByCategory(catalog.categories[0].routeName)
         }
-    }, [shop.categories]);
+    }, [catalog.categories]);
 
     const getSelectorCategories = (categories: ICategory[]) => {
-        const categoryValues = new Map<ICategory, string>();
+        const categoryValues = new Map<string, string>();
         for (const category of categories) {
-            categoryValues.set(category, category.name);
+            categoryValues.set(category.id.toString(), category.name);
         }
 
         return categoryValues;
@@ -134,8 +135,11 @@ const HomeEditor = observer(() => {
         return (localStore.bannerImgFile || localStore.banner.id !== -1) && localStore.banner.link !== '' && localStore.banner.subtitle !== '' && localStore.banner.title !== ''
     }
 
-    const onSelectCategory = (category: ICategory) => {
-        catalog.fetchByCategory(category.routeName);
+    const onSelectCategory = (categoryId: string) => {
+        const category = catalog.getCategoryById(Number(categoryId));
+        if (category) {
+            product.fetchByCategory(category.routeName);
+        }
     }
 
     if (localStore.isLoading) {
@@ -211,14 +215,19 @@ const HomeEditor = observer(() => {
             <div className='home-editor__bestsellers clc'>
                 <div className='admin-general__subtitle'>Хиты продаж</div>
                 <div className='home-editor__product-filters rlc'>
-                    <Selector className='home-editor__selector' hint={''} values={getSelectorCategories(shop.categories)} selectedValue={shop.categories[0]?.name} onSelect={onSelectCategory} />
+                    <Selector className='home-editor__selector'
+                        hint={''}
+                        values={getSelectorCategories(catalog.categories)}
+                        selectedId={catalog.categories[0]?.id.toString()}
+                        onSelect={onSelectCategory}
+                    />
                     <input className='home-editor__search' placeholder='Search ...' />
                 </div>
-                {catalog.filteredProducts.map(p => (
+                {product.filteredProducts.map(p => (
                     <div key={p.id} className='home-editor__product rlc'>
                         <img className='home-editor__product-img' src={p.images.find(img => img.isMain)?.url ?? p.images[0].url} />
                         <span className='home-editor__product-name'>{p.title}</span>
-                        <Checkbox className='home-editor__product-checkbox' checked={p.isBestseller} onChange={(v) => catalog.setBestsellerStatus(p.id, v.target.checked)} />
+                        <Checkbox className='home-editor__product-checkbox' checked={p.isBestseller} onChange={(v) => product.setBestsellerStatus(p.id, v.target.checked)} />
                     </div>
                 ))}
             </div>

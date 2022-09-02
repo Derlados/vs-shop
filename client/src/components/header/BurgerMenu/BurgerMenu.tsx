@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
+import catalog from '../../../store/catalog';
 import shop from '../../../store/shop';
 import { ROUTES } from '../../../values/routes';
 import './burger-menu.scss';
@@ -53,7 +54,7 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                         <ul className={classNames('burger-menu__link-list', {
                             'burger-menu__link-list_open': localStore.isCatalogListOpen
                         })}>
-                            {shop.categories.map(category => (
+                            {catalog.categories.map(category => (
                                 <li key={category.id}>
                                     <NavLink to={`/${ROUTES.CATEGORY_PREFIX}${category.routeName}`} onClick={onClose}>- {category.name}</NavLink>
                                 </li>

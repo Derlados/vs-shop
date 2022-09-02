@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react'
-import catalog from '../../store/catalog';
+import products from '../../store/product';
 import './product.scss';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import ProductCard from '../../components/ProductCard/ProductCard';
@@ -11,6 +11,7 @@ import Loader from '../../lib/components/Loader/Loader';
 import shop from '../../store/shop';
 import { ICategory } from '../../types/ICategory';
 import { ROUTES } from '../../values/routes';
+import catalog from '../../store/catalog';
 
 type ProductParams = {
     productName: string;
@@ -27,16 +28,16 @@ interface LocalStore {
 const Product: FC = observer(() => {
     const { productName, id } = useParams<ProductParams>();
     const localStore = useLocalObservable<LocalStore>(() => ({
-        product: catalog.products[0],
+        product: products.products[0],
         relatedProducts: [],
-        category: shop.categories[0],
+        category: catalog.categories[0],
         isLoading: true
     }));
 
     useEffect(() => {
         async function fetchProduct(productId: number) {
-            const product = await catalog.fetchProductById(productId);
-            const category = shop.getCategoryById(product.categoryId);
+            const product = await products.fetchProductById(productId);
+            const category = catalog.getCategoryById(product.categoryId);
 
             if (!category || !product) {
                 localStore.isLoading = false;
@@ -45,7 +46,7 @@ const Product: FC = observer(() => {
 
             localStore.category = category;
             localStore.product = product;
-            localStore.relatedProducts = await catalog.fetchRelatedProducts(product, 10);
+            localStore.relatedProducts = await products.fetchRelatedProducts(product, 10);
 
             correctUrl();
             localStore.isLoading = false;

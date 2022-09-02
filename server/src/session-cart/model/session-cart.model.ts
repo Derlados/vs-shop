@@ -13,6 +13,6 @@ export class SessionCart {
     @Column({ name: "modified_at", type: "datetime", default: () => "CURRENT_TIMESTAMP()" })
     modifiedAt: Date;
 
-    @OneToMany(() => SessionCartItem, item => item.cart, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+    @OneToMany(() => SessionCartItem, item => item.cart)
     products: SessionCartItem[];
 }

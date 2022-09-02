@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import React, { FC } from 'react'
-import shop, { SortType } from '../../../store/catalog';
+import shop, { SortType } from '../../../store/product';
 import { ViewMode } from './ProductCatalog/ProductCatalog';
 
 interface LocalStore {

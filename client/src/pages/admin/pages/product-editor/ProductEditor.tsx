@@ -5,7 +5,7 @@ import { ChangeEvent, useEffect, useRef } from 'react';
 import CategoryList from '../../../../components/Category/CategoryList/CategoryList';
 import Checkbox from '../../../../lib/components/Checkbox/Checkbox';
 import FileUploader from '../../../../lib/components/FileUploader/FileUploader';
-import catalog from '../../../../store/catalog';
+import products from '../../../../store/product';
 import shop from '../../../../store/shop';
 import '../../../../styles/admin/admin-general.scss';
 import './product-editor.scss';
@@ -17,6 +17,7 @@ import ProductCard from '../../../../components/ProductCard/ProductCard';
 import { ViewMode } from '../../../shop/components/ProductCatalog/ProductCatalog';
 import ProductGrid from '../../../shop/components/ProductGrid';
 import { IProductAttribute } from '../../../../types/IProductAttribyte';
+import catalog from '../../../../store/catalog';
 
 const MAX_PRODUCTS_BY_PAGE = 8;
 
@@ -62,6 +63,7 @@ const ProductEditor = observer(() => {
     const getProductTemplate = (): IProduct => {
         const attributes: IProductAttribute[] = [];
         if (localStore && localStore.selectedCategory) {
+            console.log(localStore.selectedCategory)
             for (const attr of localStore.selectedCategory.keyAttributes) {
                 attributes.push({ id: attr.id, name: attr.name, value: { id: -1, name: '' } })
             }
@@ -98,10 +100,10 @@ const ProductEditor = observer(() => {
     }
 
     useEffect(() => {
-        if (shop.categories[0]) {
-            onSelectCategory(shop.categories[0])
+        if (catalog.categories[0]) {
+            onSelectCategory(catalog.categories[0])
         }
-    }, [shop.categories]);
+    }, [catalog.categories]);
 
     const onUploadImages = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -170,9 +172,9 @@ const ProductEditor = observer(() => {
         const files = localStore.uploadedFiles.map(uploadedFile => uploadedFile.file)
 
         if (localStore.product.id === -1) {
-            catalog.addProduct(localStore.product, files, localStore.deletedImagesId, newMainImageId);
+            products.addProduct(localStore.product, files, localStore.deletedImagesId, newMainImageId);
         } else {
-            catalog.editProduct(localStore.product.id, localStore.product, files, localStore.deletedImagesId, newMainImageId);
+            products.editProduct(localStore.product.id, localStore.product, files, localStore.deletedImagesId, newMainImageId);
         }
 
         onClear();
@@ -180,13 +182,13 @@ const ProductEditor = observer(() => {
 
     const onEdit = (product: IProduct) => {
         localStore.product = { ...product, images: JSON.parse(JSON.stringify(product.images)) }
-        catalog.loadProductCount(localStore.product);
+        products.loadProductCount(localStore.product);
         localStore.uploadedFiles = [];
         localStore.deletedImagesId = [];
     }
 
     const onSelectCategory = (category: ICategory) => {
-        catalog.fetchByCategory(category.routeName);
+        products.fetchByCategory(category.routeName);
         localStore.selectedCategory = category;
         onClear();
     }
@@ -198,7 +200,7 @@ const ProductEditor = observer(() => {
     }
 
     const onDelete = () => {
-        catalog.deleteProduct(localStore.product.id);
+        products.deleteProduct(localStore.product.id);
         onClear();
     }
 
@@ -225,15 +227,15 @@ const ProductEditor = observer(() => {
         <div className='product-editor'>
             <div className='admin-general__title'>Редактор товаров</div>
             <div className='admin-general__subtitle'>Каталоги</div>
-            <CategoryList categories={shop.categories} onClick={onSelectCategory} />
+            <CategoryList categories={catalog.categories} onClick={onSelectCategory} />
             <div className='admin-general__line'></div>
             <div className='product-editor__product-list'>
                 <div className='admin-general__subtitle'>Товары в каталоге "{localStore.selectedCategory?.name}"</div>
                 <div className='product-editor__grid'>
-                    <ProductGrid products={catalog.products} viewMode={ViewMode.GRID} maxPerPage={MAX_PRODUCTS_BY_PAGE} onSelectProduct={onEdit} />
+                    <ProductGrid products={products.products} viewMode={ViewMode.GRID} maxPerPage={MAX_PRODUCTS_BY_PAGE} onSelectProduct={onEdit} />
                 </div>
                 <div className='product-editor__list'>
-                    {catalog.products.map(p => (
+                    {products.products.map(p => (
                         <div></div>
                     ))}
                 </div>

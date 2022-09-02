@@ -1,8 +1,11 @@
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsNumber, IsString, ValidateNested } from "class-validator";
 import { KeyAttributeDto } from "./key-attribute.dto";
 
 export class CreateCategoryDto {
+    @IsNumber()
+    catalogId: number;
+
     @IsString()
     name: string;
 

@@ -128,7 +128,7 @@ const Checkout = observer(() => {
         return settlementFullName;
     }
 
-    const onSelectSettlement = (settlementRef: string) => {
+    const onSelectSettlement = (settlementRef: string, settlementName: string) => {
         const selectedSettlement = settlement.settlements.find(s => s.ref == settlementRef)
         if (selectedSettlement) {
             localStore.settlement = getSettlementFullName(selectedSettlement);
@@ -205,7 +205,7 @@ const Checkout = observer(() => {
                     withSearch={true}
                     hint={'Адреса точки видачі'}
                     values={getWarehouseValues(settlement.warehouses)}
-                    selectedValue={localStore.warehouse}
+                    selectedId={localStore.warehouse}
                     onSelect={(warehouse: string) => localStore.warehouse = warehouse} />
                 <div className='checkout__additional-info'>
                     <div className='checkout__additional-head'>Додаткова інформація</div>
