@@ -21,6 +21,7 @@ class ProductStore {
     public filters: IFilters;
     public products: IProduct[];
 
+    public brands: string[];
     public selectedSort: SortType;
     public selectedPriceRange: IRange;
     public selectedTranslitBrands: string[]; // Все бренд переведены в английский транслит
@@ -78,11 +79,6 @@ class ProductStore {
         return range;
     }
 
-    get brands(): string[] {
-        const brands = new Set(this.products.map(p => p.brand));
-        return Array.from(brands);
-    }
-
     async fetchByCategory(categoryRoute: string) {
         this.clearAll();
 
@@ -91,6 +87,7 @@ class ProductStore {
             return;
         }
         this.products = await productsService.getProductsByCategory(this.category.id);
+        this.brands = this.category.allBrands ?? [];
 
         this.selectedPriceRange = this.priceRange;
 

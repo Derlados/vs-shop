@@ -12,6 +12,21 @@
 
     &__catalog-editor {
         height: 42px;
+
+        @media (max-width: $mobile-horizontal) {
+            flex-direction: column !important;
+            height: max-content;
+        }
+    }
+
+    &__catalog-editor-btns {
+
+        height: 100%;
+
+        @media (max-width: $mobile-horizontal) {
+            width: 100%;
+            margin-top: 5px;
+        }
     }
 
     &__catalog-editor-btn {
@@ -19,6 +34,11 @@
 
         &:last-child {
             margin: 0px;
+        }
+
+        @media (max-width: $mobile-horizontal) {
+            margin: 0px 10px 0px 0px;
+            flex: 1;
         }
     }
 

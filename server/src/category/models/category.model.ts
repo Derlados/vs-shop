@@ -42,7 +42,7 @@ export class Category {
 
     productsCount: number;
 
-
+    allBrands: string[];
 
     @AfterLoad()
     getImg() {
@@ -67,6 +67,14 @@ export class Category {
     getCountProducts() {
         if (this.products) {
             this.productsCount = this.products.length;
+        }
+    }
+
+    @AfterLoad()
+    getAllBrands() {
+        if (this.products) {
+            const brands = new Set(this.products.map(p => p.brand));
+            this.allBrands = Array.from(brands);
         }
     }
 }

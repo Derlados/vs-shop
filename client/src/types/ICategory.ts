@@ -9,4 +9,5 @@ export interface ICategory {
     routeName: string;
     keyAttributes: IAttribute[];
     productsCount?: number;
+    allBrands?: string[];
 }

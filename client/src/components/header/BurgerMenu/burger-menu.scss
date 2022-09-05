@@ -51,18 +51,6 @@
         }
     }
 
-    &__item {
-        width: 100%;
-        height: 100%;
-
-        &>a {
-            display: block;
-            padding: 10px 20px;
-            font-size: 18px;
-        }
-
-    }
-
     &__head {
         justify-content: space-between !important;
         padding: 15px 15px 30px 15px;
@@ -104,26 +92,39 @@
         }
     }
 
-    &__wishlist {
-        font-size: 14px;
-        font-weight: 100;
-        padding: 12px 0px;
+    &__item {
+        width: 100%;
+        height: 100%;
+        font-size: 16px;
+        padding: 10px 0px;
         cursor: pointer;
-        transition: 0.4s;
 
-        &:hover {
+        &:hover,
+        &:hover>.burger-menu__item-name {
             color: $primary;
         }
+    }
 
-        &::before {
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            content: "";
-            width: 16px;
-            height: 16px;
-            padding-right: 7px;
-            mask-image: url('../../../assets/images/favorite.svg');
-            background-color: $primary;
+    &__sublist {
+        width: 100%;
+    }
+
+    &__item-name {
+        display: block;
+        width: 100%;
+        padding-left: 20px;
+        transition: 0.4s;
+
+        &_subitem-first {
+            padding-left: 30px;
+        }
+
+        &_subitem-second {
+            padding-left: 40px;
+        }
+
+        &_selected {
+            color: $primary;
         }
     }
 
@@ -135,19 +136,21 @@
         font-weight: bold;
     }
 
+    &__list-head {
+        justify-content: space-between !important;
+        position: relative;
+        width: 100%;
+    }
+
     &__list {
         width: 100%;
-        padding-bottom: 80px;
+        padding-bottom: 40px;
 
-        &>a {
-            width: 100%;
-            padding: 12px 20px;
-            cursor: pointer;
-        }
+        &_open {}
     }
 
     &__nav-arrow {
-        margin-left: 3px;
+        margin: 0px 25px 0px auto;
         position: relative;
         top: 0px;
         content: "";
@@ -164,32 +167,14 @@
         }
     }
 
-    &__list-head {
-        width: 100%;
-        justify-content: space-between !important;
-        padding: 10px 20px;
-        font-size: 18px;
-    }
 
     &__link-list {
         list-style: inside !important;
-        margin-left: 40px;
+
         max-height: 0;
         transition: max-height 0.25s ease-out;
         overflow: hidden;
 
-        li {
-            margin-bottom: 5px;
-
-            &:last-child {
-                margin-bottom: 10px;
-            }
-        }
-
-        a {
-            text-decoration: none;
-            line-height: 16px;
-        }
 
         &_open {
             max-height: 200px;
@@ -231,4 +216,16 @@
             mask-image: url('../../../assets/images/facebook.svg');
         }
     }
+
+    &__catalog-item {
+        padding: 10px 20px 10px 35px;
+
+    }
+
+    &__dropdown {
+        height: 0px;
+        overflow: hidden;
+        transition: 0.25s;
+    }
+
 }

@@ -18,6 +18,8 @@ import { ViewMode } from '../../../shop/components/ProductCatalog/ProductCatalog
 import ProductGrid from '../../../shop/components/ProductGrid';
 import { IProductAttribute } from '../../../../types/IProductAttribyte';
 import catalog from '../../../../store/catalog';
+import Selector from '../../../../lib/components/Selector/Selector';
+import { IAttribute } from '../../../../types/IAttribute';
 
 const MAX_PRODUCTS_BY_PAGE = 8;
 
@@ -223,6 +225,24 @@ const ProductEditor = observer(() => {
         return true;
     }
 
+    const getBrandValues = (brands: string[]) => {
+        const brandValues = new Map<string, string>();
+        brands.forEach(b => brandValues.set(b, b));
+
+        return brandValues;
+    }
+
+    const getAttributeValues = (attributeId: number) => {
+        const attrValues = new Map<string, string>();
+        const attribute = products.filters.attributes.find(a => a.attribute.id === attributeId)?.attribute;
+        if (attribute) {
+            attribute.allValues.forEach(v => attrValues.set(v.id.toString(), v.name));
+        }
+
+
+        return attrValues;
+    }
+
     return (
         <div className='product-editor'>
             <div className='admin-general__title'>Редактор товаров</div>
@@ -276,7 +296,16 @@ const ProductEditor = observer(() => {
                     </div>
                     <div className='product-editor__input-wrap rlc'>
                         <div className='admin-general__input-title'>Бренд: </div>
-                        <input className='admin-general__input' placeholder='Введіть бренд' value={localStore.product.brand} onChange={(v) => localStore.product.brand = v.target.value} />
+                        <Selector
+                            className='admin-general__selector'
+                            hint='Введите новый или выберите существуюищй бренд'
+                            innerHint={true}
+                            withInput={true}
+                            withSearch={true}
+                            values={getBrandValues(products.brands ?? [])}
+                            onSelect={(key, value) => localStore.product.brand = key}
+                            onChange={(value) => localStore.product.brand = value}
+                        />
                     </div>
                     <div className='product-editor__input-wrap rlc'>
                         <div className='admin-general__input-title'>Описание: </div>
@@ -311,7 +340,16 @@ const ProductEditor = observer(() => {
                         {localStore.product.attributes.map(attr => (
                             <li key={attr.name} className='product-editor__chars-editor product-editor__input-wrap rlc'>
                                 <div className='admin-general__input-title'>{attr.name}:</div>
-                                <input type="text" className='admin-general__input product-editor__attribute-value' placeholder='Значення' value={attr.value.name} onChange={(v) => attr.value.name = v.target.value} />
+                                <Selector
+                                    className='admin-general__selector'
+                                    hint='Введите новое или выберите существующее значение'
+                                    innerHint={true}
+                                    withInput={true}
+                                    withSearch={true}
+                                    values={getAttributeValues(attr.id)}
+                                    onSelect={(key, value) => attr.value.name = key}
+                                    onChange={(value) => attr.value.name = value}
+                                />
                             </li>
                         ))}
 

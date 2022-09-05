@@ -23,7 +23,6 @@ class CatalogStore {
         for (const catalog of this.catalogs) {
             categories.push(...catalog.categories);
         }
-        console.log(this.catalogs, categories);
         return categories;
     }
 

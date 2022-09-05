@@ -30,7 +30,7 @@ const FilterItem: FC<FilterItemProps> = observer(({ attribute, onCheck }) => {
     }
 
     return (
-        <div key={attribute.id} className='filters__attr' >
+        <div className='filters__attr' >
             <div className='filters__attr-name filters__attr-name_touchable' onClick={toggleList}>{attribute.name}</div>
             <ul ref={ref} className='filters__attr-list' style={{
                 height: localStore.currentHeight

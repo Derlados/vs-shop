@@ -8,6 +8,7 @@ interface SelectorProps {
     withInput?: boolean;
     withSearch?: boolean;
     selectedId?: string;
+    innerHint?: boolean;
     hint: string;
     values: Map<string, string>;
     onSelect: (key: string, value: string) => void;
@@ -19,7 +20,7 @@ interface LocalStore {
     isOpen: boolean;
 }
 
-const Selector: FC<SelectorProps> = observer(({ className, withInput = false, withSearch = false, hint, values, selectedId = '', onSelect, onChange = () => { } }) => {
+const Selector: FC<SelectorProps> = observer(({ className, withInput = false, withSearch = false, innerHint = false, hint, values, selectedId = '', onSelect, onChange = () => { } }) => {
     const NOT_SELECTED = "Не вибрано";
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedValue: '',
@@ -55,7 +56,7 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
 
     return (
         <div className={`${className} selector`}>
-            {hint !== '' && <div className='selector__hint'>{hint}</div>}
+            {(!innerHint && hint !== '') && <div className='selector__hint'>{hint}</div>}
             <div className={classNames('selector__container', {
                 'selector__container_open': localStore.isOpen
             })}>
@@ -66,14 +67,14 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
                     })}
                         onFocus={() => localStore.isOpen = true}
                         onBlur={() => { setTimeout(() => localStore.isOpen = false, 0) }}
-                        placeholder={NOT_SELECTED}
+                        placeholder={(innerHint && hint !== '') ? hint : NOT_SELECTED}
                         value={localStore.selectedValue}
                         onChange={(e) => inputOnChange(e.target.value)}
                     />
                     :
                     <div className={classNames('selector__selected-value', {
                         'selector__selected-value_not-selected': !localStore.selectedValue
-                    })} onClick={toggleSelector}>{localStore.selectedValue || NOT_SELECTED}</div>
+                    })} onClick={toggleSelector}>{localStore.selectedValue || `${NOT_SELECTED}${hint !== '' ? ` (${hint})` : ''}`}</div>
                 }
                 <ul className={classNames('selector__values', {
                     'selector__values_open': localStore.isOpen

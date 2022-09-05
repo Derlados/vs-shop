@@ -34,6 +34,7 @@
         height: 44px;
         padding: 0px 10px;
         margin-right: 10px;
+        cursor: pointer;
 
         &::before,
         &::after {
@@ -118,7 +119,7 @@
         margin: 0px 20px 0px 20px;
         cursor: pointer;
 
-        &_open>.header__category-list {
+        &_open>.catalog-list {
             transform: scaleY(1);
             transition: 0.15s;
         }
@@ -147,7 +148,7 @@
     }
 
     &__nav-arrow {
-        margin-left: 3px;
+        margin-left: 5px;
         position: relative;
         top: -3px;
         content: "";
@@ -160,6 +161,7 @@
         transition: 0.4s;
 
     }
+
 
     &__category-list {
         position: absolute;

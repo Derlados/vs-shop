@@ -1,12 +1,14 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { ChangeEvent, KeyboardEvent, FC } from 'react'
+import catalog from '../../../store/catalog';
+import { ICatalog } from '../../../types/ICatalog';
 import { ICategory } from '../../../types/ICategory';
 import './quick-search.scss';
 
 interface QuickSearchProps {
     value: string;
-    categories: ICategory[];
+    catalogs: ICatalog[];
     onFocus: () => void;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onAccept: () => void;
@@ -20,7 +22,7 @@ interface LocalStore {
 
 const ALL_CATEGORIES = 'Всі категорії';
 
-const QuickSearch: FC<QuickSearchProps> = observer(({ value, categories, onFocus: onFocusChange, onChange, onAccept, onSelectCategory }) => {
+const QuickSearch: FC<QuickSearchProps> = observer(({ value, catalogs, onFocus: onFocusChange, onChange, onAccept, onSelectCategory }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         isOpenCategories: false,
         selectedCategory: ALL_CATEGORIES
@@ -37,6 +39,7 @@ const QuickSearch: FC<QuickSearchProps> = observer(({ value, categories, onFocus
         localStore.isOpenCategories = false;
         onSelectCategory(route);
     }
+
 
     const toggleList = () => {
         localStore.isOpenCategories = !localStore.isOpenCategories;
@@ -56,8 +59,14 @@ const QuickSearch: FC<QuickSearchProps> = observer(({ value, categories, onFocus
                         'quick-search__category-list_open': localStore.isOpenCategories
                     })}>
                         <li className='quick-search__category-item' onClick={() => onSelect(ALL_CATEGORIES, '')}>{ALL_CATEGORIES}</li>
-                        {categories.map(c => (
-                            <li key={c.id} className='quick-search__category-item' onClick={() => onSelect(c.name, c.routeName)}>{c.name}</li>
+                        {catalogs.map(c => (
+                            <ul key={c.id} className='quick-search__catalog-categories-list'>
+                                <li className='quick-search__category-item quick-search__category-item_untouchable'>{c.name}</li>
+                                {c.categories.map(category => (
+                                    <li key={category.id} className='quick-search__category-item' onClick={() => onSelect(category.name, category.routeName)}>- - {category.name}</li>
+                                ))}
+                            </ul>
+
                         ))}
                     </ul>
                 </div>

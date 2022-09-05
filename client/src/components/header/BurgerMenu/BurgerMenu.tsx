@@ -6,6 +6,7 @@ import catalog from '../../../store/catalog';
 import shop from '../../../store/shop';
 import { ROUTES } from '../../../values/routes';
 import './burger-menu.scss';
+import CatalogItem from './CatalogItem/CatalogItem';
 
 interface LocalStore {
     isCatalogListOpen: boolean;
@@ -40,13 +41,15 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                 <div className='burger-menu__menu'>MENU</div>
                 <ul className='burger-menu__list clc'>
                     <li className='burger-menu__item burger-menu_underline'>
-                        <NavLink to={'/home'} onClick={onClose}>
+                        <NavLink className='burger-menu__item-name' to={'/home'} onClick={onClose}>
                             Головна
                         </NavLink>
                     </li>
-                    <li className='burger-menu__item burger-menu_underline'>
-                        <div className='burger-menu__list-head rcc' onClick={toggleCatalogList}>
-                            <span>Каталоги</span>
+                    <li className='burger-menu__sublist'>
+                        <div className='burger-menu__item burger-menu_underline rlc' onClick={toggleCatalogList}>
+                            <span className={classNames('burger-menu__item-name', {
+                                'burger-menu__item-name_selected': localStore.isCatalogListOpen
+                            })}>Каталоги</span>
                             <span className={classNames('burger-menu__nav-arrow', {
                                 'burger-menu__nav-arrow_up': localStore.isCatalogListOpen
                             })}></span>
@@ -54,19 +57,16 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                         <ul className={classNames('burger-menu__link-list', {
                             'burger-menu__link-list_open': localStore.isCatalogListOpen
                         })}>
-                            {catalog.categories.map(category => (
-                                <li key={category.id}>
-                                    <NavLink to={`/${ROUTES.CATEGORY_PREFIX}${category.routeName}`} onClick={onClose}>- {category.name}</NavLink>
-                                </li>
+                            {catalog.catalogs.map(catalog => (
+                                <CatalogItem catalog={catalog} onClick={onClose} />
                             ))}
                         </ul>
                     </li>
                     <li className='burger-menu__item burger-menu_underline'>
-                        <NavLink to={'/contacts'} onClick={onClose}>
+                        <NavLink className='burger-menu__item-name' to={'/contacts'} onClick={onClose}>
                             Контакти
                         </NavLink>
                     </li>
-
                 </ul>
                 <div className='burger-menu__contacts rcc'>
                     <a className='burger-menu__contact-link '>

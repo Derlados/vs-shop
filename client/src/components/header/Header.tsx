@@ -12,6 +12,7 @@ import BurgerMenu from './BurgerMenu/BurgerMenu';
 import CartQuickView from './CartQuickView/CartQuickView';
 import { ROUTES } from '../../values/routes';
 import catalog from '../../store/catalog';
+import CatalogList from './CatalogList/CatalogList';
 
 interface LocalStore {
     isCartOpen: boolean;
@@ -116,19 +117,11 @@ const Header = observer(() => {
                     })} onMouseOver={onOpenCatalogList} onMouseLeave={onCloseCatalogList}>
                         <div className={classNames('header__nav-link', {
                             'header__nav-link_active': catalog.categoryRoutes.includes(location.pathname.replace('/', ''))
-                        })}>Каталоги <span className='header__nav-arrow'></span></div>
-                        <ul className='header__category-list'>
-                            {catalog.categories.map(category => (
-                                <li key={category.id} className='header__category-item clc' >
-                                    <NavLink className='header__category-link ccc' to={`./${ROUTES.CATEGORY_PREFIX}${category.routeName}`} onClick={onCloseCatalogList}>
-                                        <div className='header__category-name'>
-                                            <div className='header__category-text'>{category.name}</div>
-                                            {category.isNew && <div className='header__new-label'>New</div>}
-                                        </div>
-                                    </NavLink>
-                                </li>
-                            ))}
-                        </ul>
+                        })}>
+                            Каталоги
+                            <span className='header__nav-arrow'></span>
+                        </div>
+                        <CatalogList catalogs={catalog.catalogs} onClose={onCloseCatalogList} />
                     </li>
                     <li className='header__nav-item'>
                         <NavLink className={classNames('header__nav-link', {
@@ -137,7 +130,7 @@ const Header = observer(() => {
                     </li>
                 </ul>
                 <div className='header__action-area rrc'>
-                    <QuickSearch value={localStore.searchString} categories={catalog.categories} onFocus={() => onFocusChangeInput(true)}
+                    <QuickSearch value={localStore.searchString} catalogs={catalog.catalogs} onFocus={() => onFocusChangeInput(true)}
                         onAccept={onAcceptSearch} onChange={onChangeSearch} onSelectCategory={onSelectCategory} />
                     <div className='header__cart rcc' onClick={onOpenCart}>
                         <div className='header__cart-btn'>

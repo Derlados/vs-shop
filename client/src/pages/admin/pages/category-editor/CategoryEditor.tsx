@@ -228,12 +228,15 @@ const CategoryEditor = observer(() => {
                         value={localStore.catalog.name}
                         onChange={(e) => onChangeCatalogName(e.target.value)}
                     />
-                    <div className='category-editor__catalog-editor-btn admin-general__btn admin-general__btn_add' onClick={onAcceptCatalog}>
-                        {localStore.catalog.id === -1 ? 'Добавить' : 'Изменить'}
+                    <div className='category-editor__catalog-editor-btns rlc'>
+                        <div className='category-editor__catalog-editor-btn admin-general__btn admin-general__btn_add' onClick={onAcceptCatalog}>
+                            {localStore.catalog.id === -1 ? 'Добавить' : 'Изменить'}
+                        </div>
+                        <div className='category-editor__catalog-editor-btn admin-general__btn admin-general__btn_add' onClick={onClearCatalogEditor}>
+                            Очистить
+                        </div>
                     </div>
-                    <div className='category-editor__catalog-editor-btn admin-general__btn admin-general__btn_add' onClick={onClearCatalogEditor}>
-                        Очистить
-                    </div>
+
                 </div>
                 <ul className='category-editor__catalogs-list'>
                     {catalog.catalogs.map(c => (
@@ -281,7 +284,8 @@ const CategoryEditor = observer(() => {
                     <input className='admin-general__input' placeholder='Имя категории на английском (маленькие буквы)' value={localStore.category.routeName} onChange={(v) => localStore.category.routeName = v.target.value} />
                     <Selector
                         className='admin-general__selector'
-                        hint={'Выберете каталог'}
+                        hint='Выберите каталог'
+                        innerHint={true}
                         values={getCatalogValues(catalog.catalogs)}
                         onSelect={onSelectCatalog}
                         selectedId={localStore.category.catalogId.toString()}
