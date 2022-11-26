@@ -53,12 +53,40 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ onCheckFilter, onChe
                             productCount: products.countProductByValue(attr.attribute.id, v.name),
                             checked: products.hasSelectedFilter(attr.attribute.id, v.id)
                         }
-                    })
+                    }).sort(sortFilters)
             })
         }
 
         localStore.brand.allValues = products.brands.map((b) => { return { id: -1, name: b, productCount: products.conntProductByBrand(b), checked: products.hasSelectedBrand(cyrillicToTranslit().transform(b, "_")) } })
     }, [products.filters.attributes, products.brands, products.selectedFilters, products.selectedTranslitBrands]);
+
+
+    const sortFilters = (a: ICheckValue, b: ICheckValue) => {
+        if (!isNaN(parseFloat(a.name))) {
+            return sortNumbers(a, b);
+        } else {
+            return sortStrings(a, b);
+        }
+    }
+    
+    const sortStrings = (a: ICheckValue, b: ICheckValue) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+
+        if (a.name > b.name) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    const sortNumbers = (a: ICheckValue, b: ICheckValue) => {
+        return parseFloat(a.name) - parseFloat(b.name);
+    }
+
+
+
 
     const onCheckBrands = (ignore: number, checkValue: ICheckValue) => {
         checkValue.checked = !checkValue.checked;

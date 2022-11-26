@@ -3,7 +3,7 @@ import { Filter } from "src/category/models/filter.model";
 import { AfterLoad, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Value } from "./value.model";
 
-@Entity()
+@Entity("attributes")
 export class Attribute {
     @PrimaryGeneratedColumn("increment")
     id: number;

@@ -11,6 +11,7 @@ import { Value } from './models/value.model';
 import cyrillicToTranslit from 'cyrillic-to-translit-js';
 import { CreateAttributeDto } from './dto/create-attribute.dto';
 import { Range } from 'src/lib/types/Range';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 // ЗАМЕТКА
 // const products = await this.productRepository.createQueryBuilder("product")
@@ -56,6 +57,7 @@ export class ProductsService {
             where: { id: id },
             relations: ["values", "values.attribute", "images", "category"]
         });
+
         if (!product) {
             throw new NotFoundException("Товар не найден");
         }

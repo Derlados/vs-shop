@@ -3,7 +3,7 @@ import { Column, Entity, Generated, JoinColumn, JoinTable, ManyToOne, PrimaryCol
 import { Attribute } from "./attribute.model";
 import { Product } from "./product.model";
 
-@Entity()
+@Entity("values")
 @Unique(["productId", "attributeId"])
 export class Value {
     @PrimaryGeneratedColumn("increment")
@@ -18,7 +18,7 @@ export class Value {
     attributeId: number;
 
     @ManyToOne(() => Product, product => product.values, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-    @JoinColumn({ name: "product_id", referencedColumnName: "id" })
+    @JoinColumn({ name: "product_id" })
     product: Product;
 
     @ManyToOne(() => Attribute, attr => attr.values, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })

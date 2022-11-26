@@ -79,7 +79,7 @@ export class ShopService {
     async editSmallBanner(newBanner: Express.Multer.File) {
         const imgUrl = await this.fileService.createFile(newBanner);
         await this.shopInfoRepository.update({ id: this.SHOP_INFO_ID }, { smallBanner: imgUrl });
-        return imgUrl;
+        return `${process.env.STATIC_API}/${imgUrl}`;
     }
 
     async updateContacts(newContacts: Contact[]) {

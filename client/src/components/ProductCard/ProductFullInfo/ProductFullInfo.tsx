@@ -112,7 +112,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({ product, addToCart
                 <div className='product__title'>{product.title}</div>
                 <div className='product__price rlc'>
                     <div className='product__current-price'>{product.price} ₴</div>
-                    <div className='product__old-price'>{product.oldPrice} ₴</div>
+                    {product.oldPrice < product.price && <div className='product__old-price'>{product.oldPrice} ₴</div>}
                 </div>
                 <div className='product__desc'>{product.description}</div>
                 {isExtended &&

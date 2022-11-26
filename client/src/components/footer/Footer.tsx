@@ -15,9 +15,9 @@ const Footer = observer(() => {
                     <ul className='footer__contacts rcc'>
                         {shop.contacts.map(c => (
                             <li key={c.name} className='footer__contact-item'>
-                                <NavLink to={c.url}>
+                                <a href={c.url}>
                                     <div className={`footer__icon ${c.icon}`}></div>
-                                </NavLink>
+                                </a>
                             </li>
                         ))}
                     </ul>

@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "@nestjs/common";
 import { Exclude } from "class-transformer";
 import cyrillicToTranslit from "cyrillic-to-translit-js";
 import { Category } from "src/category/models/category.model";
@@ -83,7 +84,7 @@ export class Product {
     @AfterLoad()
     getUrl() {
         if (this.category) {
-            this.url = `/${cyrillicToTranslit().transform(this.title.toLowerCase(), "_")}/${this.id}`;
+            this.url = `/${cyrillicToTranslit().transform(this.title.toLowerCase(), "_").replace('/', '_')}/${this.id}`;
         }
     }
 
@@ -100,7 +101,7 @@ export class Product {
 
     @AfterLoad()
     getDiscountPercent() {
-        this.discountPercent = Math.floor((1 - this.price / this.oldPrice) * 100);
+        this.discountPercent = Math.abs(Math.floor((1 - this.price / this.oldPrice) * 100));
     }
 
     @AfterLoad()

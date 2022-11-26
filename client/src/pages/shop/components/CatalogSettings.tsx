@@ -15,9 +15,9 @@ interface CatalogSettingsProps {
 }
 
 const sortTypes: Map<SortType, string> = new Map([
-    [SortType.PRICE_ASC, "От дешевых к дорогим"],
-    [SortType.PRICE_DESC, "От дорогих к дешевым"],
-    [SortType.DISCOUNT, "Скидки"],
+    [SortType.PRICE_ASC, "Від дешевих до дорогих"],
+    [SortType.PRICE_DESC, "Від дорогих до дешевих"],
+    [SortType.DISCOUNT, "Знижки"],
     [SortType.NEW, "Новинки"]
 ]);
 
@@ -57,7 +57,7 @@ const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, 
             <div className='catalog__sort'>
                 <div className={classNames('catalog__selected-sort', {
                     'catalog__selected-sort_open': localStore.isOpenSort
-                })} onClick={toggleSortList}>{shop.selectedSort === SortType.NOT_SELECTED ? "Не выбрано" : sortTypes.get(shop.selectedSort)}</div>
+                })} onClick={toggleSortList}>{shop.selectedSort === SortType.NOT_SELECTED ? "Не вибрано" : sortTypes.get(shop.selectedSort)}</div>
                 <ul className={classNames('catalog__sort-list', {
                     'catalog__sort-list_open': localStore.isOpenSort
                 })}>

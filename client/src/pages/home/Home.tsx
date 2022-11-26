@@ -57,7 +57,7 @@ const Home = observer(() => {
             <SliderProducts title="Хіт продажів" slidesPerView={5} products={[...shop.bestsellers.slice(0, 10)]} />
             <div className='home__category-title'>Catalog</div>
             <CategoryList categories={catalog.categories} />
-            <img className='home__banner' alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/banner-image/4.jpg' />
+            <img className='home__banner home__banner_small' alt='' src={shop.smallBanner}/>
             <SliderProducts title="Нові товари" products={[...shop.newProducts.slice(0, 10)]} />
         </div>
     )

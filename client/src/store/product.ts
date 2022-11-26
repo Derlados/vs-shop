@@ -163,7 +163,7 @@ class ProductStore {
 
         // По бренду
         if (this.selectedTranslitBrands.length !== 0) {
-            filteredProducts = products.filter(p => this.selectedTranslitBrands.includes(cyrillicToTranslit().transform(p.brand, "_")));
+            filteredProducts = filteredProducts.filter(p => this.selectedTranslitBrands.includes(cyrillicToTranslit().transform(p.brand, "_")));
         }
 
         // По ключевому слову
