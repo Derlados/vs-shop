@@ -346,6 +346,7 @@ const ProductEditor = observer(() => {
                                     innerHint={true}
                                     withInput={true}
                                     withSearch={true}
+                                    selectedId={attr.value.id.toString()}
                                     values={getAttributeValues(attr.id)}
                                     onSelect={(key, value) => attr.value.name = key}
                                     onChange={(value) => attr.value.name = value}

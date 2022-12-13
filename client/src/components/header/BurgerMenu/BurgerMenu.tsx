@@ -33,7 +33,7 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
             <div className='burger-menu__container'>
                 <div className='burger-menu__head rcc burger-menu_underline'>
                     <NavLink className='burger-menu__link' to={'/home'}>
-                        <img src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' className='burger-menu__logo' />
+                        <img className='burger-menu__logo' src={require('../../../assets/images/logo.png')} alt='logo' />
                     </NavLink>
                     <div className='burger-menu__close' onClick={onClose}></div>
                 </div>

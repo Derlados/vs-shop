@@ -29,7 +29,9 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
 
     useEffect(() => {
         localStore.selectedValue = values.get(selectedId) ?? '';
-    }, [selectedId])
+        console.log(selectedId, values);
+        console.log(values.get(selectedId) ?? '');
+    }, [selectedId, values])
 
     const select = (key: string, value: any) => {
         localStore.selectedValue = value;

@@ -6,7 +6,8 @@ export const axiosNVInstance = axios.create({
 })
 
 export const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000/api'
+    //baseURL: 'http://localhost:5000/api'
+    baseURL: 'https://vs-shop-test.herokuapp.com/api'
     // baseURL: 'https://vs-shop.herokuapp.com/api'
 });
 

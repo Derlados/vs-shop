@@ -104,7 +104,7 @@ const Header = observer(() => {
                     <div className='header__burger-menu-icon ccc'></div>
                 </div>
                 <NavLink to={'/home'}>
-                    <img alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' className='header__logo' />
+                    <img alt='' src={require('../../assets/images/logo.png')} className='header__logo' />
                 </NavLink>
                 <ul className='header__nav-list'>
                     <li className='header__nav-item'>

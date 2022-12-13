@@ -80,6 +80,10 @@ class ProductStore {
     }
 
     async fetchByCategory(categoryRoute: string) {
+        if (this.category.routeName === categoryRoute) {
+            return;
+        }
+
         this.clearAll();
 
         this.category = await categoriesService.getCategoryByRouteName(categoryRoute);
@@ -233,8 +237,6 @@ class ProductStore {
             const values: IValue[] = allValues.filter(v => valueids.includes(v.id));
             this.selectedFilters.set(attributeId, values);
         }
-
-        console.log(JSON.stringify(this.selectedFilters));
     }
 
     public hasSelectedFilter(attributeId: number, valueId: number) {

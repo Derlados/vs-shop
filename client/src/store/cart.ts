@@ -1,8 +1,6 @@
 import { makeAutoObservable } from "mobx";
-import orderService from "../services/order/order.service";
 import sessionCartService from "../services/session-cart/session-cart.service";
 import { ICartProduct } from "../types/ICartProduct";
-import { IOrder } from "../types/IOrder";
 import { IProduct } from "../types/IProduct";
 
 

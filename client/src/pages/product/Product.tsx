@@ -36,6 +36,8 @@ const Product: FC = observer(() => {
 
     useEffect(() => {
         async function fetchProduct(productId: number) {
+            localStore.isLoading = true;
+
             const product = await products.fetchProductById(productId);
             const category = catalog.getCategoryById(product.categoryId);
 
@@ -67,7 +69,7 @@ const Product: FC = observer(() => {
         }
     }
 
-    if (localStore.product) {
+    if (localStore.product && !localStore.isLoading) {
         return (
             <div className='product ccc'>
                 <CatalogNav routes={[

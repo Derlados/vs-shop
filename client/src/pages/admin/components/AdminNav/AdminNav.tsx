@@ -22,7 +22,7 @@ const AdminNav = observer(() => {
         <div className={classNames('admin-nav', {
             'admin-nav_opened': localstore.isOpened
         })} onClick={toggleNavBar}>
-            <img className='admin-nav__logo' alt='' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' />
+            <img className='admin-nav__logo' alt='logo' src={require('../../../../assets/images/logo.png')} />
             <div className='admin-nav__item admin-nav__selected-item  rlc'>
                 <div className={`admin-nav__icon ${adminRoutes.find(r => r.to === location.pathname)?.img ?? ''}`}></div>
             </div>

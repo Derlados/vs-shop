@@ -7,9 +7,9 @@ import './footer.scss';
 const Footer = observer(() => {
     return (
         <footer className='footer ccc'>
-            <img className='footer__logo footer__logo_top' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' />
+            <img className='footer__logo footer__logo_top' src={require('../../assets/images/logo.png')} alt='logo' />
             <div className='footer__container rcc'>
-                <img className='footer__logo footer__logo_left' src='https://template.hasthemes.com/ecolife/ecolife/assets/images/logo/logo.jpg' />
+                <img className='footer__logo footer__logo_left' src={require('../../assets/images/logo.png')} alt='logo' />
                 <div className='footer__block rcc'>
                     <div className='footer__text'>Соц. мережі:</div>
                     <ul className='footer__contacts rcc'>

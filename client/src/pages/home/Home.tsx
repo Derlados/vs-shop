@@ -5,7 +5,6 @@ import './home.scss';
 import BannerList from './components/BannerList';
 import Loader from '../../lib/components/Loader/Loader';
 import "aos/dist/aos.css";
-import { IProduct } from '../../types/IProduct';
 import CategoryList from '../../components/Category/CategoryList/CategoryList';
 import catalog from '../../store/catalog';
 
@@ -55,9 +54,9 @@ const Home = observer(() => {
                 </ul>
             </div>
             <SliderProducts title="Хіт продажів" slidesPerView={5} products={[...shop.bestsellers.slice(0, 10)]} />
-            <div className='home__category-title'>Catalog</div>
+            <div className='home__category-title'>Каталоги</div>
             <CategoryList categories={catalog.categories} />
-            <img className='home__banner home__banner_small' alt='' src={shop.smallBanner}/>
+            <img className='home__banner home__banner_small' alt='' src={shop.smallBanner} />
             <SliderProducts title="Нові товари" products={[...shop.newProducts.slice(0, 10)]} />
         </div>
     )
