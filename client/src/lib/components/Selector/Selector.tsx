@@ -20,7 +20,7 @@ interface LocalStore {
     isOpen: boolean;
 }
 
-const Selector: FC<SelectorProps> = observer(({ className, withInput = false, withSearch = false, innerHint = false, hint, values, selectedId = '', onSelect, onChange = () => { } }) => {
+const Selector: FC<SelectorProps> = observer(({ className, withInput = false, withSearch = false, innerHint = false, hint, values, selectedId, onSelect, onChange = () => { } }) => {
     const NOT_SELECTED = "Не вибрано";
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedValue: '',
@@ -28,9 +28,9 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
     }));
 
     useEffect(() => {
-        localStore.selectedValue = values.get(selectedId) ?? '';
-        console.log(selectedId, values);
-        console.log(values.get(selectedId) ?? '');
+        if (selectedId != null) {
+            localStore.selectedValue = values.get(selectedId) ?? '';
+        }
     }, [selectedId, values])
 
     const select = (key: string, value: any) => {
@@ -83,7 +83,7 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
                 })}>
                     {getValidValues().map(([key, value]) => (
                         <li key={key} className={classNames('selector__value', {
-                            'selector__value_selected': value == localStore.selectedValue
+                            'selector__value_selected': value === localStore.selectedValue
                         })} onMouseDown={() => select(key, value)}>{value}</li>
                     ))}
                 </ul>

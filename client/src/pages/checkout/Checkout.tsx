@@ -129,10 +129,11 @@ const Checkout = observer(() => {
     }
 
     const onSelectSettlement = (settlementRef: string, settlementName: string) => {
-        const selectedSettlement = settlement.settlements.find(s => s.ref == settlementRef)
+        const selectedSettlement = settlement.settlements.find(s => s.ref === settlementRef)
         if (selectedSettlement) {
             localStore.settlement = getSettlementFullName(selectedSettlement);
             localStore.warehouse = '';
+            console.log(localStore.warehouse)
         }
         settlement.selectSettlement(settlementRef);
     }

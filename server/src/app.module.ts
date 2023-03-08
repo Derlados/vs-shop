@@ -51,9 +51,9 @@ import { Catalog } from './catalogs/models/catalog.model';
             rootPath: join(__dirname, '..', 'static'),
             serveRoot: '/images'
         }),
-        ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', 'client'),
-        }),
+        // ServeStaticModule.forRoot({
+        //     rootPath: join(__dirname, '..', 'client'),
+        // }),
         ProductsModule,
         UsersModule,
         AuthModule,

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC } from 'react'
 import { NavLink } from 'react-router-dom';
-import Dropdown from '../../../../lib/components/DropList/Dropdown';
+import Dropdown from '../../../../lib/components/Dropdown/Dropdown';
 import { ICatalog } from '../../../../types/ICatalog'
 import { ROUTES } from '../../../../values/routes';
 

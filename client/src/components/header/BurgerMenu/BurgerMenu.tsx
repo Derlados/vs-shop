@@ -58,7 +58,7 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
                             'burger-menu__link-list_open': localStore.isCatalogListOpen
                         })}>
                             {catalog.catalogs.map(catalog => (
-                                <CatalogItem catalog={catalog} onClick={onClose} />
+                                <CatalogItem key={catalog.id} catalog={catalog} onClick={onClose} />
                             ))}
                         </ul>
                     </li>

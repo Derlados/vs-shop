@@ -129,7 +129,6 @@ class OrderStore {
 
             this.fetchOrders();
         } catch (e) {
-            console.log(orderService.getError());
         }
     }
 

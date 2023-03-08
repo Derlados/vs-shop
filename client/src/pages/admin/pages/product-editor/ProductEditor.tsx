@@ -65,7 +65,6 @@ const ProductEditor = observer(() => {
     const getProductTemplate = (): IProduct => {
         const attributes: IProductAttribute[] = [];
         if (localStore && localStore.selectedCategory) {
-            console.log(localStore.selectedCategory)
             for (const attr of localStore.selectedCategory.keyAttributes) {
                 attributes.push({ id: attr.id, name: attr.name, value: { id: -1, name: '' } })
             }
