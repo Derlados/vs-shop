@@ -6,6 +6,8 @@ This project was created for personal use and practice in the technologies used.
 Backend - Node.js, Nest.JS, MySQL, TypeORM, REST API, JWT
 Frontend - React + related libraries, MobX, SCSS
 
+demo deploy - https://vs-shop-test.herokuapp.com/
+
 ## Screenshots
 
 ![1](https://user-images.githubusercontent.com/61616419/207192051-9c4c1fd7-2ec0-4fae-81fa-2b946b608c3a.jpg)
