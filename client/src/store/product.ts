@@ -80,9 +80,9 @@ class ProductStore {
     }
 
     async fetchByCategory(categoryRoute: string) {
-        if (this.category.routeName === categoryRoute) {
-            return;
-        }
+        // if (this.category.routeName === categoryRoute) {
+        //     return;
+        // }
 
         this.clearAll();
 
@@ -123,7 +123,7 @@ class ProductStore {
     }
 
     async fetchRelatedProducts(product: IProduct, maxProducts: number): Promise<IProduct[]> {
-        const products = await productsService.getFilterProducts({ brands: [product.brand] });
+        const products = await productsService.getProductsByCategory(product.categoryId, { brands: [product.brand] });
         const shuffledProducts = [...products].sort(() => 0.5 - Math.random());
 
         return shuffledProducts.slice(0, maxProducts);
@@ -250,12 +250,12 @@ class ProductStore {
 
     //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
     public countProductByValue(attributeId: number, value: string) {
-        return this.filteredProducts.filter(p => (p.attributes.find(a => a.id === attributeId)?.value.name ?? '') === value).length;
+        return this.products.filter(p => (p.attributes.find(a => a.id === attributeId)?.value.name ?? '') === value).length;
     }
 
     //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
     public conntProductByBrand(brand: string) {
-        return this.filteredProducts.filter(p => (p.brand == brand)).length;
+        return this.products.filter(p => (p.brand == brand)).length;
     }
 
     public setSortType(sortType: SortType) {

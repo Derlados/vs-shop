@@ -22,9 +22,10 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 //     .getMany();
 
 export interface FilterOptions {
-    limit: number;
-    brands: string[];
+    limit?: number;
+    brands?: string[];
     priceRange: Range;
+    filters?: Map<number, number[]>
 }
 
 @Injectable()
@@ -65,11 +66,38 @@ export class ProductsService {
         return product;
     }
 
-    async getProductsByCategory(categoryId: number): Promise<Product[]> {
-        return this.productRepository.find({
-            where: { category: { id: categoryId } },
-            relations: ["values", "values.attribute", "images", "category"]
-        });
+    async getProductsByCategory(categoryId: number, filters: FilterOptions): Promise<Product[]> {
+        const productsQuery = this.productRepository.createQueryBuilder("product")
+            .addSelect("COUNT(*) as count_matches")
+            .innerJoin("product.category", "category")
+            .innerJoin("product.values", "values")
+            .innerJoin("values.attribute", "attributes")
+            .where("category.id = :categoryId", { categoryId: categoryId })
+            .andWhere("product.price BETWEEN :min AND :max", { min: filters.priceRange.min, max: filters.priceRange.max })
+            .groupBy("product.id");
+
+        if (filters.brands) {
+            productsQuery.andWhere("product.brand IN (:...brands)", { brands: filters.brands })
+        }
+
+        if (filters.filters) {
+            const allValues = [];
+            Array.from(filters.filters).map(([_, value]) => {
+                allValues.push(...value);
+            });
+
+            const valueNames = (await this.valuesRepository.find({
+                id: In(allValues)
+            })).map(v => v.name);
+
+            productsQuery.andWhere("values.name IN (:...valIds)", { valIds: valueNames })
+            productsQuery.having("count_matches = :countMatches", { countMatches: filters.filters.size });
+        }
+
+        // TODO придумать что то нормальнее
+        const products = await productsQuery.getMany();
+
+        return this.productRepository.find({ where: { id: In(products.map(p => p.id)) }, relations: ["values", "values.attribute", "images", "category"] });
     }
 
     async getProductsByText(text: string): Promise<Product[]> {
@@ -79,33 +107,10 @@ export class ProductsService {
         });
     }
 
-    //TODO
-    async getFilteredProducts(filters: FilterOptions) {
-        const products = this.productRepository.find({
-            where: { brand: In(filters.brands), price: Between(filters.priceRange.min, filters.priceRange.max) },
-            take: filters.limit,
-            relations: ["values", "values.attribute", "images", "category"]
-        })
-        return products;
-    }
-
     async getProductCount(userId: number, productId: number) {
         const product = await this.productRepository.findOne({ id: productId, userId: userId });
         return product.count;
     }
-
-    /** TODO: Если работа на клиенте будет неоптимальной - фильтровать будет сервер */
-    // async getFilteredProducts(attributes: Map<string, string[]>) {
-    //     attributes = new Map([
-    //         ["attr1", ["val1", "val3", "val4"]],
-    //         ["attr2", ["val1", "val3", "val4"]],
-    //     ])
-
-    //     const products = this.productRepository.find({ relations: ["category", "values", "values.attribute"] });
-
-
-    //     return products;
-    // }
 
     async createProduct(userId: number, dto: CreateProductDto): Promise<Product> {
         const { attributes, ...product } = dto;

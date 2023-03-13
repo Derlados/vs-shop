@@ -6,14 +6,13 @@ import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
-import { ProductsService } from './products.service';
+import { FilterOptions, ProductsService } from './products.service';
 import { FilterProductsQuery } from './query/filter-products.query';
 import { SearchProductsQuery } from './query/search-products.query';
 
 @Controller('products')
 export class ProductsController {
     constructor(private productService: ProductsService) { }
-
 
     @Get()
     @UseInterceptors(ClassSerializerInterceptor)
@@ -23,8 +22,8 @@ export class ProductsController {
 
     @Get('category=:category([0-9]+)')
     @UseInterceptors(ClassSerializerInterceptor)
-    getProductByCategory(@Param('category') categoryId: number) {
-        return this.productService.getProductsByCategory(categoryId);
+    getProductByCategory(@Param('category') categoryId: number, @Query() query: FilterProductsQuery) {
+        return this.productService.getProductsByCategory(categoryId, this.parseFiltersQuery(query));
     }
 
     @Get('search')
@@ -51,22 +50,6 @@ export class ProductsController {
     @UseInterceptors(ClassSerializerInterceptor)
     getAvailableCount(@Req() req, @Param('id') id: number) {
         return this.productService.getProductCount(req.user.userId, id);
-    }
-
-    //TODO
-    @Get('filter')
-    @UseInterceptors(ClassSerializerInterceptor)
-    getFilteredProducts(@Query() query: FilterProductsQuery) {
-        const brands = query.brands?.map(b => decodeURI(b));
-
-        return this.productService.getFilteredProducts({
-            limit: query.limit ? Number(query.limit) : null,
-            brands: brands ?? [],
-            priceRange: {
-                min: query.minPrice ? Number(query.minPrice) : 0,
-                max: query.maxPrice ? Number(query.maxPrice) : Number.MAX_VALUE
-            }
-        });
     }
 
     @Get(':id([0-9]+)')
@@ -119,5 +102,29 @@ export class ProductsController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     deleteBestsellerStatus(@Req() req, @Param('id') id: number) {
         return this.productService.deleteBestsellerStatus(id, req.user.userId);
+    }
+
+    private parseFiltersQuery(filterQuery: FilterProductsQuery): FilterOptions {
+        const brands = filterQuery.brands?.map(b => decodeURI(b));
+        const filters = new Map<number, number[]>();
+        filterQuery.filters?.forEach(f => {
+            const [attrId, value] = f.split('-').map(elem => Number(elem));
+            if (!filters.has(attrId)) {
+                filters.set(attrId, []);
+            }
+
+            filters.get(attrId).push(value);
+        })
+
+
+        return {
+            limit: filterQuery.limit ? Number(filterQuery.limit) : null,
+            brands: brands,
+            priceRange: {
+                min: filterQuery.minPrice ? Number(filterQuery.minPrice) : 0,
+                max: filterQuery.maxPrice ? Number(filterQuery.maxPrice) : Number.MAX_VALUE
+            },
+            filters: filterQuery.filters ? filters : null
+        }
     }
 }

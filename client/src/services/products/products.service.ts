@@ -19,8 +19,8 @@ class ProductService extends Service {
         return data;
     }
 
-    async getProductsByCategory(categoryId: number): Promise<IProduct[]> {
-        const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/category=${categoryId}`, { headers: headersJSON() });
+    async getProductsByCategory(categoryId: number, filters?: FilterOptions): Promise<IProduct[]> {
+        const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/category=${categoryId}`, { params: filters, headers: headersJSON() });
         return data;
     }
 
@@ -50,11 +50,6 @@ class ProductService extends Service {
 
     async getNewProducts(): Promise<IProduct[]> {
         const { data } = await axiosInstance.get(`${this.API_URL}/new`, { headers: headersJSON() });
-        return data;
-    }
-
-    async getFilterProducts(filters: FilterOptions): Promise<IProduct[]> {
-        const { data } = await axiosInstance.get(`${this.API_URL}/filter`, { params: filters, headers: headersJSON() });
         return data;
     }
 
