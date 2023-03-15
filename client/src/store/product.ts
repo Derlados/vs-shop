@@ -1,32 +1,23 @@
 import cyrillicToTranslit from "cyrillic-to-translit-js";
 import { makeAutoObservable } from "mobx";
 import categoriesService from "../services/categories/categories.service";
-import productsService from "../services/products/products.service";
+import productsService, { FilterOptions } from "../services/products/products.service";
 import { ICategory } from "../types/ICategory";
 import { IFilters, IRange } from "../types/IFilters";
 import { IProduct } from "../types/IProduct";
 import { IValue } from "../types/IValue";
 
-export enum SortType {
-    NOT_SELECTED,
-    PRICE_ASC,
-    PRICE_DESC,
-    NEW,
-    DISCOUNT
-}
 
 //TODO Когда будет много товаров, логику фильтрации вынести на сервер
 class ProductStore {
     public category: ICategory;
-    public filters: IFilters;
     public products: IProduct[];
+    public allCategoryFilters: IFilters;
 
     public brands: string[];
-    public selectedSort: SortType;
-    public selectedPriceRange: IRange;
-    public selectedTranslitBrands: string[]; // Все бренд переведены в английский транслит
-    public searchString: string;
-    public selectedFilters: Map<number, IValue[]>;
+
+    public isLoading: boolean;
+
 
     constructor() {
         makeAutoObservable(this);
@@ -40,24 +31,8 @@ class ProductStore {
             keyAttributes: [],
             productsCount: 0
         };
+        this.isLoading = false;
         this.products = [];
-        this.filters = {
-            priceRange: { min: 0, max: 0 },
-            attributes: []
-        };
-
-        this.selectedSort = SortType.NOT_SELECTED;
-        this.selectedPriceRange = this.priceRange;
-        this.selectedTranslitBrands = [];
-        this.searchString = '';
-        this.selectedFilters = new Map();
-    }
-
-    get filteredProducts(): IProduct[] {
-        let products = [...this.products];
-        products = this.filterProducts(products);
-        products = this.sortProducts(products);
-        return products;
     }
 
     get priceRange(): IRange {
@@ -79,37 +54,38 @@ class ProductStore {
         return range;
     }
 
-    async fetchByCategory(categoryRoute: string) {
-        // if (this.category.routeName === categoryRoute) {
-        //     return;
-        // }
-
-        this.clearAll();
+    async fetchProducts(categoryRoute: string, filters?: FilterOptions) {
+        this.isLoading = true;
 
         this.category = await categoriesService.getCategoryByRouteName(categoryRoute);
         if (!this.category) {
+            this.isLoading = false;
             return;
         }
-        this.products = await productsService.getProductsByCategory(this.category.id);
+
+        if (filters) {
+            const { search: text, minPrice, maxPrice, filter: attributes, brands } = filters;
+
+            this.products = await productsService.getProductsByCategory(this.category.id, {
+                search: text ?? undefined,
+                brands: brands?.length !== 0 ? brands : undefined,
+                minPrice: minPrice !== 0 ? minPrice : undefined,
+                maxPrice: maxPrice !== 0 ? maxPrice : undefined,
+                filter: attributes?.size !== 0 ? attributes : undefined
+            });
+        } else {
+            this.products = await productsService.getProductsByCategory(this.category.id);
+        }
+
         this.brands = this.category.allBrands ?? [];
 
-        this.selectedPriceRange = this.priceRange;
-
         const filterAttrs = await categoriesService.getFilters(this.category.id);
-        this.filters = {
-            priceRange: this.priceRange,
+        this.allCategoryFilters = {
+            priceRange: { ...this.priceRange, max: 400000 },
             attributes: filterAttrs
         }
 
-        for (const attribute of this.filters.attributes) {
-            this.selectedFilters.set(attribute.attribute.id, []);
-        }
-    }
-
-    async fetchProductsByText(searchText: string) {
-        this.clearAll();
-        this.products = await productsService.getProductByText(searchText);
-        this.selectedPriceRange = this.priceRange;
+        this.isLoading = false;
     }
 
     async fetchProductById(id: number): Promise<IProduct> {
@@ -137,130 +113,16 @@ class ProductStore {
         product.count = await productsService.getProductCount(product.id);
     }
 
-    public clearFilters() {
-        this.selectedTranslitBrands = [];
-        this.selectedPriceRange = this.priceRange;
-        for (const attribute of this.filters.attributes) {
-            this.selectedFilters.set(attribute.attribute.id, []);
-        }
-    }
-
-    private clearAll() {
-        this.products = [];
-        this.searchString = '';
-        this.selectedFilters.clear();
-        this.selectedTranslitBrands = [];
-        this.selectedPriceRange = this.priceRange;
-        this.filters = {
-            priceRange: { min: 0, max: 0 },
-            attributes: []
-        };
-    }
-
-    /////////////////////////////////// ФИЛЬТРАЦИЯ И СОРТИРОВКА ПРОДУКТОВ ///////////////////////////////////
-
-    private filterProducts(products: IProduct[]) {
-        let filteredProducts = [];
-
-        // По цене 
-        filteredProducts = products.filter(p => p.price >= this.selectedPriceRange.min && p.price <= this.selectedPriceRange.max);
-
-        // По бренду
-        if (this.selectedTranslitBrands.length !== 0) {
-            filteredProducts = filteredProducts.filter(p => this.selectedTranslitBrands.includes(cyrillicToTranslit().transform(p.brand, "_")));
-        }
-
-        // По ключевому слову
-        const searchString = this.searchString.replace(/\s+/, ' ').toLowerCase();
-        if (this.searchString) {
-            filteredProducts = filteredProducts.filter(p => p.title.toLowerCase().includes(searchString))
-        }
-
-        // По фильтрам
-        for (const [attributeId, values] of this.selectedFilters) {
-            if (values.length !== 0) {
-                const valueNames = values.map(v => v.name);
-                filteredProducts = filteredProducts.filter(p => valueNames.includes(p.attributes.find(a => a.id === attributeId)?.value.name ?? ''));
-            }
-        }
-
-        return filteredProducts;
-    }
-
-    private sortProducts(products: IProduct[]): IProduct[] {
-        switch (this.selectedSort) {
-            case SortType.NOT_SELECTED: {
-                return products;
-            }
-            case SortType.PRICE_ASC: {
-                return products.sort((p1, p2) => {
-                    return p1.price > p2.price ? 1 : -1;
-                });
-            }
-            case SortType.PRICE_DESC: {
-                return products.sort((p1, p2) => {
-                    return p1.price < p2.price ? 1 : -1;
-                })
-            }
-            case SortType.NEW: {
-                return products.sort((p1, p2) => {
-                    return (!p1.isNew && p2.isNew) ? 1 : -1;
-                })
-            }
-            case SortType.DISCOUNT: {
-                return products.sort((p1, p2) => {
-                    return (p1.discountPercent == 0 && p2.discountPercent != 0) ? 1 : -1;
-                })
-            }
-        }
-    }
-
-    public setSearchString(searchString: string) {
-        this.searchString = searchString;
-    }
-
-    public selectPriceRange(min: number, max: number) {
-        this.selectedPriceRange = { min: min, max: max };
-    }
-
-    public selectBrands(translitBrands: string[]) {
-        this.selectedTranslitBrands.push(...translitBrands);
-    }
-
-    public hasSelectedBrand(brand: string) {
-        return this.selectedTranslitBrands.findIndex(b => b === brand) !== -1;
-    }
-
-    public setFilter(attributeId: number, ...valueids: number[]) {
-        const allValues = this.filters.attributes.find(a => a.attribute.id === attributeId)?.attribute.allValues;
-        if (allValues) {
-            const values: IValue[] = allValues.filter(v => valueids.includes(v.id));
-            this.selectedFilters.set(attributeId, values);
-        }
-    }
-
-    public hasSelectedFilter(attributeId: number, valueId: number) {
-        const values = this.selectedFilters.get(attributeId);
-        if (values && values.find(v => v.id === valueId)) {
-            return true;
-        }
-
-        return false;
+    //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
+    public isProductExistByValue(attributeId: number, value: string) {
+        return this.products.findIndex(p => (p.attributes.find(a => a.id === attributeId)?.value.name ?? '') == value) !== -1;
     }
 
     //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
-    public countProductByValue(attributeId: number, value: string) {
-        return this.products.filter(p => (p.attributes.find(a => a.id === attributeId)?.value.name ?? '') === value).length;
+    public isProductExistByBrand(brand: string) {
+        return this.products.findIndex(p => (p.brand == brand)) !== -1;
     }
 
-    //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
-    public conntProductByBrand(brand: string) {
-        return this.products.filter(p => (p.brand == brand)).length;
-    }
-
-    public setSortType(sortType: SortType) {
-        this.selectedSort = sortType;
-    }
 
     /////////////////////////////////// CRUD ОПЕРАЦИИ ДЛЯ ПРОДУКТОВ В КАТАЛОГЕ //////////////////////////////////
 

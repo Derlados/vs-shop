@@ -37,13 +37,13 @@ const FilterItem: FC<FilterItemProps> = observer(({ attribute, onCheck }) => {
             }}>
                 {attribute.allValues.map(attrValue => (
                     <li key={`${attribute.id}-${attrValue.name}`} className={classNames('filters__attr-item rlc', {
-                        'filters__attr-item_disable': attrValue.productCount === 0
+                        'filters__attr-item_disable': !attrValue.isAvailable
                     })}>
-                        <label className='filters__attr-value rcc'>{attrValue.name} ({attrValue.productCount})
+                        <label className='filters__attr-value rcc'>{attrValue.name}
                             <input className='filters__checkbox'
                                 type="checkbox"
                                 checked={attrValue.checked}
-                                onChange={() => attrValue.productCount !== 0 ? onCheck(attribute.id, attrValue) : {}}
+                                onChange={() => attrValue.isAvailable ? onCheck(attribute.id, attrValue) : {}}
                             />
                             <span className='filters__checkmark'></span>
                         </label>

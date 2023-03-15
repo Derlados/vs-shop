@@ -107,7 +107,7 @@ export class ProductsController {
     private parseFiltersQuery(filterQuery: FilterProductsQuery): FilterOptions {
         const brands = filterQuery.brands?.map(b => decodeURI(b));
         const filters = new Map<number, number[]>();
-        filterQuery.filters?.forEach(f => {
+        filterQuery.attributes?.forEach(f => {
             const [attrId, value] = f.split('-').map(elem => Number(elem));
             if (!filters.has(attrId)) {
                 filters.set(attrId, []);
@@ -124,7 +124,7 @@ export class ProductsController {
                 min: filterQuery.minPrice ? Number(filterQuery.minPrice) : 0,
                 max: filterQuery.maxPrice ? Number(filterQuery.maxPrice) : Number.MAX_VALUE
             },
-            filters: filterQuery.filters ? filters : null
+            filters: filterQuery.attributes ? filters : null
         }
     }
 }

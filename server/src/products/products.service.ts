@@ -95,6 +95,7 @@ export class ProductsService {
         }
 
         // TODO придумать что то нормальнее
+        console.log(filters);
         const products = await productsQuery.getMany();
 
         return this.productRepository.find({ where: { id: In(products.map(p => p.id)) }, relations: ["values", "values.attribute", "images", "category"] });

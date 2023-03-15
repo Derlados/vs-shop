@@ -3,9 +3,8 @@ import ProductCatalog from './components/ProductCatalog/ProductCatalog'
 import './shop.scss';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import shop from '../../store/shop';
-import products from '../../store/product';
 import Loader from '../../lib/components/Loader/Loader';
 import PopularProducts from './components/PopularProducts/PopularProducts';
 import { IProduct } from '../../types/IProduct';
@@ -13,89 +12,72 @@ import { useQuery } from '../../lib/hooks/useQuery';
 import FilterCategories, { IFilterCategory } from './components/Filters/FilterCategories/FilterCategories';
 import ProductFilters from './components/Filters/ProductFilters/ProductFilters';
 import { useEffect } from 'react';
-import { FilterUrlBuilder } from '../../lib/helpers/FiltersUrlBuilder';
 import { ICategory } from '../../types/ICategory';
 import { ROUTES } from '../../values/routes';
 import catalog from '../../store/catalog';
+import { FilterOptions } from '../../services/products/products.service';
+import filterUrlTransformer from "../../helpers/FilterUrlTransformer";
+import { SortType } from '../../enums/SortType.enum';
+import products from '../../store/product';
 
 interface LocalStore {
-    category?: ICategory;
-    filterUrlBuilder: FilterUrlBuilder;
-    isLoadedData: boolean;
     isInited: boolean;
+    category?: ICategory;
     isFilterOpen: boolean;
+    isValidCategory: boolean;
     popularProducts: IProduct[];
     filterCategories: IFilterCategory[];
+    filters: FilterOptions;
 }
+
 
 const Shop = observer(() => {
     const navigate = useNavigate();
-    const { catalog: categoryRoute, filters } = useParams();
-    const searchText = (useQuery()).get("text");
+    const { catalog: categoryRoute } = useParams();
+    const queryParams = useQuery();
 
     const localStore = useLocalObservable<LocalStore>(() => ({
-        filterUrlBuilder: new FilterUrlBuilder(),
         isInited: false,
-        isLoadedData: false,
         isFilterOpen: false,
+        isValidCategory: false,
         popularProducts: [],
-        filterCategories: []
+        filterCategories: [],
+        filterAttributes: [],
+        filters: {}
     }))
 
-    useEffect(() => {
-        if (!localStore.isLoadedData) {
-            return;
-        }
-
-        products.clearFilters();
-        if (!filters) {
-            localStore.isInited = true;
-            return;
-        }
-
-        const filtersUrl = localStore.filterUrlBuilder.parse(filters ?? '').build();
-        if (filtersUrl !== filters) {
-            acceptFiltersChange(false);
-        }
-
-        if (localStore.filterUrlBuilder.priceRange) {
-            const { min, max } = localStore.filterUrlBuilder.priceRange;
-            products.selectPriceRange(min, max);
-        }
-
-        products.selectBrands(localStore.filterUrlBuilder.brands);
-        const selectedFilters = localStore.filterUrlBuilder.filters;
-        for (const [attributeId, valueIds] of selectedFilters) {
-            products.setFilter(attributeId, ...valueIds)
-        }
-
-        localStore.isInited = true;
-    }, [categoryRoute, filters, localStore.isLoadedData])
+    const restoreFilters = () => {
+        localStore.filters.search = queryParams.get('search');
+        localStore.filters.brands = queryParams.get('brands')?.split(',') ?? [];
+        localStore.filters.minPrice = filterUrlTransformer.parseNumber(queryParams.get('minPrice') ?? "");
+        localStore.filters.maxPrice = filterUrlTransformer.parseNumber(queryParams.get('maxPrice') ?? "");
+        localStore.filters.sort = filterUrlTransformer.parseEnumSort(queryParams.get('sort') ?? "") ?? SortType.NOT_SELECTED;
+        localStore.filters.filter = filterUrlTransformer.parseFilters(queryParams.get('filter') ?? "");
+    }
+    restoreFilters();
 
     useEffect(() => {
+        console.log("category route updated")
         async function fetchProducts() {
             if (categoryRoute) {
-                await products.fetchByCategory(categoryRoute)
-                if (searchText) {
-                    products.setSearchString(searchText);
-                }
-
+                await products.fetchProducts(categoryRoute, localStore.filters)
                 localStore.category = catalog.getCategoryByRoute(categoryRoute);
-            } else if (searchText) {
-                await products.fetchProductsByText(searchText);
-                localStore.filterCategories = groupByCategories(products.filteredProducts);
+                localStore.popularProducts = shop.getBestsellersByCategory(products.category.id);
             }
 
-
-            localStore.popularProducts = shop.getBestsellersByCategory(products.category.id);
-            localStore.isLoadedData = true;
+            localStore.isInited = true;
         }
 
         localStore.isInited = false;
-        localStore.isLoadedData = false;
-
         fetchProducts();
-    }, [categoryRoute, searchText]);
+    }, [categoryRoute])
+
+    useEffect(() => {
+        if (localStore.isInited && categoryRoute) {
+            console.log("params updated")
+            products.fetchProducts(categoryRoute, localStore.filters)
+        }
+    }, [queryParams])
 
     const groupByCategories = (products: IProduct[]): IFilterCategory[] => {
         const categoryMap = new Map<number, number>();
@@ -109,7 +91,7 @@ const Shop = observer(() => {
             if (category) {
                 filterCategories.push({
                     name: category.name,
-                    link: `/${ROUTES.CATEGORY_PREFIX}${category.routeName}/search/?text=${searchText}`,
+                    link: `/${ROUTES.CATEGORY_PREFIX}${category.routeName}/search/?text=${localStore.filters.search}`,
                     productCount: productCount
                 })
             }
@@ -128,48 +110,71 @@ const Shop = observer(() => {
         document.body.style.overflowY = "";
     }
 
+    ///////////////////////////////////////// FILTERS PRODUCTS /////////////////////////////////////
+
     const onSelectPrice = (min: number, max: number) => {
-        localStore.filterUrlBuilder.setPriceRange({ min: min, max: max });
-        acceptFiltersChange(true);
+        localStore.filters.minPrice = min;
+        localStore.filters.maxPrice = max;
+
+        acceptFiltersChange();
     }
 
     const onSelectBrand = (brand: string, checked: boolean) => {
         if (checked) {
-            localStore.filterUrlBuilder.selectBrand(brand)
+            localStore.filters.brands?.push(brand);
         } else {
-            localStore.filterUrlBuilder.deselectBrand(brand);
+            localStore.filters.brands = localStore.filters.brands?.filter(b => b != brand)
+
         }
 
-        acceptFiltersChange(true);
+        acceptFiltersChange();
     }
 
-    const onSelectFilter = (attributeId: number, valueId: number, checked: boolean) => {
+    const onSelectSort = (sortType: SortType) => {
+        localStore.filters.sort = sortType;
+        acceptFiltersChange();
+    }
+
+    const onCheckFilterAttribute = (attributeId: number, valueId: number, checked: boolean) => {
+        if (!localStore.filters.filter) {
+            localStore.filters.filter = new Map<number, number[]>();
+        }
+
+        if (!localStore.filters.filter.has(attributeId)) {
+            localStore.filters.filter.set(attributeId, []);
+        }
+
         if (checked) {
-            localStore.filterUrlBuilder.selectFilter(attributeId, valueId)
+            localStore.filters.filter.get(attributeId)?.push(valueId);
         } else {
-            localStore.filterUrlBuilder.deselectFilter(attributeId, valueId);
+            const values = localStore.filters.filter.get(attributeId);
+            if (values) {
+                localStore.filters.filter.set(attributeId, values?.filter(v => v !== valueId));
+            }
+
+            if (localStore.filters.filter.get(attributeId)?.length === 0) {
+                localStore.filters.filter.delete(attributeId);
+            }
         }
 
-        acceptFiltersChange(true);
+        acceptFiltersChange();
     }
 
-    const acceptFiltersChange = (reload: boolean) => {
-        const filtersUrl = localStore.filterUrlBuilder.build();
-        let updatedRoute = `/${ROUTES.CATEGORY_PREFIX}${products.category.routeName}`;
-        if (filtersUrl !== '') {
-            updatedRoute += `/${filtersUrl};`
-        }
-
-        if (searchText) {
-            updatedRoute += `/search/?text=${searchText}`
-        }
-
-        if (reload) {
-            navigate(updatedRoute);
+    const acceptFiltersChange = () => {
+        const urlParams = filterUrlTransformer.buildFilterUrl(localStore.filters);
+        if (!urlParams) {
+            navigate('');
         } else {
-            window.history.replaceState(null, "New Page Title", updatedRoute);
+            navigate({
+                pathname: '',
+                search: decodeURIComponent(urlParams)
+            });
         }
     }
+
+    // if (!localStore.isValidCategory) {
+    //     return <Navigate to={'/404_not_found'} replace />
+    // }
 
     if (!localStore.isInited) {
         return (
@@ -179,17 +184,13 @@ const Shop = observer(() => {
         )
     }
 
-    if (localStore.isInited && !filters && searchText !== null && products.filteredProducts.length === 0) {
+    if (localStore.isInited && products.products.length === 0) {
         return (
             <div className='shop__nothing-found ccc'>
                 <div className='shop__nothing-found-icon'></div>
                 <span className='shop__nothing-found-text'>По вашому запиту нічого не знайдено. Спробуйте інший</span>
             </div>
         )
-    }
-
-    if (localStore.isInited && categoryRoute && products.products.length === 0) {
-        return <Navigate to={'/404_not_found'} replace />
     }
 
     return (
@@ -200,7 +201,8 @@ const Shop = observer(() => {
                     <Filters isOpen={localStore.isFilterOpen} onClose={onCloseFilters} >
                         {categoryRoute ?
                             <ProductFilters
-                                onCheckFilter={onSelectFilter}
+                                selectedFilters={localStore.filters}
+                                onCheckFilter={onCheckFilterAttribute}
                                 onCheckBrand={onSelectBrand}
                                 onSelectRange={onSelectPrice}
                             />
@@ -211,8 +213,13 @@ const Shop = observer(() => {
                     {localStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={localStore.popularProducts} />}
                 </div>
                 <div className='shop__content'>
-                    {products.filteredProducts.length !== 0 ?
-                        <ProductCatalog onOpenFilters={onOpenFilters} />
+                    {products.products.length !== 0 ?
+                        <ProductCatalog
+                            selectedSortType={localStore.filters.sort ?? SortType.NOT_SELECTED}
+                            products={products.products}
+                            onSelectSort={onSelectSort}
+                            onOpenFilters={onOpenFilters}
+                        />
                         :
                         <div className='shop__emprty-catalog rcc'>
                             <div className='shop__empty-catalog-icon'></div>
@@ -221,6 +228,7 @@ const Shop = observer(() => {
                     }
                 </div>
             </div>
+            <div className='shop__loading-mask'></div>
         </div>
     )
 });

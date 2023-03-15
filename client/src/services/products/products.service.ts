@@ -1,16 +1,18 @@
-import QueryString from "qs";
 import { axiosInstance, headersJSON } from "..";
-import { IRange } from "../../types/IFilters";
+import { SortType } from "../../enums/SortType.enum";
+import filterUrlTransformer from "../../helpers/FilterUrlTransformer";
 import { IImage } from "../../types/IImage";
 import { IProduct } from "../../types/IProduct";
 import { Service } from "../service";
 
 export interface FilterOptions {
-    limit?: number;
-    brands?: string[];
-    priceRange?: IRange;
+    search?: string | null;
+    brands?: string[] | null;
+    minPrice?: number | null;
+    maxPrice?: number | null;
+    sort?: SortType | null;
+    filter?: Map<number, number[]> | null;
 }
-
 
 class ProductService extends Service {
 
@@ -20,7 +22,14 @@ class ProductService extends Service {
     }
 
     async getProductsByCategory(categoryId: number, filters?: FilterOptions): Promise<IProduct[]> {
-        const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/category=${categoryId}`, { params: filters, headers: headersJSON() });
+        const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/category=${categoryId}`, {
+            params: {
+                ...filters,
+                brands: filters?.brands ? filterUrlTransformer.transformArrayToUrl(filters.brands) : null,
+                attributes: filters?.filter ? filterUrlTransformer.transformAttrMapToUrl(filters?.filter) : null
+            },
+            headers: headersJSON()
+        });
         return data;
     }
 

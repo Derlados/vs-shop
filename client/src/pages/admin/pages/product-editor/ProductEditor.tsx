@@ -189,7 +189,7 @@ const ProductEditor = observer(() => {
     }
 
     const onSelectCategory = (category: ICategory) => {
-        products.fetchByCategory(category.routeName);
+        products.fetchProducts(category.routeName);
         localStore.selectedCategory = category;
         onClear();
     }
@@ -233,7 +233,7 @@ const ProductEditor = observer(() => {
 
     const getAttributeValues = (attributeId: number) => {
         const attrValues = new Map<string, string>();
-        const attribute = products.filters.attributes.find(a => a.attribute.id === attributeId)?.attribute;
+        const attribute = products.allCategoryFilters.attributes.find(a => a.attribute.id === attributeId)?.attribute;
         if (attribute) {
             attribute.allValues.forEach(v => attrValues.set(v.id.toString(), v.name));
         }

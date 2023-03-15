@@ -33,8 +33,6 @@ class UserStore {
         this.token = '';
         localStorage.removeItem(this.ACCESS_TOKEN);
     }
-
-
 }
 
 export default new UserStore();

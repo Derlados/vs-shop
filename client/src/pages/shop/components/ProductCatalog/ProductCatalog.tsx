@@ -7,6 +7,7 @@ import CatalogSettings from '../CatalogSettings';
 import ProductQuickModal from '../../../../components/ProductCard/ProductQuickModal/ProductQuickModal';
 import ProductGrid from '../ProductGrid';
 import './catalog.scss';
+import { SortType } from '../../../../enums/SortType.enum';
 
 const MAX_PRODUCTS_BY_PAGE = 24;
 
@@ -17,18 +18,22 @@ export enum ViewMode {
 
 interface LocalStore {
     selectedViewMode: ViewMode;
-    selectedProduct: IProduct;
+    selectedSortType: SortType;
+    selectedProduct?: IProduct;
     isOpenQuick: boolean
 }
 
 interface ProductCatalogProps {
+    products: IProduct[];
+    selectedSortType: SortType;
+    onSelectSort: (sortType: SortType) => void;
     onOpenFilters: () => void;
 }
 
-const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => {
+const ProductCatalog: FC<ProductCatalogProps> = observer(({ products, selectedSortType = SortType.NOT_SELECTED, onSelectSort, onOpenFilters }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedViewMode: ViewMode.GRID,
-        selectedProduct: products.filteredProducts[0],
+        selectedSortType: selectedSortType,
         isOpenQuick: false
     }))
 
@@ -50,8 +55,14 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ onOpenFilters }) => 
     return (
         <div className='catalog ccc'>
             {localStore.selectedProduct && <ProductQuickModal isOpen={localStore.isOpenQuick} product={localStore.selectedProduct} onCloseQuickView={closeQuickView} />}
-            <CatalogSettings selectedViewMode={localStore.selectedViewMode} onSelectViewMode={selectViewMode} onOpenFilters={onOpenFilters} />
-            <ProductGrid products={products.filteredProducts} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} maxPerPage={MAX_PRODUCTS_BY_PAGE} />
+            <CatalogSettings
+                selectedSortType={selectedSortType}
+                selectedViewMode={localStore.selectedViewMode}
+                onSelectSort={onSelectSort}
+                onSelectViewMode={selectViewMode}
+                onOpenFilters={onOpenFilters}
+            />
+            <ProductGrid products={products} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} maxPerPage={MAX_PRODUCTS_BY_PAGE} />
         </div>
     )
 });

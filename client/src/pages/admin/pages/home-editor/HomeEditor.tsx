@@ -56,7 +56,7 @@ const HomeEditor = observer(() => {
 
     useEffect(() => {
         if (catalog.categories.length !== 0) {
-            product.fetchByCategory(catalog.categories[0].routeName)
+            product.fetchProducts(catalog.categories[0].routeName)
         }
     }, [catalog.categories]);
 
@@ -138,7 +138,7 @@ const HomeEditor = observer(() => {
     const onSelectCategory = (categoryId: string) => {
         const category = catalog.getCategoryById(Number(categoryId));
         if (category) {
-            product.fetchByCategory(category.routeName);
+            product.fetchProducts(category.routeName);
         }
     }
 
@@ -223,7 +223,7 @@ const HomeEditor = observer(() => {
                     />
                     <input className='home-editor__search' placeholder='Search ...' />
                 </div>
-                {product.filteredProducts.map(p => (
+                {product.products.map(p => (
                     <div key={p.id} className='home-editor__product rlc'>
                         <img className='home-editor__product-img' src={p.images.find(img => img.isMain)?.url ?? p.images[0].url} />
                         <span className='home-editor__product-name'>{p.title}</span>

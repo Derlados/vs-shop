@@ -35,6 +35,17 @@ class CatalogStore {
         this.isInit = true;
     }
 
+    async fetchFilters(routeName: string) {
+        const category = this.categories.find(c => c.routeName === routeName)
+        if (category) {
+            return await categoriesService.getFilters(category.id);
+        }
+    }
+
+    isValidRouteCategory(routeName: string): boolean {
+        return this.categories.find(c => c.routeName === routeName) !== undefined;
+    }
+
     ///////////////////////// РАБОТА С КАТЕГОРИЯМИ ///////////////////////////////////
 
     getCategoryById(id: number) {

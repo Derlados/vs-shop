@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import React, { FC } from 'react'
-import shop, { SortType } from '../../../store/product';
+import { SortType } from '../../../enums/SortType.enum';
+import products from '../../../store/product';
 import { ViewMode } from './ProductCatalog/ProductCatalog';
 
 interface LocalStore {
@@ -9,7 +10,9 @@ interface LocalStore {
 }
 
 interface CatalogSettingsProps {
+    selectedSortType: SortType;
     selectedViewMode: ViewMode;
+    onSelectSort: (sortType: SortType) => void;
     onSelectViewMode: (viewMode: ViewMode) => void;
     onOpenFilters: () => void;
 }
@@ -21,19 +24,18 @@ const sortTypes: Map<SortType, string> = new Map([
     [SortType.NEW, "Новинки"]
 ]);
 
-const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, onSelectViewMode, onOpenFilters }) => {
+const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedSortType = SortType.NOT_SELECTED, selectedViewMode = ViewMode.GRID, onSelectSort, onSelectViewMode, onOpenFilters }) => {
     const localStore = useLocalStore<LocalStore>(() => ({
-        isOpenSort: false,
-        selectedViewMode: ViewMode.GRID
+        isOpenSort: false
     }))
 
     const toggleSortList = () => {
         localStore.isOpenSort = !localStore.isOpenSort;
     }
 
-    const selectSort = (sortType: SortType) => {
+    const onChangeSort = (sortType: SortType) => {
         localStore.isOpenSort = false;
-        shop.setSortType(sortType)
+        onSelectSort(sortType);
     }
 
     return (
@@ -57,12 +59,12 @@ const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedViewMode, 
             <div className='catalog__sort'>
                 <div className={classNames('catalog__selected-sort', {
                     'catalog__selected-sort_open': localStore.isOpenSort
-                })} onClick={toggleSortList}>{shop.selectedSort === SortType.NOT_SELECTED ? "Не вибрано" : sortTypes.get(shop.selectedSort)}</div>
+                })} onClick={toggleSortList}>{selectedSortType === SortType.NOT_SELECTED ? "Не вибрано" : sortTypes.get(selectedSortType)}</div>
                 <ul className={classNames('catalog__sort-list', {
                     'catalog__sort-list_open': localStore.isOpenSort
                 })}>
                     {Array.from(sortTypes.keys()).map(sortType => (
-                        <li key={sortType} className='catalog__sort-item' onClick={() => selectSort(sortType)}>
+                        <li key={sortType} className='catalog__sort-item' onClick={() => onChangeSort(sortType)}>
                             {sortTypes.get(sortType)}
                         </li>
                     ))}
