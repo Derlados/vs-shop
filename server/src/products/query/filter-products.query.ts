@@ -1,6 +1,7 @@
 import { Transform, Type } from "class-transformer";
 import { IsArray, IsEnum, IsIn, IsNumber, IsNumberString, IsOptional, IsString, Matches, ValidateNested } from "class-validator";
 import { SortType } from "src/constants/SortType";
+import { transformFilters } from "../transformers/filter.transformer";
 
 export class FilterProductsQuery {
     @IsOptional()
@@ -28,14 +29,14 @@ export class FilterProductsQuery {
     maxPrice?: number;
 
     @IsOptional()
-    @IsArray()
-    @IsString({ each: true })
-    @Transform(({ value }) => value.split(','))
-    @Matches(/(\d+-\d+)/, { each: true })
-    attributes?: string[];
+    @Transform(({ value }) => transformFilters(value.split(',')))
+    @Type(() => Map)
+    filter?: Map<number, number[]>;
 
     @IsOptional()
     @IsEnum(SortType)
     sort?: SortType;
+
+
 }
 

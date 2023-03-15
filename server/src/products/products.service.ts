@@ -12,6 +12,7 @@ import cyrillicToTranslit from 'cyrillic-to-translit-js';
 import { CreateAttributeDto } from './dto/create-attribute.dto';
 import { Range } from 'src/lib/types/Range';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { FilterProductsQuery } from './query/filter-products.query';
 
 // ЗАМЕТКА
 // const products = await this.productRepository.createQueryBuilder("product")
@@ -20,13 +21,6 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 //     .innerJoinAndSelect("values.attribute", "attributes")
 //     .where("attributes.attribute IN ('attr2', 'attr1')")
 //     .getMany();
-
-export interface FilterOptions {
-    limit?: number;
-    brands?: string[];
-    priceRange: Range;
-    filters?: Map<number, number[]>
-}
 
 @Injectable()
 export class ProductsService {
@@ -66,23 +60,24 @@ export class ProductsService {
         return product;
     }
 
-    async getProductsByCategory(categoryId: number, filters: FilterOptions): Promise<Product[]> {
+    async getProductsByCategory(categoryId: number, filters: FilterProductsQuery): Promise<Product[]> {
         const productsQuery = this.productRepository.createQueryBuilder("product")
             .addSelect("COUNT(*) as count_matches")
             .innerJoin("product.category", "category")
             .innerJoin("product.values", "values")
             .innerJoin("values.attribute", "attributes")
             .where("category.id = :categoryId", { categoryId: categoryId })
-            .andWhere("product.price BETWEEN :min AND :max", { min: filters.priceRange.min, max: filters.priceRange.max })
+            .andWhere("product.price BETWEEN :min AND :max", { min: filters.minPrice ?? 0, max: filters.maxPrice ?? Number.MAX_VALUE })
             .groupBy("product.id");
+
 
         if (filters.brands) {
             productsQuery.andWhere("product.brand IN (:...brands)", { brands: filters.brands })
         }
 
-        if (filters.filters) {
+        if (filters.filter) {
             const allValues = [];
-            Array.from(filters.filters).map(([_, value]) => {
+            Array.from(filters.filter).map(([_, value]) => {
                 allValues.push(...value);
             });
 
@@ -90,12 +85,14 @@ export class ProductsService {
                 id: In(allValues)
             })).map(v => v.name);
 
-            productsQuery.andWhere("values.name IN (:...valIds)", { valIds: valueNames })
-            productsQuery.having("count_matches = :countMatches", { countMatches: filters.filters.size });
+
+            if (valueNames.length != 0) {
+                productsQuery.andWhere("values.name IN (:...valIds)", { valIds: valueNames })
+                productsQuery.having("count_matches = :countMatches", { countMatches: filters.filter.size });
+            }
         }
 
         // TODO придумать что то нормальнее
-        console.log(filters);
         const products = await productsQuery.getMany();
 
         return this.productRepository.find({ where: { id: In(products.map(p => p.id)) }, relations: ["values", "values.attribute", "images", "category"] });

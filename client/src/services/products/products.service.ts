@@ -26,7 +26,7 @@ class ProductService extends Service {
             params: {
                 ...filters,
                 brands: filters?.brands ? filterUrlTransformer.transformArrayToUrl(filters.brands) : null,
-                attributes: filters?.filter ? filterUrlTransformer.transformAttrMapToUrl(filters?.filter) : null
+                filter: filters?.filter ? filterUrlTransformer.transformAttrMapToUrl(filters?.filter) : null
             },
             headers: headersJSON()
         });

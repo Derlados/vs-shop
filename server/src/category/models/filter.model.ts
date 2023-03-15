@@ -27,4 +27,7 @@ export class Filter {
 
     @Column({ type: "int", default: 1 })
     step: number;
+
+    @Column({ name: "count_products", type: "int", select: false })
+    countProduct: number;
 }

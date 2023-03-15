@@ -28,4 +28,6 @@ export class Value {
 
     @Column({ type: "text", nullable: false })
     name: string;
+
+    countProducts: number;
 }

@@ -22,14 +22,14 @@ export class Attribute {
     allValues: Value[];
 
     @AfterLoad()
-    getAllValues() {        
+    getAllValues() {
         if (this.values) {
-            const uniqueValues =  new Map<string, Value>();
+            const uniqueValues = new Map<string, Value>();
             this.values.sort((a, b) => a.id - b.id)
 
             for (const value of this.values) {
                 if (!uniqueValues.has(value.name)) {
-                    uniqueValues.set(value.name, value);
+                    uniqueValues.set(value.name, { ...value, countProducts: 0 });
                 }
             }
             this.allValues = [...uniqueValues.values()];

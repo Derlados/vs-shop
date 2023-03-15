@@ -6,7 +6,7 @@ import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateImagesDto } from './dto/update-images.dto';
-import { FilterOptions, ProductsService } from './products.service';
+import { ProductsService } from './products.service';
 import { FilterProductsQuery } from './query/filter-products.query';
 import { SearchProductsQuery } from './query/search-products.query';
 
@@ -22,8 +22,8 @@ export class ProductsController {
 
     @Get('category=:category([0-9]+)')
     @UseInterceptors(ClassSerializerInterceptor)
-    getProductByCategory(@Param('category') categoryId: number, @Query() query: FilterProductsQuery) {
-        return this.productService.getProductsByCategory(categoryId, this.parseFiltersQuery(query));
+    getProductByCategory(@Param('category') categoryId: number, @Query() filters: FilterProductsQuery) {
+        return this.productService.getProductsByCategory(categoryId, filters);
     }
 
     @Get('search')
@@ -102,29 +102,5 @@ export class ProductsController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     deleteBestsellerStatus(@Req() req, @Param('id') id: number) {
         return this.productService.deleteBestsellerStatus(id, req.user.userId);
-    }
-
-    private parseFiltersQuery(filterQuery: FilterProductsQuery): FilterOptions {
-        const brands = filterQuery.brands?.map(b => decodeURI(b));
-        const filters = new Map<number, number[]>();
-        filterQuery.attributes?.forEach(f => {
-            const [attrId, value] = f.split('-').map(elem => Number(elem));
-            if (!filters.has(attrId)) {
-                filters.set(attrId, []);
-            }
-
-            filters.get(attrId).push(value);
-        })
-
-
-        return {
-            limit: filterQuery.limit ? Number(filterQuery.limit) : null,
-            brands: brands,
-            priceRange: {
-                min: filterQuery.minPrice ? Number(filterQuery.minPrice) : 0,
-                max: filterQuery.maxPrice ? Number(filterQuery.maxPrice) : Number.MAX_VALUE
-            },
-            filters: filterQuery.attributes ? filters : null
-        }
     }
 }

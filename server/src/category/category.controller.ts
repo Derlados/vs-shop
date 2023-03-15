@@ -1,6 +1,7 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { FilterProductsQuery } from 'src/products/query/filter-products.query';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleValues } from 'src/roles/roles.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
@@ -25,8 +26,8 @@ export class CategoryController {
 
     @Get(':id/filters')
     @UseInterceptors(ClassSerializerInterceptor)
-    getCategoryFilters(@Param('id') id: number) {
-        return this.categoryService.getCategoryFilters(id);
+    getCategoryFilters(@Param('id') id: number, @Query() filters: FilterProductsQuery) {
+        return this.categoryService.getCategoryFilters(id, filters);
     }
 
     @Post()
