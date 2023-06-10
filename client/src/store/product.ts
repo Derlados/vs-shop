@@ -12,7 +12,7 @@ import { IValue } from "../types/IValue";
 class ProductStore {
     public category: ICategory;
     public products: IProduct[];
-    public allCategoryFilters: IFilters;
+    public filters: IFilters;
 
     public brands: string[];
 
@@ -79,10 +79,10 @@ class ProductStore {
 
         this.brands = this.category.allBrands ?? [];
 
-        const filterAttrs = await categoriesService.getFilters(this.category.id);
-        this.allCategoryFilters = {
+        const filterAttributes = await categoriesService.getFilters(this.category.id, filters);
+        this.filters = {
             priceRange: { ...this.priceRange, max: 400000 },
-            attributes: filterAttrs
+            attributes: filterAttributes
         }
 
         this.isLoading = false;
@@ -119,10 +119,9 @@ class ProductStore {
     }
 
     //TODO если будет медленно работать, то количество можно не считать. Использовать findIndex
-    public isProductExistByBrand(brand: string) {
-        return this.products.findIndex(p => (p.brand == brand)) !== -1;
+    public getCountProductExistByBrand(brand: string) {
+        return this.products.filter(p => (p.brand == brand)).length;
     }
-
 
     /////////////////////////////////// CRUD ОПЕРАЦИИ ДЛЯ ПРОДУКТОВ В КАТАЛОГЕ //////////////////////////////////
 

@@ -31,7 +31,7 @@ const FilterItem: FC<FilterItemProps> = observer(({ attribute, onCheck }) => {
 
     return (
         <div className='filters__attr' >
-            <div className='filters__attr-name filters__attr-name_touchable' onClick={toggleList}>{attribute.name}</div>
+            <div className='filters__attr-name filters__attr-name_touchable' onClick={toggleList}>{attribute.name} </div>
             <ul ref={ref} className='filters__attr-list' style={{
                 height: localStore.currentHeight
             }}>
@@ -39,7 +39,7 @@ const FilterItem: FC<FilterItemProps> = observer(({ attribute, onCheck }) => {
                     <li key={`${attribute.id}-${attrValue.name}`} className={classNames('filters__attr-item rlc', {
                         'filters__attr-item_disable': !attrValue.isAvailable
                     })}>
-                        <label className='filters__attr-value rcc'>{attrValue.name}
+                        <label className='filters__attr-value rcc'>{attrValue.name} ({attrValue.productCount})
                             <input className='filters__checkbox'
                                 type="checkbox"
                                 checked={attrValue.checked}

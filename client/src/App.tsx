@@ -57,8 +57,8 @@ const App = () => {
                     <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog`} element={<Shop />} />
                     <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/:filters`} element={<Shop />} />
                     <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/:filters/search`} element={<Shop />} />
-                    {/* <Route path='/' element={<Navigate to='/home' replace />} /> */}
-                    {/* <Route path='*' element={<Navigate to='/home' replace />} /> */}
+                    <Route path='/' element={<Navigate to='/home' replace />} />
+                    <Route path='*' element={<Navigate to='/home' replace />} />
                 </Route>
                 {/* <Route path='*' element={<Navigate to={'/'} />} /> */}
             </Routes>

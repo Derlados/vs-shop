@@ -57,7 +57,6 @@ const Shop = observer(() => {
     restoreFilters();
 
     useEffect(() => {
-        console.log("category route updated")
         async function fetchProducts() {
             if (categoryRoute) {
                 await products.fetchProducts(categoryRoute, localStore.filters)

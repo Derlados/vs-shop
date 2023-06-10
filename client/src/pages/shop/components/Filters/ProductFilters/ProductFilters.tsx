@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 import MultiRangeSlider from '../../../../../lib/components/MultiRangeSlider/MultiRangeSlider'
 import { FilterOptions } from '../../../../../services/products/products.service'
 import products from '../../../../../store/product'
+import { IFilters } from '../../../../../types/IFilters'
 import FilterItem from '../FilterItem'
 
 export interface ICheckAttribute {
@@ -16,7 +17,7 @@ export interface ICheckValue {
     id: number;
     name: string;
     isAvailable: boolean;
-    // productCount: number;
+    productCount: number;
     checked: boolean;
 }
 
@@ -43,8 +44,9 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
     }))
 
     useEffect(() => {
+        console.log("here");
         localStore.attributes = [];
-        for (const attr of products.allCategoryFilters.attributes) {
+        for (const attr of products.filters.attributes) {
             localStore.attributes.push({
                 ...attr.attribute,
                 allValues: (Array.from(attr.attribute.allValues))
@@ -52,8 +54,8 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
                         return {
                             id: v.id,
                             name: v.name,
-                            isAvailable: products.isProductExistByValue(attr.attribute.id, v.name),
-                            // productCount: products.countProductByValue(attr.attribute.id, v.name),
+                            isAvailable: v.countProducts != 0,
+                            productCount: v.countProducts!,
                             checked: isSelectedValue(attr.attribute.id, v.id)
                         }
                     }).sort(sortFilters)
@@ -64,12 +66,12 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
             return {
                 id: -1,
                 name: b,
-                isAvailable: products.isProductExistByBrand(b),
-                // productCount: products.isProductExistByBrand(b), 
+                isAvailable: products.getCountProductExistByBrand(b) != 0,
+                productCount: products.getCountProductExistByBrand(b),
                 checked: isSelectedBrand(b)
             }
         })
-    }, [products.allCategoryFilters]);
+    }, [products.filters]);
 
 
     const sortFilters = (a: ICheckValue, b: ICheckValue) => {
@@ -124,9 +126,9 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
             <div className='filters__price'>
                 <MultiRangeSlider
                     min={0}
-                    max={products.allCategoryFilters.priceRange.max}
+                    max={products.filters.priceRange.max}
                     selectedMin={selectedFilters.minPrice ?? 0}
-                    selectedMax={selectedFilters.maxPrice ?? products.allCategoryFilters.priceRange.max}
+                    selectedMax={selectedFilters.maxPrice ?? products.filters.priceRange.max}
                     onChange={({ min, max }) => { }}
                     onAccept={onSelectRange} />
             </div>

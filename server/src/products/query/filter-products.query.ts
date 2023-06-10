@@ -36,7 +36,7 @@ export class FilterProductsQuery {
     @IsOptional()
     @IsEnum(SortType)
     sort?: SortType;
-
-
 }
+
+
 

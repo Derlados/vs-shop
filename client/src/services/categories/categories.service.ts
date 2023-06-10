@@ -1,6 +1,8 @@
 import { axiosInstance, headers, headersJSON } from "..";
+import filterUrlTransformer from "../../helpers/FilterUrlTransformer";
 import { ICategory } from "../../types/ICategory";
 import { IFilterAttribute } from "../../types/IFilterAttribute";
+import { FilterOptions } from "../products/products.service";
 import { Service } from "../service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 
@@ -16,8 +18,16 @@ class CategoryService extends Service {
         return data;
     }
 
-    async getFilters(categoryId: number): Promise<IFilterAttribute[]> {
-        const { data } = await axiosInstance.get<IFilterAttribute[]>(`${this.API_URL}/${categoryId}/filters`, { headers: headersJSON() }); 
+    async getFilters(categoryId: number, filters?: FilterOptions): Promise<IFilterAttribute[]> {
+        console.log(filters);
+        const { data } = await axiosInstance.get<IFilterAttribute[]>(`${this.API_URL}/${categoryId}/filters`, {
+            headers: headersJSON(),
+            params: {
+                ...filters,
+                brands: filters?.brands && filters?.brands?.length != 0 ? filterUrlTransformer.transformArrayToUrl(filters.brands) : null,
+                filter: filters?.filter ? filterUrlTransformer.transformAttrMapToUrl(filters?.filter) : null
+            },
+        });
         return data;
     }
 
