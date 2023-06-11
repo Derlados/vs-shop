@@ -231,14 +231,27 @@ const ProductEditor = observer(() => {
         return brandValues;
     }
 
-    const getAttributeValues = (attributeId: number) => {
-        const attrValues = new Map<string, string>();
-        const attribute = products.filters.attributes.find(a => a.attribute.id === attributeId)?.attribute;
-        if (attribute) {
-            attribute.allValues.forEach(v => attrValues.set(v.id.toString(), v.name));
+    const getAttributeValues = (attribute: IProductAttribute) => {
+        if (!products.filters) {
+            return new Map<string, string>();
         }
 
+        const attrValues = new Map<string, string>();
+        const foundAttribute = products.filters.attributes.find(a => a.attribute.id == attribute.id)?.attribute;
+        const foundValue = foundAttribute?.allValues.find(v => v.name == attribute.value.name);
 
+        if (attribute) {
+            foundAttribute?.allValues.forEach(v => attrValues.set(
+                v.id.toString(),
+                v.name
+            ));
+        }
+
+        attrValues.delete(foundValue?.id.toString() ?? '');
+        foundAttribute?.allValues.forEach(v => attrValues.set(
+            attribute.value?.id.toString() ?? '',
+            attribute.value?.name ?? ''
+        ));
         return attrValues;
     }
 
@@ -346,8 +359,8 @@ const ProductEditor = observer(() => {
                                     withInput={true}
                                     withSearch={true}
                                     selectedId={attr.value.id.toString()}
-                                    values={getAttributeValues(attr.id)}
-                                    onSelect={(key, value) => attr.value.name = key}
+                                    values={getAttributeValues(attr)}
+                                    onSelect={(key, value) => attr.value.name = value}
                                     onChange={(value) => attr.value.name = value}
                                 />
                             </li>
