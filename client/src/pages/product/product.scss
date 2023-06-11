@@ -10,11 +10,16 @@
 
     &__info {
         width: 100%;
+        margin-bottom: 30px;
 
         @media (max-width: $tablet-vertical) {
             flex-direction: column !important;
             align-items: center !important;
         }
+    }
+
+    &__info-full-wrapper {
+        width: 100%;
     }
 
     &__images {
@@ -272,6 +277,18 @@
     }
 
     &__loader {}
+
+    &__chars {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    &__chars-title {
+        position: relative;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
 }
 
 .description {
@@ -343,14 +360,25 @@
         padding-bottom: 15px;
 
         &_attr {
-            min-width: 180px;
+            padding-right: 16px;
+            color: gray;
+            text-decoration: underline;
         }
 
-        &_val {
-            color: gray;
-        }
+        &_val {}
     }
 
+    &__show-all {
+        font-size: 14px;
+        color: $primary;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: .25s;
+
+        &:hover {
+            color: $hover-primary;
+        }
+    }
 
 }
 

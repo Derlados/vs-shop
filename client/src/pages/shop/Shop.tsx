@@ -19,6 +19,7 @@ import { FilterOptions } from '../../services/products/products.service';
 import filterUrlTransformer from "../../helpers/FilterUrlTransformer";
 import { SortType } from '../../enums/SortType.enum';
 import products from '../../store/product';
+import PopupWindow from '../../components/PopupWindow/PopupWindow';
 
 interface LocalStore {
     isInited: boolean;
@@ -227,6 +228,7 @@ const Shop = observer(() => {
                     }
                 </div>
             </div>
+            <PopupWindow />
             <div className='shop__loading-mask'></div>
         </div>
     )

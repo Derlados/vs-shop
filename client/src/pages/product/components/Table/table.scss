@@ -1,0 +1,28 @@
+@import '../../../../styles/constants/colors.scss';
+@import '../../../../styles/constants/resolutions.scss';
+
+.table {
+
+    width: 100%;
+
+    &__row {
+        width: 100%;
+        padding: 8px;
+        line-height: 20px;
+        font-weight: normal;
+        text-decoration: none;
+        margin: 0px;
+    }
+
+    &__row-parametr {
+        width: 33%;
+        margin: 0 15px;
+        font-weight: bold;
+
+    }
+
+    &__row-value {
+        width: 66%;
+        margin: 0 15px;
+    }
+}

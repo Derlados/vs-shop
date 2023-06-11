@@ -1,0 +1,139 @@
+@import '../../styles/constants/colors.scss';
+@import '../../styles/constants/resolutions.scss';
+
+.popup-window {
+    position: fixed;
+    left: calc(50% - 250px);
+    width: 500px;
+    height: 350px;
+    background-color: white;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: .25s;
+
+    @media (max-width: $mobile-vertical) {
+        left: 12px;
+        width: calc(100% - 24px);
+    }
+
+    &_opened {
+        top: calc(50% - 175px);
+        opacity: 1;
+        z-index: 99;
+    }
+
+    &_closed {
+        top: calc(50% - 75px);
+        z-index: -1;
+        opacity: 0;
+    }
+
+
+
+    &__title {
+        font-size: 28px;
+        margin: 15px 0 15px 0;
+    }
+
+    &__desc {
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+    }
+
+    &__content {
+        padding: 20px;
+        height: 100%;
+        width: 100%;
+    }
+
+    &__open-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px;
+        background-color: $primary;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        z-index: 9999;
+        transition: .25s;
+
+        &:hover {
+            background-color: $hover-primary;
+        }
+
+    }
+
+    &__contact-us {
+        display: inline-block;
+        margin: 0 0 0 10px;
+        width: 24px;
+        height: 24px;
+    }
+
+    &__close-button {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 24px;
+        height: 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    &____container {}
+
+    &__blue-bar {
+        width: 150px;
+        height: 100%;
+        background-color: $primary;
+
+        @media (max-width: $mobile-vertical) {
+            width: 0px;
+        }
+    }
+
+    &__social-icons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    &__social-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin: 0px 16px;
+        background-color: $primary;
+    }
+
+    &__social-icon-img {
+        width: 30px;
+        height: 30px;
+    }
+
+    &__social-icon-img-tg {
+        margin: 0px 16px;
+        width: 50px;
+        height: 50px;
+    }
+
+    &__contact-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: $primary;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: .25s;
+
+        &:hover {
+            background-color: $hover-primary;
+        }
+    }
+}

@@ -34,6 +34,8 @@ const Product: FC = observer(() => {
         isLoading: true
     }));
 
+
+
     useEffect(() => {
         async function fetchProduct(productId: number) {
             localStore.isLoading = true;

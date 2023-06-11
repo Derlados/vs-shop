@@ -42,7 +42,9 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
     }
 
     const decrementCount = (cartProduct: ICartProduct) => {
-        cart.changeCount(cartProduct.product.id, cartProduct.count - 1)
+        if (cartProduct.count > 1) {
+            cart.changeCount(cartProduct.product.id, cartProduct.count - 1)
+        }
     }
 
     const onChangeCount = (cartProduct: ICartProduct, newCount: number) => {

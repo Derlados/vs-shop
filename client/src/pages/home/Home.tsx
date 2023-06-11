@@ -7,6 +7,7 @@ import Loader from '../../lib/components/Loader/Loader';
 import "aos/dist/aos.css";
 import CategoryList from '../../components/Category/CategoryList/CategoryList';
 import catalog from '../../store/catalog';
+import PopupWindow from '../../components/PopupWindow/PopupWindow';
 
 const Home = observer(() => {
 
@@ -58,6 +59,7 @@ const Home = observer(() => {
             <CategoryList categories={catalog.categories} />
             <img className='home__banner home__banner_small' alt='' src={shop.smallBanner} />
             <SliderProducts title="Нові товари" products={[...shop.newProducts.slice(0, 10)]} />
+            <PopupWindow />
         </div>
     )
 });
