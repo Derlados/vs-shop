@@ -5,7 +5,7 @@ import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
 import Loader from './lib/components/Loader/Loader'
 import ScrollToTop from './lib/components/ScrollToTop/ScrollToTop'
-import cart from './store/cart'
+import cart from './store/cart/cart'
 import shop from './store/shop'
 
 const Main = observer(() => {

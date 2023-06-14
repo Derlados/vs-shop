@@ -1,7 +1,7 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import cart from '../../../store/cart';
+import cart from '../../../store/cart/cart';
 import { ProductCardProps } from '../ProductCard';
 import 'swiper/css';
 import { IImage } from '../../../types/IImage';

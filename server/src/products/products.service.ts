@@ -71,6 +71,11 @@ export class ProductsService {
             .groupBy("product.id");
 
 
+
+        if (filters.search) {
+            productsQuery.andWhere(`(product.title LIKE :text OR product.brand LIKE :text)`, { text: `%${filters.search}%` })
+        }
+
         if (filters.brands) {
             productsQuery.andWhere("product.brand IN (:...brands)", { brands: filters.brands })
         }

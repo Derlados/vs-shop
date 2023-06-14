@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { IUser, UserRoles } from "../types/IUser";
+import { IUser, UserRoles } from "../../types/IUser";
 
 class UserStore {
     private readonly ACCESS_TOKEN = 'access-token';

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Navigate } from 'react-router-dom';
-import user from '../../../store/user';
+import user from '../../../store/user/user';
 import { UserRoles } from '../../../types/IUser';
 
 

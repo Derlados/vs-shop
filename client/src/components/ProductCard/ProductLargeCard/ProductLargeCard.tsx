@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { FC } from 'react'
 import CartButton from '../../Cart/CartButton/CartButton';
-import cart from '../../../store/cart';
+import cart from '../../../store/cart/cart';
 import { SimpleProductCardProps } from '../ProductCard';
 import './product-card-large.scss';
 import { NavLink } from 'react-router-dom';

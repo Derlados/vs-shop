@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import cart from '../../../store/cart';
+import cart from '../../../store/cart/cart';
 import './cart-quick.scss';
 import { ICartProduct } from '../../../types/ICartProduct';
 import { IProduct } from '../../../types/IProduct';

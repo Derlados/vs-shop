@@ -1,11 +1,12 @@
 import { makeAutoObservable } from "mobx";
-import sessionCartService from "../services/session-cart/session-cart.service";
-import { ICartProduct } from "../types/ICartProduct";
-import { IProduct } from "../types/IProduct";
+import sessionCartService from "../../services/session-cart/session-cart.service";
+import { ICartProduct } from "../../types/ICartProduct";
+import { IProduct } from "../../types/IProduct";
 
 
 class Cart {
     private readonly LOCAL_STORAGE_CART_ID = "CART_ID";
+
     cartId: string;
     cartProducts: ICartProduct[];
     isInit: boolean;

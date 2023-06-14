@@ -3,49 +3,45 @@ import ProductCatalog from './components/ProductCatalog/ProductCatalog'
 import './shop.scss';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
-import shop from '../../store/shop';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Loader from '../../lib/components/Loader/Loader';
 import PopularProducts from './components/PopularProducts/PopularProducts';
 import { IProduct } from '../../types/IProduct';
 import { useQuery } from '../../lib/hooks/useQuery';
 import FilterCategories, { IFilterCategory } from './components/Filters/FilterCategories/FilterCategories';
 import ProductFilters from './components/Filters/ProductFilters/ProductFilters';
-import { useEffect } from 'react';
-import { ICategory } from '../../types/ICategory';
+import { FC, useEffect } from 'react';
 import { ROUTES } from '../../values/routes';
 import catalog from '../../store/catalog';
 import { FilterOptions } from '../../services/products/products.service';
 import filterUrlTransformer from "../../helpers/FilterUrlTransformer";
 import { SortType } from '../../enums/SortType.enum';
-import products from '../../store/product';
 import PopupWindow from '../../components/PopupWindow/PopupWindow';
+import searchStore, { SearchStoreStatus } from '../../store/search/search.store';
+import LoadingMask from './components/LoadingMask/LoadingMask';
 
 interface LocalStore {
-    isInited: boolean;
-    category?: ICategory;
     isFilterOpen: boolean;
     isValidCategory: boolean;
-    popularProducts: IProduct[];
     filterCategories: IFilterCategory[];
     filters: FilterOptions;
 }
 
+interface ShopProps {
+    isGlobalSearch?: boolean;
+}
 
-const Shop = observer(() => {
+const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
     const navigate = useNavigate();
     const { catalog: categoryRoute } = useParams();
     const queryParams = useQuery();
 
     const localStore = useLocalObservable<LocalStore>(() => ({
-        isInited: false,
         isFilterOpen: false,
         isValidCategory: false,
-        popularProducts: [],
         filterCategories: [],
-        filterAttributes: [],
         filters: {}
-    }))
+    }));
 
     const restoreFilters = () => {
         localStore.filters.search = queryParams.get('search');
@@ -57,27 +53,26 @@ const Shop = observer(() => {
     }
     restoreFilters();
 
+
     useEffect(() => {
-        async function fetchProducts() {
-            if (categoryRoute) {
-                await products.fetchProducts(categoryRoute, localStore.filters)
-                localStore.category = catalog.getCategoryByRoute(categoryRoute);
-                localStore.popularProducts = shop.getBestsellersByCategory(products.category.id);
-            }
-
-            localStore.isInited = true;
+        if (isGlobalSearch) {
+            searchStore.initGlobalSearch(queryParams.get('search') ?? '');
+        } else {
+            searchStore.init(categoryRoute ?? "", localStore.filters);
         }
+    }, [isGlobalSearch]);
 
-        localStore.isInited = false;
-        fetchProducts();
+    useEffect(() => {
+        if (categoryRoute) {
+            searchStore.init(categoryRoute ?? "", localStore.filters);
+        }
     }, [categoryRoute])
 
     useEffect(() => {
-        if (localStore.isInited && categoryRoute) {
-            console.log("params updated")
-            products.fetchProducts(categoryRoute, localStore.filters)
+        if (searchStore.category?.routeName == categoryRoute && searchStore.status === SearchStoreStatus.success) {
+            searchStore.updateCatalog(localStore.filters);
         }
-    }, [queryParams])
+    }, [categoryRoute, queryParams])
 
     const groupByCategories = (products: IProduct[]): IFilterCategory[] => {
         const categoryMap = new Map<number, number>();
@@ -91,7 +86,7 @@ const Shop = observer(() => {
             if (category) {
                 filterCategories.push({
                     name: category.name,
-                    link: `/${ROUTES.CATEGORY_PREFIX}${category.routeName}/search/?text=${localStore.filters.search}`,
+                    link: `/${ROUTES.CATEGORY_PREFIX}${category.routeName}?search=${localStore.filters.search}`,
                     productCount: productCount
                 })
             }
@@ -111,6 +106,7 @@ const Shop = observer(() => {
     }
 
     ///////////////////////////////////////// FILTERS PRODUCTS /////////////////////////////////////
+
 
     const onSelectPrice = (min: number, max: number) => {
         localStore.filters.minPrice = min;
@@ -172,11 +168,9 @@ const Shop = observer(() => {
         }
     }
 
-    // if (!localStore.isValidCategory) {
-    //     return <Navigate to={'/404_not_found'} replace />
-    // }
 
-    if (!localStore.isInited) {
+    if (searchStore.status == SearchStoreStatus.loading || searchStore.status == SearchStoreStatus.initial) {
+        console.log('loading');
         return (
             <div className='shop__loader ccc'>
                 <Loader />
@@ -184,22 +178,28 @@ const Shop = observer(() => {
         )
     }
 
-    if (localStore.isInited && products.products.length === 0) {
-        return (
-            <div className='shop__nothing-found ccc'>
-                <div className='shop__nothing-found-icon'></div>
-                <span className='shop__nothing-found-text'>По вашому запиту нічого не знайдено. Спробуйте інший</span>
-            </div>
-        )
+    if (searchStore.status == SearchStoreStatus.failure) {
+        return <Navigate to={'/404_not_found'} replace />
+    }
+
+    if (searchStore.status == SearchStoreStatus.wrongCategoryFailure) {
+        return <Navigate to={'/404_not_found'} replace />
     }
 
     return (
         <div className='shop clt' >
-            <CatalogNav routes={localStore.category ? [{ to: `/${ROUTES.CATEGORY_PREFIX}${categoryRoute}`, title: localStore.category.name }] : []} />
+            {searchStore.status == SearchStoreStatus.updating && <LoadingMask />}
+            {!isGlobalSearch ?
+                <CatalogNav routes={[{
+                    to: `/${ROUTES.CATEGORY_PREFIX}${categoryRoute}`,
+                    title: searchStore.status == SearchStoreStatus.success ? searchStore.category?.name : ""
+                }]} /> :
+                <CatalogNav routes={[]} />
+            }
             <div className='rct'>
                 <div className='shop__side-bar clt'>
                     <Filters isOpen={localStore.isFilterOpen} onClose={onCloseFilters} >
-                        {categoryRoute ?
+                        {!isGlobalSearch ?
                             <ProductFilters
                                 selectedFilters={localStore.filters}
                                 onCheckFilter={onCheckFilterAttribute}
@@ -207,16 +207,16 @@ const Shop = observer(() => {
                                 onSelectRange={onSelectPrice}
                             />
                             :
-                            <FilterCategories filterCategories={localStore.filterCategories} />
+                            <FilterCategories filterCategories={groupByCategories(searchStore.products)} />
                         }
                     </Filters>
-                    {localStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={localStore.popularProducts} />}
+                    {searchStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={searchStore.popularProducts} />}
                 </div>
                 <div className='shop__content'>
-                    {products.products.length !== 0 ?
+                    {searchStore.products.length !== 0 ?
                         <ProductCatalog
                             selectedSortType={localStore.filters.sort ?? SortType.NOT_SELECTED}
-                            products={products.products}
+                            products={searchStore.products}
                             onSelectSort={onSelectSort}
                             onOpenFilters={onOpenFilters}
                         />

@@ -4,7 +4,7 @@ import { Navigate, NavLink } from 'react-router-dom';
 import Loader from '../../lib/components/Loader/Loader';
 import Modal from '../../lib/components/Modal/Modal';
 import Selector from '../../lib/components/Selector/Selector';
-import cart from '../../store/cart';
+import cart from '../../store/cart/cart';
 import orders from '../../store/order';
 import './checkout.scss';
 import { ICartProduct } from '../../types/ICartProduct';

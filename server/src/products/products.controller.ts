@@ -23,6 +23,7 @@ export class ProductsController {
     @Get('category=:category([0-9]+)')
     @UseInterceptors(ClassSerializerInterceptor)
     getProductByCategory(@Param('category') categoryId: number, @Query() filters: FilterProductsQuery) {
+
         return this.productService.getProductsByCategory(categoryId, filters);
     }
 

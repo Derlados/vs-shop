@@ -30,8 +30,6 @@ class ShopStore {
         this.fetchAllInfo();
     }
 
-
-
     async fetchAllInfo() {
         const shopInfoPromise = shopService.getShopInfo();
         const bestsellersPromise = productsService.getBestsellers();
@@ -48,10 +46,6 @@ class ShopStore {
         this.isInit = true;
     }
 
-    getBestsellersByCategory(categoryId: number) {
-        return this.bestsellers.filter(b => b.categoryId === categoryId);
-    }
-
     async sendMail(mail: IMail) {
         try {
             await shopService.sendMail(mail);
@@ -61,8 +55,6 @@ class ShopStore {
             return false;
         }
     }
-
-
 
     async addBanner(banner: IBanner, img: File) {
         const newBanner = await shopService.addBanner(banner, img);

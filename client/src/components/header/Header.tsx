@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ChangeEvent, useEffect } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import cart from '../../store/cart';
+import cart from '../../store/cart/cart';
 import shop from '../../store/shop';
 import './header.scss';
 import { SpecSymbols } from '../../values/specSymbols';
@@ -27,7 +27,7 @@ interface LocalStore {
 const Header = observer(() => {
     const navigate = useNavigate();
     const location = useLocation();
-    const searchText = (useQuery()).get("text");
+    const searchText = (useQuery()).get("search");
 
     const localStore = useLocalObservable<LocalStore>(() => ({
         isCartOpen: false,
@@ -51,9 +51,9 @@ const Header = observer(() => {
 
     const onAcceptSearch = () => {
         if (localStore.selectedRoute) {
-            navigate(`${ROUTES.CATEGORY_PREFIX}${localStore.selectedRoute}/search/?text=${localStore.searchString}`)
+            navigate(`${ROUTES.CATEGORY_PREFIX}${localStore.selectedRoute}?search=${localStore.searchString}`)
         } else {
-            navigate(`/search/?text=${localStore.searchString}`)
+            navigate(`/search?search=${localStore.searchString}`)
         }
     }
 

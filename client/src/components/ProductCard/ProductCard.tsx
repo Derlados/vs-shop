@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { FC } from 'react'
 import { useParams } from 'react-router-dom';
-import cart from '../../store/cart';
+import cart from '../../store/cart/cart';
 import { IImage } from '../../types/IImage';
 import { IProduct } from '../../types/IProduct';
 import ProductFullInfo from './ProductFullInfo/ProductFullInfo';

@@ -19,7 +19,6 @@ class CategoryService extends Service {
     }
 
     async getFilters(categoryId: number, filters?: FilterOptions): Promise<IFilterAttribute[]> {
-        console.log(filters);
         const { data } = await axiosInstance.get<IFilterAttribute[]>(`${this.API_URL}/${categoryId}/filters`, {
             headers: headersJSON(),
             params: {

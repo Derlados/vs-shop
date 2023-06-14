@@ -3,7 +3,7 @@ import './styles/app/position.css'
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Auth from './pages/auth/Auth';
 import Main from './Main';
-import user from './store/user';
+import user from './store/user/user';
 import { UserRoles } from './types/IUser';
 import Admin from './pages/admin/Admin';
 import ProtectedRoute from './lib/components/ProtectedRoute/ProtectedRoute';
@@ -51,7 +51,7 @@ const App = () => {
                     <Route path='/checkout' element={<Checkout />} />
                     <Route path='/contacts' element={<Contacts />} />
                     <Route path='/404_not_found' element={<Page404 />} />
-                    <Route path='/search' element={<Shop />} />
+                    <Route path='/search' element={<Shop isGlobalSearch={true} />} />
                     <Route path='/:productName/:id' element={<Product />} />
                     <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/search`} element={<Shop />} />
                     <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog`} element={<Shop />} />

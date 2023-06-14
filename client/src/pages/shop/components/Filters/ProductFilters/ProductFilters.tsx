@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 import MultiRangeSlider from '../../../../../lib/components/MultiRangeSlider/MultiRangeSlider'
 import { FilterOptions } from '../../../../../services/products/products.service'
 import products from '../../../../../store/product'
+import searchStore from '../../../../../store/search/search.store'
 import { IFilters } from '../../../../../types/IFilters'
 import FilterItem from '../FilterItem'
 
@@ -44,9 +45,8 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
     }))
 
     useEffect(() => {
-        console.log("here");
         localStore.attributes = [];
-        for (const attr of products.filters.attributes) {
+        for (const attr of searchStore.filters.attributes) {
             localStore.attributes.push({
                 ...attr.attribute,
                 allValues: (Array.from(attr.attribute.allValues))
@@ -62,16 +62,16 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
             })
         }
 
-        localStore.brand.allValues = products.brands.map((b) => {
+        localStore.brand.allValues = searchStore.brands.map((b) => {
             return {
                 id: -1,
                 name: b,
-                isAvailable: products.getCountProductExistByBrand(b) != 0,
-                productCount: products.getCountProductExistByBrand(b),
+                isAvailable: searchStore.getCountProductExistByBrand(b) != 0,
+                productCount: searchStore.getCountProductExistByBrand(b),
                 checked: isSelectedBrand(b)
             }
         })
-    }, [products.filters]);
+    }, [searchStore.filters]);
 
 
     const sortFilters = (a: ICheckValue, b: ICheckValue) => {
@@ -120,15 +120,15 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
 
     return (
         <div className='filters__content'>
-            <div className='filters__title'>{products.category.name}</div>
+            <div className='filters__title'>{searchStore.category?.name ?? ""}</div>
             <div className='filters__line'></div>
             <div className='filters__attr-name'>Ціна</div>
             <div className='filters__price'>
                 <MultiRangeSlider
                     min={0}
-                    max={products.filters.priceRange.max}
+                    max={searchStore.filters.priceRange.max}
                     selectedMin={selectedFilters.minPrice ?? 0}
-                    selectedMax={selectedFilters.maxPrice ?? products.filters.priceRange.max}
+                    selectedMax={selectedFilters.maxPrice ?? searchStore.filters.priceRange.max}
                     onChange={({ min, max }) => { }}
                     onAccept={onSelectRange} />
             </div>

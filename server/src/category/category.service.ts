@@ -44,7 +44,8 @@ export class CategoryService {
 
             const filteredProductIds = (await this.productService.getProductsByCategory(categoryId, { ...filters, filter: copyFiltersWithSkipped })).map(p => p.id);
 
-            const filterAttribute = await this.filterRepository.createQueryBuilder("filter")
+
+            const filterQuery = this.filterRepository.createQueryBuilder("filter")
                 .select([])
                 .addSelect("values.name", "valueName")
                 .addSelect("filter.attribute_id", "attributeId")
@@ -53,12 +54,14 @@ export class CategoryService {
                 .innerJoin("attribute.values", "values")
                 .where("filter.category_id = :categoryId", { categoryId })
                 .andWhere("attribute.id = :attributeId", { attributeId: filterAttr.attribute.id })
-                .andWhere("product_id IN (:...productIds)", { productIds: filteredProductIds })
                 .groupBy("values.name")
                 .addGroupBy("filter.attribute_id")
-                .getRawMany()
 
+            if (filteredProductIds.length > 0) {
+                filterQuery.andWhere("product_id IN (:...productIds)", { productIds: filteredProductIds });
+            }
 
+            const filterAttribute = await filterQuery.getRawMany();
             filterAttribute.forEach(fa => {
                 filterCountsMap.set(fa.valueName, fa.countProducts);
             })

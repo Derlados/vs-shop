@@ -1,5 +1,5 @@
 import axios from "axios";
-import userStore from "../store/user";
+import userStore from "../store/user/user";
 
 export const axiosNVInstance = axios.create({
     baseURL: 'https://api.novaposhta.ua/v2.0/json/'
@@ -7,6 +7,7 @@ export const axiosNVInstance = axios.create({
 
 export const axiosInstance = axios.create({
     baseURL: 'http://localhost:5000/api'
+    // baseURL: 'https://ka-shop.herokuapp.com/api'
     // baseURL: 'https://vs-shop-test.herokuapp.com/api'
     // baseURL: 'https://vs-shop.herokuapp.com/api'
 });

@@ -25,7 +25,7 @@ class ProductService extends Service {
         const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/category=${categoryId}`, {
             params: {
                 ...filters,
-                brands: filters?.brands ? filterUrlTransformer.transformArrayToUrl(filters.brands) : null,
+                brands: filters?.brands && filters?.brands?.length != 0 ? filterUrlTransformer.transformArrayToUrl(filters.brands) : null,
                 filter: filters?.filter ? filterUrlTransformer.transformAttrMapToUrl(filters?.filter) : null
             },
             headers: headersJSON()
@@ -48,7 +48,7 @@ class ProductService extends Service {
         return data;
     }
 
-    async getProductByText(text: string): Promise<IProduct[]> {
+    async getProductsByText(text: string): Promise<IProduct[]> {
         const params = {
             text: encodeURI(text)
         }
