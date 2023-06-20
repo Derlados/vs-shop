@@ -7,6 +7,7 @@ import { Service } from "../service";
 
 export interface FilterOptions {
     search?: string | null;
+    page?: number | null;
     brands?: string[] | null;
     minPrice?: number | null;
     maxPrice?: number | null;
@@ -24,7 +25,10 @@ class ProductService extends Service {
     async getProductsByCategory(categoryId: number, filters?: FilterOptions): Promise<IProduct[]> {
         const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/category=${categoryId}`, {
             params: {
-                ...filters,
+                page: filters?.page ? filters.page - 1 : null,
+                search: filters?.search ? encodeURI(filters.search) : null,
+                minPrice: filters?.minPrice ? filters.minPrice : null,
+                maxPrice: filters?.maxPrice ? filters.maxPrice : null,
                 brands: filters?.brands && filters?.brands?.length != 0 ? filterUrlTransformer.transformArrayToUrl(filters.brands) : null,
                 filter: filters?.filter ? filterUrlTransformer.transformAttrMapToUrl(filters?.filter) : null
             },

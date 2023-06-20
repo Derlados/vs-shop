@@ -79,10 +79,11 @@ class ProductStore {
 
         this.brands = this.category.allBrands ?? [];
 
-        const filterAttributes = await categoriesService.getFilters(this.category.id, filters);
+        const fullFilters = await categoriesService.getFilters(this.category.id, filters);
         this.filters = {
-            priceRange: { ...this.priceRange, max: 400000 },
-            attributes: filterAttributes
+            priceRange: { min: fullFilters.minPrice, max: fullFilters.maxPrice },
+            attributes: fullFilters.attributes,
+            maxPages: fullFilters.pages
         }
 
         this.isLoading = false;

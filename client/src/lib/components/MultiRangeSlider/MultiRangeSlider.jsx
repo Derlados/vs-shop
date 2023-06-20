@@ -15,7 +15,10 @@ const MultiRangeSlider = ({ min, max, selectedMin = min, selectedMax = max, onCh
 
     // Convert to percentage
     const getPercent = useCallback(
-        (value) => Math.round(((value - min) / (max - min)) * 100),
+        (value) => {
+            const percent = Math.round(((value - min) / (max - min)) * 100);
+            return percent > 100 ? 100 : percent < 0 ? 0 : percent;
+        },
         [min, max]
     );
 

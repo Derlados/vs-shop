@@ -31,6 +31,8 @@ export class CategoryService {
     }
 
     async getCategoryFilters(categoryId: number, filters?: FilterProductsQuery) {
+        const products = await this.productService.getProductsByCategory(categoryId, filters, true);
+
         const filterAttributes = await this.filterRepository.find({ where: { categoryId: categoryId }, relations: ["attribute", "attribute.values"] })
         const filterCountsMap = new Map<string, number>();
 
@@ -39,10 +41,10 @@ export class CategoryService {
         // Таким образом исключается фильтры для искомого аттрибута, так как значения одного аттрибута расцениваются как ИЛИ.
         // WARNING: Сложный цикл с множеством запросов в базу, целесообращно если аттрибутов мало или база маленькая
         for (const filterAttr of filterAttributes) {
-            const copyFiltersWithSkipped: Map<number, number[]> = new Map(JSON.parse(JSON.stringify(Array.from(filters.filter ?? []))))
+            const copyFiltersWithSkipped: Map<number, number[]> = new Map(JSON.parse(JSON.stringify(Array.from(filters?.filter ?? []))))
             copyFiltersWithSkipped.delete(filterAttr.attribute.id);
 
-            const filteredProductIds = (await this.productService.getProductsByCategory(categoryId, { ...filters, filter: copyFiltersWithSkipped })).map(p => p.id);
+            const filteredProductIds = await this.productService.getProductsByCategory(categoryId, { ...filters, filter: copyFiltersWithSkipped }, true, true);
 
 
             const filterQuery = this.filterRepository.createQueryBuilder("filter")
@@ -73,7 +75,13 @@ export class CategoryService {
             })
         })
 
-        return filterAttributes
+
+        return {
+            attributes: filterAttributes,
+            minPrice: products.length > 0 ? Math.min(...products.map(p => p.price)) : 0,
+            maxPrice: products.length > 0 ? Math.max(...products.map(p => p.price)) : 0,
+            pages: products.length > 0 ? Math.ceil(products.length / ProductsService.MAX_PER_PAGE) : 0
+        }
     }
 
     async addCategory(dto: CreateCategoryDto) {

@@ -24,6 +24,7 @@ import { FilterProductsQuery } from './query/filter-products.query';
 
 @Injectable()
 export class ProductsService {
+    static readonly MAX_PER_PAGE = 20;
 
     constructor(@InjectRepository(Product) private productRepository: Repository<Product>,
         @InjectRepository(Attribute) private attributeRepository: Repository<Attribute>,
@@ -60,17 +61,25 @@ export class ProductsService {
         return product;
     }
 
-    async getProductsByCategory(categoryId: number, filters: FilterProductsQuery): Promise<Product[]> {
+    async getProductsByCategory(categoryId: number, filters: FilterProductsQuery, ignorePages: boolean = false, onlyIds: boolean = false): Promise<Product[] | number[]> {
         const productsQuery = this.productRepository.createQueryBuilder("product")
+            .select("product.id as id")
             .addSelect("COUNT(*) as count_matches")
             .innerJoin("product.category", "category")
             .innerJoin("product.values", "values")
             .innerJoin("values.attribute", "attributes")
+            .innerJoin("product.images", "images")
             .where("category.id = :categoryId", { categoryId: categoryId })
             .andWhere("product.price BETWEEN :min AND :max", { min: filters.minPrice ?? 0, max: filters.maxPrice ?? Number.MAX_VALUE })
-            .groupBy("product.id");
+            .groupBy("product.id")
 
 
+        if (!ignorePages) {
+            productsQuery
+                .limit(ProductsService.MAX_PER_PAGE)
+                .offset(filters.page ? filters.page * ProductsService.MAX_PER_PAGE : 0);
+
+        }
 
         if (filters.search) {
             productsQuery.andWhere(`(product.title LIKE :text OR product.brand LIKE :text)`, { text: `%${filters.search}%` })
@@ -93,14 +102,20 @@ export class ProductsService {
 
             if (valueNames.length != 0) {
                 productsQuery.andWhere("values.name IN (:...valIds)", { valIds: valueNames })
-                productsQuery.having("count_matches = :countMatches", { countMatches: filters.filter.size });
+                productsQuery.having("count_matches >= :countMatches", { countMatches: filters.filter.size });
             }
         }
 
         // TODO придумать что то нормальнее
-        const products = await productsQuery.getMany();
+        const products = await productsQuery.getRawMany();
 
-        return this.productRepository.find({ where: { id: In(products.map(p => p.id)) }, relations: ["values", "values.attribute", "images", "category"] });
+        if (onlyIds) {
+            console.log(products.map(p => p.id));
+            return products.map(p => p.id);
+        }
+
+        console.log("full");
+        return this.productRepository.find({ where: { id: In(products.map(p => p.id)) }, relations: ["images", "category"] });
     }
 
     async getProductsByText(text: string): Promise<Product[]> {
@@ -116,10 +131,15 @@ export class ProductsService {
     }
 
     async createProduct(userId: number, dto: CreateProductDto): Promise<Product> {
-        const { attributes, ...product } = dto;
+        const { attributes, image, ...product } = dto;
 
         const result = await this.productRepository.insert({ ...product, userId: userId });
         const insertId = result.raw.insertId;
+
+        if (image) {
+            await this.imageRepository.insert({ filename: image, productId: insertId, isMain: true });
+        }
+
 
         await this.addAttributes(insertId, attributes);
         return this.getProductById(insertId);

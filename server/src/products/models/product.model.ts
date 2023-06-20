@@ -49,6 +49,9 @@ export class Product {
     @Column({ name: "user_id", type: "number", nullable: false })
     userId: number;
 
+    @Column({ name: "parser_url", type: "text", nullable: true })
+    parserUrl: string;
+
     url: string;
 
     availability: AvailableStatus;
@@ -84,7 +87,7 @@ export class Product {
     @AfterLoad()
     getUrl() {
         if (this.category) {
-            this.url = `/${cyrillicToTranslit().transform(this.title.toLowerCase(), "_").replace('/', '_')}/${this.id}`;
+            this.url = `/${cyrillicToTranslit().transform(this.title.toLowerCase(), "_").replace(/\//g, '_')}/${this.id}`;
         }
     }
 
@@ -118,8 +121,13 @@ export class Product {
 
     @AfterLoad()
     convertToNumber() {
-        this.price = Number(this.price);
-        this.oldPrice = Number(this.oldPrice);
+        try {
+            const PRICE_COEFICIENT = 6.9;
+            this.price = Number((Number(this.price) * PRICE_COEFICIENT).toFixed(0));
+            this.oldPrice = Number((Number(this.oldPrice) * PRICE_COEFICIENT).toFixed(0));
+        } catch (e) {
+            console.log(e);
+        }
     }
 }
 

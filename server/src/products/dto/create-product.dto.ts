@@ -32,7 +32,15 @@ export class CreateProductDto {
     categoryId: number;
 
     @IsArray()
-    @ValidateNested({each: true})
+    @ValidateNested({ each: true })
     @Type(() => CreateAttributeDto)
     attributes: CreateAttributeDto[];
+
+    @IsOptional()
+    @IsString()
+    parserUrl?: string;
+
+    @IsOptional()
+    @IsString()
+    image?: string;
 }

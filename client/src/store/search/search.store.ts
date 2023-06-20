@@ -28,6 +28,8 @@ class SearchStore {
     }
 
     async init(categoryRoute: string, initialFilters?: FilterOptions) {
+        if (this.status === SearchStoreStatus.loading) return;
+
         runInAction(() => this.status = SearchStoreStatus.loading);
 
         try {
@@ -59,6 +61,8 @@ class SearchStore {
     }
 
     async initGlobalSearch(text: string) {
+        if (this.status === SearchStoreStatus.loading) return;
+
         runInAction(() => this.status = SearchStoreStatus.loading);
 
         try {
@@ -74,6 +78,8 @@ class SearchStore {
     }
 
     async updateCatalog(filterOptions?: FilterOptions) {
+        if (this.status === SearchStoreStatus.updating) return;
+
         runInAction(() => this.status = SearchStoreStatus.updating);
 
         try {
@@ -95,9 +101,11 @@ class SearchStore {
 
     async fetchProducts(category: ICategory, filters?: FilterOptions) {
         if (filters) {
-            const { search: text, minPrice, maxPrice, filter: attributes, brands } = filters;
+            const { search: text, minPrice, maxPrice, filter: attributes, brands, page } = filters;
 
             return productsService.getProductsByCategory(category.id, {
+                ...filters,
+                page: page ?? undefined,
                 search: text ?? undefined,
                 brands: brands?.length !== 0 ? brands : undefined,
                 minPrice: minPrice !== 0 ? minPrice : undefined,
@@ -113,11 +121,12 @@ class SearchStore {
         return productsService.getProductsByText(text);
     }
 
-    async fetchFilters(category: ICategory, filterOptions?: FilterOptions) {
-        const filterAttributes = await categoriesService.getFilters(category.id, filterOptions);
-        const filters = {
-            priceRange: { ...this.priceRange, max: 400000 },
-            attributes: filterAttributes
+    async fetchFilters(category: ICategory, filterOptions?: FilterOptions): Promise<IFilters> {
+        const fullFilters = await categoriesService.getFilters(category.id, filterOptions);
+        const filters: IFilters = {
+            priceRange: { min: fullFilters.minPrice, max: fullFilters.maxPrice },
+            attributes: fullFilters.attributes,
+            maxPages: fullFilters.pages
         }
 
         return filters;

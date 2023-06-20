@@ -38,7 +38,7 @@ class CatalogStore {
     async fetchFilters(routeName: string) {
         const category = this.categories.find(c => c.routeName === routeName)
         if (category) {
-            return await categoriesService.getFilters(category.id);
+            await categoriesService.getFilters(category.id);
         }
     }
 

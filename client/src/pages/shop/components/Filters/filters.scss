@@ -4,6 +4,7 @@
 .filters {
     height: 100%;
     width: 100%;
+    max-width: 250px;
     margin-bottom: 15px;
     background-color: white;
 
@@ -87,7 +88,7 @@
 
     &__title {
         font-weight: bold;
-        font-size: 24px;
+        font-size: 20px;
         padding-bottom: 15px;
         color: black;
     }
@@ -139,6 +140,10 @@
         overflow: hidden;
         margin-left: 10px;
         transition: 0.25s;
+
+        &_opened {
+            height: max-content;
+        }
     }
 
     &__attr-item {

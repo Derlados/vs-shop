@@ -9,51 +9,39 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 interface ProductGridProps {
     products: IProduct[];
     viewMode: ViewMode;
-    maxPerPage: number;
+    maxPages: number;
+    onChangePage: (page: number) => void;
     onSelectProduct?: (product: IProduct) => void;
     onOpenQuickView?: (product: IProduct) => void;
 }
 
 interface LocalStore {
     selectedPage: number;
-    maxPages: number;
-    selectedProducts: IProduct[];
 }
 
-const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPerPage = 16, onSelectProduct, onOpenQuickView = () => { } }) => {
+const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPages, onChangePage, onSelectProduct, onOpenQuickView = () => { } }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedPage: 1,
-        maxPages: 1,
-        selectedProducts: []
     }))
-
-    useEffect(() => {
-        let maxPages: number = Math.floor(products.length / maxPerPage);
-        if (products.length % maxPerPage !== 0) {
-            ++maxPages;
-        }
-        localStore.maxPages = maxPages;
-    }, [products.length])
 
 
     const backPage = () => {
         if (localStore.selectedPage !== 1) {
             --localStore.selectedPage;
+            onChangePage(localStore.selectedPage);
         }
     }
 
     const nextPage = () => {
-        if (localStore.selectedPage !== localStore.maxPages) {
+        if (localStore.selectedPage !== maxPages) {
             ++localStore.selectedPage;
+            onChangePage(localStore.selectedPage);
         }
     }
 
     const selectPage = (page: number) => {
         localStore.selectedPage = page;
-    }
-
-    const getSelectedProducts = () => {
-        return products.slice((localStore.selectedPage - 1) * maxPerPage, localStore.selectedPage * maxPerPage);
+        onChangePage(localStore.selectedPage);
     }
 
     return (
@@ -62,7 +50,7 @@ const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPer
                 'rlt': viewMode === ViewMode.GRID,
                 'clc': viewMode === ViewMode.LIST
             })}>
-                {getSelectedProducts().map(product =>
+                {products.map(product =>
                     <div key={product.id} className={classNames('catalog__product-container ccc', {
                         'catalog__product-container_large': viewMode === ViewMode.LIST,
                         'catalog__product-container_inactive-links': onSelectProduct !== undefined
@@ -82,9 +70,9 @@ const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPer
                     </div>
                 ))}
             </div>
-            {localStore.maxPages > 1 &&
+            {maxPages > 1 &&
                 <Pagination
-                    maxPages={localStore.maxPages}
+                    maxPages={maxPages}
                     currentPage={localStore.selectedPage}
                     back={backPage}
                     next={nextPage}

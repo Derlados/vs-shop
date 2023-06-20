@@ -8,6 +8,6 @@ export interface IRange {
 export interface IFilters {
     priceRange: IRange;
     attributes: IFilterAttribute[];
+    maxPages: number;
 }
 
- 

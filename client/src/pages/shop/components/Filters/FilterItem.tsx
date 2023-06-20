@@ -11,31 +11,29 @@ interface FilterItemProps {
 interface LocalStore {
     currentHeight: number | string;
     maxHeight: number;
+    isOpen: boolean;
 }
+
 
 const FilterItem: FC<FilterItemProps> = observer(({ attribute, onCheck }) => {
     const ref = useRef<HTMLUListElement>(null);
     const localStore = useLocalObservable<LocalStore>(() => ({
         currentHeight: 'max-content',
-        maxHeight: -1
+        maxHeight: -1,
+        isOpen: false
     }))
 
-    useEffect(() => {
-        localStore.maxHeight = ref.current?.clientHeight ?? 0
-        localStore.currentHeight = 0;
-    }, [])
 
     const toggleList = () => {
-        localStore.currentHeight = localStore.currentHeight === 0 ? localStore.maxHeight : 0
+        localStore.isOpen = !localStore.isOpen;
+        localStore.currentHeight = localStore.currentHeight === 0 ? localStore.maxHeight : 0;
     }
 
     return (
         <div className='filters__attr' >
             <div className='filters__attr-name filters__attr-name_touchable' onClick={toggleList}>{attribute.name} </div>
-            <ul ref={ref} className='filters__attr-list' style={{
-                height: localStore.currentHeight
-            }}>
-                {attribute.allValues.map(attrValue => (
+            <ul ref={ref} className={`filters__attr-list ${localStore.isOpen ? 'filters__attr-list_opened' : ''}`}>
+                {attribute.allValues.filter(a => a.productCount != 0).map(attrValue => (
                     <li key={`${attribute.id}-${attrValue.name}`} className={classNames('filters__attr-item rlc', {
                         'filters__attr-item_disable': !attrValue.isAvailable
                     })}>

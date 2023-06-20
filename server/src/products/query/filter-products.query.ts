@@ -9,8 +9,14 @@ export class FilterProductsQuery {
     search?: string;
 
     @IsOptional()
-    @IsNumberString()
-    limit?: number;
+    @IsNumber()
+    @Type(() => Number)
+    page?: number;
+
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    pppp?: number;
 
     @IsOptional()
     @IsArray()

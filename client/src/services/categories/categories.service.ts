@@ -1,7 +1,7 @@
 import { axiosInstance, headers, headersJSON } from "..";
 import filterUrlTransformer from "../../helpers/FilterUrlTransformer";
 import { ICategory } from "../../types/ICategory";
-import { IFilterAttribute } from "../../types/IFilterAttribute";
+import { IFilterAttribute, IFullFilter } from "../../types/IFilterAttribute";
 import { FilterOptions } from "../products/products.service";
 import { Service } from "../service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
@@ -18,8 +18,8 @@ class CategoryService extends Service {
         return data;
     }
 
-    async getFilters(categoryId: number, filters?: FilterOptions): Promise<IFilterAttribute[]> {
-        const { data } = await axiosInstance.get<IFilterAttribute[]>(`${this.API_URL}/${categoryId}/filters`, {
+    async getFilters(categoryId: number, filters?: FilterOptions): Promise<IFullFilter> {
+        const { data } = await axiosInstance.get<IFullFilter>(`${this.API_URL}/${categoryId}/filters`, {
             headers: headersJSON(),
             params: {
                 ...filters,

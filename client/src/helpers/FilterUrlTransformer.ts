@@ -65,6 +65,10 @@ class FilterUrlTransformer {
             urlParams.append('sort', filter.sort.toString())
         }
 
+        if (filter.page) {
+            urlParams.append('page', filter.page.toString());
+        }
+
         if (filter.search) {
             urlParams.append('search', filter.search);
         }

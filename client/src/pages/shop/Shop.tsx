@@ -50,6 +50,7 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
         localStore.filters.maxPrice = filterUrlTransformer.parseNumber(queryParams.get('maxPrice') ?? "");
         localStore.filters.sort = filterUrlTransformer.parseEnumSort(queryParams.get('sort') ?? "") ?? SortType.NOT_SELECTED;
         localStore.filters.filter = filterUrlTransformer.parseFilters(queryParams.get('filter') ?? "");
+        localStore.filters.page = filterUrlTransformer.parseNumber(queryParams.get('page') ?? "");
     }
     restoreFilters();
 
@@ -156,7 +157,16 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
         acceptFiltersChange();
     }
 
-    const acceptFiltersChange = () => {
+    const onChangePage = (page: number) => {
+        localStore.filters.page = page;
+        acceptFiltersChange(true);
+    }
+
+    const acceptFiltersChange = (keepFilters: boolean = false) => {
+        if (!keepFilters) {
+            localStore.filters.page = null;
+        }
+
         const urlParams = filterUrlTransformer.buildFilterUrl(localStore.filters);
         if (!urlParams) {
             navigate('');
@@ -217,6 +227,7 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
                         <ProductCatalog
                             selectedSortType={localStore.filters.sort ?? SortType.NOT_SELECTED}
                             products={searchStore.products}
+                            onChangePage={onChangePage}
                             onSelectSort={onSelectSort}
                             onOpenFilters={onOpenFilters}
                         />

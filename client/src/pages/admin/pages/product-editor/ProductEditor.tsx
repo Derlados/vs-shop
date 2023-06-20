@@ -264,7 +264,7 @@ const ProductEditor = observer(() => {
             <div className='product-editor__product-list'>
                 <div className='admin-general__subtitle'>Товары в каталоге "{localStore.selectedCategory?.name}"</div>
                 <div className='product-editor__grid'>
-                    <ProductGrid products={products.products} viewMode={ViewMode.GRID} maxPerPage={MAX_PRODUCTS_BY_PAGE} onSelectProduct={onEdit} />
+                    <ProductGrid products={products.products} viewMode={ViewMode.GRID} maxPages={products.filters.maxPages} onSelectProduct={onEdit} onChangePage={() => { }} />
                 </div>
                 <div className='product-editor__list'>
                     {products.products.map(p => (
