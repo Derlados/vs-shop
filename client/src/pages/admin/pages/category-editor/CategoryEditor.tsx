@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, useRef } from 'react'
+import React, { ChangeEvent, ChangeEventHandler, useEffect, useRef } from 'react'
 import shop from '../../../../store/shop';
 import '../../../home/home.scss';
 import './category-editor.scss';
@@ -14,6 +14,8 @@ import Checkbox from '../../../../lib/components/Checkbox/Checkbox';
 import catalog from '../../../../store/catalog';
 import Selector from '../../../../lib/components/Selector/Selector';
 import { ICatalog } from '../../../../types/ICatalog';
+import catalogEditorStore, { CatalogEditorStoreStatus } from '../../../../store/catalog-editor/catalog-editor.store';
+import Loader from '../../../../lib/components/Loader/Loader';
 
 
 interface IKeyAttribute {
@@ -34,7 +36,6 @@ interface ICatalogTemplate {
     id: number;
     name: string;
 }
-
 
 interface LocalStore {
     category: ICategoryTemplate;
@@ -58,7 +59,12 @@ const CategoryEditor = observer(() => {
             id: -1,
             name: ''
         }
-    }))
+    }));
+
+    useEffect(() => {
+        catalogEditorStore.init();
+    }, [])
+
 
     const validate = (): boolean => {
         if (!localStore.category.name || !localStore.category.routeName
@@ -124,10 +130,10 @@ const CategoryEditor = observer(() => {
 
         if (categoryId == -1) {
             if (localStore.img) {
-                catalog.addCategory(categoryDto, localStore.img);
+                catalogEditorStore.addCategory(categoryDto, localStore.img);
             }
         } else {
-            catalog.editCategory(categoryId, categoryDto, localStore.img);
+            catalogEditorStore.editCategory(categoryId, categoryDto, localStore.img);
         }
 
         onClear();
@@ -159,7 +165,7 @@ const CategoryEditor = observer(() => {
     }
 
     const onDelete = (id: number, catalogId: number) => {
-        catalog.deleteCategory(id, catalogId);
+        catalogEditorStore.deleteCategory(id, catalogId);
         onClear();
     }
 
@@ -192,16 +198,16 @@ const CategoryEditor = observer(() => {
 
     const onAcceptCatalog = () => {
         if (localStore.catalog.id === -1) {
-            catalog.addCatalog(localStore.catalog.name);
+            catalogEditorStore.addCatalog(localStore.catalog.name);
         } else {
-            catalog.editCatalog(localStore.catalog.id, localStore.catalog.name);
+            catalogEditorStore.editCatalog(localStore.catalog.id, localStore.catalog.name);
         }
 
         onClearCatalogEditor();
     }
 
     const onDeleteCatalog = (catalogId: number) => {
-        catalog.deleteCatalog(catalogId);
+        catalogEditorStore.deleteCatalog(catalogId);
 
         if (localStore.catalog.id === catalogId) {
             onClearCatalogEditor();
@@ -212,11 +218,19 @@ const CategoryEditor = observer(() => {
         localStore.catalog = { id: -1, name: '' }
     }
 
+    if (catalogEditorStore.status === CatalogEditorStoreStatus.initial || catalogEditorStore.status === CatalogEditorStoreStatus.loading) {
+        return (
+            <div className='ccc'>
+                <Loader />
+            </div>
+        );
+    }
+
     return (
         <div className='category-editor clt'>
             <div className='admin-general__title'>Редактор каталогов и категорий</div>
             <div className='category-editor__created-categories rlc'>
-                {catalog.categories.map((category) => (
+                {catalogEditorStore.categories.map((category) => (
                     <CategoryCard key={category.routeName} category={category} onClick={() => onEdit(category)} />
                 ))}
             </div>
@@ -224,7 +238,7 @@ const CategoryEditor = observer(() => {
             <div className='category-editor__catalogs'>
                 <div className='category-editor__catalog-editor rlc'>
                     <input className='admin-general__input'
-                        placeholder={localStore.catalog.id === -1 ? 'Введите название нового каталога' : `Введите новое название для каталога --${catalog.catalogs.find(c => c.id !== localStore.catalog.id)?.name}`}
+                        placeholder={localStore.catalog.id === -1 ? 'Введите название нового каталога' : `Введите новое название для каталога --${catalogEditorStore.catalogs.find(c => c.id !== localStore.catalog.id)?.name}`}
                         value={localStore.catalog.name}
                         onChange={(e) => onChangeCatalogName(e.target.value)}
                     />
@@ -239,7 +253,7 @@ const CategoryEditor = observer(() => {
 
                 </div>
                 <ul className='category-editor__catalogs-list'>
-                    {catalog.catalogs.map(c => (
+                    {catalogEditorStore.catalogs.map(c => (
                         <li key={c.id} className='category-editor__catalog-item rlc'  >
                             <div className='category-editor__catalog-name' onClick={() => onSelectCatalogToEdit(c.id)}>{c.name}</div>
                             <div className='category-editor__catalog-del-wrapper ccc' onClick={() => onDeleteCatalog(c.id)}>

@@ -49,7 +49,6 @@ class Cart {
     async deleteFromCart(productId: number) {
         await sessionCartService.deleteProduct(this.cartId, productId);
         this.cartProducts = this.cartProducts.filter(cp => cp.product.id != productId);
-
     }
 
     async changeCount(productId: number, newCount: number) {

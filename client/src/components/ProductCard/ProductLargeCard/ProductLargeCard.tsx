@@ -34,7 +34,7 @@ const ProductLargeCard: FC<SimpleProductCardProps> = observer(({ product, addToC
                     <span className='product-card-large__current-price'>{product.price}₴</span>
                     {product.oldPrice !== product.price && <span className='product-card-large__old-price'>{product.oldPrice}₴</span>}
                 </div>
-                <div className='product-card-large__desc'>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit.</div>
+                <div className='product-card-large__desc'>{product.description}</div>
                 <div className='product-card-large__footer rlc'>
                     {product.availability !== AvailableStatus.OUT_OF_STOCK && <CartButton color="primary" isActive={cart.findById(product.id) === undefined} onClick={() => addToCart(product)} />}
                     <div className={classNames('product-card__availability product-card-large__availability', {

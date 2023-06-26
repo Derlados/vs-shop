@@ -29,7 +29,7 @@ const CatalogList: FC<CatalogListProps> = observer(({ catalogs, onClose }) => {
                                 <div key={category.id} className='catalog-list__category-item'>
                                     <NavLink className='catalog-list__category-name' to={`${ROUTES.CATEGORY_PREFIX}${category.routeName}`} onClick={onClose}>{category.name}</NavLink>
                                     <ul className='catalog-list__brand-list'>
-                                        {category.allBrands?.map(brand => (
+                                        {category.allBrands?.slice(0, 20).map(brand => (
                                             <NavLink key={brand} to={`${ROUTES.CATEGORY_PREFIX}${category.routeName}/brands=${brand}`} onClick={onClose}>
                                                 <li className='catalog-list__brand-item'>{brand}</li>
                                             </NavLink>

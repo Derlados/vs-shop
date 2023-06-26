@@ -8,7 +8,7 @@ import { CreateCategoryDto } from "./dto/create-category.dto";
 
 class CategoryService extends Service {
 
-    async getAllCategories(): Promise<ICategory[]> {
+    async getAll(): Promise<ICategory[]> {
         const { data } = await axiosInstance.get<ICategory[]>(this.API_URL, { headers: headersJSON() });
         return data;
     }

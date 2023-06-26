@@ -118,8 +118,6 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
         return selectedBrands.includes(brand)
     }
 
-    console.log(searchStore.filters.priceRange.max);
-    console.log(selectedFilters.maxPrice);
     return (
         <div className='filters__content'>
             <div className='filters__title'>{searchStore.category?.name ?? ""}</div>
@@ -135,7 +133,7 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ selectedFilters, onC
                     onAccept={onSelectRange} />
             </div>
 
-            {localStore.brand.allValues.length !== 0 && <FilterItem attribute={localStore.brand} onCheck={onCheckBrands} />}
+            {/* {localStore.brand.allValues.length !== 0 && <FilterItem attribute={localStore.brand} onCheck={onCheckBrands} />} */}
             {localStore.attributes.map(attr => (
                 <FilterItem key={attr.id} attribute={attr} onCheck={onCheck} />
             ))}

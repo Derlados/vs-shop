@@ -46,16 +46,6 @@ class ShopStore {
         this.isInit = true;
     }
 
-    async sendMail(mail: IMail) {
-        try {
-            await shopService.sendMail(mail);
-            return true;
-        } catch (e) {
-            this.apiError = shopService.getError();
-            return false;
-        }
-    }
-
     async addBanner(banner: IBanner, img: File) {
         const newBanner = await shopService.addBanner(banner, img);
         this.banners.push(newBanner);

@@ -27,8 +27,14 @@ class SearchStore {
         this.brands = [];
     }
 
+    reset() {
+        this.status = SearchStoreStatus.initial;
+    }
+
     async init(categoryRoute: string, initialFilters?: FilterOptions) {
-        if (this.status === SearchStoreStatus.loading) return;
+        if (this.status === SearchStoreStatus.loading) {
+            return;
+        }
 
         runInAction(() => this.status = SearchStoreStatus.loading);
 
@@ -61,7 +67,9 @@ class SearchStore {
     }
 
     async initGlobalSearch(text: string) {
-        if (this.status === SearchStoreStatus.loading) return;
+        if (this.status === SearchStoreStatus.loading) {
+            return;
+        }
 
         runInAction(() => this.status = SearchStoreStatus.loading);
 
@@ -78,7 +86,9 @@ class SearchStore {
     }
 
     async updateCatalog(filterOptions?: FilterOptions) {
-        if (this.status === SearchStoreStatus.updating) return;
+        if (this.status === SearchStoreStatus.updating) {
+            return;
+        }
 
         runInAction(() => this.status = SearchStoreStatus.updating);
 

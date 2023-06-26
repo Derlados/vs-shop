@@ -31,8 +31,6 @@ const Selector: FC<SelectorProps> = observer(({ className, withInput = false, wi
         if (selectedId != null) {
             localStore.selectedValue = values.get(selectedId) ?? '';
         }
-        console.log(localStore.selectedValue);
-        console.log(selectedId, values);
     }, [selectedId, values])
 
     const select = (key: string, value: any) => {

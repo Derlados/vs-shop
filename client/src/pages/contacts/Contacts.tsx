@@ -3,55 +3,34 @@ import { validate } from 'class-validator';
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import SmallLoader from '../../lib/components/SmallLoader/SmallLoader';
+import conactsStore, { ContactsStoreStatus } from '../../store/contacts/contacts.store';
 import shop from '../../store/shop';
-import { IMail } from '../../types/IMail';
+
 import { REGEX } from '../../values/regex';
 import './contacts.scss';
 
-interface LocalStore {
-    mail: IMail;
-    isValidForm: boolean;
-    isLoading: boolean;
-    isLoadedSuccessful: boolean;
-}
-
 const Contacts = observer(() => {
-    const localStore = useLocalObservable<LocalStore>(() => ({
-        mail: {
-            name: '',
-            email: '',
-            subject: '',
-            message: ''
-        },
-        isValidForm: true,
-        isLoading: false,
-        isLoadedSuccessful: false,
-    }))
-
     const phones = ['0(1234) 567 89012', '0(987) 567 890']
     const emails = ['info@demo.com', 'yourname@domain.com']
 
-    const trySendMessage = async () => {
-        if (localStore.isLoading || localStore.isLoadedSuccessful) {
-            return;
-        }
-
-        if (!validate()) {
-            localStore.isValidForm = false;
-            return;
-        }
-
-        localStore.isLoading = true;
-        const success = await shop.sendMail(localStore.mail);
-        if (success) {
-            localStore.isLoadedSuccessful = true;
-        }
-        localStore.isLoading = false;
+    const trySendMessage = () => {
+        conactsStore.sendMail();
     }
 
-    const validate = () => {
-        const { name, email, subject, message } = localStore.mail;
-        return name !== '' && REGEX.EMAIL_REGEX.test(email) && email !== '' && subject !== '' && message !== '';
+    const onNameChange = (v: React.ChangeEvent<HTMLInputElement>) => {
+        conactsStore.onNameChange(v.target.value);
+    }
+
+    const onEmailChange = (v: React.ChangeEvent<HTMLInputElement>) => {
+        conactsStore.onEmailChange(v.target.value);
+    }
+
+    const onSubjectChange = (v: React.ChangeEvent<HTMLInputElement>) => {
+        conactsStore.onSubjectChange(v.target.value);
+    }
+
+    const onMessageChange = (v: React.ChangeEvent<HTMLTextAreaElement>) => {
+        conactsStore.onMessageChange(v.target.value);
     }
 
     return (
@@ -85,22 +64,22 @@ const Contacts = observer(() => {
             <div className='contacts__form'>
                 <div className='contacts__input-row rlc'>
                     <input className={classNames('contacts__input', {
-                        'contacts__input_invalid': !localStore.isValidForm && localStore.mail.name === ''
-                    })} placeholder={'Ім\'я *'} value={localStore.mail.name} onChange={(v) => localStore.mail.name = v.target.value} />
+                        'contacts__input_invalid': conactsStore.isTriedToSend && conactsStore.name === ''
+                    })} placeholder={'Ім\'я *'} value={conactsStore.name} onChange={onNameChange} />
                     <input className={classNames('contacts__input', {
-                        'contacts__input_invalid': !localStore.isValidForm && !REGEX.EMAIL_REGEX.test(localStore.mail.email)
-                    })} placeholder='Електронна пошта *' value={localStore.mail.email} onChange={(v) => localStore.mail.email = v.target.value} />
+                        'contacts__input_invalid': conactsStore.isTriedToSend && !REGEX.EMAIL_REGEX.test(conactsStore.email)
+                    })} placeholder='Електронна пошта *' value={conactsStore.email} onChange={onEmailChange} />
                 </div>
                 <input className={classNames('contacts__input', {
-                    'contacts__input_invalid': !localStore.isValidForm && localStore.mail.subject === ''
-                })} placeholder='Тема повідомлення *' value={localStore.mail.subject} onChange={(v) => localStore.mail.subject = v.target.value} />
+                    'contacts__input_invalid': conactsStore.isTriedToSend && conactsStore.subject === ''
+                })} placeholder='Тема повідомлення *' value={conactsStore.subject} onChange={onSubjectChange} />
                 <textarea className={classNames('contacts__input contacts__input_large', {
-                    'contacts__input_invalid': !localStore.isValidForm && localStore.mail.message === ''
-                })} placeholder='Текст повідомлення *' value={localStore.mail.message} onChange={(v) => localStore.mail.message = v.target.value} />
+                    'contacts__input_invalid': conactsStore.isTriedToSend && conactsStore.message === ''
+                })} placeholder='Текст повідомлення *' value={conactsStore.message} onChange={onMessageChange} />
             </div>
-            {!localStore.isLoadedSuccessful ?
+            {conactsStore.status !== ContactsStoreStatus.success ?
                 <div className='contacts__form-btn ccc' onClick={trySendMessage}>
-                    {!localStore.isLoading ?
+                    {conactsStore.status !== ContactsStoreStatus.sending ?
                         <div className='contacts__form-btn-text'>Відправити</div>
                         :
                         <SmallLoader className='contacts__loader' />
