@@ -6,14 +6,14 @@ import Modal from '../../lib/components/Modal/Modal';
 import Selector from '../../lib/components/Selector/Selector';
 import cart from '../../store/cart/cart';
 import orders from '../../store/order';
-import './checkout.scss';
 import { ISettlement } from '../../types/ISettlement';
 import { REGEX } from '../../values/regex';
 import settlement from '../../store/settlement';
 import Input from '../../lib/components/Input/Input';
 import { CheckoutStore, CheckoutStoreStatus } from '../../store/checkout/checkout.store';
 import { useEffect } from 'react';
-
+import CheckoutProduct from './CheckoutProduct/CheckoutProduct';
+import './checkout.scss';
 
 const phoneMask = '+38 999 999 99 99';
 
@@ -26,33 +26,6 @@ const Checkout = observer(() => {
 
     const tryPlaceOrder = async () => {
         checkoutStore.accept();
-        // if (localStore.isSentSuccessfully) {
-        //     return;
-        // }
-
-        // const order: IOrder = {
-        //     id: -1,
-        //     client: `${checkoutStore.lastName} ${checkoutStore.firstName}`,
-        //     phone: checkoutStore.phone,
-        //     email: checkoutStore.email != '' ? checkoutStore.email : undefined,
-        //     address: `${checkoutStore.settlement} - ${checkoutStore.warehouse}`,
-        //     additionalInfo: checkoutStore.additionalInfo,
-        //     totalPrice: checkoutStore.totalPrice,
-        //     orderProducts: checkoutStore.cartProducts,
-        //     payment: { id: 1, method: 'Накладенний платіж' },
-        //     createdAt: new Date(),
-        //     status: OrderStatus.NOT_PROCESSED
-        // }
-
-        // localStore.isSending = true;
-        // const success = await orders.placeOrder(order);
-        // if (success) {
-        //     localStore.isSentSuccessfully = true;
-        //     localStore.copyTotal = cart.totalPrice;
-        //     localStore.copyProducts = [...cart.cartProducts];
-        //     cart.clearUserProducts();
-        // }
-        // localStore.isSending = false;
     }
 
     const getSettlementValues = (settlements: ISettlement[]) => {
@@ -119,7 +92,6 @@ const Checkout = observer(() => {
         checkoutStore.onAdditionalInfoChange(v.target.value);
     }
 
-
     const onSelectSettlement = (settlementRef: string) => {
         const selectedSettlement = settlement.settlements.find(s => s.ref === settlementRef)
         if (selectedSettlement) {
@@ -132,6 +104,10 @@ const Checkout = observer(() => {
         checkoutStore.onWarehouseChange(warehouse);
     }
 
+    const onProductQuantityChanged = async (productId: number, newQuantity: number) => {
+        await cart.changeCount(productId, newQuantity);
+        checkoutStore.onCartUpdated();
+    }
 
     if (!cart.isInit || checkoutStore.status === CheckoutStoreStatus.initializing || checkoutStore.status === CheckoutStoreStatus.initial) {
         return (
@@ -151,14 +127,14 @@ const Checkout = observer(() => {
                 <div className='checkout__title'>Деталі замовлення</div>
                 <div className='checkout__inputs-row rlc'>
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': checkoutStore.isTrienToPlace && checkoutStore.firstName === ''
+                        'checkout__input_invalid': checkoutStore.isTriedToPlace && checkoutStore.firstName === ''
                     })}
                         hint="Ім'я"
                         value={checkoutStore.firstName}
                         onChange={onFirstNameChange}
                     />
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': checkoutStore.isTrienToPlace && checkoutStore.lastName === ''
+                        'checkout__input_invalid': checkoutStore.isTriedToPlace && checkoutStore.lastName === ''
                     })}
                         hint="Прізвище"
                         value={checkoutStore.lastName}
@@ -167,7 +143,7 @@ const Checkout = observer(() => {
                 </div>
                 <div className='checkout__inputs-row rlc'>
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': checkoutStore.isTrienToPlace && !REGEX.PHONE_REGEX.test(checkoutStore.phone)
+                        'checkout__input_invalid': checkoutStore.isTriedToPlace && !REGEX.PHONE_REGEX.test(checkoutStore.phone)
                     })}
                         mask={phoneMask}
                         placeholder="+38 ___ ___ __ __"
@@ -176,7 +152,7 @@ const Checkout = observer(() => {
                         onChange={onPhoneChange}
                     />
                     <Input className={classNames('checkout__input', {
-                        'checkout__input_invalid': checkoutStore.isTrienToPlace && (!REGEX.EMAIL_REGEX.test(checkoutStore.email) && checkoutStore.email != '')
+                        'checkout__input_invalid': checkoutStore.isTriedToPlace && (!REGEX.EMAIL_REGEX.test(checkoutStore.email) && checkoutStore.email != '')
                     })}
                         hint="Електронна пошта (не обов'язково)"
                         value={checkoutStore.email}
@@ -198,6 +174,16 @@ const Checkout = observer(() => {
                     values={getWarehouseValues(settlement.warehouses)}
                     selectedId={checkoutStore.warehouse}
                     onSelect={onSelectWarehouse} />
+                <div className='checkout__title'>Обрані товари</div>
+                <ul className='checkout__product-list'>
+                    {checkoutStore.cartProducts.map((cartProduct) => (
+                        <CheckoutProduct
+                            product={cartProduct.product}
+                            quantity={cartProduct.count}
+                            onProductQuantityChanged={onProductQuantityChanged}
+                        />
+                    ))}
+                </ul>
                 <div className='checkout__additional-info'>
                     <div className='checkout__additional-head'>Додаткова інформація</div>
                     <textarea

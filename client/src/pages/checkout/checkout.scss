@@ -58,7 +58,7 @@
     }
 
     &__selector {
-        margin-top: 20px;
+        margin-bottom: 20px;
     }
 
     &__additional-head {
@@ -67,9 +67,7 @@
         margin-bottom: 15px;
     }
 
-    &__additional-info {
-        margin-top: 40px;
-    }
+    &__additional-info {}
 
     &__additional-area {
         width: 100%;
@@ -109,6 +107,9 @@
     }
 
     &__order-text {
+        max-width: 300px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: 14px;
 
         &_bold {

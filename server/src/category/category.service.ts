@@ -30,7 +30,7 @@ export class CategoryService {
         return this.categoryRepository.findOne({ where: { routeName: route }, relations: ["filters", "filters.attribute", "products"] });
     }
 
-    async getCategoryFilters(categoryId: number, filters?: FilterProductsQuery) {
+    async getCategoryFilters(categoryId: number, filters: FilterProductsQuery) {
         const products = await this.productService.getProductsByCategory(categoryId, filters, true);
 
         const filterAttributes = await this.filterRepository.find({ where: { categoryId: categoryId }, relations: ["attribute", "attribute.values"] })
@@ -46,7 +46,6 @@ export class CategoryService {
 
             const filteredProductIds = await this.productService.getProductsByCategory(categoryId, { ...filters, filter: copyFiltersWithSkipped }, true, true);
 
-
             const filterQuery = this.filterRepository.createQueryBuilder("filter")
                 .select([])
                 .addSelect("values.name", "valueName")
@@ -59,13 +58,16 @@ export class CategoryService {
                 .groupBy("values.name")
                 .addGroupBy("filter.attribute_id")
 
+
             if (filteredProductIds.length > 0) {
                 filterQuery.andWhere("product_id IN (:...productIds)", { productIds: filteredProductIds });
             }
 
             const filterAttribute = await filterQuery.getRawMany();
             filterAttribute.forEach(fa => {
-                filterCountsMap.set(fa.valueName, fa.countProducts);
+                if (!filterCountsMap.has(fa.valueName)) {
+                    filterCountsMap.set(fa.valueName, fa.countProducts);
+                }
             })
         }
 
@@ -138,7 +140,7 @@ export class CategoryService {
             .execute()
 
 
-        return this.getCategoryFilters(categoryId);
+        return this.getCategoryFilters(categoryId, {});
     }
 
     private async deleteFilters(categoryId: number, deleteKeyAttributesIds: number[]) {

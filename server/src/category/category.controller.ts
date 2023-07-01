@@ -51,6 +51,7 @@ export class CategoryController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     editCategory(@Param('id') id: number, @Body() dto: CreateCategoryDto) {
+
         return this.categoryService.editCategory(id, dto);
     }
 

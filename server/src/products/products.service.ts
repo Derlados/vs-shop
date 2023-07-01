@@ -61,7 +61,66 @@ export class ProductsService {
         return product;
     }
 
+
+    // async test(products: Product[]) {
+    //     const map = new Map([
+    //         [['4050', '4060', '4070', '4080', '4090'], 'NVIDIA GeForce RTX 40 серії'],
+    //         [['3050', '3060', '3070', '3080'], 'NVIDIA GeForce RTX 30 серії'],
+    //         [['2050', '2060', '2070', '2080'], 'NVIDIA GeForce RTX 20 серії'],
+    //         [['1650', '1660'], 'NVIDIA GeForce GTX 16 серії'],
+    //         // [[], 'NVIDIA GeForce'],
+    //         [['RTX A'], 'NVIDIA RTX серії А'],
+    //         [['Radeon'], 'AMD Radeon RX'],
+    //         [['Quadro'], 'NVIDIA Quadro'],
+    //         [['Графіка AMD'], 'Інтегрована AMD'],
+    //         [['Iris Xe'], 'Інтегрована Intel'],
+    //         [[], 'Інтегрована Ardeno'],
+    //         [['Apple M2'], 'Інтегрована Apple'],
+    //     ]);
+
+    //     for (const product of products) {
+    //         const cardValue = product.values.find(v => v.attributeId == 990)?.name ?? "";
+    //         if (cardValue == "") {
+    //             continue;
+    //         }
+
+    //         for (const [key, value] of map) {
+    //             for (const k of key) {
+    //                 if (cardValue.includes(k)) {
+    //                     try {
+    //                         console.log({ productId: product.id, attributeId: 1150, name: value });
+    //                         await this.valuesRepository.insert({ productId: product.id, attributeId: 1150, name: value });
+    //                     } catch (error) {
+
+    //                     }
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+
+
+    async test(products: Product[]) {
+        for (const product of products) {
+            if (product.categoryId != 42) {
+                continue;
+            }
+
+            try {
+                await this.valuesRepository.insert({ productId: product.id, attributeId: 1137, name: product.brand });
+            } catch (error) {
+
+            }
+
+
+        }
+    }
+
     async getProductsByCategory(categoryId: number, filters: FilterProductsQuery, ignorePages: boolean = false, onlyIds: boolean = false): Promise<Product[] | number[]> {
+        // await this.test(await this.productRepository.find({ relations: ["values", "values.attribute"] }));
+
         const productsQuery = this.productRepository.createQueryBuilder("product")
             .select("product.id as id")
             .addSelect("COUNT(*) as count_matches")
@@ -110,11 +169,9 @@ export class ProductsService {
         const products = await productsQuery.getRawMany();
 
         if (onlyIds) {
-            console.log(products.map(p => p.id));
             return products.map(p => p.id);
         }
 
-        console.log("full");
         return this.productRepository.find({ where: { id: In(products.map(p => p.id)) }, relations: ["images", "category"] });
     }
 

@@ -266,11 +266,14 @@ const ProductEditor = observer(() => {
                 <div className='product-editor__grid'>
                     <ProductGrid products={products.products} viewMode={ViewMode.GRID} maxPages={products.filters.maxPages} onSelectProduct={onEdit} onChangePage={() => { }} />
                 </div>
-                <div className='product-editor__list'>
+                {/* <div className='product-editor__list'>
                     {products.products.map(p => (
-                        <div></div>
+                        <div key={p.id} className='home-editor__product rlc' onClick={() => onEdit(p)}>
+                            <img className='home-editor__product-img' src={p.images.find(img => img.isMain)?.url ?? p.images[0].url} />
+                            <span className='home-editor__product-name'>{p.title}</span>
+                        </div>
                     ))}
-                </div>
+                </div> */}
             </div>
             <div className='admin-general__line'></div>
             <div className='product-editor__form'>

@@ -7,7 +7,7 @@ import { REGEX } from "../../values/regex";
 import cart from "../cart/cart";
 
 export enum CheckoutStoreStatus {
-    initial, initializing, loading, placing, failure, placingFailure, success, placingSuccess
+    initial, initializing, loading, placing, updatingCart, failure, placingFailure, updatingCartFailure, success, placingSuccess, updatingCartSuccess
 }
 
 export class CheckoutStore {
@@ -22,7 +22,7 @@ export class CheckoutStore {
     public payment: IPayment;
     public cartProducts: ICartProduct[];
 
-    public isTrienToPlace: boolean;
+    public isTriedToPlace: boolean;
 
     get totalPrice(): number {
         let totalPrice = 0;
@@ -48,7 +48,7 @@ export class CheckoutStore {
         this.settlement = '';
         this.warehouse = '';
         this.additionalInfo = '';
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
     async init(cartId: string) {
@@ -71,7 +71,7 @@ export class CheckoutStore {
     }
 
     async accept() {
-        runInAction(() => this.isTrienToPlace = true);
+        runInAction(() => this.isTriedToPlace = true);
         if (!this.isValid || this.status == CheckoutStoreStatus.placing) {
             return;
         }
@@ -102,53 +102,47 @@ export class CheckoutStore {
 
     onFirstNameChange(firstName: string) {
         this.firstName = firstName;
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
     onLastNameChange(lastName: string) {
         this.lastName = lastName;
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
     onEmailChange(email: string) {
         this.email = email;
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
     onPhoneChange(phone: string) {
         this.phone = phone;
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
     onSettlementChange(settlement: string) {
         this.settlement = settlement;
         this.warehouse = '';
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
     onWarehouseChange(warehouse: string) {
         this.warehouse = warehouse;
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
     onAdditionalInfoChange(additionalInfo: string) {
         this.additionalInfo = additionalInfo;
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
     onPaymentChange(payment: IPayment) {
         this.payment = payment;
-        this.isTrienToPlace = false;
+        this.isTriedToPlace = false;
     }
 
-    onOrderProductsChangeAmount(productId: number, newCount: number) {
-        const cartProduct = this.cartProducts.find(cp => cp.product.id == productId);
-        if (cartProduct) {
-            cartProduct.count = newCount;
-        }
-
-        this.cartProducts = [...this.cartProducts];
-        this.isTrienToPlace = false;
+    async onCartUpdated() {
+        this.cartProducts = [...cart.cartProducts];
     }
 }
 
