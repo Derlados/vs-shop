@@ -197,8 +197,8 @@ const Checkout = observer(() => {
                 <div className='checkout__title'>Ваше замовлення</div>
                 <div className='checkout__order-container clc'>
                     <div className='checkout__order-head rlc'>
-                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Product</div>
-                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
+                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Товари</div>
+                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Сума</div>
                     </div>
                     <ul className='checkout__order-product-list'>
                         {checkoutStore.cartProducts.map(cp => (
@@ -210,12 +210,12 @@ const Checkout = observer(() => {
                     </ul>
                     <div className='checkout__line'></div>
                     <div className='checkout__order-delivery rlc'>
-                        <div className='checkout__order-text checkout__order-text_bold'>Delivery</div>
-                        <div className='checkout__order-text'>Free shipping</div>
+                        <div className='checkout__order-text checkout__order-text_bold'>Доставка</div>
+                        <div className='checkout__order-text'>Безкоштовно</div>
                     </div>
                     <div className='checkout__line'></div>
                     <div className='checkout__total rlc'>
-                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
+                        <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Сума</div>
                         <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{checkoutStore.totalPrice.toFixed(2)} ₴</div>
                     </div>
                 </div>

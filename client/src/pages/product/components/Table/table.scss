@@ -7,22 +7,22 @@
 
     &__row {
         width: 100%;
-        padding: 8px;
         line-height: 20px;
         font-weight: normal;
         text-decoration: none;
         margin: 0px;
+        border: 1px solid #eaeaea;
     }
 
     &__row-parametr {
         width: 33%;
-        margin: 0 15px;
+        padding: 12px;
         font-weight: bold;
-
+        border-right: 1px solid #eaeaea;
     }
 
     &__row-value {
         width: 66%;
-        margin: 0 15px;
+        padding: 12px;
     }
 }

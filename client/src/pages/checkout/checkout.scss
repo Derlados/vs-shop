@@ -109,7 +109,9 @@
     &__order-text {
         max-width: 300px;
         text-overflow: ellipsis;
+        overflow: hidden;
         white-space: nowrap;
+
         font-size: 14px;
 
         &_bold {
