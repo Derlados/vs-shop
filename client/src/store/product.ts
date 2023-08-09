@@ -126,20 +126,6 @@ class ProductStore {
 
     /////////////////////////////////// CRUD ОПЕРАЦИИ ДЛЯ ПРОДУКТОВ В КАТАЛОГЕ //////////////////////////////////
 
-    public async addProduct(product: IProduct, images: File[], deletedImagesId?: number[], newMainImageId?: number) {
-        product.categoryId = this.category.id;
-        const newProduct = await productsService.addProducts(product);
-        newProduct.images = await productsService.editProductImages(newProduct.id, images, deletedImagesId, newMainImageId);
-        this.products.push(newProduct);
-    }
-
-    public async editProduct(id: number, product: IProduct, images: File[], deletedImagesId?: number[], newMainImageId?: number) {
-        product.categoryId = this.category.id;
-        const updatedProduct = await productsService.editProduct(id, product);
-        updatedProduct.images = await productsService.editProductImages(updatedProduct.id, images, deletedImagesId, newMainImageId);
-        this.products[this.products.findIndex(p => p.id === id)] = updatedProduct;
-    }
-
     public async setBestsellerStatus(id: number, isBestseller: boolean) {
         const product = this.products.find(p => p.id === id);
         if (!product) {

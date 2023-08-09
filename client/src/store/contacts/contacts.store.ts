@@ -58,14 +58,14 @@ class ContactsStore {
 
         runInAction(() => this.status = ContactsStoreStatus.sending);
 
-        const mail: IMail = {
-            name: this.name,
-            email: this.email,
-            subject: this.subject,
-            message: this.message
-        };
-
         try {
+            const mail: IMail = {
+                name: this.name,
+                email: this.email,
+                subject: this.subject,
+                message: this.message
+            };
+
             await shopService.sendMail(mail);
 
             runInAction(() => this.status = ContactsStoreStatus.success);

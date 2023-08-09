@@ -47,7 +47,7 @@ const Contacts = observer(() => {
                         {phones.map((phone, index) => (
                             <li key={phone} className='contacts__list-item'>Phone {index}: {phone}</li>
                         ))}
-                    </ul>
+                        В               </ul>
                 </div>
                 <div className='contacts__row-item ccc'>
                     <div className='contacts__icon-wrapper ccc'>

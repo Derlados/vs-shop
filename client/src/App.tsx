@@ -13,7 +13,7 @@ import ProductEditor from './pages/admin/pages/product-editor/ProductEditor';
 import OrderList from './pages/admin/pages/orders/OrderList';
 import Home from './pages/home/Home';
 import Checkout from './pages/checkout/Checkout';
-import Product from './pages/product/Product';
+import IProduct from './pages/product/Product';
 import Shop from './pages/shop/Shop';
 import HomeEditor from './pages/admin/pages/home-editor/HomeEditor';
 import { useEffect } from 'react';
@@ -52,7 +52,7 @@ const App = () => {
                     <Route path='/contacts' element={<Contacts />} />
                     <Route path='/404_not_found' element={<Page404 />} />
                     <Route path='/search' element={<Shop isGlobalSearch={true} />} />
-                    <Route path='/:productName/:id' element={<Product />} />
+                    <Route path='/:productName/:id' element={<IProduct />} />
                     <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/search`} element={<Shop />} />
                     <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog`} element={<Shop />} />
                     <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/:filters`} element={<Shop />} />

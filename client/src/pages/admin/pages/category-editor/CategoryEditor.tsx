@@ -220,7 +220,7 @@ const CategoryEditor = observer(() => {
 
     if (catalogEditorStore.status === CatalogEditorStoreStatus.initial || catalogEditorStore.status === CatalogEditorStoreStatus.loading) {
         return (
-            <div className='ccc'>
+            <div className='category-editor__loader ccc'>
                 <Loader />
             </div>
         );

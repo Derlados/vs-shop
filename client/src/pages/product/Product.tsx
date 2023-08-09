@@ -25,7 +25,7 @@ interface LocalStore {
     isLoading: boolean;
 }
 
-const Product: FC = observer(() => {
+const IProduct: FC = observer(() => {
     const { productName, id } = useParams<ProductParams>();
     const localStore = useLocalObservable<LocalStore>(() => ({
         product: products.products[0],
@@ -96,4 +96,4 @@ const Product: FC = observer(() => {
     }
 });
 
-export default Product
+export default IProduct

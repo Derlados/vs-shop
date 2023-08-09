@@ -20,6 +20,8 @@ import { IProductAttribute } from '../../../../types/IProductAttribyte';
 import catalog from '../../../../store/catalog';
 import Selector from '../../../../lib/components/Selector/Selector';
 import { IAttribute } from '../../../../types/IAttribute';
+import productEditorStore from '../../../../store/product-editor/product-editor.store';
+import ProductEditorInput from './component/ProductEditorInput';
 
 const MAX_PRODUCTS_BY_PAGE = 8;
 
@@ -36,68 +38,11 @@ interface IUploadedFile {
 }
 
 const ProductEditor = observer(() => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const localStore = useLocalObservable<LocalStore>(() => ({
-        deletedImagesId: [],
-        uploadedFiles: [],
-        product: {
-            id: -1,
-            categoryId: -1,
-            userId: -1,
-            title: '',
-            brand: '',
-            description: '',
-            url: '',
-            price: 0,
-            oldPrice: 0,
-            isNew: false,
-            isBestseller: false,
-            availability: AvailableStatus.IN_STOCK,
-            maxByOrder: 0,
-            count: 0,
-            discountPercent: 0,
-            attributes: [],
-            images: []
-        }
-    }))
-    localStore.product.discountPercent = Math.floor((1 - localStore.product.price / localStore.product.oldPrice) * 100);
+    const fileUploaderRef = useRef<HTMLInputElement>(null);
 
-    const getProductTemplate = (): IProduct => {
-        const attributes: IProductAttribute[] = [];
-        if (localStore && localStore.selectedCategory) {
-            for (const attr of localStore.selectedCategory.keyAttributes) {
-                attributes.push({ id: attr.id, name: attr.name, value: { id: -1, name: '' } })
-            }
-        }
-
-        return {
-            id: -1,
-            categoryId: -1,
-            userId: -1,
-            title: '',
-            brand: '',
-            description: '',
-            url: '',
-            price: 0,
-            oldPrice: 0,
-            isNew: false,
-            isBestseller: false,
-            availability: AvailableStatus.IN_STOCK,
-            maxByOrder: 0,
-            count: 0,
-            discountPercent: 0,
-            attributes: attributes,
-            images: []
-        }
-    }
 
     const getMainImg = (): IImage => {
-        let mainImg = localStore.product.images.find(img => img.isMain)
-        if (!mainImg) {
-            localStore.product.images[0].isMain = true;
-            mainImg = localStore.product.images[0];
-        }
-        return mainImg;
+        return productEditorStore.mainImage;
     }
 
     useEffect(() => {
@@ -106,129 +51,80 @@ const ProductEditor = observer(() => {
         }
     }, [catalog.categories]);
 
+    const onTitleChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        productEditorStore.onTitleChanged(e.target.value);
+    }
+
+    const onBrandChanged = (brand: string) => {
+        productEditorStore.onBrandChanged(brand);
+    }
+
+    const onDescriptionChanged = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        productEditorStore.onDescriptionChanged(e.target.value);
+    }
+
+    const onPriceChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        productEditorStore.onPriceChanged(Number(e.target.value));
+    }
+
+    const onOldPriceChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        productEditorStore.onOldPriceChanged(Number(e.target.value));
+    }
+
+    const onAmountChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        productEditorStore.onAmountChanged(Number(e.target.value));
+    }
+
+    const onMaxByOrderChange = (e: ChangeEvent<HTMLInputElement>) => {
+        productEditorStore.onMaxByOrderChange(Number(e.target.value));
+    }
+
     const onUploadImages = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            const nanoid = customAlphabet('1234567890', 18)
             const images = e.target.files;
+            productEditorStore.uploadImages(images);
 
-            for (const image of images) {
-                const id = Number(nanoid());
-                localStore.product.images.push({
-                    id: id,
-                    url: URL.createObjectURL(image),
-                    isMain: false
-                })
-                localStore.uploadedFiles.push({ id: id, file: image });
-            }
-
-            // Очистка input от файла (чтобы при очищении файла мог отобразится тот же файл при загрузке)
-            if (inputRef.current) {
-                inputRef.current.value = '';
+            // Clearing the input from the file (so that when the file is cleared, the same file can be displayed when loading)
+            if (fileUploaderRef.current) {
+                fileUploaderRef.current.value = '';
             }
         }
     }
 
     const selectMainImg = (image: IImage) => {
-        localStore.product.images.forEach((img) => img.isMain = false);
-        image.isMain = true;
-
-        const fileIndex = localStore.uploadedFiles.findIndex(uf => uf.id == image.id);
-        if (fileIndex !== -1) {
-            const temp = localStore.uploadedFiles[0];
-            localStore.uploadedFiles[0] = localStore.uploadedFiles[fileIndex];
-            localStore.uploadedFiles[fileIndex] = temp;
-        }
+        productEditorStore.selectMainImage(image.id);
     }
 
     const deleteImg = (image: IImage) => {
-        let indexToDelete = localStore.product.images.findIndex(img => img == image);
-        localStore.product.images.splice(indexToDelete, 1);
-
-        indexToDelete = localStore.uploadedFiles.findIndex(file => file.id == image.id);
-        if (indexToDelete != -1) {
-            localStore.uploadedFiles.splice(indexToDelete, 1);
-        }
-
-        if (!REGEX.BLOB.test(image.url)) {
-            localStore.deletedImagesId.push(image.id);
-        }
+        productEditorStore.deleteImage(image);
     }
 
     const toggleIsNew = () => {
-        localStore.product.isNew = !localStore.product.isNew;
+        productEditorStore.onIsNewToggled();
     }
 
     const onAccept = () => {
-        if (!validate()) {
-            return;
-        }
-
-        // Проверка, если главным изображением стало одно из существующих - берет его id, иначе никакое id не передается
-        const mainImage = getMainImg();
-        let newMainImageId = undefined;
-        if (!REGEX.BLOB.test(mainImage.url)) {
-            newMainImageId = mainImage.id;
-        }
-
-        const files = localStore.uploadedFiles.map(uploadedFile => uploadedFile.file)
-
-        if (localStore.product.id === -1) {
-            products.addProduct(localStore.product, files, localStore.deletedImagesId, newMainImageId);
-        } else {
-            products.editProduct(localStore.product.id, localStore.product, files, localStore.deletedImagesId, newMainImageId);
-        }
-
-        onClear();
+        productEditorStore.saveProduct();
     }
 
     const onEdit = (product: IProduct) => {
-        localStore.product = { ...product, images: JSON.parse(JSON.stringify(product.images)) }
-        products.loadProductCount(localStore.product);
-        localStore.uploadedFiles = [];
-        localStore.deletedImagesId = [];
+        productEditorStore.selectProduct(product.id);
     }
 
     const onSelectCategory = (category: ICategory) => {
-        products.fetchProducts(category.routeName);
-        localStore.selectedCategory = category;
-        onClear();
+        productEditorStore.onCategorySelected(category);
     }
 
     const onClear = () => {
-        localStore.product = getProductTemplate();
-        localStore.uploadedFiles = [];
-        localStore.deletedImagesId = [];
+        productEditorStore.clear();
     }
 
     const onDelete = () => {
-        products.deleteProduct(localStore.product.id);
-        onClear();
-    }
-
-    const validate = (): boolean => {
-        if (localStore.uploadedFiles.length == 0 && localStore.product.images.length == 0) {
-            return false;
-        }
-
-        const { title, brand, description, price, oldPrice, attributes } = localStore.product;
-        if (!title || !brand || !description || !price || !oldPrice) {
-            return false;
-        }
-
-        for (const value of attributes.values()) {
-            if (!value) {
-                return false;
-            }
-        }
-
-        return true;
+        productEditorStore.onProductDeleted();
     }
 
     const getBrandValues = (brands: string[]) => {
-        const brandValues = new Map<string, string>();
-        brands.forEach(b => brandValues.set(b, b));
-
-        return brandValues;
+        return new Map<string, string>(brands.map(b => [b, b]));
     }
 
     const getAttributeValues = (attribute: IProductAttribute) => {
@@ -262,9 +158,9 @@ const ProductEditor = observer(() => {
             <CategoryList categories={catalog.categories} onClick={onSelectCategory} />
             <div className='admin-general__line'></div>
             <div className='product-editor__product-list'>
-                <div className='admin-general__subtitle'>Товары в каталоге "{localStore.selectedCategory?.name}"</div>
+                <div className='admin-general__subtitle'>Товары в каталоге "{productEditorStore.category.name}"</div>
                 <div className='product-editor__grid'>
-                    <ProductGrid products={products.products} viewMode={ViewMode.GRID} maxPages={products.filters.maxPages} onSelectProduct={onEdit} onChangePage={() => { }} />
+                    <ProductGrid products={products.products} viewMode={ViewMode.GRID} maxPages={products.filters?.maxPages ?? 100} onSelectProduct={onEdit} onChangePage={() => { }} />
                 </div>
                 {/* <div className='product-editor__list'>
                     {products.products.map(p => (
@@ -282,17 +178,17 @@ const ProductEditor = observer(() => {
                     <div className='admin-general__clear-btn' onClick={onClear}>Очистить</div>
                 </div>
                 <div className='product-editor__images-editor clc'>
-                    <FileUploader inputRef={inputRef} className='product-editor__uploader ccc' multiple={true} onUploadImage={onUploadImages}>
+                    <FileUploader inputRef={fileUploaderRef} className='product-editor__uploader ccc' multiple={true} onUploadImage={onUploadImages}>
                         <div className='rcc'>
                             <div className='product-editor__uploader-icon'></div>
                             <div className='product-editor__uploader-text'>Drop files to upload or <b>Browse Files</b></div>
                         </div>
                     </FileUploader>
-                    {localStore.product.images.length !== 0 &&
+                    {productEditorStore.editedProduct.images.length !== 0 &&
                         <div className='product-editor__images rcc'>
                             <img className='product-editor__main-image' src={getMainImg().url} />
                             <div className='product-editor__image-grid rlt'>
-                                {localStore.product.images.map(img => (
+                                {productEditorStore.editedProduct.images.map(img => (
                                     <div key={img.id} className={classNames('product-editor__image-grid-item', {
                                         'product-editor__image-grid-item_active': img.isMain
                                     })}>
@@ -305,10 +201,11 @@ const ProductEditor = observer(() => {
                     }
                 </div>
                 <div className='product-editor__chars'>
-                    <div className='product-editor__input-wrap rlc'>
-                        <div className='admin-general__input-title'>Название: </div>
-                        <input className='admin-general__input' placeholder='Введіть назву' value={localStore.product.title} onChange={(v) => localStore.product.title = v.target.value} />
-                    </div>
+                    <ProductEditorInput
+                        title='Название: '
+                        value={productEditorStore.editedProduct.title}
+                        onChange={onTitleChanged}
+                    />
                     <div className='product-editor__input-wrap rlc'>
                         <div className='admin-general__input-title'>Бренд: </div>
                         <Selector
@@ -317,42 +214,58 @@ const ProductEditor = observer(() => {
                             innerHint={true}
                             withInput={true}
                             withSearch={true}
-                            values={getBrandValues(products.brands ?? [])}
-                            onSelect={(key, value) => localStore.product.brand = key}
-                            onChange={(value) => localStore.product.brand = value}
+                            values={getBrandValues(productEditorStore.category.allBrands ?? [])}
+                            onSelect={(key, value) => productEditorStore.editedProduct.brand = key}
+                            onChange={onBrandChanged}
                         />
                     </div>
                     <div className='product-editor__input-wrap rlc'>
                         <div className='admin-general__input-title'>Описание: </div>
-                        <textarea className='admin-general__input admin-general__input_textarea' placeholder='Введіть опис' value={localStore.product.description} onChange={(v) => localStore.product.description = v.target.value} />
+                        <textarea className='admin-general__input admin-general__input_textarea' placeholder='Введіть опис'
+                            value={productEditorStore.editedProduct.description} onChange={onDescriptionChanged} />
                     </div>
-                    <div className='product-editor__input-wrap rlc'>
-                        <div className='admin-general__input-title'>Цена: </div>
-                        <input type="number" step={0.01} onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.price ?? ''} onChange={(v) => localStore.product.price = Number(v.target.value)} />
-                    </div>
-                    <div className='product-editor__input-wrap rlc'>
-                        <div className='admin-general__input-title'>Прошлая цена: </div>
-                        <input type="number" step={0.01} onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.oldPrice} onChange={(v) => localStore.product.oldPrice = Number(v.target.value)} />
-                    </div>
+                    <ProductEditorInput
+                        title='Цена: '
+                        type="number"
+                        step={0.01}
+                        value={productEditorStore.editedProduct.price}
+                        onChange={onPriceChanged}
+                    />
+                    <ProductEditorInput
+                        title='Прошлая цена: '
+                        type="number"
+                        step={0.01}
+                        value={productEditorStore.editedProduct.oldPrice}
+                        onChange={onOldPriceChanged}
+                    />
                     <div className='product-editor__input-wrap rlc'>
                         <div className='admin-general__input-title'>Количество: </div>
-                        {localStore.product.count !== undefined ?
-                            <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.count} onChange={(v) => localStore.product.count = Number(v.target.value)} />
+                        {productEditorStore.editedProduct.count !== undefined ?
+                            <input
+                                className='admin-general__input'
+                                type="number"
+                                onWheel={(e) => e.currentTarget.blur()}
+                                min={0}
+                                value={productEditorStore.editedProduct.count}
+                                onChange={onAmountChanged}
+                            />
                             :
                             <div className='admin-general__input'>Загрузка ...</div>
                         }
                     </div>
-                    <div className='product-editor__input-wrap rlc'>
-                        <div className='admin-general__input-title'>Количество на заказ: </div>
-                        <input type="number" onWheel={(e) => e.currentTarget.blur()} min={0} className='admin-general__input' value={localStore.product.maxByOrder} onChange={(v) => localStore.product.maxByOrder = Number(v.target.value)} />
-                    </div>
+                    <ProductEditorInput
+                        title='Количество на заказ:  '
+                        type="number"
+                        value={productEditorStore.editedProduct.maxByOrder}
+                        onChange={onMaxByOrderChange}
+                    />
                     <div className='product-editor__input-wrap rlc'>
                         <div className='admin-general__input-title'>Новый ?: </div>
-                        <Checkbox checked={localStore.product.isNew} onChange={toggleIsNew} />
+                        <Checkbox checked={productEditorStore.editedProduct.isNew} onChange={toggleIsNew} />
                     </div>
                     <div className='admin-general__subtitle'>Характеристики</div>
                     <ul className='product-editor__attributes clc'>
-                        {localStore.product.attributes.map(attr => (
+                        {productEditorStore.editedProduct.attributes.map(attr => (
                             <li key={attr.name} className='product-editor__chars-editor product-editor__input-wrap rlc'>
                                 <div className='admin-general__input-title'>{attr.name}:</div>
                                 <Selector
@@ -372,18 +285,19 @@ const ProductEditor = observer(() => {
                     </ul>
                 </div>
                 <div className={classNames('admin-general__action-btn admin-general__action-btn_accept ccc', {
-                    "admin-general__action-btn_inactive": !validate()
+                    "admin-general__action-btn_inactive": !productEditorStore.isValid
                 })} onClick={onAccept}>Сохранить</div>
-                {localStore.product.id !== -1 && <div className={'admin-general__action-btn admin-general__action-btn_delete ccc'} onClick={onDelete}>Удалить</div>}
+                {productEditorStore.editedProduct.id !== -1 &&
+                    <div className={'admin-general__action-btn admin-general__action-btn_delete ccc'} onClick={onDelete}>Удалить</div>}
             </div>
             <div className='admin-general__line'></div>
             <div className='admin-general__subtitle'>Предпросмотр</div>
             <div className='product-editor__prev rct'>
                 <div className='product-editor__prev-product product-editor__prev-product_quick-view'>
-                    <ProductCard product={localStore.product} type='full-view' />
+                    <ProductCard product={productEditorStore.editedProduct} type='full-view' />
                 </div>
                 <div className='product-editor__prev-product product-editor__prev-product_small'>
-                    <ProductCard product={localStore.product} type='small' />
+                    <ProductCard product={productEditorStore.editedProduct} type='small' />
                 </div>
             </div>
         </div>
