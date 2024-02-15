@@ -1,13 +1,12 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { axiosInstance } from ".";
+import { AxiosError, AxiosResponse } from "axios";
 
 export class Service {
-    protected readonly API_URL: string;
+    protected readonly apiUrl: string;
     protected errorMessage: string;
     protected errorCode?: number;
 
     constructor(apiUrl: string) {
-        this.API_URL = apiUrl;
+        this.apiUrl = apiUrl;
         this.errorMessage = '';
     }
 

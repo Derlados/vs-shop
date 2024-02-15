@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { axiosInstance, headersJSON } from "..";
+import { axiosInstance, headersAuthJson } from "..";
 import { PageElements } from "../../lib/types/PageElements";
 import { OrderSorts } from "../../store/order";
 import { IOrder, OrderStatus } from "../../types/IOrder";
@@ -17,7 +17,7 @@ class OrderService extends Service {
             orderProducts: order.orderProducts.map(op => { return { id: op.product.id, count: op.count } })
         }
 
-        const data = await this.execute<IOrder>(axiosInstance.post(this.API_URL, body, { headers: headersJSON() }));
+        const data = await this.execute<IOrder>(axiosInstance.post(this.apiUrl, body, { headers: headersAuthJson() }));
         return data;
     }
 
@@ -30,20 +30,8 @@ class OrderService extends Service {
             search: search ? encodeURI(search) : undefined
         }
 
-        const { data } = await axiosInstance.get<PageElements<IOrder>>(this.API_URL, { params: params, headers: headersJSON() });
+        const { data } = await axiosInstance.get<PageElements<IOrder>>(this.apiUrl, { params: params, headers: headersAuthJson() });
         data.elements.forEach(order => order.createdAt = new Date(order.createdAt));
-        return data;
-    }
-
-    async changeOrderStatus(id: number, newStatus: OrderStatus): Promise<OrderStatus> {
-        const body = { status: newStatus };
-        const { data } = await axiosInstance.put(`${this.API_URL}/${id}/status`, body, { headers: headersJSON() });
-        return data.updatedStatus;
-    }
-
-    async deleteSelectedOrders(ids: number[]): Promise<void> {
-        const body = { toDeleteIds: ids }
-        const { data } = await this.execute(axiosInstance.put(this.API_URL, body, { headers: headersJSON() }));
         return data;
     }
 }

@@ -65,5 +65,5 @@ server/.gitignore
 
 templates.txt
 passwords.txt
-
-/server/static
+magento/
+server/static/
