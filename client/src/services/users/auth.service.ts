@@ -10,7 +10,7 @@ class CategoryService extends Service {
                 email: email,
                 password: password
             }
-            const { data } = await axiosInstance.post(`${this.API_URL}/login`, body);
+            const { data } = await axiosInstance.post(`${this.apiUrl}/login`, body);
             return data;
         } catch (e) {
             this.errorHandler(e);

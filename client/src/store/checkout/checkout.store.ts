@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import orderService from "../../services/order/order.service";
-import sessionCartService from "../../services/session-cart/session-cart.service";
+import sessionCartService from "../../services/cart/cart.service";
 import { ICartProduct } from "../../types/ICartProduct";
 import { IPayment, OrderStatus } from "../../types/IOrder";
 import { REGEX } from "../../values/regex";

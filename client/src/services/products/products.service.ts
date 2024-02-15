@@ -1,7 +1,6 @@
-import { axiosInstance, headersJSON } from "..";
+import { axiosInstance, headersAuthJson } from "..";
 import { SortType } from "../../enums/SortType.enum";
 import filterUrlTransformer from "../../helpers/FilterUrlTransformer";
-import { IImage } from "../../types/IImage";
 import { IProduct } from "../../types/IProduct";
 import { Service } from "../service";
 
@@ -18,12 +17,12 @@ export interface FilterOptions {
 class ProductService extends Service {
 
     async getAllProducts(): Promise<IProduct[]> {
-        const { data } = await axiosInstance.get<IProduct[]>(this.API_URL, { headers: headersJSON() });
+        const { data } = await axiosInstance.get<IProduct[]>(this.apiUrl, { headers: headersAuthJson() });
         return data;
     }
 
     async getProductsByCategory(categoryId: number, filters?: FilterOptions): Promise<IProduct[]> {
-        const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/category=${categoryId}`, {
+        const { data } = await axiosInstance.get<IProduct[]>(`${this.apiUrl}/category=${categoryId}`, {
             params: {
                 page: filters?.page ? filters.page - 1 : null,
                 search: filters?.search ? encodeURI(filters.search) : null,
@@ -32,23 +31,23 @@ class ProductService extends Service {
                 brands: filters?.brands && filters?.brands?.length != 0 ? filterUrlTransformer.transformArrayToUrl(filters.brands) : null,
                 filter: filters?.filter ? filterUrlTransformer.transformAttrMapToUrl(filters?.filter) : null
             },
-            headers: headersJSON()
+            headers: headersAuthJson()
         });
         return data;
     }
 
     async getProductsBySeller(sellerId: number): Promise<IProduct[]> {
-        const { data } = await axiosInstance.get<IProduct[]>(`${this.API_URL}/seller/${sellerId}`, { headers: headersJSON() });
+        const { data } = await axiosInstance.get<IProduct[]>(`${this.apiUrl}/seller/${sellerId}`, { headers: headersAuthJson() });
         return data;
     }
 
     async getProductById(productId: number): Promise<IProduct> {
-        const { data } = await axiosInstance.get<IProduct>(`${this.API_URL}/${productId}`, { headers: headersJSON() });
+        const { data } = await axiosInstance.get<IProduct>(`${this.apiUrl}/${productId}`, { headers: headersAuthJson() });
         return data;
     }
 
     async getBestsellers(): Promise<IProduct[]> {
-        const { data } = await axiosInstance.get(`${this.API_URL}/bestsellers`, { headers: headersJSON() });
+        const { data } = await axiosInstance.get(`${this.apiUrl}/bestsellers`, { headers: headersAuthJson() });
         return data;
     }
 
@@ -57,69 +56,19 @@ class ProductService extends Service {
             text: encodeURI(text)
         }
 
-        const { data } = await axiosInstance.get(`${this.API_URL}/search`, { params: params, headers: headersJSON() });
+        const { data } = await axiosInstance.get(`${this.apiUrl}/search`, { params: params, headers: headersAuthJson() });
         return data;
     }
 
     async getNewProducts(): Promise<IProduct[]> {
-        const { data } = await axiosInstance.get(`${this.API_URL}/new`, { headers: headersJSON() });
+        const { data } = await axiosInstance.get(`${this.apiUrl}/new`, { headers: headersAuthJson() });
         return data;
     }
 
     async getProductCount(id: number): Promise<number> {
-        const { data } = await axiosInstance.get(`${this.API_URL}/${id}/count`, { headers: headersJSON() });
+        const { data } = await axiosInstance.get(`${this.apiUrl}/${id}/count`, { headers: headersAuthJson() });
         return data;
     }
-
-    async addProducts(product: IProduct): Promise<IProduct> {
-        const { data } = await axiosInstance.post<IProduct>(`${this.API_URL}`, this.getProductDto(product), { headers: headersJSON() });
-        return data;
-    }
-
-    async editProduct(id: number, product: IProduct): Promise<IProduct> {
-        const { data } = await axiosInstance.put<IProduct>(`${this.API_URL}/${id}`, this.getProductDto(product), { headers: headersJSON() });
-        return data;
-    }
-
-    async editProductImages(id: number, images: File[], deletedImagesId?: number[], newMainImageId?: number): Promise<IImage[]> {
-        const formData = new FormData();
-        for (const image of images) {
-            formData.append('images', image);
-        }
-
-        if (deletedImagesId) {
-            for (const id of deletedImagesId) {
-                formData.append('deletedImagesId[]', id.toString());
-            }
-        }
-        if (newMainImageId) {
-            formData.append('newMainImageId', newMainImageId.toString());
-        }
-
-        const { data } = await axiosInstance.put<IImage[]>(`${this.API_URL}/${id}/images`, formData, { headers: headersJSON() });
-        return data;
-    }
-
-    async setBestsellerStatus(id: number) {
-        const { data } = await axiosInstance.put(`${this.API_URL}/${id}/bestseller`, {}, { headers: headersJSON() });
-        return data;
-    }
-
-    async deleteProduct(id: number) {
-        const { data } = await axiosInstance.delete<IProduct>(`${this.API_URL}/${id}`, { headers: headersJSON() });
-        return data;
-    }
-
-    async deleteBestsellerStatus(id: number) {
-        const { data } = await axiosInstance.delete(`${this.API_URL}/${id}/bestseller`, { headers: headersJSON() });
-        return data;
-    }
-
-    private getProductDto(p: IProduct) {
-        const { id, images, discountPercent, userId, availability, ...product } = p;
-        return product;
-    }
-
 }
 
 export default new ProductService('/products');

@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import sessionCartService from "../../services/session-cart/session-cart.service";
+import sessionCartService from "../../services/cart/cart.service";
 import { ICartProduct } from "../../types/ICartProduct";
 import { IProduct } from "../../types/IProduct";
 

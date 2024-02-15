@@ -1,5 +1,5 @@
 import axios from "axios";
-import { axiosInstance, headers, headersJSON } from "..";
+import { axiosInstance, headersAuth, headersAuthJson } from "..";
 import { IBanner } from "../../types/ILargeBanner";
 import { ShopInfo } from "../../types/ShopInfo";
 import { Service } from "../service";
@@ -10,12 +10,12 @@ import { IMail } from "../../types/IMail";
 class ShopService extends Service {
 
     async getShopInfo(): Promise<ShopInfo> {
-        const { data } = await axiosInstance.get(`${this.API_URL}/all-info`);
+        const { data } = await axiosInstance.get(`${this.apiUrl}/all-info`);
         return data;
     }
 
     async sendMail(mail: IMail) {
-        await this.execute(axiosInstance.post(`${this.API_URL}/email`, mail));
+        await this.execute(axiosInstance.post(`${this.apiUrl}/email`, mail));
     }
 
     async addBanner(banner: IBanner, img: File): Promise<IBanner> {
@@ -24,7 +24,7 @@ class ShopService extends Service {
         const formData = serialize(bannerData);
         formData.append('image', img);
 
-        const { data } = await axiosInstance.post(`${this.API_URL}/banner`, formData, { headers: headers() });
+        const { data } = await axiosInstance.post(`${this.apiUrl}/banner`, formData, { headers: headersAuth() });
         return data;
     }
 
@@ -36,12 +36,12 @@ class ShopService extends Service {
             formData.append('image', img);
         }
 
-        const { data } = await axiosInstance.put(`${this.API_URL}/banner/${id}`, formData, { headers: headers() });
+        const { data } = await axiosInstance.put(`${this.apiUrl}/banner/${id}`, formData, { headers: headersAuth() });
         return data;
     }
 
     async deleteBanner(id: number) {
-        const { data } = await axiosInstance.delete(`${this.API_URL}/banner/${id}`, { headers: headers() });
+        const { data } = await axiosInstance.delete(`${this.apiUrl}/banner/${id}`, { headers: headersAuth() });
         return data;
     }
 
@@ -49,7 +49,7 @@ class ShopService extends Service {
         const formData = new FormData();
         formData.append('image', img);
 
-        const { data } = await axiosInstance.put(`${this.API_URL}/small-banner`, formData, { headers: headers() });
+        const { data } = await axiosInstance.put(`${this.apiUrl}/small-banner`, formData, { headers: headersAuth() });
         return data;
 
     }
@@ -59,7 +59,7 @@ class ShopService extends Service {
             contacts: contacts
         }
 
-        const { data } = await axiosInstance.put(`${this.API_URL}/contacts`, body, { headers: headersJSON() });
+        const { data } = await axiosInstance.put(`${this.apiUrl}/contacts`, body, { headers: headersAuthJson() });
         return data;
     }
 
