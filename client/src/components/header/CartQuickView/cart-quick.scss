@@ -3,234 +3,234 @@
 
 
 .cart-quick {
+  width: 100%;
+  min-height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.534);
+  z-index: 99;
+  top: 0;
+  left: 0;
+  transition: 0.25s;
+
+
+  &_hide {
+    pointer-events: none;
+    background-color: transparent;
+  }
+
+  &_hide>&__container {
+    right: -400px;
+
+    @media (max-width: $mobile-vertical) {
+      right: -100%;
+    }
+  }
+
+  &__container {
     width: 100%;
+    max-width: 400px;
+    height: 100%;
     min-height: 100vh;
     position: fixed;
-    background-color: rgba(0, 0, 0, 0.534);
-    z-index: 99;
     top: 0;
-    left: 0;
+    right: 0;
+    z-index: 99;
+    background-color: white;
+    padding: 20px;
     transition: 0.25s;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 
-
-    &_hide {
-        pointer-events: none;
-        background-color: transparent;
+    &::-webkit-scrollbar {
+      display: none;
     }
 
-    &_hide>&__container {
-        right: -400px;
+    @media (max-width: $mobile-vertical) {
+      max-width: 100%;
+    }
+  }
 
-        @media (max-width: $mobile-vertical) {
-            right: -100%;
-        }
+  &__head {
+    width: 100%;
+    justify-content: space-between !important;
+    margin-bottom: 30px;
+  }
+
+  &__head-text {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  &__close {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    cursor: pointer;
+
+    &::before {
+      position: absolute;
+      top: calc(50% - 1px);
+      right: 0;
+      width: 20px;
+      height: 2px;
+      content: "";
+      -webkit-transition: all .5s ease 0s;
+      transition: all .5s ease 0s;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+      background-color: $primary;
+
     }
 
-    &__container {
-        width: 100%;
-        max-width: 400px;
-        height: 100%;
-        min-height: 100vh;
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: 99;
-        background-color: white;
-        padding: 20px;
-        transition: 0.25s;
-        overflow-y: scroll;
-        -ms-overflow-style: none;
-        /* IE and Edge */
-        scrollbar-width: none;
-        /* Firefox */
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        @media (max-width: $mobile-vertical) {
-            max-width: 100%;
-        }
+    &::after {
+      position: absolute;
+      top: calc(50% - 1px);
+      right: 0;
+      width: 20px;
+      height: 2px;
+      content: "";
+      -webkit-transition: all .5s ease 0s;
+      transition: all .5s ease 0s;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      background-color: $primary;
     }
 
-    &__head {
-        width: 100%;
-        justify-content: space-between !important;
-        margin-bottom: 30px;
+    &_anim {
+
+      &:hover::before,
+      &:hover::after {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
     }
 
-    &__head-text {
-        font-size: 18px;
-        font-weight: bold;
+    &_delete {
+      height: 16px;
+      width: 16px;
+
+      &:hover::before,
+      &:hover::after {
+        background-color: rgb(255, 103, 103);
+      }
+
+      &::before {
+        width: 14px;
+        background-color: black;
+      }
+
+      &::after {
+        width: 14px;
+        background-color: black;
+      }
     }
+  }
 
-    &__close {
-        height: 20px;
-        width: 20px;
-        position: relative;
-        cursor: pointer;
+  &__product-list {
+    width: 100%;
+    list-style-type: none;
+  }
 
-        &::before {
-            position: absolute;
-            top: calc(50% - 1px);
-            right: 0;
-            width: 20px;
-            height: 2px;
-            content: "";
-            -webkit-transition: all .5s ease 0s;
-            transition: all .5s ease 0s;
-            -webkit-transform: rotate(45deg);
-            transform: rotate(45deg);
-            background-color: $primary;
+  &__product {
+    position: relative;
+    width: 100%;
+    height: max-content;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
 
-        }
-
-        &::after {
-            position: absolute;
-            top: calc(50% - 1px);
-            right: 0;
-            width: 20px;
-            height: 2px;
-            content: "";
-            -webkit-transition: all .5s ease 0s;
-            transition: all .5s ease 0s;
-            -webkit-transform: rotate(-45deg);
-            transform: rotate(-45deg);
-            background-color: $primary;
-        }
-
-        &_anim {
-
-            &:hover::before,
-            &:hover::after {
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-        }
-
-        &_delete {
-            height: 16px;
-            width: 16px;
-
-            &:hover::before,
-            &:hover::after {
-                background-color: rgb(255, 103, 103);
-            }
-
-            &::before {
-                width: 14px;
-                background-color: black;
-            }
-
-            &::after {
-                width: 14px;
-                background-color: black;
-            }
-        }
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      transform: scale(1);
+      height: 1px;
+      bottom: 0;
+      left: 0;
+      background-color: $primary-gray;
     }
+  }
 
-    &__product-list {
-        width: 100%;
-        list-style-type: none;
+  &__product-head {
+    justify-content: space-between !important;
+    padding-bottom: 10px;
+  }
+
+  &__product-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: solid 1px $primary-gray;
+    cursor: pointer;
+  }
+
+  &__product-desc {
+    padding-left: 20px;
+    flex: 1;
+  }
+
+  &__product-title {
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.4s;
+
+    &:hover {
+      color: $primary;
     }
+  }
 
-    &__product {
-        position: relative;
-        width: 100%;
-        height: max-content;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
+  &__product-count {
+    height: 40px;
+    font-size: 18px;
+    color: gray;
+  }
 
-        &::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            transform: scale(1);
-            height: 1px;
-            bottom: 0;
-            left: 0;
-            background-color: $primary-gray;
-        }
+  &__product-price {
+    font-size: 18px;
+    color: $primary;
+  }
+
+  &__price {
+    width: 100%;
+    justify-content: space-between !important;
+    margin-bottom: 25px;
+  }
+
+  &__price-text {
+    font-weight: bold;
+  }
+
+  &__checkout {
+    width: 100%;
+    background-color: $primary;
+    padding: 15px;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.4s;
+
+    &:hover {
+      background-color: $hover-primary;
     }
+  }
 
-    &__product-head {
-        justify-content: space-between !important;
-        padding-bottom: 10px;
-    }
+  &__empty {
+    height: 100%;
+  }
 
-    &__product-img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border: solid 1px $primary-gray;
-        cursor: pointer;
-    }
+  &__cart-img {
+    width: 250px;
+    height: 250px;
+    margin-bottom: 25px;
+    mask-size: contain;
+    mask-image: url("../../../assets/images/shopping-bag.svg");
+    background-color: gray;
+  }
 
-    &__product-desc {
-        padding-left: 20px;
-        flex: 1;
-    }
-
-    &__product-title {
-        font-size: 16px;
-        cursor: pointer;
-        transition: 0.4s;
-
-        &:hover {
-            color: $primary;
-        }
-    }
-
-    &__product-count {
-        height: 40px;
-        font-size: 18px;
-        color: gray;
-    }
-
-    &__product-price {
-        font-size: 18px;
-        color: $primary;
-    }
-
-    &__price {
-        width: 100%;
-        justify-content: space-between !important;
-        margin-bottom: 25px;
-    }
-
-    &__price-text {
-        font-weight: bold;
-    }
-
-    &__checkout {
-        width: 100%;
-        background-color: $primary;
-        padding: 15px;
-        color: white;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: 0.4s;
-
-        &:hover {
-            background-color: $hover-primary;
-        }
-    }
-
-    &__empty {
-        height: 100%;
-    }
-
-    &__cart-img {
-        width: 250px;
-        height: 250px;
-        margin-bottom: 25px;
-        mask-size: contain;
-        mask-image: url("../../../assets/images/shopping-bag.svg");
-        background-color: gray;
-    }
-
-    &__no-products {
-        font-size: 20px;
-        color: gray;
-    }
+  &__no-products {
+    font-size: 20px;
+    color: gray;
+  }
 }

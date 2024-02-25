@@ -3,7 +3,7 @@ import React, { FC, useRef } from 'react';
 import './product-modal.scss';
 import ProductCard from '../ProductCard';
 import classNames from 'classnames';
-import { IProduct } from '../../../types/IProduct';
+import { IProduct } from '../../../types/magento/IProduct';
 
 interface ProductQuickModalProps {
     isOpen: boolean;

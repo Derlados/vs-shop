@@ -29,7 +29,28 @@ export interface IProduct {
   }[];
   tier_prices: any[];
   custom_attributes: {
-    attribute_code: "image" | "small_image" | "thumbnail" | "swatch_image" | "page_layout" | "options_container" | "url_key" | "msrp_display_actual_price_type" | "gift_message_available" | "required_options" | "has_options" | "meta_title" | "meta_keyword" | "meta_description" | "tax_class_id" | "category_ids" | string;
+    attribute_code:
+    "image" |
+    "small_image" |
+    "thumbnail" |
+    "swatch_image" |
+    "page_layout" |
+    "options_container" |
+    "url_key" |
+    "msrp_display_actual_price_type" |
+    "gift_message_available" |
+    "required_options" |
+    "has_options" |
+    "meta_title" |
+    "meta_keyword" |
+    "meta_description" |
+    "tax_class_id" |
+    "category_ids" |
+    "simple_description" |
+    "special_price" |
+    "news_from_date" |
+    "news_to_date" |
+    "manufacturer";
     value: string | number | string[];
   }[];
 }

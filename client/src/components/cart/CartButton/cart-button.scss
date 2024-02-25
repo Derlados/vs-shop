@@ -1,82 +1,82 @@
 @import '../../../styles/constants/colors.scss';
 
 .cart-button {
-    border-radius: 5px;
-    padding: 13px;
-    background-color: #ebebeb;
-    transition: 0.4s;
-    cursor: pointer;
-    transition: 0.4s;
+  border-radius: 5px;
+  padding: 13px;
+  background-color: #ebebeb;
+  transition: 0.4s;
+  cursor: pointer;
+  transition: 0.4s;
 
-    &_inactive {
-        cursor: default;
-    }
+  &_inactive {
+    cursor: default;
+  }
 
-    &_primary {
-        background-color: $primary;
-
-        @media (hover: hover) {
-            &:hover {
-                background-color: $primary-dark  !important;
-            }
-        }
-
-    }
-
-    &_primary>&__btn {
-        color: white;
-    }
-
-    &_primary>&__img {
-        background-color: white;
-    }
-
-    &_added {
-        cursor: default;
-        background-color: $primary-dark;
-        pointer-events: none;
-    }
-
-    &_added>&__btn {
-        color: white;
-    }
-
-    &_added>&__img {
-        background-color: white;
-    }
+  &_primary {
+    background-color: $primary;
 
     @media (hover: hover) {
-        &:hover {
-            background-color: $primary;
-        }
+      &:hover {
+        background-color: $primary-dark !important;
+      }
     }
 
+  }
 
-    &:hover>&__btn {
-        color: white;
+  &_primary>&__btn {
+    color: white;
+  }
+
+  &_primary>&__img {
+    background-color: white;
+  }
+
+  &_added {
+    cursor: default;
+    background-color: $primary-dark;
+    pointer-events: none;
+  }
+
+  &_added>&__btn {
+    color: white;
+  }
+
+  &_added>&__img {
+    background-color: white;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: $primary;
     }
-
-    &:hover>&__img {
-        background-color: white;
-    }
-
-    &__img {
-        width: 18px;
-        height: 19px;
-        mask-size: contain;
-        mask-image: url('../../../assets/images/shopping-bag.svg');
-        mask-repeat: no-repeat;
-        background-color: $primary-dark;
-        transition: 0.4s;
-    }
-
-    &__btn {
-        font-size: 14px;
-        line-height: 18px;
-        margin-left: 10px;
-        transition: 0.4s;
-        color: $primary-dark;
+  }
 
 
-    }
+  &:hover>&__btn {
+    color: white;
+  }
+
+  &:hover>&__img {
+    background-color: white;
+  }
+
+  &__img {
+    width: 18px;
+    height: 19px;
+    mask-size: contain;
+    mask-image: url('../../../assets/images/shopping-bag.svg');
+    mask-repeat: no-repeat;
+    background-color: $primary-dark;
+    transition: 0.4s;
+  }
+
+  &__btn {
+    font-size: 14px;
+    line-height: 18px;
+    margin-left: 10px;
+    transition: 0.4s;
+    color: $primary-dark;
+
+
+  }
 }
