@@ -42,7 +42,7 @@ class CartStore {
         }
     }
 
-    async addProductToCart(sku: string, quantity: number) {
+    async addProduct(sku: string, quantity: number) {
         runInAction(() => this.status = 'loading');
 
         try {
@@ -58,7 +58,7 @@ class CartStore {
         }
     }
 
-    async updateItemInCart(itemId: number, quantity: number) {
+    async updateProduct(itemId: number, quantity: number) {
         runInAction(() => this.status = 'loading');
 
         try {
@@ -74,7 +74,7 @@ class CartStore {
         }
     }
 
-    async removeItemFromCart(itemId: number) {
+    async removeProduct(itemId: number) {
         runInAction(() => this.status = 'loading');
 
         try {

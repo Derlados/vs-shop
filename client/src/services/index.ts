@@ -6,7 +6,7 @@ export const axiosNVInstance = axios.create({
 })
 
 export const axiosInstance = axios.create({
-    baseURL: 'http://localhost/rest/V1'
+    baseURL: 'http://guessdraw.fun/rest/V1'
     // baseURL: 'https://ka-shop.herokuapp.com/api'
     // baseURL: 'https://vs-shop-test.herokuapp.com/api'
     // baseURL: 'https://vs-shop.herokuapp.com/api'

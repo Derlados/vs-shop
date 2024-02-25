@@ -22,7 +22,7 @@ export interface IProduct {
 }
 
 export enum AvailableStatus {
-    IN_STOCK = 'В наявності',
-    IN_STOKE_FEW = 'Закінчується',
-    OUT_OF_STOCK = 'Немає в наявності'
+    OUT_OF_STOCK = 0,
+    IN_STOCK = 1,
+    IN_STOKE_FEW = 2
 }

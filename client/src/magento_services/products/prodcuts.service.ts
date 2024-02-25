@@ -1,5 +1,6 @@
 import { axiosInstance } from "../../services";
 import { Service } from "../../services/service";
+import { IManufacturer } from "../../types/magento/IManufacturer";
 import { IProduct } from "../../types/magento/IProduct";
 
 class ProductsService extends Service {
@@ -22,6 +23,11 @@ class ProductsService extends Service {
       ]
     };
     return await this.execute(axiosInstance.get<IProduct[]>(`${this.apiUrl}`, { params: { searchCriteria } }));
+  }
+
+  async getManufacturers(): Promise<IManufacturer[]> {
+    const manufacturers = await this.execute(axiosInstance.get<IManufacturer[]>(`${this.apiUrl}/attributes/manufacturer/options`));
+    return manufacturers.filter(manufacturer => manufacturer.value !== '');
   }
 }
 

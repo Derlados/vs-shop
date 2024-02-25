@@ -9,29 +9,27 @@ import cart from './store/cart/cart'
 import shop from './store/shop'
 
 const Main = observer(() => {
-
-
-    if (!shop.isInit || !cart.isInit) {
-        return (
-            <div className='app__main ccc'>
-                <Loader />
-            </div>
-        )
-    }
-
+  if (!shop.isInit || !cart.isInit) {
     return (
-        <div className='app__main cct'>
-            <ScrollToTop />
-            <Header />
-            <div className='app__content ccc'>
-                <div className='app__page cct'>
-                    <Outlet />
-                </div>
-            </div>
-            <Footer />
-            <ButtonUp />
-        </div>
+      <div className='app__main ccc'>
+        <Loader />
+      </div>
     )
-});
+  }
+
+  return (
+    <div className='app__main cct'>
+      <ScrollToTop />
+      <Header />
+      <div className='app__content ccc'>
+        <div className='app__page cct'>
+          <Outlet />
+        </div>
+      </div>
+      <Footer />
+      <ButtonUp />
+    </div>
+  )
+})
 
 export default Main
