@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { AvailableStatus } from '../../../types/IProduct';
 import { ProductCardProps } from '../ProductCard';
 import { IProduct } from '../../../types/magento/IProduct';
-import cartStore from '../../../magento_stores/cart/cart.store';
+import cartStore from '../../../stores/cart/cart.store';
 import mediaHelper from '../../../helpers/media.helper';
 import productHelper from '../../../helpers/product.helper';
 import catalogStore from '../../../magento_stores/catalog/catalog.store';

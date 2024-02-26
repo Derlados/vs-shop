@@ -1,48 +1,40 @@
-import { axiosInstance, headersAuthJson } from "..";
-import { ICartProduct } from "../../types/ICartProduct";
-import { Service } from "../service";
+import { axiosInstance, headersAuthJson, headersJson } from "..";
+import { Service } from "../../services/service";
+import { ICart } from "../../types/magento/ICart";
+import { ITotals } from "../../types/magento/ITotals";
+import { IUpdateItemRes } from "./dto/update-item-res.dto";
 
 class CartService extends Service {
 
-    async getCart(cartId: string): Promise<ICartProduct[]> {
-        const data = await this.execute(axiosInstance.get<ICartProduct[]>(`${this.apiUrl}/${cartId}`, { headers: headersAuthJson() }));
-        return data;
+  async createCartId(): Promise<string> {
+    return await this.execute(axiosInstance.get<string>(this.apiUrl));
+  }
+
+  async getCart(cartId: string): Promise<ICart> {
+    return await this.execute(axiosInstance.get<ICart>(`${this.apiUrl}/${cartId}`));
+  }
+
+  async getTotals(cartId: string): Promise<ITotals> {
+    return await this.execute(axiosInstance.get(`${this.apiUrl}/${cartId}/totals`));
+  }
+
+  async addItem(cartId: string, sku: string, qty: number): Promise<IUpdateItemRes> {
+    const body = {
+      cartItem: { sku, qty }
     }
+    return await this.execute(axiosInstance.post(`${this.apiUrl}/${cartId}/items`, body, { headers: headersJson }));
+  }
 
-    async createCart(): Promise<string> {
-        const { data } = await axiosInstance.post<string>(`${this.apiUrl}`, { headers: headersAuthJson() });
-        return data;
+  async updateItem(cartId: string, itemId: number, qty: number): Promise<IUpdateItemRes> {
+    const body = {
+      cartItem: { qty }
     }
+    return await this.execute(axiosInstance.put(`${this.apiUrl}/${cartId}/items/${itemId}`, body, { headers: headersJson }));
+  }
 
-    async addProduct(cartId: string, productId: number, count: number) {
-        const body = {
-            productId: productId,
-            count: count
-        }
-
-        const { data } = await axiosInstance.post(`${this.apiUrl}/${cartId}/products`, body, { headers: headersAuthJson() });
-        return data;
-    }
-
-    async editProduct(cartId: string, productId: number, count: number) {
-        const body = {
-            productId: productId,
-            count: count
-        }
-
-        const { data } = await axiosInstance.put(`${this.apiUrl}/${cartId}/products`, body, { headers: headersAuthJson() });
-        return data;
-    }
-
-    async deleteProduct(cartId: string, productId: number) {
-        const { data } = await axiosInstance.delete(`${this.apiUrl}/${cartId}/products/${productId}`, { headers: headersAuthJson() });
-        return data;
-    }
-
-    async clearCart(cartId: string) {
-        const { data } = await axiosInstance.delete(`${this.apiUrl}/${cartId}/clear`, { headers: headersAuthJson() });
-        return data;
-    }
+  async deleteItem(cartId: string, itemId: number): Promise<boolean> {
+    return await this.execute(axiosInstance.delete(`${this.apiUrl}/${cartId}/items/${itemId}`));
+  }
 }
 
-export default new CartService('/session-cart');
+export default new CartService('/guest-carts');

@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react-lite';
-import shop from '../../store/shop';
 import './footer.scss';
 
 const Footer = observer(() => {
@@ -11,13 +10,13 @@ const Footer = observer(() => {
         <div className='footer__block rcc'>
           <div className='footer__text'>Соц. мережі:</div>
           <ul className='footer__contacts rcc'>
-            {shop.contacts.map(c => (
+            {/* {shop.contacts.map(c => (
               <li key={c.name} className='footer__contact-item'>
                 <a href={c.url}>
                   <div className={`footer__icon ${c.icon}`}></div>
                 </a>
               </li>
-            ))}
+            ))} */}
           </ul>
         </div>
         <div className='footer__block rlc'>

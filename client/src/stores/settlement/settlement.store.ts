@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
-import novaposhtaService from "../services/novaposhta/novaposhta.service";
-import { ISettlement } from "../types/ISettlement";
+import novaposhtaService from "../../services/novaposhta/novaposhta.service";
+import { ISettlement } from "../../types/ISettlement";
 
 class SettlementStore {
     settlements: ISettlement[];

@@ -1,5 +1,5 @@
 import axios from "axios";
-import userStore from "../store/user/user";
+// import userStore from "../store/user/user";
 
 export const axiosNVInstance = axios.create({
     baseURL: 'https://api.novaposhta.ua/v2.0/json/'
@@ -16,15 +16,15 @@ export const headersJson = {
     'Content-Type': 'application/json'
 };
 
-export const headersAuth = () => {
-    return {
-        Authorization: `Bearer ${userStore.token}`
-    };
-};
+// export const headersAuth = () => {
+//     return {
+//         Authorization: `Bearer ${userStore.token}`
+//     };
+// };
 
 export const headersAuthJson = () => {
     return {
-        Authorization: `Bearer ${userStore.token}`,
+        // Authorization: `Bearer ${userStore.token}`,
         'Content-Type': 'application/json'
     };
 };

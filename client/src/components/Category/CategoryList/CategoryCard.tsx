@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react'
 import { NavLink } from 'react-router-dom';
-import { ICategory } from '../../../types/ICategory';
 import { ICategoryList } from '../../../types/magento/ICategoryList';
 import { ROUTES } from '../../../values/routes';
 

@@ -5,11 +5,11 @@ import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
 import Loader from './lib/components/Loader/Loader'
 import ScrollToTop from './lib/components/ScrollToTop/ScrollToTop'
-import cart from './store/cart/cart'
-import shop from './store/shop'
+import cartStore from './stores/cart/cart.store'
+import catalogStore from './magento_stores/catalog/catalog.store'
 
 const Main = observer(() => {
-  if (!shop.isInit || !cart.isInit) {
+  if (cartStore.status === "initial" && catalogStore.status === "initial") {
     return (
       <div className='app__main ccc'>
         <Loader />

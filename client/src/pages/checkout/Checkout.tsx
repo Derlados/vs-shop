@@ -8,7 +8,7 @@ import cart from '../../store/cart/cart';
 import orders from '../../store/order';
 import { ISettlement } from '../../types/ISettlement';
 import { REGEX } from '../../values/regex';
-import settlement from '../../store/settlement';
+import settlement from '../../magento_stores/settlement/settlement.store';
 import Input from '../../lib/components/Input/Input';
 import { CheckoutStore, CheckoutStoreStatus } from '../../store/checkout/checkout.store';
 import { useEffect } from 'react';
