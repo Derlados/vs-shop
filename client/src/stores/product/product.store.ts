@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import prodcutsService from "../../magento_services/products/prodcuts.service";
+import prodcutsService from "../../services/products/prodcuts.service";
 import { IProduct } from "../../types/magento/IProduct";
 
 class ProductStore {

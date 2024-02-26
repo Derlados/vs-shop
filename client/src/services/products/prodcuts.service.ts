@@ -1,5 +1,5 @@
-import { axiosInstance } from "../../services";
-import { Service } from "../../services/service";
+import { axiosInstance } from "..";
+import { Service } from "../service";
 import { IManufacturer } from "../../types/magento/IManufacturer";
 import { IProduct } from "../../types/magento/IProduct";
 

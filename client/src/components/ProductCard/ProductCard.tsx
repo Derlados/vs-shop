@@ -7,7 +7,7 @@ import ProductLargeCard from './ProductLargeCard/ProductLargeCard';
 import ProductSmallCard from './ProductSmallCard/ProductSmallCard';
 import './product-card.scss';
 import { IProduct } from '../../types/magento/IProduct';
-import cartStore from '../../magento_stores/cart/cart.store';
+import cartStore from '../../stores/cart/cart.store';
 import catalogStore from '../../magento_stores/catalog/catalog.store';
 import productHelper from '../../helpers/product.helper';
 
@@ -51,7 +51,7 @@ const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize 
                 break;
             }
             case "update": {
-                updateCartItemQty(product, qty);
+                updateCartItemQty(product, qty ?? 1);
                 break;
             }
             case "delete": {

@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import categoriesService from "../../magento_services/categories/categories.service";
-import prodcutsService from "../../magento_services/products/prodcuts.service";
+import categoriesService from "../../services/categories/categories.service";
+import prodcutsService from "../../services/products/prodcuts.service";
 import { ICategoryList } from "../../types/magento/ICategoryList";
 import { IManufacturer } from "../../types/magento/IManufacturer";
 import { IProduct } from "../../types/magento/IProduct";
