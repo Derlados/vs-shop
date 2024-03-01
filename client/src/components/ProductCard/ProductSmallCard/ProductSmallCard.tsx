@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
-import CartButton from '../../Cart/CartButton/CartButton';
-import cart from '../../../store/cart/cart';
+import CartButton from '../../cart/CartButton/cart-button';
 import { ProductCardProps } from '../ProductCard';
 import { NavLink } from 'react-router-dom';
 import "aos/dist/aos.css";
@@ -9,6 +8,7 @@ import classNames from 'classnames';
 import { AvailableStatus } from '../../../types/IProduct';
 import { IProduct } from '../../../types/magento/IProduct';
 import productHelper from '../../../helpers/product.helper';
+import cartStore from '../../../stores/cart/cart.store';
 
 export interface SimpleProductCardProps extends ProductCardProps {
   containerSize?: "default" | "small";
@@ -54,7 +54,7 @@ const ProductSmallCard: FC<SimpleProductCardProps> = observer(({
           {product.status !== AvailableStatus.OUT_OF_STOCK &&
             <CartButton
               className={`product-card__cart-btn ${containerSize == 'default' ? '' : 'product-card__cart-btn_large'}`}
-              isActive={cart.findById(product.id) === undefined}
+              isActive={cartStore.totals.items.find(item => item.item_id == product.id) === undefined}
               onClick={() => updateCart('add', product)}
             />}
         </div>

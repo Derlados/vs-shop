@@ -1,16 +1,11 @@
-import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import { FC } from 'react';
-import products from '../../../../store/product'
-import { IProduct } from '../../../../types/IProduct';
 import CatalogSettings from '../CatalogSettings';
 import ProductQuickModal from '../../../../components/ProductCard/ProductQuickModal/ProductQuickModal';
 import ProductGrid from '../ProductGrid';
 import './catalog.scss';
 import { SortType } from '../../../../enums/SortType.enum';
-import searchStore from '../../../../store/search/search.store';
-
-const MAX_PRODUCTS_BY_PAGE = 24;
+import { IProduct } from '../../../../types/magento/IProduct';
 
 export enum ViewMode {
     GRID,
@@ -64,7 +59,13 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ products, selectedSo
                 onSelectViewMode={selectViewMode}
                 onOpenFilters={onOpenFilters}
             />
-            <ProductGrid products={products} onOpenQuickView={openQuickView} viewMode={localStore.selectedViewMode} maxPages={searchStore.filters.maxPages} onChangePage={onChangePage} />
+            <ProductGrid
+                products={products}
+                onOpenQuickView={openQuickView}
+                viewMode={localStore.selectedViewMode}
+                maxPages={20}
+                onChangePage={onChangePage}
+            />
         </div>
     )
 });

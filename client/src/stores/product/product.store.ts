@@ -3,13 +3,14 @@ import prodcutsService from "../../services/products/prodcuts.service";
 import { IProduct } from "../../types/magento/IProduct";
 
 class ProductStore {
-
     public status: "initial" | "loading" | "success" | "error";
-    public product: IProduct;
+    public product: IProduct | null;
     public relatedProducts: IProduct[];
 
     constructor() {
         makeAutoObservable(this);
+        this.status = "initial";
+        this.product = null;
     }
 
     async loadProduct(sku: string) {
@@ -20,7 +21,7 @@ class ProductStore {
 
             runInAction(() => {
                 this.product = product;
-                this.status = "success";
+                this.status = product ? "success" : "error";
             });
         } catch (error) {
             runInAction(() => this.status = "error");

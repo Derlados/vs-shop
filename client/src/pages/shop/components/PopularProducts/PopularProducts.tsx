@@ -1,33 +1,37 @@
-import React, { FC } from 'react'
-import { NavLink } from 'react-router-dom'
-import { IProduct } from '../../../../types/IProduct';
-import './popular-products.scss';
+import { FC } from 'react';
+import { NavLink } from 'react-router-dom';
+import productHelper from '../../../../helpers/product.helper';
+import { IProduct } from '../../../../types/magento/IProduct';
+import React from 'react';
 
 interface PopularProductsProps {
-    categoryRoute: string;
-    products: IProduct[];
+  categoryRoute: string;
+  products: IProduct[];
 }
 
 const PopularProducts: FC<PopularProductsProps> = ({ categoryRoute, products }) => {
-    return (
-        <div className='popular-products'>
-            <div className='popular-products__head'>Популярні товари</div>
-            <ul className='popular-products__list clc'>
-                {products.map(p => (
-                    <li key={p.id} className='popular-products__item rlc'>
-                        <NavLink to={`/${categoryRoute}/${p.id}`}>
-                            <img className='popular-products__img' src={p.images.find(img => img.isMain)?.url} alt={p.id.toString()} />
-                        </NavLink>
-                        <div className='popular-products__info clc'>
-                            <NavLink to={`/${categoryRoute}/${p.id}`} className='popular-products__title'>{p.title}</NavLink>
-                            <div className='popular-products__price'>{p.price}₴</div>
-                        </div>
-                    </li>
-                ))}
+  return (
+    <div className='popular-products'>
+      <div className='popular-products__head'>Популярні товари</div>
+      <ul className='popular-products__list clc'>
+        {products.map(product => (
+          <li key={product.id} className='popular-products__item rlc'>
+            <NavLink to={`/${categoryRoute}/${product.id}`} className='popular-products__link'>
+              <img className='popular-products__img' src={productHelper.getMainImage(product) ?? ""} alt={product.id.toString()} />
+            </NavLink>
+            <div className='popular-products__info clc'>
+              <NavLink
+                to={`/${categoryRoute}/${product.id}`}
+                className='popular-products__title'>
+                {product.name}
+              </NavLink>
+              <div className='popular-products__price'>{product.price}₴</div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-            </ul>
-        </div>
-    )
-}
-
-export default PopularProducts
+export default PopularProducts;

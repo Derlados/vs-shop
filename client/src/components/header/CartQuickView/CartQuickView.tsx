@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import cart from '../../../store/cart/cart';
 import './cart-quick.scss';
 import { ICartProduct } from '../../../types/ICartProduct';
-import { IProduct } from '../../../types/IProduct';
-import CartCountEditor from '../../Cart/CartCountEditor/CartCountEditor';
+import cartStore from '../../../stores/cart/cart.store';
+import { IProduct } from '../../../types/magento/IProduct';
+import CartCountEditor from '../../cart/CartCountEditor/CartCountEditor';
 
 interface CartQuickViewProps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
   const wrapperRef = useRef(null);
 
   const onDeleteProduct = (product: IProduct) => {
-    cart.deleteFromCart(product.id);
+    cartStore.removeProduct(product.id);
   }
 
   const handleClickOutside = (event: React.MouseEvent) => {
@@ -37,18 +37,8 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
     onClose();
   }
 
-  const incrementCount = (cartProduct: ICartProduct) => {
-    cart.changeCount(cartProduct.product.id, cartProduct.count + 1)
-  }
-
-  const decrementCount = (cartProduct: ICartProduct) => {
-    if (cartProduct.count > 1) {
-      cart.changeCount(cartProduct.product.id, cartProduct.count - 1)
-    }
-  }
-
-  const onChangeCount = (cartProduct: ICartProduct, newCount: number) => {
-    cart.changeCount(cartProduct.product.id, newCount)
+  const onChangeCount = (product: IProduct, newCount: number) => {
+    cartStore.updateProduct(product.id, newCount)
   }
 
 
@@ -61,24 +51,24 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
           <div className='cart-quick__head-text'>Кошик</div>
           <div className='cart-quick__close cart-quick__close_anim' onClick={onClose}></div>
         </div>
-        {cart.cartProducts.length != 0
+        {cartStore.cart.items.length != 0
           ?
           <div className='cart-quick__content'>
             <ul className='cart-quick__product-list'>
-              {cart.cartProducts.map(cp => (
-                <li key={cp.product.id} className='cart-quick__product rlt'>
-                  <img className='cart-quick__product-img' alt='' src={cp.product.images[0].url} onClick={() => openProductInfo(cp.product)} />
+              {cartStore.cart.items.map(item => (
+                <li key={item.product.id} className='cart-quick__product rlt'>
+                  <img className='cart-quick__product-img' alt='' src={item.product.images[0].url} onClick={() => openProductInfo(item.product)} />
                   <div className='cart-quick__product-desc'>
                     <div className='cart-quick__product-head rct'>
-                      <div className='cart-quick__product-title' onClick={() => openProductInfo(cp.product)}>{cp.product.title}</div>
-                      <div className='cart-quick__close cart-quick__close_delete' onClick={() => onDeleteProduct(cp.product)}></div>
+                      <div className='cart-quick__product-title' onClick={() => openProductInfo(item.product)}>{item.product.title}</div>
+                      <div className='cart-quick__close cart-quick__close_delete' onClick={() => onDeleteProduct(item.product)}></div>
                     </div>
                     <div className='cart-quick__product-count rlc'>
                       <CartCountEditor
-                        onChange={(count) => onChangeCount(cp, count)}
-                        selectedCount={cp.count}
+                        onChange={(count) => onChangeCount(item, count)}
+                        selectedCount={item.count}
                       />
-                      <span className='cart-quick__product-price'>{(cp.product.price * cp.count).toFixed(2)} ₴</span>
+                      <span className='cart-quick__product-price'>{(item.product.price * item.count).toFixed(2)} ₴</span>
                     </div>
                   </div>
                 </li>
@@ -86,7 +76,7 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
             </ul>
             <div className='cart-quick__price rcc'>
               <div className='cart-quick__price-text'>Total</div>
-              <div className='cart-quick__price-text'>{Number(cart.totalPrice).toFixed(2)} ₴</div>
+              <div className='cart-quick__price-text'>{Number(cartStore.totals.grand_total).toFixed(2)} ₴</div>
             </div>
             <div className='cart-quick__checkout ccc' onClick={openCheckout}>CHECKOUT</div>
           </div>

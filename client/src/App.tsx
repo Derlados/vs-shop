@@ -12,6 +12,7 @@ import Contacts from './pages/contacts/Contacts'
 import Page404 from './pages/Page404/Page404'
 import { ROUTES } from './values/routes'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import React from 'react'
 
 const App = () => {
   useEffect(() => {
@@ -39,7 +40,7 @@ const App = () => {
           <Route path='/' element={<Navigate to='/home' replace />} />
           <Route path='*' element={<Navigate to='/home' replace />} />
         </Route>
-        {/* <Route path='*' element={<Navigate to={'/'} />} /> */}
+        <Route path='*' element={<Navigate to={'/'} />} />
       </Routes>
     </div>
   )

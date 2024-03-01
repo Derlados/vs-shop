@@ -43,6 +43,10 @@ class ProductHelper {
 
     return manufacturer?.label;
   }
+
+  getMainImage(product: IProduct): string | undefined {
+    return product.custom_attributes.find(attr => attr.attribute_code === "thumbnail")?.value as string | undefined;
+  }
 }
 
 export default new ProductHelper();
