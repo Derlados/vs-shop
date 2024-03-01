@@ -4,10 +4,11 @@ import React, { FC } from 'react'
 import { NavLink } from 'react-router-dom';
 import Dropdown from '../../../../lib/components/Dropdown/Dropdown';
 import { ICatalog } from '../../../../types/ICatalog'
+import { ICategoryList } from '../../../../types/magento/ICategoryList';
 import { ROUTES } from '../../../../values/routes';
 
 interface CatalogItemProps {
-    catalog: ICatalog;
+    catalog: ICategoryList;
     onClick: () => void;
 }
 
@@ -33,9 +34,9 @@ const CatalogItem: FC<CatalogItemProps> = observer(({ catalog, onClick }) => {
             </div>
             <Dropdown className='burger-menu__dropdown' isOpen={localStore.isOpenCategories}>
                 <ul className='burger-menu__sublist'>
-                    {catalog.categories.map(category => (
+                    {catalog.children_data.map(category => (
                         <li key={category.id} className='burger-menu__item burger-menu_underline'>
-                            <NavLink className=' burger-menu__item-name burger-menu__item-name_subitem-second' to={`${ROUTES.CATEGORY_PREFIX}${category.routeName}`}
+                            <NavLink className=' burger-menu__item-name burger-menu__item-name_subitem-second' to={`${ROUTES.CATEGORY_PREFIX}${category.id}`}
                                 onClick={onClick}>
                                 {category.name}
                             </NavLink>

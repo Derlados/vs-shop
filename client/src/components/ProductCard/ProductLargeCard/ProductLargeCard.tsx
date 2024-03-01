@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { FC } from 'react'
-import CartButton from '../../Cart/CartButton/CartButton';
+import CartButton from '../../cart/CartButton/cart-button';
 import './product-card-large.scss';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
@@ -10,7 +10,6 @@ import { IProduct } from '../../../types/magento/IProduct';
 import cartStore from '../../../stores/cart/cart.store';
 import mediaHelper from '../../../helpers/media.helper';
 import productHelper from '../../../helpers/product.helper';
-import catalogStore from '../../../magento_stores/catalog/catalog.store';
 
 export interface SimpleProductCardProps extends ProductCardProps {
   onOpenQuickView: (product: IProduct) => void;

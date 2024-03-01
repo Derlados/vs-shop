@@ -1,3 +1,5 @@
+import ICartItem from "./ICartItem";
+
 export interface ITotals {
   grand_total: number;
   base_grand_total: number;
@@ -22,7 +24,7 @@ export interface ITotals {
   base_currency_code: string;
   quote_currency_code: string;
   items_qty: number;
-  items: any[];
+  items: ICartItem[];
   total_segments: {
     code: 'subtotal' | 'shipping' | 'tax' | 'grand_total';
     title: string;

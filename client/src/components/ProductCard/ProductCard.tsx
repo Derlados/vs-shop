@@ -8,8 +8,8 @@ import ProductSmallCard from './ProductSmallCard/ProductSmallCard';
 import './product-card.scss';
 import { IProduct } from '../../types/magento/IProduct';
 import cartStore from '../../stores/cart/cart.store';
-import catalogStore from '../../magento_stores/catalog/catalog.store';
 import productHelper from '../../helpers/product.helper';
+import catalogStore from '../../stores/catalog/catalog.store';
 
 export interface ProductCardProps {
     product: IProduct;
@@ -36,7 +36,7 @@ const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize 
     const { catalog: category } = useParams();
 
     const manufacturer = productHelper.getManufacturer(product, catalogStore.manufacturers);
-    const mainImage = product.custom_attributes.find(attr => attr.attribute_code === "thumbnail")?.value as string | undefined;
+    const mainImage = productHelper.getMainImage(product);
     const description = productHelper.getDescription(product);
     const specialPrice = productHelper.getSpecialPrice(product);
 

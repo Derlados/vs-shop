@@ -1,16 +1,16 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import cart from '../../../store/cart/cart';
 import { ProductCardProps } from '../ProductCard';
 import 'swiper/css';
-import { IImage } from '../../../types/IImage';
-import CartCountEditor from '../../Cart/CartCountEditor/CartCountEditor';
 import classNames from 'classnames';
 import { AvailableStatus, IProduct } from '../../../types/IProduct';
-import CartButton from '../../Cart/CartButton/CartButton';
 import Table from '../../../pages/product/components/Table/Table';
 import mediaHelper from '../../../helpers/media.helper';
+import productHelper from '../../../helpers/product.helper';
+import cartStore from '../../../stores/cart/cart.store';
+import CartCountEditor from '../../cart/CartCountEditor/CartCountEditor';
+import CartButton from '../../cart/CartButton/cart-button';
 
 interface LocalStore {
   swiper: any;
@@ -41,14 +41,12 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
 
   useEffect(() => {
     localStore.swiper?.slideToLoop(product.media_gallery_entries.map(img => img.file).length - 1, 0);
-    localStore.selectedImage = getMainImage(product) || '';
+    localStore.selectedImage = productHelper.getMainImage(product) || '';
   }, [product])
 
 
-  const handleCountChange = (count: number) => {
-    if (count >= 1 && count <= product.maxByOrder) {
-      localStore.selectedCount = count;
-    }
+  const onQtyChange = (neqQty: number) => {
+    updateCart('update', product, neqQty);
   }
 
   const onAddToCart = () => {
@@ -149,13 +147,17 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
             </div>
           }
           <div className='product__actions rlc'>
-            {!cart.findById(product.id) &&
+            {!cartStore.totals.items.find(i => i.item_id == product.id) &&
               <CartCountEditor
-                onChange={handleCountChange}
+                onChange={onQtyChange}
                 selectedCount={localStore.selectedCount}
               />
             }
-            <CartButton color="primary" isActive={cart.findById(product.id) === undefined} onClick={onAddToCart} />
+            <CartButton
+              color="primary"
+              isActive={cartStore.totals.items.find(i => i.item_id == product.id) === undefined}
+              onClick={onAddToCart}
+            />
           </div>
           <span className='product__availability'>Доступно:
             <span className={classNames('product__availability-status', {
@@ -174,7 +176,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
       {isExtended &&
         <div ref={charsRef} className='product__chars clt' >
           <div className='product__chars-title'>Характеристики</div>
-          <Table attributes={product.attributes} />
+          {/* <Table attributes={product.attributes} /> */}
         </div>
       }
     </div>

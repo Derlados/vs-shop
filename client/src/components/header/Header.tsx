@@ -3,7 +3,6 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ChangeEvent, useEffect } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import cart from '../../store/cart/cart';
-import shop from '../../store/shop';
 import './header.scss';
 import { SpecSymbols } from '../../values/specSymbols';
 import { useQuery } from '../../lib/hooks/useQuery';

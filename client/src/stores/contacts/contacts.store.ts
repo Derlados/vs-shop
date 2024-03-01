@@ -1,5 +1,4 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import shopService from "../../services/shop/shop.service";
 import { IMail } from "../../types/IMail";
 import { REGEX } from "../../values/regex";
 
@@ -66,7 +65,7 @@ class ContactsStore {
         };
 
         try {
-            await shopService.sendMail(mail);
+            // await shopService.sendMail(mail);
 
             runInAction(() => this.status = ContactsStoreStatus.success);
         } catch (e) {

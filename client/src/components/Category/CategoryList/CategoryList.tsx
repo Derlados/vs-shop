@@ -2,7 +2,6 @@ import { FC } from 'react'
 import CategoryCard from './CategoryCard';
 import './category-list.scss';
 import { ICategoryList } from '../../../types/magento/ICategoryList';
-import { ICategory } from '../../../types/magento/ICategory';
 
 
 interface CategoryListProps {
