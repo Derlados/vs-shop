@@ -2,14 +2,15 @@ import ProductCatalog from './components/ProductCatalog/ProductCatalog'
 import './shop.scss';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import Loader from '../../lib/components/Loader/Loader';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { ROUTES } from '../../values/routes';
 import { SortType } from '../../enums/SortType.enum';
 import PopupWindow from '../../components/PopupWindow/PopupWindow';
 import LoadingMask from './components/LoadingMask/LoadingMask';
 import shopStore from '../../stores/shop/shop.store';
+import catalogStore from '../../stores/catalog/catalog.store';
 
 interface LocalStore {
   isFilterOpen: boolean;
@@ -21,13 +22,31 @@ interface ShopProps {
 }
 
 const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
-  const { catalog: categoryRoute } = useParams();
+  const { categoryPath } = useParams();
 
   const localStore = useLocalObservable<LocalStore>(() => ({
     isFilterOpen: false,
-    isValidCategory: false,
+    isValidCategory: true,
     filterCategories: [],
   }));
+
+  useEffect(() => {
+    console.log('categoryPath', categoryPath)
+    if (!categoryPath) {
+      localStore.isValidCategory = false;
+      return;
+    }
+
+    const category = catalogStore.getCategoryByUrl(categoryPath);
+    console.log('category', JSON.stringify(category))
+    if (!category) {
+      localStore.isValidCategory = false;
+      return;
+    }
+
+    shopStore.selectCategory(category.id);
+  }, [])
+
 
 
   if ((shopStore.status === "initial" || shopStore.status === "loading") && shopStore.products.length == 0) {
@@ -38,14 +57,17 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
     )
   }
 
-  // return <Navigate to={'/404_not_found'} replace />
+  if (!localStore.isValidCategory || shopStore.status === "error") {
+    return <Navigate to={'/404_not_found'} replace />
+  }
+
 
   return (
     <div className='shop clt' >
       {shopStore.status == "loading" && <LoadingMask />}
       {!isGlobalSearch ?
         <CatalogNav routes={[{
-          to: `/${ROUTES.CATEGORY_PREFIX}${categoryRoute}`,
+          to: `/${ROUTES.CATEGORY_PREFIX}/${categoryPath}`,
           title: "test"
         }]} /> :
         <CatalogNav routes={[]} />

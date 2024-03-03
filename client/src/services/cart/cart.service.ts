@@ -7,7 +7,7 @@ import { IUpdateItemRes } from "./dto/update-item-res.dto";
 class CartService extends Service {
 
   async createCartId(): Promise<string> {
-    return await this.execute(axiosInstance.get<string>(this.apiUrl));
+    return await this.execute(axiosInstance.post<string>(this.apiUrl));
   }
 
   async getCart(cartId: string): Promise<ICart> {

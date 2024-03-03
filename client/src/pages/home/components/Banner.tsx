@@ -18,9 +18,7 @@ const Banner: FC<BannerProps> = observer(({ info, size = "full-screen" }) => {
     })}>
       <div className='home__banner-img' style={{
         backgroundImage: `url('${info.img}')`
-      }}>
-
-      </div>
+      }} />
       <div className='home__banner-info clc'>
         <div className='home__banner-title' data-aos="fade-up">{info.title}</div>
         <div className='home__banner-subtitle' data-aos="fade-up" data-aos-delay="500">{info.subtitle}</div>

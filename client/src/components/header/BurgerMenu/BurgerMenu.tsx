@@ -55,7 +55,7 @@ const BurgerMenu: FC<BurgerMenuProps> = observer(({ isOpen, onClose }) => {
             <ul className={classNames('burger-menu__link-list', {
               'burger-menu__link-list_open': localStore.isCatalogListOpen
             })}>
-              {catalogStore.categoryList?.children_data.map(catalog => (
+              {catalogStore.categoryTree?.children_data.map(catalog => (
                 <CatalogItem key={catalog.id} catalog={catalog} onClick={onClose} />
               ))}
             </ul>

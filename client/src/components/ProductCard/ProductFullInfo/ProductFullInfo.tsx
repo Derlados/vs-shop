@@ -117,7 +117,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
                 <SwiperSlide key={img.id}>
                   <img
                     className='product__slider-slide' alt=''
-                    src={mediaHelper.getProductUrl(img.file)}
+                    src={mediaHelper.getCatalogUrl(img.file, "product")}
                     onClick={() => selectImg(index)}
                   />
                 </SwiperSlide>
@@ -136,18 +136,18 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
           {isExtended &&
             <div className='description__details clc'>
               <ul className='description__list'>
-                {product.attributes.slice(0, 5).map(attribute => (
+                {/* {product.attributes.slice(0, 5).map(attribute => (
                   <li key={attribute.name} className='description__list-item rlt'>
                     <div className='description__list-item_attr'>{attribute.name} :</div>
                     <div className='description__list-item_val'>{attribute.value.name}</div>
                   </li>
-                ))}
+                ))} */}
               </ul>
               <div className='description__show-all' onClick={onShowChars}>Глянути всі характеристики</div>
             </div>
           }
           <div className='product__actions rlc'>
-            {!cartStore.totals.items.find(i => i.item_id == product.id) &&
+            {!cartStore.totals?.items.find(i => i.item_id == product.id) &&
               <CartCountEditor
                 onChange={onQtyChange}
                 selectedCount={localStore.selectedCount}
@@ -155,7 +155,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
             }
             <CartButton
               color="primary"
-              isActive={cartStore.totals.items.find(i => i.item_id == product.id) === undefined}
+              isActive={cartStore.totals?.items.find(i => i.item_id == product.id) === undefined}
               onClick={onAddToCart}
             />
           </div>

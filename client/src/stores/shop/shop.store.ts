@@ -4,6 +4,7 @@ import { IProduct } from "../../types/magento/IProduct";
 
 class ShopStore {
   public products: IProduct[];
+  public curretnCategoryId: number;
   public status: 'initial' | 'loading' | 'success' | 'error';
 
   constructor() {
@@ -12,8 +13,11 @@ class ShopStore {
     this.status = 'initial';
   }
 
-  async loadProductsByCategory(categoryId: number) {
-    runInAction(() => this.status = 'loading');
+  async selectCategory(categoryId: number) {
+    runInAction(() => {
+      this.status = 'loading';
+      this.curretnCategoryId = categoryId;
+    });
 
     try {
       const products = await prodcutsService.getProductsByCategoryId(categoryId);

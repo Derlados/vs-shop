@@ -2,6 +2,7 @@ import { axiosInstance } from "..";
 import { Service } from "../service";
 import { IManufacturer } from "../../types/magento/IManufacturer";
 import { IProduct } from "../../types/magento/IProduct";
+import { IGetProductsResDto } from "./dto/get-products-res.dto";
 
 class ProductsService extends Service {
   async getProductBySku(sku: string): Promise<IProduct> {
@@ -22,7 +23,9 @@ class ProductsService extends Service {
         }
       ]
     };
-    return await this.execute(axiosInstance.get<IProduct[]>(`${this.apiUrl}`, { params: { searchCriteria } }));
+    const data = await this.execute(axiosInstance.get<IGetProductsResDto>(`${this.apiUrl}`, { params: { searchCriteria } }));
+
+    return data.items;
   }
 
   async getManufacturers(): Promise<IManufacturer[]> {

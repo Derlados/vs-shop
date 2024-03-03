@@ -11,7 +11,7 @@ export interface ICategory {
   path: string;
   include_in_menu: boolean;
   custom_attributes: {
-    attribute_code: "is_anchor" | "path" | "children_count" | "url_key" | "url_path";
+    attribute_code: "is_anchor" | "path" | "children_count" | "url_key" | "url_path" | "image";
     value: string | number;
   }[];
 }

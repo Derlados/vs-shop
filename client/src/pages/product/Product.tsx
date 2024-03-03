@@ -34,7 +34,7 @@ const Product: FC = observer(() => {
     return (
       <div className='product ccc'>
         <CatalogNav routes={[
-          { to: `/${ROUTES.CATEGORY_PREFIX}${"test"}`, title: "test" },
+          { to: `/${ROUTES.SHOP_ROUTE}/${"test"}`, title: "test" },
           { to: `/${productStore.product.sku}`, title: productStore.product.name },
         ]} />
         <div className='product__container rlc'>

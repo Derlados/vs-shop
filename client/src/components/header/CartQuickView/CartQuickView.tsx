@@ -51,11 +51,11 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
           <div className='cart-quick__head-text'>Кошик</div>
           <div className='cart-quick__close cart-quick__close_anim' onClick={onClose}></div>
         </div>
-        {cartStore.cart.items.length != 0
+        {cartStore.cart?.items.length != 0
           ?
           <div className='cart-quick__content'>
             <ul className='cart-quick__product-list'>
-              {cartStore.cart.items.map(item => (
+              {cartStore.cart?.items.map(item => (
                 <li key={item.product.id} className='cart-quick__product rlt'>
                   <img className='cart-quick__product-img' alt='' src={item.product.images[0].url} onClick={() => openProductInfo(item.product)} />
                   <div className='cart-quick__product-desc'>
@@ -76,7 +76,7 @@ const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => 
             </ul>
             <div className='cart-quick__price rcc'>
               <div className='cart-quick__price-text'>Total</div>
-              <div className='cart-quick__price-text'>{Number(cartStore.totals.grand_total).toFixed(2)} ₴</div>
+              <div className='cart-quick__price-text'>{Number(cartStore.totals?.grand_total).toFixed(2)} ₴</div>
             </div>
             <div className='cart-quick__checkout ccc' onClick={openCheckout}>CHECKOUT</div>
           </div>
