@@ -12,122 +12,122 @@ import productHelper from '../../helpers/product.helper';
 import catalogStore from '../../stores/catalog/catalog.store';
 
 export interface ProductCardProps {
-    product: IProduct;
-    updateCart: (
-        action: "add" | "update" | "delete",
-        product: IProduct,
-        count?: number
-    ) => void;
-    mainImage: string | undefined;
-    specialPrice: number | undefined;
-    manufacturer: string | undefined;
-    description: string | undefined;
+  product: IProduct;
+  updateCart: (
+    action: "add" | "update" | "delete",
+    product: IProduct,
+    count?: number
+  ) => void;
+  mainImage: string | undefined;
+  specialPrice: number | undefined;
+  manufacturer: string | undefined;
+  description: string | undefined;
 }
 
 
 interface CreateProductCardProps {
-    product: IProduct;
-    containerSize?: "default" | "small";
-    type: "small" | "large" | "quick-view" | "full-view";
-    onOpenQuickView?: (IProduct: IProduct) => void;
+  product: IProduct;
+  containerSize?: "default" | "small";
+  type: "small" | "large" | "quick-view" | "full-view";
+  onOpenQuickView?: (IProduct: IProduct) => void;
 }
 
 const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize = "default", product, onOpenQuickView = () => { } }) => {
-    const { catalog: category } = useParams();
+  const { catalog: category } = useParams();
 
-    const manufacturer = productHelper.getManufacturer(product, catalogStore.manufacturers);
-    const mainImage = productHelper.getMainImage(product);
-    const description = productHelper.getDescription(product);
-    const specialPrice = productHelper.getSpecialPrice(product);
+  const manufacturer = productHelper.getManufacturer(product, catalogStore.manufacturers);
+  const mainImage = productHelper.getMainImage(product);
+  const description = productHelper.getDescription(product);
+  const specialPrice = productHelper.getSpecialPrice(product);
 
-    const updateCart = (
-        action: "add" | "update" | "delete",
-        product: IProduct,
-        qty?: number
-    ) => {
-        switch (action) {
-            case "add": {
-                addToCart(product, qty);
-                break;
-            }
-            case "update": {
-                updateCartItemQty(product, qty ?? 1);
-                break;
-            }
-            case "delete": {
-                deleteFromCart(product);
-                break;
-            }
-        }
+  const updateCart = (
+    action: "add" | "update" | "delete",
+    product: IProduct,
+    qty?: number
+  ) => {
+    switch (action) {
+      case "add": {
+        addToCart(product, qty);
+        break;
+      }
+      case "update": {
+        updateCartItemQty(product, qty ?? 1);
+        break;
+      }
+      case "delete": {
+        deleteFromCart(product);
+        break;
+      }
     }
+  }
 
-    const addToCart = (product: IProduct, qty: number = 1) => {
-        cartStore.addProduct(product.sku, qty);
-    }
+  const addToCart = (product: IProduct, qty: number = 1) => {
+    cartStore.addProduct(product.sku, qty);
+  }
 
-    const updateCartItemQty = (product: IProduct, qty: number) => {
-        cartStore.updateProduct(product.id, qty);
-    }
+  const updateCartItemQty = (product: IProduct, qty: number) => {
+    cartStore.updateProduct(product.id, qty);
+  }
 
-    const deleteFromCart = (product: IProduct) => {
-        cartStore.removeProduct(product.id);
-    }
+  const deleteFromCart = (product: IProduct) => {
+    cartStore.removeProduct(product.id);
+  }
 
-    switch (type) {
-        case "small": {
-            return (
-                <ProductSmallCard
-                    product={product}
-                    urlFull={`/${category}/${product.sku}`}
-                    containerSize={containerSize}
-                    updateCart={updateCart}
-                    onOpenQuickView={onOpenQuickView}
-                    mainImage={mainImage}
-                    specialPrice={specialPrice}
-                    manufacturer={manufacturer}
-                    description={description}
-                />
-            )
-        }
-        case "large": {
-            return (
-                <ProductLargeCard
-                    product={product}
-                    updateCart={updateCart}
-                    onOpenQuickView={onOpenQuickView}
-                    mainImage={mainImage}
-                    specialPrice={specialPrice}
-                    manufacturer={manufacturer}
-                    description={description}
-                />
-            )
-        }
-        case "quick-view": {
-            return (
-                <ProductFullInfo
-                    product={product}
-                    updateCart={updateCart}
-                    mainImage={mainImage}
-                    specialPrice={specialPrice}
-                    manufacturer={manufacturer}
-                    description={description}
-                />
-            )
-        }
-        case "full-view": {
-            return (
-                <ProductFullInfo
-                    product={product}
-                    updateCart={updateCart}
-                    isExtended={true}
-                    mainImage={mainImage}
-                    specialPrice={specialPrice}
-                    manufacturer={manufacturer}
-                    description={description}
-                />
-            )
-        }
+  switch (type) {
+    case "small": {
+      return (
+        <ProductSmallCard
+          product={product}
+          urlFull={`/${category}/${product.sku}`}
+          containerSize={containerSize}
+          updateCart={updateCart}
+          onOpenQuickView={onOpenQuickView}
+          mainImage={mainImage}
+          specialPrice={specialPrice}
+          manufacturer={manufacturer}
+          description={description}
+        />
+      )
     }
+    case "large": {
+      return (
+        <ProductLargeCard
+          product={product}
+          updateCart={updateCart}
+          onOpenQuickView={onOpenQuickView}
+          mainImage={mainImage}
+          specialPrice={specialPrice}
+          manufacturer={manufacturer}
+          description={description}
+        />
+      )
+    }
+    case "quick-view": {
+      return (
+        <ProductFullInfo
+          product={product}
+          updateCart={updateCart}
+          mainImage={mainImage}
+          specialPrice={specialPrice}
+          manufacturer={manufacturer}
+          description={description}
+        />
+      )
+    }
+    case "full-view": {
+      return (
+        <ProductFullInfo
+          product={product}
+          updateCart={updateCart}
+          isExtended={true}
+          mainImage={mainImage}
+          specialPrice={specialPrice}
+          manufacturer={manufacturer}
+          description={description}
+        />
+      )
+    }
+  }
 });
 
 export default ProductCard

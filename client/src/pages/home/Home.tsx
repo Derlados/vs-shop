@@ -7,14 +7,10 @@ import "aos/dist/aos.css";
 import CategoryList from '../../components/Category/CategoryList/CategoryList';
 import PopupWindow from '../../components/PopupWindow/PopupWindow';
 import catalogStore from '../../stores/catalog/catalog.store';
-import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import { IBanner } from '../../types/ILargeBanner';
 
 const Home = observer(() => {
-
-  useEffect(() => {
-    catalogStore.init();
-  }, [])
 
   if (catalogStore.status === "loading" || catalogStore.status === "initial") {
     return (
@@ -24,10 +20,20 @@ const Home = observer(() => {
     )
   }
 
+  const banners: IBanner[] = [
+    {
+      id: 12,
+      title: "Цифрові товари, комплектуючі",
+      subtitle: "Все для збірки ПК",
+      img: "https://computerstore.ug/wp-content/uploads/2022/09/side-1.jpg",
+      link: "/shop"
+    }
+  ]
+
   if (catalogStore.status === "success" && catalogStore.categoryList) {
     return (
       <div className='home ccc'>
-        {/* <BannerList banners={shop.banners} /> */}
+        <BannerList banners={banners} />
         <div className='home__features'>
           <ul className='home__feature-list rcc'>
             <li className='home__feature-item rlc'>

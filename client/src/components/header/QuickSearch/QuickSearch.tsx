@@ -3,10 +3,11 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ChangeEvent, KeyboardEvent, FC } from 'react'
 import { ICategoryList } from '../../../types/magento/ICategoryList';
 import './quick-search.scss';
+import React from 'react';
 
 interface QuickSearchProps {
   value: string;
-  catalogs: ICategoryList[];
+  categoryList: ICategoryList;
   onFocus: () => void;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onAccept: () => void;
@@ -20,7 +21,7 @@ interface State {
 
 const ALL_CATEGORIES = 'Всі категорії';
 
-const QuickSearch: FC<QuickSearchProps> = observer(({ value, catalogs, onFocus: onFocusChange, onChange, onAccept, onSelectCategory }) => {
+const QuickSearch: FC<QuickSearchProps> = observer(({ value, categoryList, onFocus: onFocusChange, onChange, onAccept, onSelectCategory }) => {
   const state = useLocalObservable<State>(() => ({
     isOpenCategories: false,
     selectedCategory: ALL_CATEGORIES
@@ -72,10 +73,10 @@ const QuickSearch: FC<QuickSearchProps> = observer(({ value, catalogs, onFocus: 
             >
               {ALL_CATEGORIES}
             </li>
-            {catalogs.map(c => (
-              <ul key={c.id} className='quick-search__catalog-categories-list'>
-                <li className='quick-search__category-item quick-search__category-item_untouchable'>{c.name}</li>
-                {c.children_data.map(category => (
+            {categoryList.children_data.map(category => (
+              <ul key={category.id} className='quick-search__catalog-categories-list'>
+                <li className='quick-search__category-item quick-search__category-item_untouchable'>{category.name}</li>
+                {category.children_data.map(category => (
                   <li
                     key={category.id}
                     className='quick-search__category-item'

@@ -31,7 +31,7 @@ const ProductLargeCard: FC<SimpleProductCardProps> = observer(({
           <img
             className='product-card__img product-card-large__img'
             alt={product.name}
-            src={mainImage ? mediaHelper.getProductUrl(mainImage) : require('../../../assets/images/no-photos.png')}
+            src={mainImage ? mediaHelper.getCatalogUrl(mainImage, "product") : require('../../../assets/images/no-photos.png')}
           />
         </NavLink>
         <div className='product-card__labels product-card__labels_large ccc'>

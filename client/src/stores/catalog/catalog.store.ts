@@ -1,41 +1,56 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import categoryHelper from "../../helpers/category.helper";
 import categoriesService from "../../services/categories/categories.service";
 import prodcutsService from "../../services/products/prodcuts.service";
+import { ICategory } from "../../types/magento/ICategory";
 import { ICategoryList } from "../../types/magento/ICategoryList";
 import { IManufacturer } from "../../types/magento/IManufacturer";
-import { IProduct } from "../../types/magento/IProduct";
 
 class CatalogStore {
-    public manufacturers: IManufacturer[];
-    public categoryList: ICategoryList | null;
-    public status: 'initial' | 'loading' | 'success' | 'error';
+  public manufacturers: IManufacturer[];
+  public categoryTree: ICategoryList | null;
+  public categoryList: ICategory[];
+  public status: 'initial' | 'loading' | 'success' | 'error';
 
-    constructor() {
-        makeAutoObservable(this);
+  constructor() {
+    makeAutoObservable(this);
 
-        this.manufacturers = [];
-        this.categoryList = null;
-        this.status = 'initial';
+    this.manufacturers = [];
+    this.categoryTree = null;
+    this.categoryList = [];
+    this.status = 'initial';
+  }
+
+  async init() {
+    runInAction(() => this.status = 'loading');
+
+    try {
+      const categoryList = await categoriesService.getCategoryList();
+      const categoryTree = await categoriesService.getCategoryTree();
+      const manufacturers = await prodcutsService.getManufacturers();
+
+      runInAction(() => {
+        this.manufacturers = manufacturers;
+        this.categoryTree = categoryTree;
+        this.categoryList = categoryList;
+        this.status = 'success';
+      });
+    } catch (error) {
+      runInAction(() => this.status = 'error');
     }
+  }
 
-    async init() {
-        runInAction(() => this.status = 'loading');
+  getCategoryProductsCount(categoryId: number): number {
+    return this.categoryTree?.children_data.find(category => category.id === categoryId)?.product_count || 0;
+  }
 
-        try {
-            const [categoryList, manufacturers] = await Promise.all([
-                categoriesService.getCategoryList(),
-                prodcutsService.getManufacturers()
-            ]);
+  getCategoryById(categoryId: number): ICategory | undefined {
+    return this.categoryList.find(category => category.id === categoryId);
+  }
 
-            runInAction(() => {
-                this.manufacturers = manufacturers;
-                this.categoryList = categoryList;
-                this.status = 'success';
-            });
-        } catch (error) {
-            runInAction(() => this.status = 'error');
-        }
-    }
+  getCategoryByUrl(categoryUrl: string): ICategory | undefined {
+    return this.categoryList.find(category => categoryHelper.getUrlPath(category) === categoryUrl);
+  }
 }
 
 export default new CatalogStore();

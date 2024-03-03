@@ -5,7 +5,13 @@ import { ICategory } from "../../types/magento/ICategory";
 import { ICategoryList } from "../../types/magento/ICategoryList";
 
 class CategoriesService extends Service {
-    async getCategoryList(): Promise<ICategoryList> {
+    async getCategoryList(): Promise<ICategory[]> {
+        const categories = await this.execute(axiosInstance.get<ICategory[]>('/vs-shop/categories/all'));
+
+        return categories.filter(category => category.level > 1);
+    }
+
+    async getCategoryTree(): Promise<ICategoryList> {
         return await this.execute(axiosInstance.get<ICategoryList>(this.apiUrl));
     }
 

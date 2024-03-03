@@ -9,7 +9,7 @@ class CartStore {
   private cartId: string;
   public status: 'initial' | 'loading' | 'success' | 'error';
   public cart: ICart;
-  public totals: ITotals;
+  public totals?: ITotals;
 
   constructor() {
     makeAutoObservable(this);
@@ -17,6 +17,7 @@ class CartStore {
     this.cartId = localStorage.getItem(this.LOCAL_STORAGE_CART_ID) || '';
     this.status = 'initial';
   }
+
 
   async init() {
     runInAction(() => this.status = 'loading');

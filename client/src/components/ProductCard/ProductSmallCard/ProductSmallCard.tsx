@@ -9,6 +9,7 @@ import { AvailableStatus } from '../../../types/IProduct';
 import { IProduct } from '../../../types/magento/IProduct';
 import productHelper from '../../../helpers/product.helper';
 import cartStore from '../../../stores/cart/cart.store';
+import mediaHelper from '../../../helpers/media.helper';
 
 export interface SimpleProductCardProps extends ProductCardProps {
   containerSize?: "default" | "small";
@@ -38,7 +39,11 @@ const ProductSmallCard: FC<SimpleProductCardProps> = observer(({
         </div>
       </div>
       <NavLink className='product-card__img-cont' to={`/shop/${product.sku}`}>
-        <img className='product-card__img' alt='' src={mainImage ?? require('../../../assets/images/no-photos.png')} />
+        <img
+          className='product-card__img'
+          alt=''
+          src={mainImage ? mediaHelper.getCatalogUrl(mainImage, "product") : require('../../../assets/images/no-photos.png')}
+        />
       </NavLink>
       <div className='product-card__line' />
       <div className='product-card__desc'>
@@ -48,13 +53,15 @@ const ProductSmallCard: FC<SimpleProductCardProps> = observer(({
         </NavLink>
         <div className={`product-card__price-and-btn ${containerSize == 'default' ? 'rlc' : 'ccc'}`}>
           <div className={`product-card__prices ${containerSize == 'default' ? '' : 'product-card__prices_margin'} rlc`}>
-            <div className='product-card__current-price'>{product.price}₴</div>
-            {specialPrice !== product.price && <div className='product-card__old-price'>{specialPrice}₴</div>}
+            <div className='product-card__current-price'>{Number(specialPrice ?? product.price).toFixed(0)} грн</div>
+            {specialPrice && specialPrice !== product.price &&
+              <div className='product-card__old-price'>{Number(product.price).toFixed(0)} грн</div>
+            }
           </div>
           {product.status !== AvailableStatus.OUT_OF_STOCK &&
             <CartButton
               className={`product-card__cart-btn ${containerSize == 'default' ? '' : 'product-card__cart-btn_large'}`}
-              isActive={cartStore.totals.items.find(item => item.item_id == product.id) === undefined}
+              isActive={cartStore.totals?.items.find(item => item.item_id == product.id) === undefined}
               onClick={() => updateCart('add', product)}
             />}
         </div>
@@ -64,7 +71,7 @@ const ProductSmallCard: FC<SimpleProductCardProps> = observer(({
             'product-card__availability_yellow': product.status === AvailableStatus.IN_STOKE_FEW,
             'product-card__availability_gray': product.status === AvailableStatus.OUT_OF_STOCK,
           })}>
-            {product.status}
+            В наявності
           </div>
         }
       </div>

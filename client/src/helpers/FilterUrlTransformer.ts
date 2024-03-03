@@ -1,6 +1,5 @@
 import cyrillicToTranslit from 'cyrillic-to-translit-js';
 import { SortType } from '../enums/SortType.enum';
-import { FilterOptions } from '../services/products/products.service';
 
 
 const FILTER_ITEM_REGEX = /(\d+-\d+)/g;
@@ -58,39 +57,39 @@ class FilterUrlTransformer {
         return values.join(',');
     }
 
-    buildFilterUrl(filter: FilterOptions) {
-        let urlParams = new URLSearchParams();
+    // buildFilterUrl(filter: FilterOptions) {
+    //     let urlParams = new URLSearchParams();
 
-        if (filter.sort != null && filter.sort !== SortType.NOT_SELECTED) {
-            urlParams.append('sort', filter.sort.toString())
-        }
+    //     if (filter.sort != null && filter.sort !== SortType.NOT_SELECTED) {
+    //         urlParams.append('sort', filter.sort.toString())
+    //     }
 
-        if (filter.page) {
-            urlParams.append('page', filter.page.toString());
-        }
+    //     if (filter.page) {
+    //         urlParams.append('page', filter.page.toString());
+    //     }
 
-        if (filter.search) {
-            urlParams.append('search', filter.search);
-        }
+    //     if (filter.search) {
+    //         urlParams.append('search', filter.search);
+    //     }
 
-        if (filter.minPrice && filter.minPrice > 0) {
-            urlParams.append('minPrice', filter.minPrice?.toString());
-        }
+    //     if (filter.minPrice && filter.minPrice > 0) {
+    //         urlParams.append('minPrice', filter.minPrice?.toString());
+    //     }
 
-        if (filter.maxPrice) {
-            urlParams.append('maxPrice', filter.maxPrice?.toString());
-        }
+    //     if (filter.maxPrice) {
+    //         urlParams.append('maxPrice', filter.maxPrice?.toString());
+    //     }
 
-        if (filter.brands && filter.brands.length !== 0) {
-            urlParams.append('brands', this.transformArrayToUrl(filter.brands));
-        }
+    //     if (filter.brands && filter.brands.length !== 0) {
+    //         urlParams.append('brands', this.transformArrayToUrl(filter.brands));
+    //     }
 
-        if (filter.filter && filter.filter.size !== 0) {
-            urlParams.append('filter', this.transformAttrMapToUrl(filter.filter));
-        }
+    //     if (filter.filter && filter.filter.size !== 0) {
+    //         urlParams.append('filter', this.transformAttrMapToUrl(filter.filter));
+    //     }
 
-        return decodeURIComponent(urlParams.toString());
-    }
+    //     return decodeURIComponent(urlParams.toString());
+    // }
 }
 
 export default new FilterUrlTransformer()

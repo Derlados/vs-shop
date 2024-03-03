@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import ButtonUp from './components/ButtonUp/ButtonUp'
 import Footer from './components/Footer/Footer'
@@ -9,13 +10,19 @@ import cartStore from './stores/cart/cart.store'
 import catalogStore from './stores/catalog/catalog.store'
 
 const Main = observer(() => {
-  if (cartStore.status !== "success" && catalogStore.status === "success") {
+  useEffect(() => {
+    cartStore.init();
+    catalogStore.init();
+  }, [])
+
+
+  if (cartStore.status !== "success" || catalogStore.status !== "success") {
     return (
       <div className='app__main ccc'>
         <Loader />
       </div>
     )
-  }
+  };
 
   return (
     <div className='app__main cct'>

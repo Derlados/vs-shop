@@ -33,10 +33,10 @@ const App = () => {
           <Route path='/404_not_found' element={<Page404 />} />
           <Route path='/search' element={<Shop isGlobalSearch={true} />} />
           <Route path='/:productName/:id' element={<Product />} />
-          <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/search`} element={<Shop />} />
-          <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog`} element={<Shop />} />
-          <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/:filters`} element={<Shop />} />
-          <Route path={`/${ROUTES.CATEGORY_PREFIX}:catalog/:filters/search`} element={<Shop />} />
+          <Route path={`/${ROUTES.SHOP_ROUTE}/:categoryPath/search`} element={<Shop />} />
+          <Route path={`/${ROUTES.SHOP_ROUTE}/:categoryPath`} element={<Shop />} />
+          <Route path={`/${ROUTES.SHOP_ROUTE}/:categoryPath/:filters`} element={<Shop />} />
+          <Route path={`/${ROUTES.SHOP_ROUTE}/:categoryPath/:filters/search`} element={<Shop />} />
           <Route path='/' element={<Navigate to='/home' replace />} />
           <Route path='*' element={<Navigate to='/home' replace />} />
         </Route>
