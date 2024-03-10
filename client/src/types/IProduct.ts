@@ -1,5 +1,6 @@
 import { IImage } from "./IImage";
 import { IProductAttribute } from "./IProductAttribyte";
+import { StockStatus } from "./magento/IProduct";
 
 export interface IProduct {
     id: number;
@@ -13,7 +14,7 @@ export interface IProduct {
     isBestseller: boolean;
     count?: number;
     maxByOrder: number;
-    availability: AvailableStatus;
+    availability: StockStatus;
     categoryId: number;
     userId: number;
     discountPercent: number;
@@ -21,8 +22,3 @@ export interface IProduct {
     images: IImage[];
 }
 
-export enum AvailableStatus {
-    OUT_OF_STOCK = 0,
-    IN_STOCK = 1,
-    IN_STOKE_FEW = 2
-}

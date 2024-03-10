@@ -1,15 +1,15 @@
 import { observer } from 'mobx-react-lite';
 import { FC } from 'react'
-import CartButton from '../../cart/CartButton/cart-button';
+import CartButton from '../../CartButton/cart-button';
 import './product-card-large.scss';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
-import { AvailableStatus } from '../../../types/IProduct';
 import { ProductCardProps } from '../ProductCard';
-import { IProduct } from '../../../types/magento/IProduct';
+import { IProduct, StockStatus } from '../../../types/magento/IProduct';
 import cartStore from '../../../stores/cart/cart.store';
 import mediaHelper from '../../../helpers/media.helper';
 import productHelper from '../../../helpers/product.helper';
+import FormatHelper from '../../../helpers/format.helper';
 
 export interface SimpleProductCardProps extends ProductCardProps {
   onOpenQuickView: (product: IProduct) => void;
@@ -17,6 +17,7 @@ export interface SimpleProductCardProps extends ProductCardProps {
 
 const ProductLargeCard: FC<SimpleProductCardProps> = observer(({
   product,
+  productUrl,
   onOpenQuickView,
   updateCart,
   mainImage,
@@ -27,11 +28,11 @@ const ProductLargeCard: FC<SimpleProductCardProps> = observer(({
   return (
     <div className='product-card-large rlt'>
       <div className='product-card-large__img-container'>
-        <NavLink to={`shop/${product.sku}`}>
+        <NavLink to={productUrl}>
           <img
             className='product-card__img product-card-large__img'
             alt={product.name}
-            src={mainImage ? mediaHelper.getCatalogUrl(mainImage, "product") : require('../../../assets/images/no-photos.png')}
+            src={mainImage ? mediaHelper.getCatalogFileUrl(mainImage, "product") : require('../../../assets/images/no-photos.png')}
           />
         </NavLink>
         <div className='product-card__labels product-card__labels_large ccc'>
@@ -47,30 +48,31 @@ const ProductLargeCard: FC<SimpleProductCardProps> = observer(({
         </div>
       </div>
       <div className='product-card-large__info clt'>
-        <NavLink to={`shop/${product.sku}`} className="rlc">
+        <NavLink to={productUrl} className="rlc">
           <span className='product-card-large__title'>{product.name}</span>
         </NavLink>
         <span className='product-card-large__brand'>{manufacturer}</span>
         <div className='product-card-large__price rlc'>
-          <span className='product-card-large__current-price'>{product.price}₴</span>
+          <span className='product-card-large__current-price'>{FormatHelper.formatCurrency(specialPrice ?? product.price, 0)}</span>
           {specialPrice &&
-            <span className='product-card-large__old-price'>{specialPrice}₴</span>
+            <span className='product-card-large__old-price'>{FormatHelper.formatCurrency(product.price, 0)}</span>
           }
         </div>
         <div className='product-card-large__desc'>{description}</div>
         <div className='product-card-large__footer rlc'>
-          {product.status !== AvailableStatus.OUT_OF_STOCK &&
+          {product.extension_attributes.stock_status !== StockStatus.OUT_OF_STOCK &&
             <CartButton color="primary"
-              isActive={cartStore.cart.items.find(item => item.product.id === product.id) === undefined}
+              sku={product.sku}
+              isActive={cartStore.cart.items.find(item => item.sku === product.sku) === undefined}
               onClick={() => updateCart('add', product)}
             />
           }
           <div className={classNames('product-card__availability product-card-large__availability', {
-            'product-card__availability_green': product.status === AvailableStatus.IN_STOCK,
-            'product-card__availability_yellow': product.status === AvailableStatus.IN_STOKE_FEW,
-            'product-card__availability_gray': product.status === AvailableStatus.OUT_OF_STOCK,
+            'product-card__availability_green': product.extension_attributes.stock_status === StockStatus.IN_STOCK,
+            'product-card__availability_yellow': product.extension_attributes.stock_status === StockStatus.RUNNING_LOW,
+            'product-card__availability_gray': product.extension_attributes.stock_status === StockStatus.OUT_OF_STOCK,
           })}>
-            {product.status}
+            {productHelper.getStockStatusLabel(product)}
           </div>
         </div>
       </div>

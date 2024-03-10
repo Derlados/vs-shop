@@ -11,6 +11,7 @@ class CatalogStore {
   public categoryTree: ICategoryList | null;
   public categoryList: ICategory[];
   public status: 'initial' | 'loading' | 'success' | 'error';
+  public isInit: boolean;
 
   constructor() {
     makeAutoObservable(this);
@@ -19,6 +20,7 @@ class CatalogStore {
     this.categoryTree = null;
     this.categoryList = [];
     this.status = 'initial';
+    this.isInit = false;
   }
 
   async init() {
@@ -34,6 +36,7 @@ class CatalogStore {
         this.categoryTree = categoryTree;
         this.categoryList = categoryList;
         this.status = 'success';
+        this.isInit = true;
       });
     } catch (error) {
       runInAction(() => this.status = 'error');

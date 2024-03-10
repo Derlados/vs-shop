@@ -16,7 +16,7 @@ const Main = observer(() => {
   }, [])
 
 
-  if (cartStore.status !== "success" || catalogStore.status !== "success") {
+  if (!cartStore.isInit || !catalogStore.isInit) {
     return (
       <div className='app__main ccc'>
         <Loader />

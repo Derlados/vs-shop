@@ -1,5 +1,5 @@
 import { IManufacturer } from "../types/magento/IManufacturer";
-import { IProduct } from "../types/magento/IProduct";
+import { IProduct, StockStatus } from "../types/magento/IProduct";
 
 class ProductHelper {
 
@@ -46,6 +46,13 @@ class ProductHelper {
 
   getMainImage(product: IProduct): string | undefined {
     return product.custom_attributes.find(attr => attr.attribute_code === "thumbnail")?.value as string | undefined;
+  }
+
+  getStockStatusLabel(product: IProduct): string {
+    if (product.extension_attributes.stock_status === StockStatus.IN_STOCK) return 'В наявності';
+    if (product.extension_attributes.stock_status === StockStatus.RUNNING_LOW) return 'Закінчується';
+    return 'Немає в наявності';
+
   }
 }
 

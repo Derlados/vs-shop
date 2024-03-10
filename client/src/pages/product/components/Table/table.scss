@@ -12,6 +12,14 @@
         font-weight: normal;
         text-decoration: none;
         margin: 0px;
+
+        &:nth-child(odd) {
+            background-color: white;
+        }
+
+        &:nth-child(even) {
+            background-color: #f9f9f9;
+        }
     }
 
     &__row-parametr {

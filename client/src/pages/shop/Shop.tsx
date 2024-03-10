@@ -31,14 +31,12 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
   }));
 
   useEffect(() => {
-    console.log('categoryPath', categoryPath)
     if (!categoryPath) {
       localStore.isValidCategory = false;
       return;
     }
 
     const category = catalogStore.getCategoryByUrl(categoryPath);
-    console.log('category', JSON.stringify(category))
     if (!category) {
       localStore.isValidCategory = false;
       return;

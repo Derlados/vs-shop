@@ -3,72 +3,67 @@ import { observer } from 'mobx-react-lite';
 import React, { FC, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './cart-quick.scss';
-import { ICartProduct } from '../../../types/ICartProduct';
-import cartStore from '../../../stores/cart/cart.store';
-import { IProduct } from '../../../types/magento/IProduct';
-import CartCountEditor from '../../cart/CartCountEditor/CartCountEditor';
+import cartStore from '../../stores/cart/cart.store';
+import ICartItem from '../../types/magento/ICartItem';
+import uiStore from '../../stores/ui/ui.store';
+import CartCountEditor from '../CartCountEditor/CartCountEditor';
 
-interface CartQuickViewProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const CartQuickView: FC<CartQuickViewProps> = observer(({ isOpen, onClose }) => {
+const CartQuickView: FC = observer(() => {
   const navigation = useNavigate();
   const wrapperRef = useRef(null);
 
-  const onDeleteProduct = (product: IProduct) => {
-    cartStore.removeProduct(product.id);
+  const onDeleteProduct = (product: ICartItem) => {
+    cartStore.removeProduct(product.item_id);
   }
 
   const handleClickOutside = (event: React.MouseEvent) => {
     if (wrapperRef.current && !(wrapperRef.current as any).contains(event.target)) {
-      onClose();
+      uiStore.closeSidebarCart();
     }
   }
 
   const openCheckout = () => {
     navigation('/checkout');
-    onClose();
+    uiStore.closeSidebarCart();
   }
 
-  const openProductInfo = (product: IProduct) => {
-    navigation(`/product/${product.id}`);
-    onClose();
+  const openProductInfo = (product: ICartItem) => {
+    navigation(`/product/${product.sku}`);
+    uiStore.closeSidebarCart();
   }
 
-  const onChangeCount = (product: IProduct, newCount: number) => {
-    cartStore.updateProduct(product.id, newCount)
+  const onChangeCount = (product: ICartItem, newCount: number) => {
+    cartStore.updateProduct(product.item_id, newCount)
   }
 
 
   return (
     <div className={classNames("cart-quick", {
-      "cart-quick_hide": !isOpen
+      "cart-quick_hide": !uiStore.isOpenSidebarCart,
     })} onClick={handleClickOutside}>
       <div className='cart-quick__container' ref={wrapperRef} >
         <div className='cart-quick__head rcc'>
           <div className='cart-quick__head-text'>Кошик</div>
-          <div className='cart-quick__close cart-quick__close_anim' onClick={onClose}></div>
+          <div className='cart-quick__close cart-quick__close_anim' onClick={() => uiStore.closeSidebarCart()}></div>
         </div>
         {cartStore.cart?.items.length != 0
           ?
           <div className='cart-quick__content'>
             <ul className='cart-quick__product-list'>
               {cartStore.cart?.items.map(item => (
-                <li key={item.product.id} className='cart-quick__product rlt'>
-                  <img className='cart-quick__product-img' alt='' src={item.product.images[0].url} onClick={() => openProductInfo(item.product)} />
+                <li key={item.item_id} className='cart-quick__product rlt'>
+                  {/* <img className='cart-quick__product-img' alt='' src={item.product.images[0].url} onClick={() => openProductInfo(item.product)} /> */}
                   <div className='cart-quick__product-desc'>
                     <div className='cart-quick__product-head rct'>
-                      <div className='cart-quick__product-title' onClick={() => openProductInfo(item.product)}>{item.product.title}</div>
-                      <div className='cart-quick__close cart-quick__close_delete' onClick={() => onDeleteProduct(item.product)}></div>
+                      <div className='cart-quick__product-title' onClick={() => openProductInfo(item)}>{item.name}</div>
+                      <div className='cart-quick__close cart-quick__close_delete' onClick={() => onDeleteProduct(item)}></div>
                     </div>
                     <div className='cart-quick__product-count rlc'>
                       <CartCountEditor
                         onChange={(count) => onChangeCount(item, count)}
-                        selectedCount={item.count}
+                        selectedCount={item.qty}
                       />
-                      <span className='cart-quick__product-price'>{(item.product.price * item.count).toFixed(2)} ₴</span>
+                      <span className='cart-quick__product-price'>{(item.price * item.qty).toFixed(2)} ₴</span>
                     </div>
                   </div>
                 </li>

@@ -1,10 +1,13 @@
+import ICartItem from "./ICartItem";
+import ITotalsItem from "./ITotalsItem";
+
 export interface ICart {
   id: number;
   created_at: string;
   updated_at: string;
   is_active: boolean;
   is_virtual: boolean;
-  items: any[];
+  items: ICartItem[];
   items_count: number;
   items_qty: number;
   customer: {

@@ -1,3 +1,5 @@
+import { IProductAttribute } from "./IProductAttribute";
+
 export interface IProduct {
   id: number;
   sku: string;
@@ -15,6 +17,8 @@ export interface IProduct {
       position: number;
       category_id: string;
     }[];
+    stock_status: StockStatus;
+    description_attributes: IProductAttribute[];
   };
   product_links: any[];
   options: any[];
@@ -53,4 +57,10 @@ export interface IProduct {
     "manufacturer";
     value: string | number | string[];
   }[];
+}
+
+export enum StockStatus {
+  OUT_OF_STOCK = 0,
+  IN_STOCK = 1,
+  RUNNING_LOW = 2
 }
