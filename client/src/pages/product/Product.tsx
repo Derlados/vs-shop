@@ -8,6 +8,9 @@ import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import Loader from '../../lib/components/Loader/Loader';
 import { ROUTES } from '../../values/routes';
 import productStore from '../../stores/product/product.store';
+import catalogHelper from '../../helpers/catalog.helper';
+import catalogStore from '../../stores/catalog/catalog.store';
+import categoryHelper from '../../helpers/category.helper';
 
 type ProductParams = {
   sku: string | undefined;
@@ -34,14 +37,19 @@ const Product: FC = observer(() => {
     return (
       <div className='product ccc'>
         <CatalogNav routes={[
-          { to: `/${ROUTES.SHOP_ROUTE}/${"test"}`, title: "test" },
+          {
+            to: `/${ROUTES.SHOP_ROUTE}/${productStore.category ? categoryHelper.getUrlPath(productStore.category) : ''}`,
+            title: productStore.category?.name ?? ''
+          },
           { to: `/${productStore.product.sku}`, title: productStore.product.name },
         ]} />
         <div className='product__container rlc'>
           <ProductCard product={productStore.product} type="full-view" />
         </div>
         {/* Когда контент добавится  <ProductDesc /> */}
-        <SliderProducts title="Товари від цього ж бренду" products={productStore.relatedProducts} />
+        {productStore.relatedProducts?.length > 0 && (
+          <SliderProducts title="Товари від цього ж бренду" products={productStore.relatedProducts} />
+        )}
       </div>
     )
   }

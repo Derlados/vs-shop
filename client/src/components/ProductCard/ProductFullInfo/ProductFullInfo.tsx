@@ -4,13 +4,14 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { ProductCardProps } from '../ProductCard';
 import 'swiper/css';
 import classNames from 'classnames';
-import { AvailableStatus, IProduct } from '../../../types/IProduct';
 import Table from '../../../pages/product/components/Table/Table';
 import mediaHelper from '../../../helpers/media.helper';
 import productHelper from '../../../helpers/product.helper';
 import cartStore from '../../../stores/cart/cart.store';
-import CartCountEditor from '../../cart/CartCountEditor/CartCountEditor';
-import CartButton from '../../cart/CartButton/cart-button';
+import CartButton from '../../CartButton/cart-button';
+import { StockStatus } from '../../../types/magento/IProduct';
+import CartCountEditor from '../../CartCountEditor/CartCountEditor';
+import FormatHelper from '../../../helpers/format.helper';
 
 interface LocalStore {
   swiper: any;
@@ -33,15 +34,17 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
   const localStore = useLocalObservable<LocalStore>(() => ({
     swiper: null,
     selectedCount: 1,
-    selectedImage: mainImage || '',
+    selectedImage: '',
   }));
 
   const charsRef = React.createRef<HTMLDivElement>();
 
+  const productInCart = cartStore.cart.items.find(i => i.sku == product.sku) !== undefined;
 
   useEffect(() => {
     localStore.swiper?.slideToLoop(product.media_gallery_entries.map(img => img.file).length - 1, 0);
-    localStore.selectedImage = productHelper.getMainImage(product) || '';
+    const mainImage = productHelper.getMainImage(product) || '';
+    localStore.selectedImage = mediaHelper.getCatalogFileUrl(mainImage, 'product');
   }, [product])
 
 
@@ -61,12 +64,11 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
 
   const onSwiperIndexChange = (realIndex: number) => {
     const index = ++realIndex;
+    const file = index === product.media_gallery_entries.length
+      ? product.media_gallery_entries[0].file
+      : product.media_gallery_entries[index].file;
 
-    if (index === product.media_gallery_entries.length) {
-      localStore.selectedImage = product.media_gallery_entries[0].file;
-    } else {
-      localStore.selectedImage = product.media_gallery_entries[index].file;
-    }
+    localStore.selectedImage = mediaHelper.getCatalogFileUrl(file, 'product');
   }
 
   const onShowChars = () => {
@@ -117,7 +119,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
                 <SwiperSlide key={img.id}>
                   <img
                     className='product__slider-slide' alt=''
-                    src={mediaHelper.getCatalogUrl(img.file, "product")}
+                    src={mediaHelper.getCatalogFileUrl(img.file, "product")}
                     onClick={() => selectImg(index)}
                   />
                 </SwiperSlide>
@@ -129,25 +131,25 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
         <div className='product__content clt'>
           <div className='product__title'>{product.name}</div>
           <div className='product__price rlc'>
-            <div className='product__current-price'>{product.price} ₴</div>
-            {specialPrice && <div className='product__old-price'>{specialPrice} ₴</div>}
+            <div className='product__current-price'>{FormatHelper.formatCurrency(specialPrice ?? product.price, 0)}</div>
+            {specialPrice && <div className='product__old-price'>{FormatHelper.formatCurrency(product.price, 0)}</div>}
           </div>
           <div className='product__desc'>{description}</div>
           {isExtended &&
             <div className='description__details clc'>
               <ul className='description__list'>
-                {/* {product.attributes.slice(0, 5).map(attribute => (
-                  <li key={attribute.name} className='description__list-item rlt'>
-                    <div className='description__list-item_attr'>{attribute.name} :</div>
-                    <div className='description__list-item_val'>{attribute.value.name}</div>
+                {product.extension_attributes.description_attributes.slice(0, 5).map(attribute => (
+                  <li key={attribute.attribute_code} className='description__list-item rlt'>
+                    <div className='description__list-item_attr'>{attribute.label} :</div>
+                    <div className='description__list-item_val'>{attribute.value}</div>
                   </li>
-                ))} */}
+                ))}
               </ul>
               <div className='description__show-all' onClick={onShowChars}>Глянути всі характеристики</div>
             </div>
           }
           <div className='product__actions rlc'>
-            {!cartStore.totals?.items.find(i => i.item_id == product.id) &&
+            {!productInCart &&
               <CartCountEditor
                 onChange={onQtyChange}
                 selectedCount={localStore.selectedCount}
@@ -155,16 +157,17 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
             }
             <CartButton
               color="primary"
-              isActive={cartStore.totals?.items.find(i => i.item_id == product.id) === undefined}
+              sku={product.sku}
+              isActive={!productInCart}
               onClick={onAddToCart}
             />
           </div>
           <span className='product__availability'>Доступно:
             <span className={classNames('product__availability-status', {
-              'product__availability-status_green': product.status === AvailableStatus.IN_STOCK,
-              'product__availability-status_yellow': product.status === AvailableStatus.IN_STOKE_FEW,
-              'product__availability-status_gray': product.status === AvailableStatus.OUT_OF_STOCK,
-            })}>{product.status}</span>
+              'product__availability-status_green': product.extension_attributes.stock_status === StockStatus.IN_STOCK,
+              'product__availability-status_yellow': product.extension_attributes.stock_status === StockStatus.RUNNING_LOW,
+              'product__availability-status_gray': product.extension_attributes.stock_status === StockStatus.OUT_OF_STOCK,
+            })}>{productHelper.getStockStatusLabel(product)}</span>
           </span>
           <div className='product__share-actions rlc'>
             <span className='product__share'>Поділитися: </span>
@@ -176,7 +179,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
       {isExtended &&
         <div ref={charsRef} className='product__chars clt' >
           <div className='product__chars-title'>Характеристики</div>
-          {/* <Table attributes={product.attributes} /> */}
+          <Table attributes={product.extension_attributes.description_attributes} />
         </div>
       }
     </div>

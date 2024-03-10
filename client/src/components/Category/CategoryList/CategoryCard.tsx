@@ -15,7 +15,7 @@ interface CategoryCardProps {
 
 const CategoryCard: FC<CategoryCardProps> = observer(({ category, poductsCount, onClick }) => {
   const image = categoryHelper.getImage(category);
-  const imageUrl = image ? mediaHelper.getCatalogUrl(image, "category") : '';
+  const imageUrl = image ? mediaHelper.getCatalogFileUrl(image, "category") : '';
 
   return (
     <NavLink

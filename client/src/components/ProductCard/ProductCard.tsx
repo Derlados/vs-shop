@@ -1,7 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { FC } from 'react'
-import { useParams } from 'react-router-dom';
-import { IImage } from '../../types/IImage';
+import { FC } from 'react';
 import ProductFullInfo from './ProductFullInfo/ProductFullInfo';
 import ProductLargeCard from './ProductLargeCard/ProductLargeCard';
 import ProductSmallCard from './ProductSmallCard/ProductSmallCard';
@@ -13,15 +11,16 @@ import catalogStore from '../../stores/catalog/catalog.store';
 
 export interface ProductCardProps {
   product: IProduct;
+  productUrl: string;
+  mainImage: string | undefined;
+  specialPrice: number | undefined;
+  manufacturer: string | undefined;
+  description: string | undefined;
   updateCart: (
     action: "add" | "update" | "delete",
     product: IProduct,
     count?: number
   ) => void;
-  mainImage: string | undefined;
-  specialPrice: number | undefined;
-  manufacturer: string | undefined;
-  description: string | undefined;
 }
 
 
@@ -33,8 +32,6 @@ interface CreateProductCardProps {
 }
 
 const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize = "default", product, onOpenQuickView = () => { } }) => {
-  const { catalog: category } = useParams();
-
   const manufacturer = productHelper.getManufacturer(product, catalogStore.manufacturers);
   const mainImage = productHelper.getMainImage(product);
   const description = productHelper.getDescription(product);
@@ -78,7 +75,8 @@ const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize 
       return (
         <ProductSmallCard
           product={product}
-          urlFull={`/${category}/${product.sku}`}
+          urlFull={`/product/${product.sku}`}
+          productUrl={`/product/${product.sku}`}
           containerSize={containerSize}
           updateCart={updateCart}
           onOpenQuickView={onOpenQuickView}
@@ -93,6 +91,7 @@ const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize 
       return (
         <ProductLargeCard
           product={product}
+          productUrl={`/product/${product.sku}`}
           updateCart={updateCart}
           onOpenQuickView={onOpenQuickView}
           mainImage={mainImage}
@@ -106,6 +105,7 @@ const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize 
       return (
         <ProductFullInfo
           product={product}
+          productUrl={`/product/${product.sku}`}
           updateCart={updateCart}
           mainImage={mainImage}
           specialPrice={specialPrice}
@@ -118,6 +118,7 @@ const ProductCard: FC<CreateProductCardProps> = observer(({ type, containerSize 
       return (
         <ProductFullInfo
           product={product}
+          productUrl={`/product/${product.sku}`}
           updateCart={updateCart}
           isExtended={true}
           mainImage={mainImage}

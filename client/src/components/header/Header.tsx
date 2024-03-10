@@ -7,12 +7,13 @@ import { SpecSymbols } from '../../values/specSymbols';
 import { useQuery } from '../../lib/hooks/useQuery';
 import QuickSearch from './QuickSearch/QuickSearch';
 import BurgerMenu from './BurgerMenu/BurgerMenu';
-import CartQuickView from './CartQuickView/CartQuickView';
+import CartQuickView from '../CartQuickView/CartQuickView';
 import { ROUTES } from '../../values/routes';
 import CatalogList from './CatalogList/CatalogList';
 import cartStore from '../../stores/cart/cart.store';
 import catalogStore from '../../stores/catalog/catalog.store';
 import React from 'react';
+import uiStore from '../../stores/ui/ui.store';
 
 interface LocalStore {
   isCartOpen: boolean;
@@ -66,13 +67,8 @@ const Header = observer(() => {
   }
 
   const onOpenCart = () => {
-    localStore.isCartOpen = true;
+    uiStore.openSidebarCart();
     document.body.style.overflowY = "hidden";
-  }
-
-  const onCloseCart = () => {
-    localStore.isCartOpen = false;
-    document.body.style.overflowY = "";
   }
 
   const onOpenMenu = () => {
@@ -110,7 +106,9 @@ const Header = observer(() => {
           <li className='header__nav-item'>
             <NavLink className={classNames('header__nav-link', {
               'header__nav-link_active': location.pathname === '/home'
-            })} to={'./home'}>Головна</NavLink>
+            })} to={'./home'}>
+              Головна
+            </NavLink>
           </li>
           <li className={classNames('header__nav-item', {
             'header__nav-item_open': localStore.isCategoryList
@@ -124,7 +122,9 @@ const Header = observer(() => {
           <li className='header__nav-item'>
             <NavLink className={classNames('header__nav-link', {
               'header__nav-link_active': location.pathname === '/contacts'
-            })} to={'./contacts'}>Контакти</NavLink>
+            })} to={'./contacts'}>
+              Контакти
+            </NavLink>
           </li>
         </ul>
         <div className='header__action-area rrc'>
@@ -148,7 +148,7 @@ const Header = observer(() => {
         </div>
       </div>
       <BurgerMenu isOpen={localStore.isMenuOpen} onClose={onCloseMenu} />
-      <CartQuickView isOpen={localStore.isCartOpen} onClose={onCloseCart} />
+      <CartQuickView />
       <div className={classNames('header__mask', {
         'header__mask_open': localStore.isFocused
       })} onClick={() => onFocusChangeInput(false)}></div>

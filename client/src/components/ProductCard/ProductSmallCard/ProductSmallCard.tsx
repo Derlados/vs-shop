@@ -1,15 +1,15 @@
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
-import CartButton from '../../cart/CartButton/cart-button';
+import CartButton from '../../CartButton/cart-button';
 import { ProductCardProps } from '../ProductCard';
 import { NavLink } from 'react-router-dom';
 import "aos/dist/aos.css";
 import classNames from 'classnames';
-import { AvailableStatus } from '../../../types/IProduct';
-import { IProduct } from '../../../types/magento/IProduct';
+import { IProduct, StockStatus } from '../../../types/magento/IProduct';
 import productHelper from '../../../helpers/product.helper';
 import cartStore from '../../../stores/cart/cart.store';
 import mediaHelper from '../../../helpers/media.helper';
+import FormatHelper from '../../../helpers/format.helper';
 
 export interface SimpleProductCardProps extends ProductCardProps {
   containerSize?: "default" | "small";
@@ -20,11 +20,14 @@ export interface SimpleProductCardProps extends ProductCardProps {
 const ProductSmallCard: FC<SimpleProductCardProps> = observer(({
   containerSize = 'default',
   product,
+  productUrl,
   updateCart,
   onOpenQuickView,
   mainImage,
   specialPrice
 }) => {
+  const isActiveCartBtn = cartStore.cart?.items.find(item => item.sku == product.sku) === undefined;
+
   return (
     <div className='product-card ccc'>
       <div className='product-card__labels ccc'>
@@ -38,40 +41,52 @@ const ProductSmallCard: FC<SimpleProductCardProps> = observer(({
           <div className='product-card__quick-view'></div>
         </div>
       </div>
-      <NavLink className='product-card__img-cont' to={`/shop/${product.sku}`}>
+      <NavLink className='product-card__img-cont' to={productUrl}>
         <img
           className='product-card__img'
           alt=''
-          src={mainImage ? mediaHelper.getCatalogUrl(mainImage, "product") : require('../../../assets/images/no-photos.png')}
+          src={mainImage ? mediaHelper.getCatalogFileUrl(mainImage, "product") : require('../../../assets/images/no-photos.png')}
         />
       </NavLink>
       <div className='product-card__line' />
       <div className='product-card__desc'>
         <div className='product-card__title product-card__title_gray rlc'>{ }</div>
-        <NavLink className='product-card__title-nav ccc' to={`/shop/${product.sku}`}>
+        <NavLink className='product-card__title-nav ccc' to={productUrl}>
           <div className='product-card__title'>{product.name}</div>
         </NavLink>
-        <div className={`product-card__price-and-btn ${containerSize == 'default' ? 'rlc' : 'ccc'}`}>
-          <div className={`product-card__prices ${containerSize == 'default' ? '' : 'product-card__prices_margin'} rlc`}>
-            <div className='product-card__current-price'>{Number(specialPrice ?? product.price).toFixed(0)} грн</div>
+        <div
+          className={classNames('product-card__price-and-btn', {
+            'rlc': containerSize == 'default',
+            'ccc': containerSize == 'small'
+          })}
+        >
+          <div
+            className={classNames('product-card__prices rlc', {
+              'product-card__prices_margin': containerSize !== 'default'
+            })}
+          >
+            <div className='product-card__current-price'>{FormatHelper.formatCurrency(specialPrice ?? product.price, 0)} грн</div>
             {specialPrice && specialPrice !== product.price &&
-              <div className='product-card__old-price'>{Number(product.price).toFixed(0)} грн</div>
+              <div className='product-card__old-price'>{FormatHelper.formatCurrency(product.price, 0)} грн</div>
             }
           </div>
-          {product.status !== AvailableStatus.OUT_OF_STOCK &&
+          {product.extension_attributes.stock_status !== StockStatus.OUT_OF_STOCK &&
             <CartButton
-              className={`product-card__cart-btn ${containerSize == 'default' ? '' : 'product-card__cart-btn_large'}`}
-              isActive={cartStore.totals?.items.find(item => item.item_id == product.id) === undefined}
+              className={classNames('product-card__cart-btn', {
+                'product-card__cart-btn_large': containerSize !== 'default'
+              })}
+              sku={product.sku}
+              isActive={isActiveCartBtn}
               onClick={() => updateCart('add', product)}
             />}
         </div>
         {containerSize === 'default' &&
           <div className={classNames('product-card__availability', {
-            'product-card__availability_green': product.status === AvailableStatus.IN_STOCK,
-            'product-card__availability_yellow': product.status === AvailableStatus.IN_STOKE_FEW,
-            'product-card__availability_gray': product.status === AvailableStatus.OUT_OF_STOCK,
+            'product-card__availability_green': product.extension_attributes.stock_status === StockStatus.IN_STOCK,
+            'product-card__availability_yellow': product.extension_attributes.stock_status === StockStatus.RUNNING_LOW,
+            'product-card__availability_gray': product.extension_attributes.stock_status === StockStatus.OUT_OF_STOCK,
           })}>
-            В наявності
+            {productHelper.getStockStatusLabel(product)}
           </div>
         }
       </div>

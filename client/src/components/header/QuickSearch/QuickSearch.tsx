@@ -86,7 +86,6 @@ const QuickSearch: FC<QuickSearchProps> = observer(({ value, categoryList, onFoc
                   </li>
                 ))}
               </ul>
-
             ))}
           </ul>
         </div>

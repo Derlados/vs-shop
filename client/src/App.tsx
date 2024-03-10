@@ -32,7 +32,7 @@ const App = () => {
           <Route path='/contacts' element={<Contacts />} />
           <Route path='/404_not_found' element={<Page404 />} />
           <Route path='/search' element={<Shop isGlobalSearch={true} />} />
-          <Route path='/:productName/:id' element={<Product />} />
+          <Route path='/product/:sku' element={<Product />} />
           <Route path={`/${ROUTES.SHOP_ROUTE}/:categoryPath/search`} element={<Shop />} />
           <Route path={`/${ROUTES.SHOP_ROUTE}/:categoryPath`} element={<Shop />} />
           <Route path={`/${ROUTES.SHOP_ROUTE}/:categoryPath/:filters`} element={<Shop />} />
