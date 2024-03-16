@@ -4,21 +4,23 @@ import './input.scss';
 
 
 interface InputProps {
-    mask?: string;
     className?: string;
+    mask?: string;
+    name: string;
     placeholder?: string;
     hint: string;
     value: string;
     onChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input: FC<InputProps> = ({ className = '', mask, placeholder = '', value, hint, onChange }) => {
+const Input: FC<InputProps> = ({ className = '', name, mask, placeholder = '', value, hint, onChange }) => {
 
     return (
         <div className={`${className} input clc`}>
             <div className='input__hint'>{hint}</div>
             {mask ?
                 <InputMask
+                    name={name}
                     className='input__field'
                     mask={mask}
                     value={value}
@@ -27,7 +29,7 @@ const Input: FC<InputProps> = ({ className = '', mask, placeholder = '', value, 
                     onBlur={(e) => e.preventDefault()}
                 />
                 :
-                <input className='input__field' placeholder={placeholder} onChange={onChange} value={value} />
+                <input className='input__field' name={name} placeholder={placeholder} onChange={onChange} value={value} />
             }
         </div>
     )

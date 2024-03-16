@@ -17,7 +17,7 @@ interface CartButtonProps {
 
 const CartButton: FC<CartButtonProps> = observer(({ className = '', sku, isActive, onClick, color = "gray" }) => {
 
-  if (cartStore.status == "loading" && cartStore.processingSkus == sku) {
+  if (cartStore.status == "loading" && cartStore.processingSku == sku) {
     return (
       <div className={`${className} cart-button cart-button_inactive cart-button_added rlc`}>
         <div className='cart-button__loader-container ccc'>

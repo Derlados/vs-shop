@@ -49,7 +49,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
 
 
   const onQtyChange = (neqQty: number) => {
-    updateCart('update', product, neqQty);
+    localStore.selectedCount = neqQty;
   }
 
   const onAddToCart = () => {
@@ -151,6 +151,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
           <div className='product__actions rlc'>
             {!productInCart &&
               <CartCountEditor
+                sku={product.sku}
                 onChange={onQtyChange}
                 selectedCount={localStore.selectedCount}
               />

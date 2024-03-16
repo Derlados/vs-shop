@@ -68,7 +68,6 @@ const Header = observer(() => {
 
   const onOpenCart = () => {
     uiStore.openSidebarCart();
-    document.body.style.overflowY = "hidden";
   }
 
   const onOpenMenu = () => {

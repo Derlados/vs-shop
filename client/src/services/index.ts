@@ -6,7 +6,7 @@ export const axiosNVInstance = axios.create({
 })
 
 export const axiosInstance = axios.create({
-    baseURL: 'http://guessdraw.fun/rest/V1'
+    baseURL: 'http://localhost/rest/V1'
 });
 
 export const headersJson = {

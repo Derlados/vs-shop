@@ -1,9 +1,9 @@
 class MediaHelper {
 
   getCatalogFileUrl(file: string, type: "product" | "category"): string {
-    if (type === "category") return `http://guessdraw.fun/${file}`;
+    if (type === "category") return `http://localhost/${file}`;
 
-    return `http://guessdraw.fun/media/catalog/product/${file}`;
+    return `http://localhost/media/catalog/product/${file}`;
   }
 }
 
