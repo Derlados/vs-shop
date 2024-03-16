@@ -19,7 +19,7 @@ export class Service {
             return data;
         } catch (e) {
             this.errorHandler(e);
-            throw new Error()
+            throw e
         }
     }
 

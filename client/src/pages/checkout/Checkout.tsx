@@ -1,23 +1,32 @@
-import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Navigate, NavLink } from 'react-router-dom';
-import Loader from '../../lib/components/Loader/Loader';
-import Modal from '../../lib/components/Modal/Modal';
-import Selector from '../../lib/components/Selector/Selector';
 import './checkout.scss';
 import { ISettlement } from '../../types/ISettlement';
-import { REGEX } from '../../values/regex';
-import Input from '../../lib/components/Input/Input';
 import { useEffect } from 'react';
 import cartStore from '../../stores/cart/cart.store';
+import Selector from '../../lib/components/Selector/Selector';
+import Input from '../../lib/components/Input/Input';
+import classNames from 'classnames';
+import { REGEX } from '../../values/regex';
+import settlementStore from '../../stores/settlement/settlement.store';
+import Modal from '../../lib/components/Modal/Modal';
+import Loader from '../../lib/components/Loader/Loader';
+import { IShippingInformation } from '../../types/magento/IShippingInformation';
 
 const phoneMask = '+38 999 999 99 99';
 
+interface CheckoutPageStore {
+  isTriedToPlace: boolean;
+}
+
 const Checkout = observer(() => {
-  // const checkoutStore = useLocalObservable(() => new CheckoutStore());
+  const checkoutPageStore = useLocalObservable<CheckoutPageStore>(() => ({
+    isTriedToPlace: false
+  }));
+
 
   useEffect(() => {
-    // checkoutStore.init(cart.cartId);
+
   }, [])
 
   const tryPlaceOrder = async () => {
@@ -95,29 +104,25 @@ const Checkout = observer(() => {
     return settlementFullName;
   }
 
-  const onFirstNameChange = (v: React.ChangeEvent<HTMLInputElement>) => {
-    // checkoutStore.onFirstNameChange(v.target.value);
-  }
+  const onChangeField = (v: React.ChangeEvent<HTMLInputElement>) => {
+    const validKeys = ["firstname", "lastname", "telephone", "email"];
+    const key = v.target.name;
+    if (!validKeys.includes(key)) {
+      return;
+    }
 
-  const onLastNameChange = (v: React.ChangeEvent<HTMLInputElement>) => {
-    // checkoutStore.onLastNameChange(v.target.value);
-  }
-
-  const onPhoneChange = (v: React.ChangeEvent<HTMLInputElement>) => {
-    // checkoutStore.onPhoneChange(v.target.value);
-  }
-
-  const onEmailChange = (v: React.ChangeEvent<HTMLInputElement>) => {
-    // checkoutStore.onEmailChange(v.target.value);
+    cartStore.onUpdateShippingInformation(
+      key as keyof IShippingInformation["addressInformation"]["shippingAddress"],
+      v.target.value
+    );
   }
 
   const onAdditionalInfoChange = (v: React.ChangeEvent<HTMLTextAreaElement>) => {
     // checkoutStore.onAdditionalInfoChange(v.target.value);
   }
 
-
   const onSelectSettlement = (settlementRef: string) => {
-    // const selectedSettlement = settlement.settlements.find(s => s.ref === settlementRef)
+    const selectedSettlement = settlementStore.settlements.find(s => s.ref === settlementRef)
     // if (selectedSettlement) {
     //     checkoutStore.onSettlementChange(getSettlementFullName(selectedSettlement));
     // }
@@ -134,55 +139,60 @@ const Checkout = observer(() => {
 
   return (
     <div className='checkout rlt'>
-      {/* <div className='checkout__details clt'>
+      <div className='checkout__details clt'>
         <div className='checkout__title'>Деталі замовлення</div>
         <div className='checkout__inputs-row rlc'>
           <Input className={classNames('checkout__input', {
-            'checkout__input_invalid': checkoutStore.isTrienToPlace && checkoutStore.firstName === ''
+            'checkout__input_invalid': checkoutPageStore.isTriedToPlace && cartStore.getAddressInfoByKey("firstname") === ''
           })}
+            name="firstname"
             hint="Ім'я"
-            value={checkoutStore.firstName}
-            onChange={onFirstNameChange}
+            value={cartStore.getAddressInfoByKey("firstname")}
+            onChange={onChangeField}
           />
           <Input className={classNames('checkout__input', {
-            'checkout__input_invalid': checkoutStore.isTrienToPlace && checkoutStore.lastName === ''
+            'checkout__input_invalid': checkoutPageStore.isTriedToPlace && cartStore.getAddressInfoByKey("lastname") === ''
           })}
+            name="lastname"
             hint="Прізвище"
-            value={checkoutStore.lastName}
-            onChange={onLastNameChange}
+            value={cartStore.getAddressInfoByKey("lastname")}
+            onChange={onChangeField}
           />
         </div>
         <div className='checkout__inputs-row rlc'>
           <Input className={classNames('checkout__input', {
-            'checkout__input_invalid': checkoutStore.isTrienToPlace && !REGEX.PHONE_REGEX.test(checkoutStore.phone)
+            'checkout__input_invalid': checkoutPageStore.isTriedToPlace && !REGEX.PHONE_REGEX.test(cartStore.getAddressInfoByKey<string>("telephone"))
           })}
+            name="telephone"
             mask={phoneMask}
             placeholder="+38 ___ ___ __ __"
             hint='Номер телефону'
-            value={checkoutStore.phone}
-            onChange={onPhoneChange}
+            value={cartStore.getAddressInfoByKey("telephone")}
+            onChange={onChangeField}
           />
           <Input className={classNames('checkout__input', {
-            'checkout__input_invalid': checkoutStore.isTrienToPlace && (!REGEX.EMAIL_REGEX.test(checkoutStore.email) && checkoutStore.email != '')
+            'checkout__input_invalid': checkoutPageStore.isTriedToPlace
+              && (!REGEX.EMAIL_REGEX.test(cartStore.getAddressInfoByKey("email")) && cartStore.getAddressInfoByKey("email") != '')
           })}
+            name="email"
             hint="Електронна пошта (не обов'язково)"
-            value={checkoutStore.email}
-            onChange={onEmailChange}
+            value={cartStore.getAddressInfoByKey("email")}
+            onChange={onChangeField}
           />
         </div>
         <Selector
           className='checkout__selector'
           withInput={true}
           hint={'Населений пункт України'}
-          values={getSettlementValues(settlement.settlements)}
+          values={getSettlementValues(settlementStore.settlements)}
           onSelect={onSelectSettlement}
-          onChange={(searchString: string) => settlement.findSettlements(searchString)} />
+          onChange={(searchString: string) => settlementStore.findSettlements(searchString)} />
         <Selector
           className='checkout__selector'
           withInput={true}
           withSearch={true}
           hint={'Адреса точки видачі'}
-          values={getWarehouseValues(settlement.warehouses)}
+          values={getWarehouseValues(settlementStore.warehouses)}
           selectedId={checkoutStore.warehouse}
           onSelect={onSelectWarehouse} />
         <div className='checkout__additional-info'>
@@ -202,10 +212,10 @@ const Checkout = observer(() => {
             <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
           </div>
           <ul className='checkout__order-product-list'>
-            {checkoutStore.cartProducts.map(cp => (
-              <li key={cp.product.id} className='checkout__order-product rlc'>
-                <div className='checkout__order-text'>{cp.product.title} × {cp.count}</div>
-                <div className='checkout__order-text'>{cp.product.price * cp.count} ₴</div>
+            {cartStore.totals?.items.map(item => (
+              <li key={item.item_id} className='checkout__order-product rlc'>
+                <div className='checkout__order-text'>{item.name} × {item.qty}</div>
+                <div className='checkout__order-text'>{item.price * item.qty} ₴</div>
               </li>
             ))}
           </ul>
@@ -217,16 +227,16 @@ const Checkout = observer(() => {
           <div className='checkout__line'></div>
           <div className='checkout__total rlc'>
             <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
-            <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{checkoutStore.totalPrice.toFixed(2)} ₴</div>
+            <div className='checkout__order-text checkout__order-text_bold checkout__order-text_primary'>{cartStore.totals?.grand_total.toFixed(2)} ₴</div>
           </div>
         </div>
         <div className='checkout__order-accept ccc' onClick={tryPlaceOrder}>ОФОРМИТИ ЗАМОВЛЕННЯ</div>
         {orders.apiError && <div className='checkout__error'>* {orders.apiError}</div>}
       </div>
-      <Modal isActive={checkoutStore.status == CheckoutStoreStatus.placing || checkoutStore.status == CheckoutStoreStatus.placingSuccess} setActive={() => { }} >
+      <Modal isActive={cartStore.status == "placing" || cartStore.status == "placing-success"} setActive={() => { }} >
         <div className='checkout__modal ccc'>
-          {checkoutStore.status == CheckoutStoreStatus.placing && <Loader />}
-          {checkoutStore.status == CheckoutStoreStatus.placingSuccess &&
+          {cartStore.status == "placing" && <Loader />}
+          {cartStore.status == "placing-success" &&
             <div className='checkout__modal-success ccc'>
               <div className='checkout__modal-icon ccc'>✓</div>
               <div className='checkout__modal-text'>Ваше замовлення надіслано успішно !</div>
@@ -234,9 +244,9 @@ const Checkout = observer(() => {
             </div>
           }
         </div>
-      </Modal> */}
+      </Modal>
     </div>
-  )
+  );
 });
 
 export default Checkout

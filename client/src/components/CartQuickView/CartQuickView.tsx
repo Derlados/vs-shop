@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './cart-quick.scss';
 import cartStore from '../../stores/cart/cart.store';
@@ -11,6 +11,11 @@ import CartCountEditor from '../CartCountEditor/CartCountEditor';
 const CartQuickView: FC = observer(() => {
   const navigation = useNavigate();
   const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    document.body.style.overflowY = uiStore.isOpenSidebarCart ? 'hidden' : 'auto';
+  }, [uiStore.isOpenSidebarCart])
+
 
   const onDeleteProduct = (product: ICartItem) => {
     cartStore.removeProduct(product.item_id);
@@ -60,6 +65,7 @@ const CartQuickView: FC = observer(() => {
                     </div>
                     <div className='cart-quick__product-count rlc'>
                       <CartCountEditor
+                        sku={item.sku}
                         onChange={(count) => onChangeCount(item, count)}
                         selectedCount={item.qty}
                       />

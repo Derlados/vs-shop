@@ -1,17 +1,21 @@
+import { AxiosError } from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import cartService from "../../services/cart/cart.service";
 import { ICart } from "../../types/magento/ICart";
+import { IShippingInformation } from "../../types/magento/IShippingInformation";
 import { ITotals } from "../../types/magento/ITotals";
+import { ShippingPattern } from "../../values/shipping-patterns";
 
 class CartStore {
   private readonly LOCAL_STORAGE_CART_ID = "cartId";
 
   private cartId: string;
-  public status: 'initial' | 'loading' | 'success' | 'error';
+  public status: 'initial' | 'loading' | 'success' | 'error' | 'placing';
   public cart: ICart;
   public totals?: ITotals;
   public isInit: boolean;
-  public processingSkus: string;
+  public processingSku: string;
+  public shippingInformation: IShippingInformation;
 
   constructor() {
     makeAutoObservable(this);
@@ -19,7 +23,9 @@ class CartStore {
     this.cartId = localStorage.getItem(this.LOCAL_STORAGE_CART_ID) || '';
     this.status = 'initial';
     this.isInit = false;
-    this.processingSkus = '';
+    this.processingSku = '';
+
+    this.shippingInformation = { ...ShippingPattern.UA_SHIPPING };
   }
 
 
@@ -43,7 +49,13 @@ class CartStore {
         this.status = 'success';
         this.isInit = true;
       });
-    } catch (error) {
+    } catch (error: AxiosError | unknown) {
+      if ((error as AxiosError).response?.status === 404 && this.cartId) {
+        await this.clear();
+        await this.init();
+        return;
+      }
+
       runInAction(() => this.status = 'error');
     }
   }
@@ -51,7 +63,7 @@ class CartStore {
   async addProduct(sku: string, quantity: number) {
     runInAction(() => {
       this.status = 'loading';
-      this.processingSkus = sku;
+      this.processingSku = sku;
     });
 
     try {
@@ -61,7 +73,7 @@ class CartStore {
 
       runInAction(() => {
         this.cart.items = updatedItems;
-        this.processingSkus = '';
+        this.processingSku = '';
         this.status = 'success';
       });
     } catch (error) {
@@ -72,7 +84,7 @@ class CartStore {
   async updateProduct(itemId: number, quantity: number) {
     runInAction(() => {
       this.status = 'loading';
-      this.processingSkus = this.cart.items.find(item => item.item_id === itemId)?.sku || '';
+      this.processingSku = this.cart.items.find(item => item.item_id === itemId)?.sku || '';
     });
 
     try {
@@ -82,7 +94,7 @@ class CartStore {
 
       runInAction(() => {
         this.cart.items = updatedItems;
-        this.processingSkus = '';
+        this.processingSku = '';
         this.status = 'success';
       });
     } catch (error) {
@@ -93,7 +105,7 @@ class CartStore {
   async removeProduct(itemId: number) {
     runInAction(() => {
       this.status = 'loading';
-      this.processingSkus = this.cart.items.find(item => item.item_id === itemId)?.sku || '';
+      this.processingSku = this.cart.items.find(item => item.item_id === itemId)?.sku || '';
     });
 
     try {
@@ -102,7 +114,7 @@ class CartStore {
 
       runInAction(() => {
         this.cart.items = this.cart.items.filter(item => item.item_id !== itemId);
-        this.processingSkus = '';
+        this.processingSku = '';
         this.status = 'success';
       });
     } catch (error) {
@@ -125,6 +137,27 @@ class CartStore {
   async clear() {
     localStorage.removeItem(this.LOCAL_STORAGE_CART_ID);
     this.cartId = '';
+  }
+
+  async onUpdateShippingInformation(key: keyof IShippingInformation["addressInformation"]["shippingAddress"], value: string) {
+    this.shippingInformation = {
+      ...this.shippingInformation,
+      addressInformation: {
+        ...this.shippingInformation.addressInformation,
+        shippingAddress: {
+          ...this.shippingInformation.addressInformation.shippingAddress,
+          [key]: value
+        },
+        billingAddress: {
+          ...this.shippingInformation.addressInformation.billingAddress,
+          [key]: value
+        }
+      }
+    };
+  }
+
+  getAddressInfoByKey<T>(key: keyof IShippingInformation["addressInformation"]["shippingAddress"]): T {
+    return this.shippingInformation.addressInformation.shippingAddress[key] as T;
   }
 }
 

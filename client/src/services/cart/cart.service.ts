@@ -1,6 +1,7 @@
 import { axiosInstance, headersAuthJson, headersJson } from "..";
 import { Service } from "../../services/service";
 import { ICart } from "../../types/magento/ICart";
+import { IShippingInformation } from "../../types/magento/IShippingInformation";
 import { ITotals } from "../../types/magento/ITotals";
 import { IUpdateItemRes } from "./dto/update-item-res.dto";
 
@@ -34,6 +35,19 @@ class CartService extends Service {
 
   async deleteItem(cartId: string, itemId: number): Promise<boolean> {
     return await this.execute(axiosInstance.delete(`${this.apiUrl}/${cartId}/items/${itemId}`));
+  }
+
+  async setShippingInformation(cartId: string, shippingInformation: IShippingInformation): Promise<boolean> {
+    return await this.execute(axiosInstance.post(`${this.apiUrl}/${cartId}/shipping-information`, shippingInformation, { headers: headersJson }));
+  }
+
+  async placeOrder(cartId: string, paymentMethod: string): Promise<boolean> {
+    const body = {
+      paymentMethod: {
+        method: paymentMethod
+      }
+    };
+    return await this.execute(axiosInstance.put(`${this.apiUrl}/${cartId}/order`, body, { headers: headersJson }));
   }
 }
 

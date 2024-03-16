@@ -1,24 +1,47 @@
 @import '../../styles/constants/colors.scss';
 
 .cart-count-editor {
+  position: relative;
+  height: 100%;
+  border: solid 1px $primary-gray;
+  padding: 0px 12px 0px 12px;
+  margin-right: 15px;
+
+  &__btn {
     height: 100%;
-    border: solid 1px $primary-gray;
-    padding: 0px 12px 0px 12px;
-    margin-right: 15px;
+    width: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    color: rgb(68, 68, 68);
+  }
 
-    &__btn {
-        height: 100%;
-        width: 12px;
-        font-size: 20px;
-        cursor: pointer;
-        color: rgb(68, 68, 68);
-    }
+  &__count {
+    width: 32px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    text-align: center;
+  }
 
-    &__count {
-        width: 32px;
-        font-size: 14px;
-        border: none;
-        outline: none;
-        text-align: center;
+  &__loading-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .small-loader {
+      width: 24px;
+      height: 24px;
+
+      &::after {
+        border-color: transparent $primary transparent $primary !important;
+      }
     }
+  }
 }
