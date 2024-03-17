@@ -1,16 +1,19 @@
 import { AxiosError } from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import cartService from "../../services/cart/cart.service";
+import { ISettlement } from "../../types/ISettlement";
+import { IWarehouse } from "../../types/IWarehouse";
 import { ICart } from "../../types/magento/ICart";
 import { IShippingInformation } from "../../types/magento/IShippingInformation";
 import { ITotals } from "../../types/magento/ITotals";
+import { REGEX } from "../../values/regex";
 import { ShippingPattern } from "../../values/shipping-patterns";
 
 class CartStore {
   private readonly LOCAL_STORAGE_CART_ID = "cartId";
 
   private cartId: string;
-  public status: 'initial' | 'loading' | 'success' | 'error' | 'placing';
+  public status: 'initial' | 'loading' | 'success' | 'error' | 'placing' | 'placing-success';
   public cart: ICart;
   public totals?: ITotals;
   public isInit: boolean;
@@ -28,6 +31,34 @@ class CartStore {
     this.shippingInformation = { ...ShippingPattern.UA_SHIPPING };
   }
 
+  get isValidCheckout() {
+    const { city, street, telephone, firstname, lastname, email, postcode } = this.shippingInformation.addressInformation.shippingAddress;
+
+    const isValidShipping = this.shippingInformation.addressInformation.shippingAddress.region
+      && city
+      && street.length > 0
+      && telephone && REGEX.PHONE_REGEX.test(telephone)
+      && firstname
+      && lastname
+      && email && REGEX.EMAIL_REGEX.test(email)
+      && postcode;
+
+    return this.cart && this.cart.items.length > 0 && isValidShipping;
+  }
+
+  get validErrors() {
+    const { city, street, telephone, firstname, lastname, email, postcode } = this.shippingInformation.addressInformation.shippingAddress;
+    const errors = {
+      "city": !city ? "Оберіть населений пункт" : "",
+      "street": street.length === 0 ? "Оберіть точку видачі" : "",
+      "telephone": !telephone || !REGEX.PHONE_REGEX.test(telephone) ? "Введіть коректний номер телефону" : "",
+      "firstname": !firstname ? "Введіть ім'я" : "",
+      "lastname": !lastname ? "Введіть прізвище" : "",
+      "email": email && !REGEX.EMAIL_REGEX.test(email) ? "Введіть коректну електронну пошту" : "",
+    };
+
+    return errors;
+  }
 
   async init() {
     runInAction(() => this.status = 'loading');
@@ -139,7 +170,7 @@ class CartStore {
     this.cartId = '';
   }
 
-  async onUpdateShippingInformation(key: keyof IShippingInformation["addressInformation"]["shippingAddress"], value: string) {
+  updateShippingInformation(key: keyof IShippingInformation["addressInformation"]["shippingAddress"], value: string | string[]) {
     this.shippingInformation = {
       ...this.shippingInformation,
       addressInformation: {
@@ -154,6 +185,20 @@ class CartStore {
         }
       }
     };
+  }
+
+  setSettlement(settlement: ISettlement, warehouse: IWarehouse) {
+    this.updateShippingInformation("region", warehouse.region);
+    this.updateShippingInformation("city", `${settlement.name}, ${settlement.area}`);
+    this.updateShippingInformation("street", [warehouse.address]);
+    this.updateShippingInformation("postcode", warehouse.postcode || '');
+  }
+
+  clearSettlement() {
+    this.updateShippingInformation("region", '');
+    this.updateShippingInformation("city", '');
+    this.updateShippingInformation("street", []);
+    this.updateShippingInformation("postcode", '');
   }
 
   getAddressInfoByKey<T>(key: keyof IShippingInformation["addressInformation"]["shippingAddress"]): T {

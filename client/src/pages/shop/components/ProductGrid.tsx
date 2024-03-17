@@ -1,47 +1,28 @@
 import classNames from 'classnames';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import ProductCard from '../../../components/ProductCard/ProductCard';
 import { ViewMode } from './ProductCatalog/ProductCatalog';
 import Pagination from '../../../lib/components/Pagination/Pagination';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { IProduct } from '../../../types/magento/IProduct';
+import shopStore from '../../../stores/shop/shop.store';
 
 interface ProductGridProps {
   products: IProduct[];
   viewMode: ViewMode;
-  maxPages: number;
-  onChangePage: (page: number) => void;
   onSelectProduct?: (product: IProduct) => void;
   onOpenQuickView?: (product: IProduct) => void;
 }
 
-interface LocalStore {
-  selectedPage: number;
-}
 
-const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPages, onChangePage, onSelectProduct, onOpenQuickView = () => { } }) => {
-  const localStore = useLocalObservable<LocalStore>(() => ({
-    selectedPage: 1,
-  }))
-
-
-  const backPage = () => {
-    if (localStore.selectedPage !== 1) {
-      --localStore.selectedPage;
-      onChangePage(localStore.selectedPage);
-    }
-  }
-
-  const nextPage = () => {
-    if (localStore.selectedPage !== maxPages) {
-      ++localStore.selectedPage;
-      onChangePage(localStore.selectedPage);
-    }
-  }
+const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, onSelectProduct, onOpenQuickView = () => { } }) => {
 
   const selectPage = (page: number) => {
-    localStore.selectedPage = page;
-    onChangePage(localStore.selectedPage);
+    if (page < 1 || page > shopStore.totalPages) {
+      return;
+    }
+
+    shopStore.selectPage(page);
   }
 
   return (
@@ -70,12 +51,12 @@ const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, maxPag
           </div>
         ))}
       </div>
-      {maxPages > 1 &&
+      {shopStore.totalPages > 1 &&
         <Pagination
-          maxPages={maxPages}
-          currentPage={localStore.selectedPage}
-          back={backPage}
-          next={nextPage}
+          maxPages={shopStore.totalPages}
+          currentPage={shopStore.currentPage}
+          back={() => selectPage(shopStore.currentPage - 1)}
+          next={() => selectPage(shopStore.currentPage + 1)}
           setPage={selectPage} />
       }
     </div>

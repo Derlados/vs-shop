@@ -1,5 +1,6 @@
 import { axiosNVInstance } from "..";
 import { ISettlement } from "../../types/ISettlement";
+import { IWarehouse } from "../../types/IWarehouse";
 import { Service } from "../service";
 
 interface NVResData {
@@ -26,15 +27,22 @@ class NovaposhtaService extends Service {
         return this.parseSettlements(data.data);
     }
 
-    async getWarehouses(settlementRef: string): Promise<string[]> {
+    async getWarehouses(settlementRef: string): Promise<IWarehouse[]> {
         const postalBody = this.getWarehousesBody(settlementRef, WarehouseType.POSTAL);
         const cargoBody = this.getWarehousesBody(settlementRef, WarehouseType.CARGO);
 
         const postalWarehouses = axiosNVInstance.post<NVResData>('', postalBody);
         const cargoWarehouses = axiosNVInstance.post<NVResData>('', cargoBody);
 
-        const warehouses = [...(await postalWarehouses).data.data, ...(await cargoWarehouses).data.data]
-        return warehouses.map(w => w.Description);
+        const warehouses = [...(await postalWarehouses).data.data, ...(await cargoWarehouses).data.data];
+        return warehouses.map((w) => {
+            return {
+                siteKey: w.SiteKey,
+                region: w.RegionCity,
+                postcode: w.PostalCodeUA,
+                address: w.Description
+            }
+        });
     }
 
     private getSettlementsBody(searchString: string) {
@@ -63,10 +71,10 @@ class NovaposhtaService extends Service {
 
     private parseSettlements(data: any[]): ISettlement[] {
         const settlements: ISettlement[] = data.map((d) => {
+            console.log(d);
             return {
                 ref: d.Ref,
                 name: d.Description,
-                region: d.RegionsDescription,
                 area: d.AreaDescription,
                 settlementType: d.SettlementTypeDescription,
             }
