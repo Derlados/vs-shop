@@ -2,28 +2,48 @@ import { makeAutoObservable, runInAction } from "mobx";
 import prodcutsService from "../../services/products/prodcuts.service";
 import { IProduct } from "../../types/magento/IProduct";
 
+const PAGE_SIZE = 16;
+
 class ShopStore {
   public products: IProduct[];
-  public curretnCategoryId: number;
+  public currentCategoryId: number;
   public status: 'initial' | 'loading' | 'success' | 'error';
+  public currentPage: number;
+  public totalPages: number;
 
   constructor() {
     makeAutoObservable(this);
     this.products = [];
     this.status = 'initial';
+    this.currentPage = 1;
   }
 
-  async selectCategory(categoryId: number) {
+  selectCategory(categoryId: number) {
+    this.currentCategoryId = categoryId;
+    this.currentPage = 1;
+    this.updateProducts();
+  }
+
+  selectPage(page: number) {
+    this.currentPage = page;
+    this.updateProducts();
+  }
+
+  async updateProducts() {
     runInAction(() => {
       this.status = 'loading';
-      this.curretnCategoryId = categoryId;
     });
 
     try {
-      const products = await prodcutsService.getProductsByCategoryId(categoryId);
+      const { items, total_count } = await prodcutsService.getProductsByCategoryId(
+        this.currentCategoryId,
+        this.currentPage,
+        PAGE_SIZE,
+      );
 
       runInAction(() => {
-        this.products = products;
+        this.products = items;
+        this.totalPages = Math.ceil(total_count / PAGE_SIZE);
         this.status = 'success';
       });
     } catch (error) {

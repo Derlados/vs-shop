@@ -63,8 +63,6 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ products, selectedSo
                 products={products}
                 onOpenQuickView={openQuickView}
                 viewMode={localStore.selectedViewMode}
-                maxPages={20}
-                onChangePage={onChangePage}
             />
         </div>
     )

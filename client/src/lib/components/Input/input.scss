@@ -1,18 +1,24 @@
 @import '../../../styles/constants/colors.scss';
 
 .input {
+  width: 100%;
+
+  &__hint {
+    font-size: 14px;
+    padding-bottom: 6px;
+    color: gray;
+  }
+
+  &__field {
     width: 100%;
+    padding: 10px;
+    outline: none;
+    border: solid 1px $primary-gray;
+  }
 
-    &__hint {
-        font-size: 14px;
-        padding-bottom: 5px;
-        color: gray;
-    }
-
-    &__field {
-        width: 100%;
-        padding: 10px;
-        outline: none;
-        border: solid 1px $primary-gray;
-    }
+  &__error {
+    margin: 4px 0;
+    font-size: 14px;
+    color: red;
+  }
 }
