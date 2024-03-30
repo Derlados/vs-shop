@@ -11,10 +11,16 @@ import PopupWindow from '../../components/PopupWindow/PopupWindow';
 import LoadingMask from './components/LoadingMask/LoadingMask';
 import shopStore from '../../stores/shop/shop.store';
 import catalogStore from '../../stores/catalog/catalog.store';
+import filtersStore from '../../stores/filters/filters.store';
+import ProductFilters from './components/Filters/ProductFilters/ProductFilters';
+import Filters from './components/Filters/Filters';
+import { ICategory } from '../../types/magento/ICategory';
 
 interface LocalStore {
   isFilterOpen: boolean;
   isValidCategory: boolean;
+  filterCategories: any[];
+  category?: ICategory;
 }
 
 interface ShopProps {
@@ -28,6 +34,7 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
     isFilterOpen: false,
     isValidCategory: true,
     filterCategories: [],
+    category: undefined,
   }));
 
   useEffect(() => {
@@ -42,9 +49,15 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
       return;
     }
 
+    localStore.category = category;
     shopStore.selectCategory(category.id);
   }, [])
 
+  useEffect(() => {
+    if (shopStore.products.length !== 0) {
+      filtersStore.loadFilters(shopStore.currentCategoryId, shopStore.products[0].attribute_set_id);
+    }
+  }, [shopStore.currentCategoryId, shopStore.products.length])
 
 
   if ((shopStore.status === "initial" || shopStore.status === "loading") && shopStore.products.length == 0) {
@@ -71,21 +84,13 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
         <CatalogNav routes={[]} />
       }
       <div className='rct'>
-        {/* <div className='shop__side-bar clt'>
-          <Filters isOpen={localStore.isFilterOpen} onClose={onCloseFilters} >
-            {!isGlobalSearch ?
-              <ProductFilters
-                selectedFilters={localStore.filters}
-                onCheckFilter={onCheckFilterAttribute}
-                onCheckBrand={onSelectBrand}
-                onSelectRange={onSelectPrice}
-              />
-              :
-              <FilterCategories filterCategories={groupByCategories(searchStore.products)} />
-            }
+        <div className='shop__side-bar clt'>
+          <Filters isOpen={localStore.isFilterOpen} onClose={() => localStore.isFilterOpen = false}>
+            <ProductFilters category={localStore.category!} />
+            {/*<FilterCategories filterCategories={groupByCategories(searchStore.products)} />*/}
           </Filters>
-          {searchStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={searchStore.popularProducts} />}
-        </div> */}
+          {/* {searchStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={searchStore.popularProducts} />} */}
+        </div>
         <div className='shop__content'>
           {shopStore.products.length !== 0 ?
             <ProductCatalog
