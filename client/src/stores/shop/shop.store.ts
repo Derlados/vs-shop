@@ -1,5 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import attributesService from "../../services/filters/attributes.service";
 import prodcutsService from "../../services/products/prodcuts.service";
+import { IDisplayFilter } from "../../types/magento/IDisplayFilter";
 import { IProduct } from "../../types/magento/IProduct";
 
 const PAGE_SIZE = 16;
@@ -18,10 +20,10 @@ class ShopStore {
     this.currentPage = 1;
   }
 
-  selectCategory(categoryId: number) {
+  async selectCategory(categoryId: number) {
     this.currentCategoryId = categoryId;
     this.currentPage = 1;
-    this.updateProducts();
+    await this.updateProducts();
   }
 
   selectPage(page: number) {

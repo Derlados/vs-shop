@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 import AOS from 'aos'
 import SwiperCore, { Autoplay } from 'swiper'
 import Contacts from './pages/contacts/Contacts'
-import Page404 from './pages/Page404/Page404'
+import Page404 from './pages/page-404/Page404'
 import { ROUTES } from './values/routes'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
