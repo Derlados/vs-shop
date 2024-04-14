@@ -1,7 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import attributesService from "../../services/filters/attributes.service";
 import prodcutsService from "../../services/products/prodcuts.service";
-import { IDisplayFilter } from "../../types/magento/IDisplayFilter";
+import { IFilterGroup } from "../../types/magento/IFilterGroup";
 import { IProduct } from "../../types/magento/IProduct";
 
 const PAGE_SIZE = 16;
@@ -12,26 +11,40 @@ class ShopStore {
   public status: 'initial' | 'loading' | 'success' | 'error';
   public currentPage: number;
   public totalPages: number;
+  public search: string;
+  public isInit: boolean;
 
   constructor() {
     makeAutoObservable(this);
     this.products = [];
     this.status = 'initial';
+    this.currentCategoryId = 0;
     this.currentPage = 1;
+    this.totalPages = 0;
+    this.search = '';
+    this.isInit = false;
   }
 
-  async selectCategory(categoryId: number) {
-    this.currentCategoryId = categoryId;
-    this.currentPage = 1;
-    await this.updateProducts();
+  selectCategory(categoryId: number) {
+    runInAction(() => {
+      this.currentCategoryId = categoryId;
+    });
+  }
+
+  changeSearch(search: string) {
+    runInAction(() => {
+      this.search = search;
+      this.currentPage = 1;
+    });
   }
 
   selectPage(page: number) {
-    this.currentPage = page;
-    this.updateProducts();
+    runInAction(() => {
+      this.currentPage = page;
+    });
   }
 
-  async updateProducts() {
+  async updateProducts(selectedFilters: IFilterGroup[] = [], options?: { clearPage?: boolean }) {
     runInAction(() => {
       this.status = 'loading';
     });
@@ -39,14 +52,17 @@ class ShopStore {
     try {
       const { items, total_count } = await prodcutsService.getProductsByCategoryId(
         this.currentCategoryId,
-        this.currentPage,
+        options?.clearPage ? 1 : this.currentPage,
         PAGE_SIZE,
+        selectedFilters,
+        this.search
       );
 
       runInAction(() => {
         this.products = items;
         this.totalPages = Math.ceil(total_count / PAGE_SIZE);
         this.status = 'success';
+        this.currentPage = options?.clearPage ? 1 : this.currentPage;
       });
     } catch (error) {
       runInAction(() => this.status = 'error');

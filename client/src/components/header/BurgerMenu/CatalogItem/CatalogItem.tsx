@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom';
 import categoryHelper from '../../../../helpers/category.helper';
 import Dropdown from '../../../../lib/components/Dropdown/Dropdown';
 import catalogStore from '../../../../stores/catalog/catalog.store';
-import { ICatalog } from '../../../../types/ICatalog'
 import { ICategoryList } from '../../../../types/magento/ICategoryList';
 import { ROUTES } from '../../../../values/routes';
 

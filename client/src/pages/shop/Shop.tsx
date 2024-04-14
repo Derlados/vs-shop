@@ -6,21 +6,18 @@ import { Navigate, useParams } from 'react-router-dom';
 import Loader from '../../lib/components/Loader/Loader';
 import { FC, useEffect } from 'react';
 import { ROUTES } from '../../values/routes';
-import { SortType } from '../../enums/SortType.enum';
 import PopupWindow from '../../components/PopupWindow/PopupWindow';
-import LoadingMask from './components/LoadingMask/LoadingMask';
 import shopStore from '../../stores/shop/shop.store';
 import catalogStore from '../../stores/catalog/catalog.store';
 import filtersStore from '../../stores/filters/filters.store';
 import ProductFilters from './components/Filters/ProductFilters/ProductFilters';
 import Filters from './components/Filters/Filters';
-import { ICategory } from '../../types/magento/ICategory';
+import FilterCategories from './components/Filters/FilterCategories/FilterCategories';
 
 interface LocalStore {
   isFilterOpen: boolean;
   isValidCategory: boolean;
   filterCategories: any[];
-  category?: ICategory;
 }
 
 interface ShopProps {
@@ -49,18 +46,23 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
       return;
     }
 
-    localStore.category = category;
+    if (shopStore.currentCategoryId === category.id) return;
+
     shopStore.selectCategory(category.id);
+    filtersStore.loadFilters(category.id);
   }, [])
 
   useEffect(() => {
-    if (shopStore.products.length !== 0) {
-      filtersStore.loadFilters(shopStore.currentCategoryId, shopStore.products[0].attribute_set_id);
-    }
-  }, [shopStore.currentCategoryId, shopStore.products.length])
+    if (shopStore.currentCategoryId === 0 || filtersStore.status === "loading") return;
 
+    shopStore.updateProducts(filtersStore.filterGroups);
+  }, [filtersStore.filterGroups, shopStore.currentCategoryId, shopStore.currentPage, shopStore.search])
 
-  if ((shopStore.status === "initial" || shopStore.status === "loading") && shopStore.products.length == 0) {
+  const onOpenFilters = () => {
+    localStore.isFilterOpen = true;
+  };
+
+  if (shopStore.status === "initial") {
     return (
       <div className='shop__loader ccc'>
         <Loader />
@@ -72,33 +74,32 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
     return <Navigate to={'/404_not_found'} replace />
   }
 
-
   return (
     <div className='shop clt' >
-      {shopStore.status == "loading" && <LoadingMask />}
       {!isGlobalSearch ?
         <CatalogNav routes={[{
           to: `/${ROUTES.CATEGORY_PREFIX}/${categoryPath}`,
-          title: "test"
+          title: catalogStore.getCategoryById(shopStore.currentCategoryId)?.name || ""
         }]} /> :
         <CatalogNav routes={[]} />
       }
       <div className='rct'>
         <div className='shop__side-bar clt'>
           <Filters isOpen={localStore.isFilterOpen} onClose={() => localStore.isFilterOpen = false}>
-            <ProductFilters category={localStore.category!} />
-            {/*<FilterCategories filterCategories={groupByCategories(searchStore.products)} />*/}
+            {isGlobalSearch
+              ? <FilterCategories filterCategories={[]} />
+              : <ProductFilters category={catalogStore.getCategoryById(shopStore.currentCategoryId)!} />
+            }
           </Filters>
           {/* {searchStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={searchStore.popularProducts} />} */}
         </div>
         <div className='shop__content'>
           {shopStore.products.length !== 0 ?
             <ProductCatalog
-              selectedSortType={SortType.NOT_SELECTED}
+              selectedSortType={filtersStore.selectedSort}
               products={shopStore.products}
-              onChangePage={() => { }}
-              onSelectSort={() => { }}
-              onOpenFilters={() => { }}
+              onOpenFilters={onOpenFilters}
+              isLoading={shopStore.status === "loading"}
             />
             :
             <div className='shop__emprty-catalog rcc'>

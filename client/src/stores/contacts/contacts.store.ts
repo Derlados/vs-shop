@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { IMail } from "../../types/IMail";
+import { IMail } from "../../types/shop/IMail";
 import { REGEX } from "../../values/regex";
 
 export enum ContactsStoreStatus {

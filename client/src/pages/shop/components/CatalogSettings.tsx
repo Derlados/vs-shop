@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import React, { FC } from 'react'
 import { SortType } from '../../../enums/SortType.enum';
+import filtersStore from '../../../stores/filters/filters.store';
 import { ViewMode } from './ProductCatalog/ProductCatalog';
 
 interface LocalStore {
@@ -11,7 +12,6 @@ interface LocalStore {
 interface CatalogSettingsProps {
   selectedSortType: SortType;
   selectedViewMode: ViewMode;
-  onSelectSort: (sortType: SortType) => void;
   onSelectViewMode: (viewMode: ViewMode) => void;
   onOpenFilters: () => void;
 }
@@ -23,7 +23,7 @@ const sortTypes: Map<SortType, string> = new Map([
   [SortType.NEW, "Новинки"]
 ]);
 
-const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedSortType = SortType.NOT_SELECTED, selectedViewMode = ViewMode.GRID, onSelectSort, onSelectViewMode, onOpenFilters }) => {
+const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedSortType = SortType.NOT_SELECTED, selectedViewMode = ViewMode.GRID, onSelectViewMode, onOpenFilters }) => {
   const localStore = useLocalStore<LocalStore>(() => ({
     isOpenSort: false
   }))
@@ -32,9 +32,9 @@ const CatalogSettings: FC<CatalogSettingsProps> = observer(({ selectedSortType =
     localStore.isOpenSort = !localStore.isOpenSort;
   }
 
-  const onChangeSort = (sortType: SortType) => {
+  const onChangeSort = (sort: SortType) => {
     localStore.isOpenSort = false;
-    onSelectSort(sortType);
+    filtersStore.selectedSort = sort;
   }
 
   return (

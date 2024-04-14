@@ -21,7 +21,7 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ category }) => {
 
   return (
     <div className='filters__content'>
-      <div className='filters__title'>{category.name}</div>
+      <div className='filters__title'>{category?.name}</div>
       <div className='filters__line'></div>
       <div className='filters__attr-name'>Ціна</div>
       <div className='filters__price'>
@@ -31,8 +31,8 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ category }) => {
             max={filtersStore.priceRange.max}
             selectedMin={filtersStore.selectedPriceRange.min}
             selectedMax={filtersStore.selectedPriceRange.max}
-            onChange={({ min, max }) => { }}
-            onAccept={({ min, max }) => onChangeRange({ min, max })}
+            onChange={(min, max) => { }}
+            onAccept={(min, max) => onChangeRange({ min, max })}
           />
         )}
       </div>

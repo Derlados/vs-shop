@@ -22,12 +22,11 @@ interface LocalStore {
 interface ProductCatalogProps {
     products: IProduct[];
     selectedSortType: SortType;
-    onChangePage: (page: number) => void;
-    onSelectSort: (sortType: SortType) => void;
+    isLoading: boolean;
     onOpenFilters: () => void;
 }
 
-const ProductCatalog: FC<ProductCatalogProps> = observer(({ products, selectedSortType = SortType.NOT_SELECTED, onChangePage, onSelectSort, onOpenFilters }) => {
+const ProductCatalog: FC<ProductCatalogProps> = observer(({ products, selectedSortType = SortType.NOT_SELECTED, isLoading, onOpenFilters }) => {
     const localStore = useLocalObservable<LocalStore>(() => ({
         selectedViewMode: ViewMode.GRID,
         selectedSortType: selectedSortType,
@@ -55,7 +54,6 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ products, selectedSo
             <CatalogSettings
                 selectedSortType={selectedSortType}
                 selectedViewMode={localStore.selectedViewMode}
-                onSelectSort={onSelectSort}
                 onSelectViewMode={selectViewMode}
                 onOpenFilters={onOpenFilters}
             />
@@ -63,6 +61,7 @@ const ProductCatalog: FC<ProductCatalogProps> = observer(({ products, selectedSo
                 products={products}
                 onOpenQuickView={openQuickView}
                 viewMode={localStore.selectedViewMode}
+                isLoading={isLoading}
             />
         </div>
     )

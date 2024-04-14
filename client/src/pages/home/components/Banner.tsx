@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react'
 import { NavLink } from 'react-router-dom';
-import { IBanner } from '../../../types/ILargeBanner'
+import { IBanner } from '../../../types/shop/ILargeBanner';
 
 interface BannerProps {
   info: IBanner;

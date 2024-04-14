@@ -8,8 +8,6 @@ import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import Loader from '../../lib/components/Loader/Loader';
 import { ROUTES } from '../../values/routes';
 import productStore from '../../stores/product/product.store';
-import catalogHelper from '../../helpers/catalog.helper';
-import catalogStore from '../../stores/catalog/catalog.store';
 import categoryHelper from '../../helpers/category.helper';
 
 type ProductParams = {
@@ -57,4 +55,4 @@ const Product: FC = observer(() => {
   return <Navigate to={'/404_not_found'} replace />
 });
 
-export default IProduct
+export default Product

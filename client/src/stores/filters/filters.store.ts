@@ -1,6 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import { SortType } from "../../enums/SortType.enum";
 import attributesService from "../../services/filters/attributes.service";
 import { IDisplayFilter } from "../../types/magento/IDisplayFilter";
+import { IFilterGroup } from "../../types/magento/IFilterGroup";
 import { IUserSelectedFilter } from "../../types/magento/IUserSelectedFilter";
 
 class FiltersStore {
@@ -9,6 +11,7 @@ class FiltersStore {
   public selectedFilters: IUserSelectedFilter[];
   public selectedPriceRange: { min: number, max: number };
   public priceRange: { min: number, max: number };
+  public selectedSort: SortType;
 
   constructor() {
     makeAutoObservable(this);
@@ -17,11 +20,52 @@ class FiltersStore {
     this.priceRange = { min: 0, max: 0 };
     this.selectedPriceRange = { min: 0, max: 0 };
     this.filters = [];
+    this.selectedSort = SortType.NOT_SELECTED;
   }
 
-  async loadFilters(categoryId: number, attributeSetId: number) {
+  get filterGroups(): IFilterGroup[] {
+    const filterGroups: IFilterGroup[] = [];
+
+    for (let i = 0; i < this.selectedFilters.length; i++) {
+      filterGroups.push({
+        filters: this.selectedFilters[i].values.map(value => ({
+          field: this.selectedFilters[i].attributeCode,
+          value,
+          conditionType: 'eq'
+        }))
+      });
+    }
+
+    if (this.selectedPriceRange.min !== this.priceRange.min || this.selectedPriceRange.max !== this.priceRange.max) {
+      filterGroups.push({
+        filters: [
+          {
+            field: 'price',
+            value: `${this.selectedPriceRange.min}`,
+            conditionType: 'from'
+          }
+        ]
+      }, {
+        filters: [
+          {
+            field: 'price',
+            value: `${this.selectedPriceRange.max}`,
+            conditionType: 'to'
+          }
+        ]
+      });
+    }
+
+    return filterGroups;
+  }
+
+  async loadFilters(categoryId: number) {
+    runInAction(() => {
+      this.status = 'loading';
+    });
+
     try {
-      const filters = await attributesService.getAttributesByAttributeSet(categoryId, attributeSetId);
+      const filters = await attributesService.getAttributesByAttributeSet(categoryId);
 
       const priceFilter = filters.find(f => f.attribute_code === 'price');
       const checkedFilters = filters.filter(f => f.attribute_code !== 'price');
@@ -64,6 +108,11 @@ class FiltersStore {
 
   changePriceRange(min: number, max: number) {
     this.selectedPriceRange = { min, max };
+  }
+
+  clearFilters() {
+    this.selectedFilters = [];
+    this.selectedPriceRange = { min: 0, max: 0 };
   }
 }
 
