@@ -1,6 +1,6 @@
 import { axiosNVInstance } from "..";
-import { ISettlement } from "../../types/ISettlement";
-import { IWarehouse } from "../../types/IWarehouse";
+import { ISettlement } from "../../types/novaposhta/ISettlement";
+import { IWarehouse } from "../../types/novaposhta/IWarehouse";
 import { Service } from "../service";
 
 interface NVResData {

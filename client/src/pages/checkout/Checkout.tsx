@@ -1,8 +1,6 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Navigate, NavLink } from 'react-router-dom';
 import './checkout.scss';
-import { ISettlement } from '../../types/ISettlement';
-import { useEffect } from 'react';
 import cartStore from '../../stores/cart/cart.store';
 import Selector from '../../lib/components/Selector/Selector';
 import Input from '../../lib/components/Input/Input';
@@ -12,7 +10,8 @@ import settlementStore from '../../stores/settlement/settlement.store';
 import Modal from '../../lib/components/Modal/Modal';
 import Loader from '../../lib/components/Loader/Loader';
 import { IShippingInformation } from '../../types/magento/IShippingInformation';
-import { IWarehouse } from '../../types/IWarehouse';
+import { IWarehouse } from '../../types/novaposhta/IWarehouse';
+import { ISettlement } from '../../types/novaposhta/ISettlement';
 
 const phoneMask = '+38 999 999 99 99';
 
@@ -31,7 +30,7 @@ const Checkout = observer(() => {
     checkoutPageStore.isTriedToPlace = true;
     if (!cartStore.isValidCheckout) return;
 
-    // cartStore.placeOrder();
+    cartStore.placeOrder();
   }
 
   const getSettlementValues = (settlements: ISettlement[]) => {
@@ -171,7 +170,7 @@ const Checkout = observer(() => {
           onSelect={onSelectSettlement}
           onChange={(searchString: string) => settlementStore.findSettlements(searchString)}
         />
-        {!cartStore.validErrors.city && checkoutPageStore.isTriedToPlace && (
+        {cartStore.validErrors.city && checkoutPageStore.isTriedToPlace && (
           <div className='checkout__error'>{cartStore.validErrors.city}</div>
         )}
         <Selector
@@ -183,7 +182,7 @@ const Checkout = observer(() => {
           selectedId={checkoutPageStore.warehouse?.siteKey}
           onSelect={(key, _) => onSelectWarehouse(key)}
         />
-        {!cartStore.validErrors.street && checkoutPageStore.isTriedToPlace && (
+        {cartStore.validErrors.street && checkoutPageStore.isTriedToPlace && (
           <div className='checkout__error'>{cartStore.validErrors.street}</div>
         )}
         <div className='checkout__additional-info'>

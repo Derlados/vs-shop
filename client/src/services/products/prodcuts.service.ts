@@ -10,8 +10,14 @@ class ProductsService extends Service {
     return await this.execute(axiosInstance.get<IProduct>(`${this.apiUrl}/${sku}`));
   }
 
-  async getProductsByCategoryId(categoryId: number, page: number, pageSize: number, filterGroups: IFilterGroup[] = []): Promise<IGetProductsResDto> {
-    const searchCriteria = this.createSearchCriteria(categoryId, page, pageSize, filterGroups);
+  async getProductsByCategoryId(
+    categoryId: number,
+    page: number,
+    pageSize: number,
+    filterGroups: IFilterGroup[] = [],
+    search: string = ''
+  ): Promise<IGetProductsResDto> {
+    const searchCriteria = this.createSearchCriteria(categoryId, page, pageSize, filterGroups, search);
 
     const data = await this.execute(axiosInstance.get<IGetProductsResDto>(`${this.apiUrl}`, { params: searchCriteria }));
 
@@ -24,7 +30,13 @@ class ProductsService extends Service {
   }
 
 
-  private createSearchCriteria(categoryId: number, currentPage: number, pageSize: number, filterGroups: IFilterGroup[] = []) {
+  private createSearchCriteria(
+    categoryId: number,
+    currentPage: number,
+    pageSize: number,
+    filterGroups: IFilterGroup[] = [],
+    search: string = ''
+  ) {
 
     const searchCriteria: any = {
       "searchCriteria[pageSize]": pageSize,
@@ -41,6 +53,12 @@ class ProductsService extends Service {
         searchCriteria[`searchCriteria[filter_groups][${i + 1}][filters][${j}][value]`] = filter.value;
         searchCriteria[`searchCriteria[filter_groups][${i + 1}][filters][${j}][condition_type]`] = filter.conditionType;
       }
+    }
+
+    if (search !== '') {
+      searchCriteria[`searchCriteria[filter_groups][${filterGroups.length + 1}][filters][0][field]`] = 'name';
+      searchCriteria[`searchCriteria[filter_groups][${filterGroups.length + 1}][filters][0][value]`] = `%${search}%`;
+      searchCriteria[`searchCriteria[filter_groups][${filterGroups.length + 1}][filters][0][condition_type]`] = 'like';
     }
 
     return searchCriteria;

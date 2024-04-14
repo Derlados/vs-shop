@@ -3,9 +3,9 @@ import { IDisplayFilter } from "../../types/magento/IDisplayFilter";
 import { Service } from "../service";
 
 class FiltersService extends Service {
-  async getAttributesByAttributeSet(categoryId: number, attributeSetId: number) {
+  async getAttributesByAttributeSet(categoryId: number) {
     return await this.execute(axiosInstance.get<IDisplayFilter[]>(
-      `${this.apiUrl}/${categoryId}/attributes/${attributeSetId}/filters`
+      `${this.apiUrl}/${categoryId}/filters`
     ));
   }
 }

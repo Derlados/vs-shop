@@ -1,13 +1,13 @@
 import { AxiosError } from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import cartService from "../../services/cart/cart.service";
-import { ISettlement } from "../../types/ISettlement";
-import { IWarehouse } from "../../types/IWarehouse";
+import { IWarehouse } from "../../types/novaposhta/IWarehouse";
 import { ICart } from "../../types/magento/ICart";
 import { IShippingInformation } from "../../types/magento/IShippingInformation";
 import { ITotals } from "../../types/magento/ITotals";
 import { REGEX } from "../../values/regex";
 import { ShippingPattern } from "../../values/shipping-patterns";
+import { ISettlement } from "../../types/novaposhta/ISettlement";
 
 class CartStore {
   private readonly LOCAL_STORAGE_CART_ID = "cartId";
@@ -153,6 +153,22 @@ class CartStore {
     }
   }
 
+  async placeOrder() {
+    runInAction(() => this.status = 'placing');
+
+    try {
+      await cartService.setShippingInformation(this.cartId, this.shippingInformation);
+      await cartService.placeOrder(this.cartId, 'checkmo');
+
+      this.clear();
+      this.init();
+
+      runInAction(() => this.status = 'placing-success');
+    } catch (error) {
+      runInAction(() => this.status = 'error');
+    }
+  }
+
   private async updateTotals() {
     try {
       const totals = await cartService.getTotals(this.cartId);
@@ -165,7 +181,7 @@ class CartStore {
     }
   }
 
-  async clear() {
+  clear() {
     localStorage.removeItem(this.LOCAL_STORAGE_CART_ID);
     this.cartId = '';
   }

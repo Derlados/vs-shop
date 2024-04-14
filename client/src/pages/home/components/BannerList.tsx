@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { FC } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { IBanner } from '../../../types/ILargeBanner'
+import { IBanner } from '../../../types/shop/ILargeBanner';
 import Banner from './Banner';
 
 interface BannerListProps {

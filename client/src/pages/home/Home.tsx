@@ -8,7 +8,7 @@ import CategoryList from '../../components/Category/CategoryList/CategoryList';
 import PopupWindow from '../../components/PopupWindow/PopupWindow';
 import catalogStore from '../../stores/catalog/catalog.store';
 import { Navigate } from 'react-router-dom';
-import { IBanner } from '../../types/ILargeBanner';
+import { IBanner } from '../../types/shop/ILargeBanner';
 
 const Home = observer(() => {
 

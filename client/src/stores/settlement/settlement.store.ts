@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import novaposhtaService from "../../services/novaposhta/novaposhta.service";
-import { ISettlement } from "../../types/ISettlement";
-import { IWarehouse } from "../../types/IWarehouse";
+import { ISettlement } from "../../types/novaposhta/ISettlement";
+import { IWarehouse } from "../../types/novaposhta/IWarehouse";
 
 class SettlementStore {
   settlements: ISettlement[];

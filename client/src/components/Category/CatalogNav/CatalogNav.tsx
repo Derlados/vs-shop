@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ILink } from '../../../types/ILink';
+import { ILink } from '../../../types/shop/ILink';
 import './catalog-nav.scss';
 
 interface CatalogNavProps {

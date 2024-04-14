@@ -7,6 +7,7 @@
     }
 
     &__products-grid {
+        position: relative;
         justify-content: space-between !important;
         width: 100%;
         flex-wrap: wrap;
