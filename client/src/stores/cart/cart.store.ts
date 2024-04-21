@@ -20,6 +20,7 @@ class CartStore {
   public processingSku: string;
   public shippingInformation: IShippingInformation;
 
+
   constructor() {
     makeAutoObservable(this);
 
@@ -153,12 +154,12 @@ class CartStore {
     }
   }
 
-  async placeOrder() {
+  async placeOrder(comment: string = '') {
     runInAction(() => this.status = 'placing');
 
     try {
       await cartService.setShippingInformation(this.cartId, this.shippingInformation);
-      await cartService.placeOrder(this.cartId, 'checkmo');
+      await cartService.placeOrder(this.cartId, 'checkmo', comment);
 
       this.clear();
       this.init();

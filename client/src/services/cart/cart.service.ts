@@ -41,11 +41,12 @@ class CartService extends Service {
     return await this.execute(axiosInstance.post(`${this.apiUrl}/${cartId}/shipping-information`, shippingInformation, { headers: headersJson }));
   }
 
-  async placeOrder(cartId: string, paymentMethod: string): Promise<boolean> {
+  async placeOrder(cartId: string, paymentMethod: string, comment: string = ''): Promise<boolean> {
     const body = {
       paymentMethod: {
         method: paymentMethod
-      }
+      },
+      comment: comment,
     };
     return await this.execute(axiosInstance.put(`${this.apiUrl}/${cartId}/order`, body, { headers: headersJson }));
   }

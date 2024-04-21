@@ -18,19 +18,21 @@ const phoneMask = '+38 999 999 99 99';
 interface CheckoutPageStore {
   isTriedToPlace: boolean;
   warehouse?: IWarehouse;
+  comment?: string;
 }
 
 const Checkout = observer(() => {
   const checkoutPageStore = useLocalObservable<CheckoutPageStore>(() => ({
     isTriedToPlace: false,
     warehouse: undefined,
+    comment: '',
   }));
 
   const onTryToPlace = () => {
     checkoutPageStore.isTriedToPlace = true;
     if (!cartStore.isValidCheckout) return;
 
-    cartStore.placeOrder();
+    cartStore.placeOrder(checkoutPageStore.comment);
   }
 
   const getSettlementValues = (settlements: ISettlement[]) => {
@@ -87,7 +89,7 @@ const Checkout = observer(() => {
   }
 
   const onAdditionalInfoChange = (v: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // checkoutStore.onAdditionalInfoChange(v.target.value);
+    checkoutPageStore.comment = v.target.value;
   }
 
   const onSelectSettlement = (settlementRef: string) => {
