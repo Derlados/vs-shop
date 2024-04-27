@@ -68,6 +68,15 @@ class ShopStore {
       runInAction(() => this.status = 'error');
     }
   }
+
+  clear() {
+    this.products = [];
+    this.status = 'initial';
+    this.currentCategoryId = 0;
+    this.currentPage = 1;
+    this.totalPages = 0;
+    this.search = '';
+  }
 }
 
 export default new ShopStore();

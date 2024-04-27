@@ -32,7 +32,7 @@ const CatalogItem: FC<CatalogItemProps> = observer(({ catalog, onClick }) => {
     <li key={catalog.id} className='burger-menu__sublist'>
       {catalog.children_data.length === 0 && category && (
         <div className='burger-menu__item burger-menu_underline burger-menu__item-name_subitem-first'>
-          <NavLink className='burger-menu__item-name' to={`${ROUTES.SHOP_ROUTE}/${categoryHelper.getUrlPath(category)}`}>
+          <NavLink className='burger-menu__item-name' to={`${ROUTES.SHOP_ROUTE}/${categoryHelper.getUrlPath(category)}`} onClick={onClick}>
             {catalog.name}
           </NavLink>
         </div>

@@ -1,4 +1,5 @@
 import { IProductAttribute } from "./IProductAttribute";
+import { IProductLink } from "./IProductLink";
 
 export interface IProduct {
   id: number;
@@ -20,7 +21,7 @@ export interface IProduct {
     stock_status: StockStatus;
     description_attributes: IProductAttribute[];
   };
-  product_links: any[];
+  product_links: IProductLink[];
   options: any[];
   media_gallery_entries: {
     id: number;

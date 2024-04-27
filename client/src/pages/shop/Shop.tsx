@@ -35,6 +35,9 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
   }));
 
   useEffect(() => {
+    filtersStore.clearFilters();
+    shopStore.clear();
+
     if (!categoryPath) {
       localStore.isValidCategory = false;
       return;
@@ -50,7 +53,7 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
 
     shopStore.selectCategory(category.id);
     filtersStore.loadFilters(category.id);
-  }, [])
+  }, [categoryPath])
 
   useEffect(() => {
     if (shopStore.currentCategoryId === 0 || filtersStore.status === "loading") return;

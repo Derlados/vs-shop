@@ -10,6 +10,11 @@ class ProductsService extends Service {
     return await this.execute(axiosInstance.get<IProduct>(`${this.apiUrl}/${sku}`));
   }
 
+  async getRelatedProducts(sku: string): Promise<IProduct[]> {
+    const data = await this.execute(axiosInstance.get<IProduct[]>(`${this.apiUrl}/${sku}/related-products`));
+    return data;
+  }
+
   async getProductsByCategoryId(
     categoryId: number,
     page: number,

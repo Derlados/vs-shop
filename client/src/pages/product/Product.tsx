@@ -19,11 +19,20 @@ const Product: FC = observer(() => {
 
   useEffect(() => {
     if (sku) {
-      productStore.loadProduct(sku);
+      loadProductInfo(sku);
     }
-  }, []);
+  }, [sku]);
 
-  if (sku && (productStore.status === "loading" || productStore.status === "initial")) {
+  const loadProductInfo = async (sku: string) => {
+    productStore.clear();
+
+    await productStore.loadProduct(sku);
+    if (productStore.product) {
+      await productStore.loadRelatedProducts();
+    }
+  }
+
+  if (sku && (productStore.productStatus === "loading" || productStore.productStatus === "initial")) {
     return (
       <div className='product__loader ccc'>
         <Loader />
@@ -31,7 +40,7 @@ const Product: FC = observer(() => {
     )
   }
 
-  if (productStore.status === "success" && productStore.product) {
+  if (productStore.productStatus === "success" && productStore.product) {
     return (
       <div className='product ccc'>
         <CatalogNav routes={[
