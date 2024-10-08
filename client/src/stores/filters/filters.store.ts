@@ -15,12 +15,7 @@ class FiltersStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.status = 'initial';
-    this.selectedFilters = [];
-    this.priceRange = { min: 0, max: 0 };
-    this.selectedPriceRange = { min: 0, max: 0 };
-    this.filters = [];
-    this.selectedSort = SortType.NOT_SELECTED;
+    this.setDefaultState();
   }
 
   get filterGroups(): IFilterGroup[] {
@@ -110,9 +105,13 @@ class FiltersStore {
     this.selectedPriceRange = { min, max };
   }
 
-  clearFilters() {
+  setDefaultState() {
+    this.status = 'initial';
     this.selectedFilters = [];
+    this.priceRange = { min: 0, max: 0 };
     this.selectedPriceRange = { min: 0, max: 0 };
+    this.filters = [];
+    this.selectedSort = SortType.NOT_SELECTED;
   }
 }
 

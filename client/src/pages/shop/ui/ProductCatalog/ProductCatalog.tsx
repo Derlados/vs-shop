@@ -1,11 +1,11 @@
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import { FC } from 'react';
-import CatalogSettings from '../CatalogSettings';
 import ProductQuickModal from '../../../../components/ProductCard/ProductQuickModal/ProductQuickModal';
-import ProductGrid from '../ProductGrid';
+import ProductGrid from '../ProductGrid/ProductGrid';
 import './catalog.scss';
 import { SortType } from '../../../../enums/SortType.enum';
 import { IProduct } from '../../../../types/magento/IProduct';
+import CatalogSettings from '../Filters/CatalogSettings/CatalogSettings';
 
 export enum ViewMode {
     GRID,

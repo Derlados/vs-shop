@@ -10,7 +10,6 @@ interface FiltersProps {
 }
 
 const Filters: FC<FiltersProps> = observer(({ children, isOpen, onClose }) => {
-
   return (
     <div className={classNames('filters__mask ', {
       'filters__mask_opened': isOpen

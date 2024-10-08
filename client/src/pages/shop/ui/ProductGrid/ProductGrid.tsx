@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { FC } from 'react';
-import ProductCard from '../../../components/ProductCard/ProductCard';
-import { ViewMode } from './ProductCatalog/ProductCatalog';
-import Pagination from '../../../lib/components/Pagination/Pagination';
+import ProductCard from '../../../../components/ProductCard/ProductCard';
+import { ViewMode } from '../ProductCatalog/ProductCatalog';
+import Pagination from '../../../../lib/components/Pagination/Pagination';
 import { observer } from 'mobx-react-lite';
-import { IProduct } from '../../../types/magento/IProduct';
-import shopStore from '../../../stores/shop/shop.store';
-import LoadingMask from './LoadingMask/LoadingMask';
+import { IProduct } from '../../../../types/magento/IProduct';
+import LoadingMask from '../LoadingMask/LoadingMask';
+import shopPageStore from '../../model/shop-page.store';
 
 interface ProductGridProps {
   products: IProduct[];
@@ -17,16 +17,9 @@ interface ProductGridProps {
 }
 
 
-const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, isLoading, onSelectProduct, onOpenQuickView = () => { } }) => {
-
-  const selectPage = (page: number) => {
-    if (page < 1 || page > shopStore.totalPages) {
-      return;
-    }
-
-    shopStore.selectPage(page);
-  }
-
+const ProductGrid: FC<ProductGridProps> = observer(({
+  products, viewMode, isLoading, onSelectProduct, onOpenQuickView = () => {}
+}) => {
   return (
     <div className='ccc catalog__product-grid-cont'>
       <div className={classNames('catalog__products-grid', {
@@ -45,22 +38,20 @@ const ProductGrid: FC<ProductGridProps> = observer(({ products, viewMode, isLoad
               onOpenQuickView={onOpenQuickView} />
           </div>
         )}
-        {/* Для нормальной работы flex-wrap и space between */}
+        {/* for normal view with flex-wrap and space between */}
         {[...Array(4).keys()].map(num => (
           <div key={`empty-${num}`} className={classNames('catalog__product-container ccc', {
             'catalog__product-container_large': viewMode === ViewMode.LIST
-          })}>
-
-          </div>
+          })}/>
         ))}
       </div>
-      {shopStore.totalPages > 1 &&
+      {shopPageStore.totalPages > 1 &&
         <Pagination
-          maxPages={shopStore.totalPages}
-          currentPage={shopStore.currentPage}
-          back={() => selectPage(shopStore.currentPage - 1)}
-          next={() => selectPage(shopStore.currentPage + 1)}
-          setPage={selectPage} />
+          maxPages={shopPageStore.totalPages}
+          currentPage={shopPageStore.currentPage}
+          back={() => shopPageStore.selectPage(shopPageStore.currentPage - 1)}
+          next={() => shopPageStore.selectPage(shopPageStore.currentPage + 1)}
+          setPage={(page) => shopPageStore.selectPage(page)} />
       }
     </div>
   )

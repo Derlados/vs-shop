@@ -75,7 +75,12 @@ const QuickSearch: FC<QuickSearchProps> = observer(({ value, categoryList, onFoc
             </li>
             {categoryList.children_data.map(category => (
               <ul key={category.id} className='quick-search__catalog-categories-list'>
-                <li className='quick-search__category-item quick-search__category-item_untouchable'>{category.name}</li>
+                <li
+                className='quick-search__category-item quick-search__category-item_bold'
+                onClick={() => !Boolean(category.children_data?.length) ? onSelect(category.name, category.id) : null}
+                >
+                  {category.name}
+                </li>
                 {category.children_data.map(category => (
                   <li
                     key={category.id}

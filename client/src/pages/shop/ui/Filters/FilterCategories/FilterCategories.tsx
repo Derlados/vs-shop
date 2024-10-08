@@ -1,6 +1,5 @@
-import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { NavLink } from 'react-router-dom';
 import '../filters.scss';
 

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FC, useEffect, useRef } from 'react'
-import filtersStore from '../../../../stores/filters/filters.store';
-import { IDisplayFilter } from '../../../../types/magento/IDisplayFilter';
+import filtersStore from '../../../../../stores/filters/filters.store';
+import { IDisplayFilter } from '../../../../../types/magento/IDisplayFilter';
 
 interface FilterItemProps {
   displayFilter: IDisplayFilter;

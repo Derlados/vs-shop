@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
-import MultiRangeSlider from '../../../../../lib/components/MultiRangeSlider/MultiRangeSlider';
-import filtersStore from '../../../../../stores/filters/filters.store';
-import { ICategory } from '../../../../../types/magento/ICategory';
-import FilterItem from '../FilterItem'
+import MultiRangeSlider from '../../../../lib/components/MultiRangeSlider/MultiRangeSlider';
+import filtersStore from '../../../../stores/filters/filters.store';
+import { ICategory } from '../../../../types/magento/ICategory';
+import FilterItem from '../Filters/FilterItem/FilterItem'
 
 interface ProductFiltersProps {
   category: ICategory;

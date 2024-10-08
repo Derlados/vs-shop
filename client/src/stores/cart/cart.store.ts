@@ -83,7 +83,7 @@ class CartStore {
       });
     } catch (error: AxiosError | unknown) {
       if ((error as AxiosError).response?.status === 404 && this.cartId) {
-        await this.clear();
+        this.clear();
         await this.init();
         return;
       }

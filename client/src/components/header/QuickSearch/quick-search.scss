@@ -161,12 +161,15 @@
         &_untouchable {
             color: $primary-dark;
             cursor: default;
-            font-weight: bold;
             pointer-events: none;
 
             &:hover {
                 background-color: white
             }
+        }
+
+        &_bold { 
+            font-weight: bold;
         }
 
         &:hover {

@@ -12,8 +12,8 @@ import { ROUTES } from '../../values/routes';
 import CatalogList from './CatalogList/CatalogList';
 import cartStore from '../../stores/cart/cart.store';
 import catalogStore from '../../stores/catalog/catalog.store';
-import React from 'react';
 import uiStore from '../../stores/ui/ui.store';
+import categoryHelper from '../../helpers/category.helper';
 
 interface LocalStore {
   isCartOpen: boolean;
@@ -51,8 +51,9 @@ const Header = observer(() => {
   }
 
   const onAcceptSearch = () => {
-    if (localStore.selectedCategoryId) {
-      navigate(`${ROUTES.CATEGORY_PREFIX}${localStore.selectedCategoryId}?search=${localStore.searchString}`)
+    const category = catalogStore.getCategoryById(localStore.selectedCategoryId);
+    if (localStore.selectedCategoryId && category) {
+      navigate(`${ROUTES.SHOP_ROUTE}/${categoryHelper.getUrlPath(category)}`)
     } else {
       navigate(`/search?search=${localStore.searchString}`)
     }
@@ -88,6 +89,34 @@ const Header = observer(() => {
     localStore.isCategoryList = true;
   }
 
+  const renderNavList = () => (
+    <ul className='header__nav-list'>
+      <li className='header__nav-item'>
+        <NavLink className={classNames('header__nav-link', {
+          'header__nav-link_active': location.pathname === '/home'
+        })} to={'./home'}>
+          Головна
+        </NavLink>
+      </li>
+      <li className={classNames('header__nav-item', {
+        'header__nav-item_open': localStore.isCategoryList
+      })} onMouseOver={onOpenCatalogList} onMouseLeave={onCloseCatalogList}>
+        <div className={classNames('header__nav-link')}>
+          Каталоги
+          <span className='header__nav-arrow'></span>
+        </div>
+        {catalogStore.categoryTree && <CatalogList categoryList={catalogStore.categoryTree} onClose={onCloseCatalogList} />}
+      </li>
+      <li className='header__nav-item'>
+        <NavLink className={classNames('header__nav-link', {
+          'header__nav-link_active': location.pathname === '/contacts'
+        })} to={'./contacts'}>
+          Контакти
+        </NavLink>
+      </li>
+    </ul>
+  );
+
   return (
     <div className={classNames('header rcc', {
       'header_focused': localStore.isFocused
@@ -101,31 +130,7 @@ const Header = observer(() => {
         <NavLink to={'/home'}>
           <img alt='' src={require('../../assets/images/logo.png')} className='header__logo' />
         </NavLink>
-        <ul className='header__nav-list'>
-          <li className='header__nav-item'>
-            <NavLink className={classNames('header__nav-link', {
-              'header__nav-link_active': location.pathname === '/home'
-            })} to={'./home'}>
-              Головна
-            </NavLink>
-          </li>
-          <li className={classNames('header__nav-item', {
-            'header__nav-item_open': localStore.isCategoryList
-          })} onMouseOver={onOpenCatalogList} onMouseLeave={onCloseCatalogList}>
-            <div className={classNames('header__nav-link')}>
-              Каталоги
-              <span className='header__nav-arrow'></span>
-            </div>
-            {catalogStore.categoryTree && <CatalogList categoryList={catalogStore.categoryTree} onClose={onCloseCatalogList} />}
-          </li>
-          <li className='header__nav-item'>
-            <NavLink className={classNames('header__nav-link', {
-              'header__nav-link_active': location.pathname === '/contacts'
-            })} to={'./contacts'}>
-              Контакти
-            </NavLink>
-          </li>
-        </ul>
+        {renderNavList()}
         <div className='header__action-area rrc'>
           {catalogStore.categoryTree && (
             <QuickSearch

@@ -13,11 +13,11 @@
         margin: 0px;
 
         &:nth-child(odd) {
-            background-color: white;
+            background-color: #f3f3f3;
         }
 
         &:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: white;
         }
     }
 
@@ -25,11 +25,12 @@
         width: 33%;
         padding: 12px;
         font-weight: bold;
-        border-right: 1px solid #eaeaea;
+        border: 1px solid #eaeaea;
     }
 
     &__row-value {
-        width: 66%;
+        width: 67%;
         padding: 12px;
+        border: 1px solid #eaeaea;
     }
 }

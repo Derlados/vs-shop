@@ -200,14 +200,14 @@ const Checkout = observer(() => {
         <div className='checkout__title'>Ваше замовлення</div>
         <div className='checkout__order-container clc'>
           <div className='checkout__order-head rlc'>
-            <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Product</div>
-            <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Total</div>
+            <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Товар</div>
+            <div className='checkout__order-text checkout__order-text_bold checkout__order-text_large'>Сума</div>
           </div>
           <ul className='checkout__order-product-list'>
             {cartStore.totals?.items.map(item => (
               <li key={item.item_id} className='checkout__order-product rlc'>
-                <div className='checkout__order-text'>{item.name} × {item.qty}</div>
-                <div className='checkout__order-text'>{item.price * item.qty} ₴</div>
+                <div className='checkout__order-text'>{`${item.name} × ${item.qty}`}</div>
+                <div className='checkout__order-text'>{formatMoney(item.price * item.qty)}</div>
               </li>
             ))}
           </ul>
@@ -224,10 +224,10 @@ const Checkout = observer(() => {
         </div>
         <div className='checkout__order-accept ccc' onClick={onTryToPlace}>ОФОРМИТИ ЗАМОВЛЕННЯ</div>
       </div>
-      <Modal isActive={cartStore.status == "placing" || cartStore.status == "placing-success"} setActive={() => { }} >
+      <Modal isActive={cartStore.status === "placing" || cartStore.status === "placing-success"} setActive={() => { }} >
         <div className='checkout__modal ccc'>
-          {cartStore.status == "placing" && <Loader />}
-          {cartStore.status == "placing-success" &&
+          {cartStore.status === "placing" && <Loader />}
+          {cartStore.status === "placing-success" &&
             <div className='checkout__modal-success ccc'>
               <div className='checkout__modal-icon ccc'>✓</div>
               <div className='checkout__modal-text'>Ваше замовлення надіслано успішно !</div>

@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import React, { FC } from 'react'
-import { SortType } from '../../../enums/SortType.enum';
-import filtersStore from '../../../stores/filters/filters.store';
-import { ViewMode } from './ProductCatalog/ProductCatalog';
+import filtersStore from '../../../../../stores/filters/filters.store';
+import { SortType } from '../../../../../enums/SortType.enum';
+import { ViewMode } from '../../ProductCatalog/ProductCatalog';
 
 interface LocalStore {
   isOpenSort: boolean;
