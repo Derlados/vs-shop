@@ -37,19 +37,25 @@ const FilterItem: FC<FilterItemProps> = observer(({ displayFilter, onCheck }) =>
 
   return (
     <div className='filters__attr' >
-      <div className='filters__attr-name filters__attr-name_touchable' onClick={toggleList}>{displayFilter.frontend_label} </div>
+      <div 
+        className='filters__attr-name filters__attr-name_touchable text text_xlarge' 
+        onClick={toggleList}
+      >
+        {displayFilter.frontend_label}
+      </div>
       <ul ref={ref} className='filters__attr-list' style={{
         height: localStore.currentHeight
       }}>
         {displayFilter.values.map(value => (
-          <li key={value} className={classNames('filters__attr-item rlc', {
+          <li key={value.value} className={classNames('filters__attr-item rlc', {
             'filters__attr-item_disable': false
           })}>
-            <label className='filters__attr-value rcc'>{value}
+            <label className='filters__attr-value text text_small rcc'>
+              {`${value.value} (${value.count})`}
               <input className='filters__checkbox'
                 type="checkbox"
-                checked={isChecked(displayFilter.attribute_code, value)}
-                onChange={(e) => onCheck(displayFilter.attribute_code, value, e.target.checked)}
+                checked={isChecked(displayFilter.attribute_code, value.value)}
+                onChange={(e) => onCheck(displayFilter.attribute_code, value.value, e.target.checked)}
               />
               <span className='filters__checkmark'></span>
             </label>

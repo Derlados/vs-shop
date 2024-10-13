@@ -1,0 +1,29 @@
+.text {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  line-height: 18px;
+
+  &_small {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &_medium {
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  &_large {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  &_xlarge {
+    font-size: 20px;
+    line-height: 22px;
+  }
+
+  &_bold {
+    font-weight: bold;
+  }
+}

@@ -106,10 +106,9 @@
 
     &__attr-name {
         position: relative;
-        font-size: 20px;
         font-weight: 500;
         transition: 0.25s;
-        padding: 13px 0px;
+        padding: 12px 0px;
 
         &_touchable {
             border-bottom: 1px solid #ededed;
@@ -119,7 +118,6 @@
                 content: '+';
                 position: absolute;
                 right: 0;
-                font-size: 20px;
                 font-weight: bold;
                 color: $primary-dark;
                 transition: 0.25s;
@@ -171,8 +169,6 @@
         display: block;
         position: relative;
         padding-left: 25px;
-        font-size: 14px;
-        line-height: 16px;
         cursor: pointer;
         transition: 0.4s;
 
