@@ -8,6 +8,7 @@ import Loader from './lib/components/Loader/Loader'
 import ScrollToTop from './lib/components/ScrollToTop/ScrollToTop'
 import cartStore from './stores/cart/cart.store'
 import catalogStore from './stores/catalog/catalog.store'
+import { CartProvider } from './providers/cart/cart.provider'
 
 const Main = observer(() => {
   useEffect(() => {
@@ -26,15 +27,17 @@ const Main = observer(() => {
 
   return (
     <div className='app__main cct'>
-      <ScrollToTop />
-      <Header />
-      <div className='app__content ccc'>
-        <div className='app__page cct'>
-          <Outlet />
+      <CartProvider>
+        <ScrollToTop />
+        <Header />
+        <div className='app__content ccc'>
+          <div className='app__page cct'>
+            <Outlet />
+          </div>
         </div>
-      </div>
-      <Footer />
-      <ButtonUp />
+        <Footer />
+        <ButtonUp />
+      </CartProvider>
     </div>
   )
 })

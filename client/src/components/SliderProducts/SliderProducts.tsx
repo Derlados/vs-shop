@@ -2,11 +2,11 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FC, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import ProductCard from '../ProductCard/ProductCard';
 import './slider-products.scss';
 import { Resolutions } from '../../values/resolutions';
-import ProductQuickModal from '../ProductCard/ProductQuickModal/ProductQuickModal';
+import ProductQuickModal from '../ProductQuickModal/ProductQuickModal';
 import { IProduct } from '../../types/magento/IProduct';
+import ProductSmallCard from '../ProductSmallCard/ProductSmallCard';
 
 interface LocalStore {
   swiper: any;
@@ -93,7 +93,11 @@ const SliderProducts: FC<SliderProductsProps> = observer(({ products, title, sli
         >
           {products.map((product, index) => (
             <SwiperSlide key={index} className="slider-products__slider">
-              <ProductCard type="small" product={product} containerSize="small" onOpenQuickView={openQuickView} />
+               <ProductSmallCard
+                  containerSize="small"
+                  product={product}
+                  onOpenQuickView={openQuickView}
+                />
             </SwiperSlide>
           ))}
         </Swiper>

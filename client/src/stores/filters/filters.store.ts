@@ -4,13 +4,14 @@ import attributesService from "../../services/filters/attributes.service";
 import { IDisplayFilter } from "../../types/magento/IDisplayFilter";
 import { IFilterGroup } from "../../types/magento/IFilterGroup";
 import { IUserSelectedFilter } from "../../types/magento/IUserSelectedFilter";
+import { IPriceRange } from "../../types/magento/IPriceRange";
 
 class FiltersStore {
   public status: 'initial' | 'loading' | 'success' | 'error';
   public filters: IDisplayFilter[];
   public selectedFilters: IUserSelectedFilter[];
-  public selectedPriceRange: { min: number, max: number };
-  public priceRange: { min: number, max: number };
+  public selectedPriceRange: IPriceRange;
+  public priceRange: IPriceRange;
   public selectedSort: SortType;
 
   constructor() {
@@ -60,7 +61,13 @@ class FiltersStore {
     });
 
     try {
-      const filters = await attributesService.getAttributesByAttributeSet(categoryId);
+      const filters = await attributesService.getAttributesByAttributeSet(categoryId,
+        {
+          attributeFilters: this.selectedFilters,
+          priceRange: this.selectedPriceRange,
+          search: ''
+        }
+      );
 
       const priceFilter = filters.find(f => f.attribute_code === 'price');
       const checkedFilters = filters.filter(f => f.attribute_code !== 'price');

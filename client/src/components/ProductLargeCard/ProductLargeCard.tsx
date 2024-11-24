@@ -1,30 +1,29 @@
 import { observer } from 'mobx-react-lite';
 import { FC } from 'react'
-import CartButton from '../../CartButton/cart-button';
+import CartButton from '../CartButton/cart-button';
 import './product-card-large.scss';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
-import { ProductCardProps } from '../ProductCard';
-import { IProduct, StockStatus } from '../../../types/magento/IProduct';
-import cartStore from '../../../stores/cart/cart.store';
-import mediaHelper from '../../../helpers/media.helper';
-import productHelper from '../../../helpers/product.helper';
-import FormatHelper from '../../../helpers/format.helper';
+import { IProduct, StockStatus } from '../../types/magento/IProduct';
+import cartStore from '../../stores/cart/cart.store';
+import mediaHelper from '../../helpers/media.helper';
+import productHelper from '../../helpers/product.helper';
+import FormatHelper from '../../helpers/format.helper';
+import { useCart } from '../../providers/cart/cart.provider';
+import useProduct from '../../hooks/useProduct';
 
-export interface SimpleProductCardProps extends ProductCardProps {
+export interface SimpleProductCardProps {
+  product: IProduct;
   onOpenQuickView: (product: IProduct) => void;
 }
 
 const ProductLargeCard: FC<SimpleProductCardProps> = observer(({
   product,
-  productUrl,
   onOpenQuickView,
-  updateCart,
-  mainImage,
-  specialPrice,
-  manufacturer,
-  description,
 }) => {
+  const { productUrl, mainImage, specialPrice, manufacturer, description } = useProduct(product);
+  const { addToCart } =  useCart();
+
   return (
     <div className='product-card-large rlt'>
       <div className='product-card-large__img-container'>
@@ -32,7 +31,7 @@ const ProductLargeCard: FC<SimpleProductCardProps> = observer(({
           <img
             className='product-card__img product-card-large__img'
             alt={product.name}
-            src={mainImage ? mediaHelper.getCatalogFileUrl(mainImage, "product") : require('../../../assets/images/no-photos.png')}
+            src={mainImage ? mediaHelper.getCatalogFileUrl(mainImage, "product") : require('../../assets/images/no-photos.png')}
           />
         </NavLink>
         <div className='product-card__labels product-card__labels_large ccc'>
@@ -64,7 +63,7 @@ const ProductLargeCard: FC<SimpleProductCardProps> = observer(({
             <CartButton color="primary"
               sku={product.sku}
               isActive={cartStore.cart.items.find(item => item.sku === product.sku) === undefined}
-              onClick={() => updateCart('add', product)}
+              onClick={() => addToCart(product)}
             />
           }
           <div className={classNames('product-card__availability product-card-large__availability', {

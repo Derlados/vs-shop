@@ -1,10 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { ICategory } from "../../../types/magento/ICategory";
-import catalogStore from "../../../stores/catalog/catalog.store";
-import { IProduct } from "../../../types/magento/IProduct";
-import { IFilterGroup } from "../../../types/magento/IFilterGroup";
-import prodcutsService from "../../../services/products/prodcuts.service";
-import { IFilterCategory } from "../ui/Filters/FilterCategories/FilterCategories";
+import { ICategory } from "../../types/magento/ICategory";
+import catalogStore from "../catalog/catalog.store";
+import { IProduct } from "../../types/magento/IProduct";
+import { IFilterGroup } from "../../types/magento/IFilterGroup";
+import prodcutsService from "../../services/products/prodcuts.service";
+import { IFilterCategory } from "../../pages/shop/ui/Filters/FilterCategories/FilterCategories";
 
 const PAGE_SIZE = 16;
 
@@ -26,7 +26,7 @@ class ShopPageStore {
     this.setDefaultState();
   }
 
-  init(categoryPath?: string) {
+  init(categoryPath?: string, search: string = '') {
     if (!categoryPath) {
       this.isValidCategory = false;
       return;
@@ -40,18 +40,13 @@ class ShopPageStore {
 
     this.category = category;
     this.currentCategoryId = category.id;
+    
+    this.search = search;
   }
 
   selectCategory(categoryId: number) {
     runInAction(() => {
       this.currentCategoryId = categoryId;
-    });
-  }
-
-  changeSearch(search: string) {
-    runInAction(() => {
-      this.search = search;
-      this.currentPage = 1;
     });
   }
 

@@ -1,6 +1,6 @@
 
 import classNames from 'classnames';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import SmallLoader from '../../lib/components/SmallLoader/SmallLoader';
 import contactsStore, { ContactsStoreStatus } from '../../stores/contacts/contacts.store';
 import { REGEX } from '../../values/regex';

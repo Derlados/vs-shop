@@ -38,14 +38,8 @@ const Checkout = observer(() => {
   const getSettlementValues = (settlements: ISettlement[]) => {
     const settlementValues = new Map<string, string>();
     settlements = settlements.slice().sort((a, b) => {
-      if (a.settlementType === 'місто') {
-        return -1;
-      }
-
-      if (a.settlementType === 'село') {
-        return 1;
-      }
-
+      if (a.settlementType === 'місто') return -1;
+      if (a.settlementType === 'село') return 1;
       return 0;
     })
 

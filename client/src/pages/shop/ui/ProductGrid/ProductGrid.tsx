@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { FC } from 'react';
-import ProductCard from '../../../../components/ProductCard/ProductCard';
 import { ViewMode } from '../ProductCatalog/ProductCatalog';
 import Pagination from '../../../../lib/components/Pagination/Pagination';
 import { observer } from 'mobx-react-lite';
 import { IProduct } from '../../../../types/magento/IProduct';
 import LoadingMask from '../LoadingMask/LoadingMask';
-import shopPageStore from '../../model/shop-page.store';
+import shopPageStore from '../../../../stores/shop-page/shop-page.store';
+import ProductLargeCard from '../../../../components/ProductLargeCard/ProductLargeCard';
 
 interface ProductGridProps {
   products: IProduct[];
@@ -32,10 +32,10 @@ const ProductGrid: FC<ProductGridProps> = observer(({
             'catalog__product-container_large': viewMode === ViewMode.LIST,
             'catalog__product-container_inactive-links': onSelectProduct !== undefined
           })} onClick={onSelectProduct ? () => onSelectProduct(product) : () => { }}>
-            <ProductCard
-              type={viewMode === ViewMode.GRID ? 'small' : 'large'}
+            <ProductLargeCard
               product={product}
-              onOpenQuickView={onOpenQuickView} />
+              onOpenQuickView={onOpenQuickView}
+            /> 
           </div>
         )}
         {/* for normal view with flex-wrap and space between */}

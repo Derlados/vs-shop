@@ -1,6 +1,6 @@
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import { FC } from 'react';
-import ProductQuickModal from '../../../../components/ProductCard/ProductQuickModal/ProductQuickModal';
+import ProductQuickModal from '../../../../components/ProductQuickModal/ProductQuickModal';
 import ProductGrid from '../ProductGrid/ProductGrid';
 import './catalog.scss';
 import { SortType } from '../../../../enums/SortType.enum';

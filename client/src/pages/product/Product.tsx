@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react';
 import './product.scss';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import ProductCard from '../../components/ProductCard/ProductCard';
+import { observer } from 'mobx-react-lite';
 import { Navigate, useParams } from 'react-router-dom';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import SliderProducts from '../../components/SliderProducts/SliderProducts';
@@ -9,6 +8,7 @@ import Loader from '../../lib/components/Loader/Loader';
 import { ROUTES } from '../../values/routes';
 import productStore from '../../stores/product/product.store';
 import categoryHelper from '../../helpers/category.helper';
+import ProductInfo from '../../components/ProductInfo/ProductInfo';
 
 type ProductParams = {
   sku: string | undefined;
@@ -51,7 +51,7 @@ const Product: FC = observer(() => {
           { to: `/${productStore.product.sku}`, title: productStore.product.name },
         ]} />
         <div className='product__container rlc'>
-          <ProductCard product={productStore.product} type="full-view" />
+          <ProductInfo product={productStore.product} view='full' />
         </div>
         {/* Когда контент добавится  <ProductDesc /> */}
         {productStore.relatedProducts?.length > 0 && (

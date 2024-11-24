@@ -1,17 +1,17 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { ProductCardProps } from '../ProductCard';
 import 'swiper/css';
 import classNames from 'classnames';
-import Table from '../../../pages/product/components/Table/Table';
-import mediaHelper from '../../../helpers/media.helper';
-import productHelper from '../../../helpers/product.helper';
-import cartStore from '../../../stores/cart/cart.store';
-import CartButton from '../../CartButton/cart-button';
-import { StockStatus } from '../../../types/magento/IProduct';
-import CartCountEditor from '../../CartCountEditor/CartCountEditor';
-import FormatHelper from '../../../helpers/format.helper';
+import Table from '../../pages/product/components/Table/Table';
+import mediaHelper from '../../helpers/media.helper';
+import productHelper from '../../helpers/product.helper';
+import CartButton from '../CartButton/cart-button';
+import { IProduct, StockStatus } from '../../types/magento/IProduct';
+import CartCountEditor from '../CartCountEditor/CartCountEditor';
+import FormatHelper from '../../helpers/format.helper';
+import { useCart } from '../../providers/cart/cart.provider';
+import useProduct from '../../hooks/useProduct';
 
 interface LocalStore {
   swiper: any;
@@ -19,47 +19,30 @@ interface LocalStore {
   selectedImage: string;
 }
 
-interface ProductFullInfoProps extends ProductCardProps {
-  isExtended?: boolean;
+interface ProductFullInfoProps {
+  product: IProduct;
+  view: 'full' | 'quick';
 }
 
-const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
-  product,
-  updateCart,
-  isExtended = false,
-  mainImage,
-  specialPrice,
-  description
-}) => {
+const ProductInfo: FC<ProductFullInfoProps> = observer(({ product, view = 'full'}) => {
+  const { mainImage, specialPrice, description, isInCart } = useProduct(product);
+  const { addToCart } = useCart();
+
   const localStore = useLocalObservable<LocalStore>(() => ({
     swiper: null,
     selectedCount: 1,
-    selectedImage: '',
+    selectedImage: mediaHelper.getCatalogFileUrl(mainImage || '', 'product'),
   }));
 
   const charsRef = React.createRef<HTMLDivElement>();
 
-  const productInCart = cartStore.cart.items.find(i => i.sku == product.sku) !== undefined;
-
   useEffect(() => {
     localStore.swiper?.slideToLoop(product.media_gallery_entries.map(img => img.file).length - 1, 0);
-    const mainImage = productHelper.getMainImage(product) || '';
-    localStore.selectedImage = mediaHelper.getCatalogFileUrl(mainImage, 'product');
-  }, [product])
+  }, [localStore.swiper, product])
 
 
   const onQtyChange = (neqQty: number) => {
     localStore.selectedCount = neqQty;
-  }
-
-  const onAddToCart = () => {
-    updateCart('add', product, localStore.selectedCount);
-  }
-
-  //TODO Есть баг с прямым выбором изображения
-  const selectImg = (index: number) => {
-    // localStore.selectedImage = product.images[index].url;
-    // localStore.swiper?.slideToLoop(index - 1);
   }
 
   const onSwiperIndexChange = (realIndex: number) => {
@@ -69,6 +52,10 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
       : product.media_gallery_entries[index].file;
 
     localStore.selectedImage = mediaHelper.getCatalogFileUrl(file, 'product');
+  }
+
+  const selectImg = (index: number) => {
+    // localStore.selectedImage = mediaHelper.getCatalogFileUrl(product.media_gallery_entries[index].file, 'product');
   }
 
   const onShowChars = () => {
@@ -101,7 +88,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
       <div className='product__info rlt'>
         <div className='product__images ctc'>
           <div className='product__img-container'>
-            <img className='product__img' alt='' src={localStore.selectedImage ?? require('../../../assets/images/no-photos.png')} />
+            <img className='product__img' alt='' src={localStore.selectedImage ?? require('../../assets/images/no-photos.png')} />
             {renderSwiperArrows()}
           </div>
           <div className='product__slider-container'>
@@ -135,7 +122,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
             {specialPrice && <div className='product__old-price'>{FormatHelper.formatCurrency(product.price, 0)}</div>}
           </div>
           <div className='product__desc'>{description}</div>
-          {isExtended &&
+          {view === 'full' &&
             <div className='description__details clc'>
               <ul className='description__list'>
                 {product.extension_attributes.description_attributes.slice(0, 5).map(attribute => (
@@ -149,7 +136,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
             </div>
           }
           <div className='product__actions rlc'>
-            {!productInCart &&
+            {!isInCart &&
               <CartCountEditor
                 sku={product.sku}
                 onChange={onQtyChange}
@@ -159,8 +146,8 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
             <CartButton
               color="primary"
               sku={product.sku}
-              isActive={!productInCart}
-              onClick={onAddToCart}
+              isActive={!isInCart}
+              onClick={() => addToCart(product, localStore.selectedCount)}
             />
           </div>
           <span className='product__availability'>Доступно:
@@ -177,7 +164,7 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
           </div>
         </div>
       </div>
-      {isExtended &&
+      {view === 'full' &&
         <div ref={charsRef} className='product__chars clt' >
           <div className='product__chars-title'>Характеристики</div>
           <Table attributes={product.extension_attributes.description_attributes} />
@@ -188,4 +175,4 @@ const ProductFullInfo: FC<ProductFullInfoProps> = observer(({
   )
 });
 
-export default ProductFullInfo
+export default ProductInfo

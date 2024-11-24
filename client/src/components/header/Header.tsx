@@ -53,7 +53,7 @@ const Header = observer(() => {
   const onAcceptSearch = () => {
     const category = catalogStore.getCategoryById(localStore.selectedCategoryId);
     if (localStore.selectedCategoryId && category) {
-      navigate(`${ROUTES.SHOP_ROUTE}/${categoryHelper.getUrlPath(category)}`)
+      navigate(`${ROUTES.SHOP_ROUTE}/${categoryHelper.getUrlPath(category)}?search=${localStore.searchString}`)
     } else {
       navigate(`/search?search=${localStore.searchString}`)
     }

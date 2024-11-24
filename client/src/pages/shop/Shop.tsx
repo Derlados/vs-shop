@@ -11,8 +11,9 @@ import catalogStore from '../../stores/catalog/catalog.store';
 import filtersStore from '../../stores/filters/filters.store';
 import ProductFilters from './ui/ProductFilters/ProductFilters';
 import Filters from './ui/Filters/Filters';
-import shopPageStore from './model/shop-page.store';
+import shopPageStore from '../../stores/shop-page/shop-page.store';
 import FilterCategories from './ui/Filters/FilterCategories/FilterCategories';
+import { useQuery } from '../../lib/hooks/useQuery';
 
 interface ShopProps {
   isGlobalSearch?: boolean;
@@ -21,18 +22,20 @@ interface ShopProps {
 const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
   const { categoryPath } = useParams();
 
+  const search = useQuery().get('search') || '';
+
   useEffect(() => {
     filtersStore.setDefaultState();
     shopPageStore.setDefaultState();
 
-    shopPageStore.init(categoryPath);
+    shopPageStore.init(categoryPath, search);
     filtersStore.loadFilters(shopPageStore.currentCategoryId);
     return () => {
       console.log('unmount')
       filtersStore.setDefaultState();
       shopPageStore.setDefaultState();
     }
-  }, [categoryPath])
+  }, [categoryPath, search]);
 
   useEffect(() => {
     if (filtersStore.status === 'success' && shopPageStore.currentCategoryId !== 0) {
@@ -95,7 +98,7 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
           }
         </div>
       </div>
-      <PopupWindow />
+      {/* <PopupWindow /> */}
     </div>
   );
 });
