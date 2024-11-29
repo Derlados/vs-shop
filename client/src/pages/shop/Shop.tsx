@@ -14,6 +14,7 @@ import Filters from './ui/Filters/Filters';
 import shopPageStore from '../../stores/shop-page/shop-page.store';
 import FilterCategories from './ui/Filters/FilterCategories/FilterCategories';
 import { useQuery } from '../../lib/hooks/useQuery';
+import useFilterSearchParams from '../../hooks/useFilterSearchParams';
 
 interface ShopProps {
   isGlobalSearch?: boolean;
@@ -21,8 +22,9 @@ interface ShopProps {
 
 const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
   const { categoryPath } = useParams();
-
-  const search = useQuery().get('search') || '';
+  const [{
+    page, search, sort, minPrice, maxPrice, attributeFilters
+  }, updateParams] = useFilterSearchParams();
 
   useEffect(() => {
     filtersStore.setDefaultState();
@@ -30,8 +32,8 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
 
     shopPageStore.init(categoryPath, search);
     filtersStore.loadFilters(shopPageStore.currentCategoryId);
+
     return () => {
-      console.log('unmount')
       filtersStore.setDefaultState();
       shopPageStore.setDefaultState();
     }

@@ -70,6 +70,4 @@ class ProductsService extends Service {
   }
 }
 
-
-
 export default new ProductsService('/products');
