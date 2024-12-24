@@ -6,14 +6,11 @@ import { Navigate, useParams } from 'react-router-dom';
 import Loader from '../../lib/components/Loader/Loader';
 import { FC, useEffect } from 'react';
 import { ROUTES } from '../../values/routes';
-import PopupWindow from '../../components/PopupWindow/PopupWindow';
-import catalogStore from '../../stores/catalog/catalog.store';
 import filtersStore from '../../stores/filters/filters.store';
 import ProductFilters from './ui/ProductFilters/ProductFilters';
 import Filters from './ui/Filters/Filters';
 import shopPageStore from '../../stores/shop-page/shop-page.store';
 import FilterCategories from './ui/Filters/FilterCategories/FilterCategories';
-import { useQuery } from '../../lib/hooks/useQuery';
 import useFilterSearchParams from '../../hooks/useFilterSearchParams';
 
 interface ShopProps {
@@ -30,14 +27,19 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
     filtersStore.setDefaultState();
     shopPageStore.setDefaultState();
 
-    shopPageStore.init(categoryPath, search);
-    filtersStore.loadFilters(shopPageStore.currentCategoryId);
+    shopPageStore.init(categoryPath, search, page);
+    filtersStore.init(shopPageStore.currentCategoryId, {
+      minPrice,
+      maxPrice,
+      selectedFilters: attributeFilters,
+      sort,
+    });
 
     return () => {
       filtersStore.setDefaultState();
       shopPageStore.setDefaultState();
     }
-  }, [categoryPath, search]);
+  }, [categoryPath]);
 
   useEffect(() => {
     if (filtersStore.status === 'success' && shopPageStore.currentCategoryId !== 0) {
@@ -50,8 +52,24 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
     shopPageStore.currentCategoryId,
     shopPageStore.currentPage,
     shopPageStore.search,
-  ])
+  ]);
 
+  useEffect(() => {
+    updateParams({
+      page: shopPageStore.currentPage,
+      search: shopPageStore.search,
+      sort: filtersStore.selectedSort,
+      minPrice: filtersStore.selectedPriceRange.min,
+      maxPrice: filtersStore.selectedPriceRange.max,
+      attributeFilters: filtersStore.selectedFilters,
+    });
+  }, [
+    shopPageStore.search,
+    shopPageStore.currentPage,
+    filtersStore.selectedSort,
+    filtersStore.selectedPriceRange,
+    filtersStore.selectedFilters,
+  ]);
 
   if (shopPageStore.status === "initial") {
     return (

@@ -60,10 +60,10 @@ export default function useFilterSearchParams() {
     window.history.pushState({}, '', url.toString());
   }
 
-  const updateParams = (key: keyof IFilterParams, value: any) => {
+  const updateParams = (newParams: Partial<IFilterParams>) => {
     setParams({
       ...params,
-      [key]: value
+      ...newParams,
     });
   }
 

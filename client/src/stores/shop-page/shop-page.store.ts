@@ -26,7 +26,7 @@ class ShopPageStore {
     this.setDefaultState();
   }
 
-  init(categoryPath?: string, search: string = '') {
+  init(categoryPath?: string, search: string = '', page: number = 1) {
     if (!categoryPath) {
       this.isValidCategory = false;
       return;

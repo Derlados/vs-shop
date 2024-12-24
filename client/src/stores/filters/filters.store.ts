@@ -55,8 +55,11 @@ class FiltersStore {
     return filterGroups;
   }
 
-  async loadFilters(categoryId: number) {
+  async init(categoryId: number, options: { minPrice?: number, maxPrice?: number, selectedFilters?: IUserSelectedFilter[], sort?: SortType }) {
     runInAction(() => {
+      this.selectedPriceRange = { min: options.minPrice ?? 0, max: options.maxPrice ?? 0 };
+      this.selectedFilters = options.selectedFilters ?? [];
+      this.selectedSort = options.sort ?? SortType.NOT_SELECTED;
       this.status = 'loading';
     });
 
