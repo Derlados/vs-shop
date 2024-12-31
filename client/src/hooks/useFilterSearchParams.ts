@@ -46,8 +46,9 @@ export default function useFilterSearchParams() {
     const keys = Object.keys(params) as (keyof IFilterParams)[];
 
     keys.forEach(key => {
-      if (params[key]) {
-        url.searchParams.set(key, params[key].toString());
+      const value = params[key];
+      if (value) {
+        url.searchParams.set(key, value.toString());
       } else {
         url.searchParams.delete(key);
       }
@@ -69,11 +70,11 @@ export default function useFilterSearchParams() {
 
   useEffect(() => {
     initAttributeFilters();
-  });
+  }, []);
 
-  useEffect(() => {
-    setSearchParams();
-  }, [params]);
+  // useEffect(() => {
+  //   setSearchParams();
+  // }, [params]);
 
   return [params, updateParams] as const;
 }

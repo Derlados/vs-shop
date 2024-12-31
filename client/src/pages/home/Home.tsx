@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import './home.scss';
+import './home-2.scss';
 import BannerList from './components/BannerList';
 import Loader from '../../lib/components/Loader/Loader';
 import "aos/dist/aos.css";
@@ -29,6 +30,138 @@ const Home = observer(() => {
       link: "/shop"
     }
   ]
+
+  const images = [
+    [
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzLZNa_Djvd2yjBTUQtybvQkLPWYOTItyurg&s',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5Horaki4ZAV1ga942kOnBfBgIFPjO7rdLrA&s'
+    ],
+    [
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeYPNjXNgm8TgcoavhxKPGqJKCcdQFylssAw&s',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSYEZJiaqb7uvW_VovYHsocPtngCbDTQzuE9ILlKr4k83JvdeoqINFq1-LU0wejoDqRlk&usqp=CAU'
+    ],
+    [
+      'https://tkani-atlas.com.ua/assets/images/blog/1503824130_1503824130.webp',
+    'https://i.pinimg.com/236x/3b/9b/31/3b9b316b6882a352a4dd6cb29240f7eb.jpg'
+    ]
+  ];
+
+  if (true) {
+    return (
+      <>
+       <div className="vs-shop__header">
+      <h1 className="vs-shop__title">
+        Косметика, вишивка. Все для вас, вашого дому та вашої краси
+      </h1>
+      <div className="vs-shop__btn-row">
+        <button className="vs-shop__btn vs-shop__btn_fill">Купити зараз</button>
+        <button className="vs-shop__btn vs-shop__btn_outline">Замовити</button>
+      </div>
+    </div>
+    <div className="vs-shop__features">
+      <div className="vs-shop__features-item">
+        <div className="vs-shop__feature-title">Години праці</div>
+        <div className="vs-shop__feature-desc">Пн-Пт: 9:00-18:00</div>
+      </div>
+      <div className="vs-shop__features-item">
+        <div className="vs-shop__feature-title">Ціни</div>
+        <div className="vs-shop__feature-desc">Від 500 до 1200 грн</div>
+      </div>
+      <div className="vs-shop__features-item">
+        <div className="vs-shop__feature-title">Терміни замовлення</div>
+        <div className="vs-shop__feature-desc">7 днів</div>
+      </div>
+      <div className="vs-shop__features-item">
+        <div className="vs-shop__feature-title">Поспішайте</div>
+        <div className="vs-shop__feature-desc">
+          <a href='/shop'>Купіть зараз</a>
+          або
+          <a href='/order'>Замовте</a>
+        </div>
+      </div>
+    </div>
+    <div className="vs-shop__products">
+      <div className="vs-shop__subtitle">Наші каталоги</div>
+      <CategoryList categories={catalogStore.categoryList} />
+    </div>
+    <div className="vs-shop__products">
+      <div className="vs-shop__subtitle">Для домашнього затишку</div>
+      <CategoryList categories={catalogStore.categoryList} />
+    </div>
+    <div className="vs-shop__about">
+      <img className="vs-shop__about-icon" src=''/>
+      <div className="vs-shop__subtitle">Про нас</div>
+      <div className="vs-shop__about-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+    </div>
+    <div className="vs-shop__gallery">
+      {images.map((column, index) => (
+        <div key={index} className="vs-shop__gallery-column">
+          {column.map((img, index) => (
+            <div className='vs-shop__gallery-img-wrapper'>
+              <img key={index} src={img} alt={`img${index + 1}`}/>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+    <div className="vs-shop__products">
+      <div className="vs-shop__subtitle">Оберіть товар і замовте!</div>
+      <CategoryList categories={catalogStore.categoryList} />
+    </div>
+    <div className="vs-shop__contacts">
+      <div className="vs-shop__subtitle">Контакти</div>
+      <div className="row">
+         {/* <!-- form --> */}
+        <div className="vs-shop__contacts-info">
+          <div className="vs-shop__contacts-info-block">
+            <img className="vs-shop__contacts-info-icon" src=''/>
+            <div className="vs-shop__contacts-info-content">
+              <div className="vs-shop__contacts-info-title">Номер телефону</div>
+              <div className="vs-shop__contacts-info-desc">+380 50 123 45 67</div>
+            </div>
+          </div>
+          <div className="vs-shop__contacts-info-block">
+            <img className="vs-shop__contacts-info-icon" src=''/>
+            <div className="vs-shop__contacts-info-content">
+              <div className="vs-shop__contacts-info-title">Email</div>
+              <div className="vs-shop__contacts-info-desc">Email: test@gmail.com</div>
+            </div>
+          </div>
+          <div className="vs-shop__contacts-info-block">
+            <img className="vs-shop__contacts-info-icon" src=''/>
+            <div className="vs-shop__contacts-info-content">
+              <div className="vs-shop__contacts-info-title">Адреса</div>
+              <div className="vs-shop__contacts-info-desc">м. Львів, вул. Шевченка 123</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div className="vs-shop__footer-blocks">
+        <div className="vs-shop__block">
+          <div className="vs-shop__block-title">Загальна інформація</div>
+          <div className="vs-shop__block-info">Номер телефону: +380 50 123 45 67</div>
+          <div className="vs-shop__block-info">Email: test@gmail.com</div>
+          <div className="vs-shop__block-title">Графік роботи</div>
+          <div className="vs-shop__block-info">Пн-Пт: 9:00-18:00</div>
+          <div className="vs-shop__block-info">Сб-Нд: 10:00-18:00</div>
+        </div>
+        <div className="vs-shop__block">
+          <div className="vs-shop__block-title">Користувачам</div>
+          <a href="/contacts">Контакти</a>
+          <a href="/payment_and_delivery">Оплата та доставка</a>
+          <a href="#catalogs">Всі каталоги</a>
+          <a href="/shop/category">Вишивка</a>
+        </div>
+      </div>
+      <div className="vs-shop__copyright">
+
+      </div>
+    </footer>
+      </>
+    );
+  }
 
   if (catalogStore.status === "success" && catalogStore.categoryList) {
     return (

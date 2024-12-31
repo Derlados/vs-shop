@@ -60,7 +60,7 @@ class ProductsService extends Service {
       }
     }
 
-    if (search !== '') {
+    if (search) {
       searchCriteria[`searchCriteria[filter_groups][${filterGroups.length + 1}][filters][0][field]`] = 'name';
       searchCriteria[`searchCriteria[filter_groups][${filterGroups.length + 1}][filters][0][value]`] = `%${search}%`;
       searchCriteria[`searchCriteria[filter_groups][${filterGroups.length + 1}][filters][0][condition_type]`] = 'like';

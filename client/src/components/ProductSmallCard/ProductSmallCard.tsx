@@ -3,6 +3,7 @@ import { FC } from 'react'
 import CartButton from '../CartButton/cart-button';
 import { NavLink } from 'react-router-dom';
 import "aos/dist/aos.css";
+import "./product-card.scss";
 import classNames from 'classnames';
 import { IProduct, StockStatus } from '../../types/magento/IProduct';
 import productHelper from '../../helpers/product.helper';

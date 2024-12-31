@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { IProduct } from '../../../../types/magento/IProduct';
 import LoadingMask from '../LoadingMask/LoadingMask';
 import shopPageStore from '../../../../stores/shop-page/shop-page.store';
-import ProductLargeCard from '../../../../components/ProductLargeCard/ProductLargeCard';
+import ProductSmallCard from '../../../../components/ProductSmallCard/ProductSmallCard';
 
 interface ProductGridProps {
   products: IProduct[];
@@ -32,7 +32,7 @@ const ProductGrid: FC<ProductGridProps> = observer(({
             'catalog__product-container_large': viewMode === ViewMode.LIST,
             'catalog__product-container_inactive-links': onSelectProduct !== undefined
           })} onClick={onSelectProduct ? () => onSelectProduct(product) : () => { }}>
-            <ProductLargeCard
+            <ProductSmallCard
               product={product}
               onOpenQuickView={onOpenQuickView}
             /> 

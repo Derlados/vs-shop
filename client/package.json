@@ -20,7 +20,7 @@
         "mobx-react-lite": "^3.2.3",
         "nanoid": "^3.3.4",
         "object-to-formdata": "^4.4.2",
-        "qs": "^6.11.0",
+        "qs": "^6.13.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-hook-mask": "^1.1.8",

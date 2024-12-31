@@ -5,7 +5,7 @@ export interface ISelectedFilter {
   values: string[];
 }
 
-export interface ISelectedFiltersDTo {
+export interface ISelectedFiltersDTO {
   attributeFilters: ISelectedFilter[];
   priceRange: IPriceRange;
   search: string;
