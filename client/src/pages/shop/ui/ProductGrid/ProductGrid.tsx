@@ -5,7 +5,7 @@ import Pagination from '../../../../lib/components/Pagination/Pagination';
 import { observer } from 'mobx-react-lite';
 import { IProduct } from '../../../../types/magento/IProduct';
 import LoadingMask from '../LoadingMask/LoadingMask';
-import shopPageStore from '../../../../stores/shop-page/shop-page.store';
+import shopPageStore from '../../../../stores/pages/shop-page/shop-page.store';
 import ProductSmallCard from '../../../../components/ProductSmallCard/ProductSmallCard';
 
 interface ProductGridProps {

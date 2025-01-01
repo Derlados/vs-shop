@@ -135,7 +135,7 @@ const Checkout = observer(() => {
         </div>
         <div className='checkout__inputs-row rlt'>
           <Input className={classNames('checkout__input', {
-            'checkout__input_invalid': checkoutPageStore.isTriedToPlace && !REGEX.PHONE_REGEX.test(cartStore.getAddressInfoByKey<string>("telephone"))
+            'checkout__input_invalid': checkoutPageStore.isTriedToPlace && !REGEX.PHONE.test(cartStore.getAddressInfoByKey<string>("telephone"))
           })}
             name="telephone"
             mask={phoneMask}
@@ -148,7 +148,7 @@ const Checkout = observer(() => {
           />
           <Input className={classNames('checkout__input', {
             'checkout__input_invalid': checkoutPageStore.isTriedToPlace
-              && (!REGEX.EMAIL_REGEX.test(cartStore.getAddressInfoByKey("email")) && cartStore.getAddressInfoByKey("email") != '')
+              && (!REGEX.EMAIL.test(cartStore.getAddressInfoByKey("email")) && cartStore.getAddressInfoByKey("email") != '')
           })}
             name="email"
             hint="Електронна пошта (не обов'язково)"

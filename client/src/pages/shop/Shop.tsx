@@ -9,7 +9,7 @@ import { ROUTES } from '../../values/routes';
 import filtersStore from '../../stores/filters/filters.store';
 import ProductFilters from './ui/ProductFilters/ProductFilters';
 import Filters from './ui/Filters/Filters';
-import shopPageStore from '../../stores/shop-page/shop-page.store';
+import shopPageStore from '../../stores/pages/shop-page/shop-page.store';
 import FilterCategories from './ui/Filters/FilterCategories/FilterCategories';
 import useFilterSearchParams from '../../hooks/useFilterSearchParams';
 
@@ -79,6 +79,7 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
     )
   }
 
+
   if (!shopPageStore.isValidCategory || !shopPageStore.category || shopPageStore.status === "error" ) {
     return <Navigate to={'/404_not_found'} replace />
   }
@@ -103,19 +104,20 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
           {/* {searchStore.popularProducts.length !== 0 && categoryRoute && <PopularProducts categoryRoute={categoryRoute} products={searchStore.popularProducts} />} */}
         </div>
         <div className='shop__content'>
-          {shopPageStore.products.length !== 0 ?
+          {shopPageStore.products.length !== 0 && (
             <ProductCatalog
               selectedSortType={filtersStore.selectedSort}
               products={shopPageStore.products}
               onOpenFilters={() => shopPageStore.openFilters()}
               isLoading={shopPageStore.status === "loading"}
             />
-            :
+          )}
+          {shopPageStore.products.length === 0 && shopPageStore.status === 'success' && (
             <div className='shop__emprty-catalog rcc'>
               <div className='shop__empty-catalog-icon'></div>
               <div className='shop__nothing-found-text'>За даними фільтрами нічого не знайдено</div>
             </div>
-          }
+          )}
         </div>
       </div>
       {/* <PopupWindow /> */}

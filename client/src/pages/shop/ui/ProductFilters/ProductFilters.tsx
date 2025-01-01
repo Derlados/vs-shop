@@ -25,7 +25,7 @@ const ProductFilters: FC<ProductFiltersProps> = observer(({ category }) => {
       <div className='filters__line'></div>
       <div className='filters__attr-name'>Ціна</div>
       <div className='filters__price'>
-        {filtersStore.status == 'success' && (
+        {filtersStore.status === 'success' && (
           <MultiRangeSlider
             min={filtersStore.priceRange.min}
             max={filtersStore.priceRange.max}

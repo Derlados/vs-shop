@@ -3,68 +3,58 @@ import { IMail } from "../../types/shop/IMail";
 import { REGEX } from "../../values/regex";
 
 export enum ContactsStoreStatus {
-    initial, sending, sentFailure, failure, success
+  initial, sending, sentFailure, failure, success
 }
 
 class ContactsStore {
-    public status: ContactsStoreStatus;
-    public name: string;
-    public email: string;
-    public subject: string;
-    public message: string;
+  public status: ContactsStoreStatus;
+  public contactInfo: IMail;
 
-    public isTriedToSend: boolean;
+  public isTriedToSend: boolean;
 
-    get isValid(): boolean {
-        return this.name !== '' && REGEX.EMAIL_REGEX.test(this.email) && this.email !== '' && this.subject !== '' && this.message !== '';
+  get isValid(): boolean {
+    return (
+      this.contactInfo.name !== '' &&
+      REGEX.EMAIL.test(this.contactInfo.email) &&
+      this.contactInfo.subject !== '' &&
+      this.contactInfo.message !== ''
+    );
+  }
+
+  constructor() {
+    makeAutoObservable(this);
+    this.status = ContactsStoreStatus.initial;
+    this.contactInfo = {
+      name: '',
+      phone: '',
+      email: '',
+      subject: '',
+      message: ''
+    }
+    this.isTriedToSend = false;
+  }
+
+  onChangeContactInfo(field: keyof IMail, value: string) {
+    this.contactInfo[field] = value;
+    this.isTriedToSend = false;
+  }
+
+  async sendMail() {
+    runInAction(() => this.isTriedToSend = true);
+    if (!this.isValid || this.status === ContactsStoreStatus.sending || this.status === ContactsStoreStatus.success) {
+      return;
     }
 
-    constructor() {
-        makeAutoObservable(this);
-        this.status = ContactsStoreStatus.initial;
-        this.name = '';
-        this.email = '';
-        this.subject = '';
-        this.message = '';
-        this.isTriedToSend = false;
+    runInAction(() => this.status = ContactsStoreStatus.sending);
+
+    try {
+      // await shopService.sendMail(mail);
+
+      runInAction(() => this.status = ContactsStoreStatus.success);
+    } catch (e) {
+      runInAction(() => this.status = ContactsStoreStatus.sentFailure);
     }
-
-    onNameChange(name: string) {
-        this.name = name;
-        this.isTriedToSend = false;
-    }
-
-    onEmailChange(email: string) {
-        this.email = email;
-        this.isTriedToSend = false;
-    }
-
-    onSubjectChange(subject: string) {
-        this.subject = subject;
-        this.isTriedToSend = false;
-    }
-
-    onMessageChange(message: string) {
-        this.message = message;
-        this.isTriedToSend = false;
-    }
-
-    async sendMail() {
-        runInAction(() => this.isTriedToSend = true);
-        if (!this.isValid || this.status == ContactsStoreStatus.sending || this.status == ContactsStoreStatus.success) {
-            return;
-        }
-
-        runInAction(() => this.status = ContactsStoreStatus.sending);
-
-        try {
-            // await shopService.sendMail(mail);
-
-            runInAction(() => this.status = ContactsStoreStatus.success);
-        } catch (e) {
-            runInAction(() => this.status = ContactsStoreStatus.sentFailure);
-        }
-    }
+  }
 }
 
 export default new ContactsStore();

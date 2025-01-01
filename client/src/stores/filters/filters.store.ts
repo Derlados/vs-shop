@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { SortType } from "../../enums/SortType.enum";
-import attributesService from "../../services/filters/attributes.service";
+import attributesService from "../../services/filters/filters.service";
 import { IDisplayFilter } from "../../types/magento/IDisplayFilter";
 import { IFilterGroup } from "../../types/magento/IFilterGroup";
 import { IUserSelectedFilter } from "../../types/magento/IUserSelectedFilter";
@@ -57,7 +57,6 @@ class FiltersStore {
 
   async init(categoryId: number, options: { minPrice?: number, maxPrice?: number, selectedFilters?: IUserSelectedFilter[], sort?: SortType }) {
     runInAction(() => {
-      this.selectedPriceRange = { min: options.minPrice ?? 0, max: options.maxPrice ?? 0 };
       this.selectedFilters = options.selectedFilters ?? [];
       this.selectedSort = options.sort ?? SortType.NOT_SELECTED;
       this.status = 'loading';
@@ -84,7 +83,10 @@ class FiltersStore {
         this.filters = checkedFilters;
         this.priceRange = { ...priceRange };
         this.status = 'success';
-        this.selectedPriceRange = { ...priceRange };
+        this.selectedPriceRange = {
+          min: options.minPrice ? Number(options.minPrice) : priceRange.min,
+          max: options.minPrice ? Number(options.maxPrice) : priceRange.max
+        };
       });
     } catch (error) {
       console.error(error);

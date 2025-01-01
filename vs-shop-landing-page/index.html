@@ -1,6 +1,10 @@
 <html>
   <head>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    
   </head>
   <body class="vs-shop">
     <div class="vs-shop__header">
@@ -8,29 +12,29 @@
         Косметика, вишивка. Все для вас, вашого дому та вашої краси
       </h1>
       <div class="vs-shop__btn-row">
-        <div class="vs-shop__btn">Купити зараз</div>
-        <div class="vs-shop__btn">Замовити вязання</div>
+        <button class="vs-shop__btn vs-shop__btn_fill">Купити зараз</button>
+        <button class="vs-shop__btn vs-shop__btn_outline">Замовити</button>
       </div>
     </div>
     <div class="vs-shop__features">
-      <div class="vs-shop__feature">
+      <div class="vs-shop__features-item">
         <div class="vs-shop__feature-title">Години праці</div>
         <div class="vs-shop__feature-desc">Пн-Пт: 9:00-18:00</div>
       </div>
-      <div class="vs-shop__feature">
+      <div class="vs-shop__features-item">
         <div class="vs-shop__feature-title">Ціни</div>
         <div class="vs-shop__feature-desc">Від 500 до 1200 грн</div>
       </div>
-      <div class="vs-shop__feature">
+      <div class="vs-shop__features-item">
         <div class="vs-shop__feature-title">Терміни замовлення</div>
         <div class="vs-shop__feature-desc">7 днів</div>
       </div>
-      <div class="vs-shop__feature">
+      <div class="vs-shop__features-item">
         <div class="vs-shop__feature-title">Поспішайте</div>
         <div class="vs-shop__feature-desc">
           <a href='/shop'>Купіть зараз</a>
           або
-          <a href='/order'>замовте</a>
+          <a href='/order'>Замовте</a>
         </div>
       </div>
     </div>
@@ -39,21 +43,22 @@
       <!-- товари -->
     </div>
     <div class="vs-shop__about">
-      <div class="vs-shop__about-title">Про нас</div>
+      <img class="vs-shop__about-icon" src=''/>
+      <div class="vs-shop__subtitle">Про нас</div>
       <div class="vs-shop__about-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
     </div>
-    <div class="vs-shop__examples">
+    <div class="vs-shop__gallery">
       <div class="vs-shop__gallery-column">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3_bq9kt0lwRaZseelFPaIQjwKWsgJX6nGOguheTM1whAuirf0kqHN_KTPc2VR0Jz2MdQ&usqp=CAU" alt="img1"/>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeYPNjXNgm8TgcoavhxKPGqJKCcdQFylssAw&s" alt="img2"/>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzLZNa_Djvd2yjBTUQtybvQkLPWYOTItyurg&s" alt="img1"/>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5Horaki4ZAV1ga942kOnBfBgIFPjO7rdLrA&s" alt="img2"/>
       </div>
       <div class="vs-shop__gallery-column">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeYPNjXNgm8TgcoavhxKPGqJKCcdQFylssAw&s" alt="img3"/>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3_bq9kt0lwRaZseelFPaIQjwKWsgJX6nGOguheTM1whAuirf0kqHN_KTPc2VR0Jz2MdQ&usqp=CAU" alt="img4"/>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSYEZJiaqb7uvW_VovYHsocPtngCbDTQzuE9ILlKr4k83JvdeoqINFq1-LU0wejoDqRlk&usqp=CAU" alt="img4"/>
       </div>
       <div class="vs-shop__gallery-column">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3_bq9kt0lwRaZseelFPaIQjwKWsgJX6nGOguheTM1whAuirf0kqHN_KTPc2VR0Jz2MdQ&usqp=CAU" alt="img5"/>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeYPNjXNgm8TgcoavhxKPGqJKCcdQFylssAw&s" alt="img6"/>
+        <img src="https://tkani-atlas.com.ua/assets/images/blog/1503824130_1503824130.webp" alt="img5"/>
+        <img src="https://i.pinimg.com/236x/3b/9b/31/3b9b316b6882a352a4dd6cb29240f7eb.jpg" alt="img6"/>
       </div>
     </div>
     <div class="vs-shop__products">
@@ -67,16 +72,29 @@
     <div class="vs-shop__contacts">
       <div class="vs-shop__subtitle">Контакти</div>
       <div class="row">
-        <form>
-
-        </form>
+         <!-- form -->
         <div class="vs-shop__contacts-info">
-          <div class="vs-shop__contacts-info-title">Номер телефону</div>
-          <div class="vs-shop__contacts-info-desc">+380 50 123 45 67</div>
-          <div class="vs-shop__contacts-info-title">Email</div>
-          <div class="vs-shop__contacts-info-desc">Email: test@gmail.com</div>
-          <div class="vs-shop__contacts-info-title">Адреса</div>
-          <div class="vs-shop__contacts-info-desc">м. Львів, вул. Шевченка 123</div>
+          <div class="vs-shop__contacts-info-block">
+            <img class="vs-shop__contacts-info-icon" src=''/>
+            <div class="vs-shop__contacts-info-content">
+              <div class="vs-shop__contacts-info-title">Номер телефону</div>
+              <div class="vs-shop__contacts-info-desc">+380 50 123 45 67</div>
+            </div>
+          </div>
+          <div class="vs-shop__contacts-info-block">
+            <img class="vs-shop__contacts-info-icon" src=''/>
+            <div class="vs-shop__contacts-info-content">
+              <div class="vs-shop__contacts-info-title">Email</div>
+              <div class="vs-shop__contacts-info-desc">Email: test@gmail.com</div>
+            </div>
+          </div>
+          <div class="vs-shop__contacts-info-block">
+            <img class="vs-shop__contacts-info-icon" src=''/>
+            <div class="vs-shop__contacts-info-content">
+              <div class="vs-shop__contacts-info-title">Адреса</div>
+              <div class="vs-shop__contacts-info-desc">м. Львів, вул. Шевченка 123</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

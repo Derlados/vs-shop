@@ -38,10 +38,10 @@ class CartStore {
     const isValidShipping = this.shippingInformation.addressInformation.shippingAddress.region
       && city
       && street.length > 0
-      && telephone && REGEX.PHONE_REGEX.test(telephone)
+      && telephone && REGEX.PHONE.test(telephone)
       && firstname
       && lastname
-      && email && REGEX.EMAIL_REGEX.test(email)
+      && email && REGEX.EMAIL.test(email)
       && postcode;
 
     return this.cart && this.cart.items.length > 0 && isValidShipping;
@@ -52,10 +52,10 @@ class CartStore {
     const errors = {
       "city": !city ? "Оберіть населений пункт" : "",
       "street": street.length === 0 ? "Оберіть точку видачі" : "",
-      "telephone": !telephone || !REGEX.PHONE_REGEX.test(telephone) ? "Введіть коректний номер телефону" : "",
+      "telephone": !telephone || !REGEX.PHONE.test(telephone) ? "Введіть коректний номер телефону" : "",
       "firstname": !firstname ? "Введіть ім'я" : "",
       "lastname": !lastname ? "Введіть прізвище" : "",
-      "email": email && !REGEX.EMAIL_REGEX.test(email) ? "Введіть коректну електронну пошту" : "",
+      "email": email && !REGEX.EMAIL.test(email) ? "Введіть коректну електронну пошту" : "",
     };
 
     return errors;

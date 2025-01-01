@@ -5,6 +5,7 @@ import SmallLoader from '../../lib/components/SmallLoader/SmallLoader';
 import contactsStore, { ContactsStoreStatus } from '../../stores/contacts/contacts.store';
 import { REGEX } from '../../values/regex';
 import './contacts.scss';
+import { IMail } from '../../types/shop/IMail';
 
 const Contacts = observer(() => {
   const phones = ['0(1234) 567 89012', '0(987) 567 890']
@@ -14,20 +15,8 @@ const Contacts = observer(() => {
     contactsStore.sendMail();
   }
 
-  const onNameChange = (v: React.ChangeEvent<HTMLInputElement>) => {
-    contactsStore.onNameChange(v.target.value);
-  }
-
-  const onEmailChange = (v: React.ChangeEvent<HTMLInputElement>) => {
-    contactsStore.onEmailChange(v.target.value);
-  }
-
-  const onSubjectChange = (v: React.ChangeEvent<HTMLInputElement>) => {
-    contactsStore.onSubjectChange(v.target.value);
-  }
-
-  const onMessageChange = (v: React.ChangeEvent<HTMLTextAreaElement>) => {
-    contactsStore.onMessageChange(v.target.value);
+  const onChangeField = (field: keyof IMail, value: string) => {
+    contactsStore.onChangeContactInfo(field, value);
   }
 
   return (
@@ -39,7 +28,7 @@ const Contacts = observer(() => {
           <div className='contacts__icon-wrapper ccc'>
             <div className='contacts__icon contacts__icon_phone'></div>
           </div>
-          <div className='contacts__row-item-title'>NUMBER PHONE</div>
+          <div className='contacts__row-item-title'>Номера телефонів</div>
           <ul className='contacts__list ccc'>
             {phones.map((phone, index) => (
               <li key={phone} className='contacts__list-item'>Phone {index}: {phone}</li>
@@ -50,7 +39,7 @@ const Contacts = observer(() => {
           <div className='contacts__icon-wrapper ccc'>
             <div className='contacts__icon contacts__icon_email'></div>
           </div>
-          <div className='contacts__row-item-title'>ADDRESS EMAIL</div>
+          <div className='contacts__row-item-title'>Email</div>
           <ul className='contacts__list ccc'>
             {emails.map(email => (
               <li key={email} className='contacts__list-item'>{email}</li>
@@ -60,19 +49,24 @@ const Contacts = observer(() => {
       </div>
       <div className='contacts__form'>
         <div className='contacts__input-row rlc'>
+          <input 
+            className={classNames('contacts__input', {
+              'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.contactInfo.name === ''
+            })} 
+            placeholder={'Ім\'я *'}
+            value={contactsStore.contactInfo.name}
+            onChange={(e) => onChangeField('name', e.target.value)}
+          />
           <input className={classNames('contacts__input', {
-            'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.name === ''
-          })} placeholder={'Ім\'я *'} value={contactsStore.name} onChange={onNameChange} />
-          <input className={classNames('contacts__input', {
-            'contacts__input_invalid': contactsStore.isTriedToSend && !REGEX.EMAIL_REGEX.test(contactsStore.email)
-          })} placeholder='Електронна пошта *' value={contactsStore.email} onChange={onEmailChange} />
+            'contacts__input_invalid': contactsStore.isTriedToSend && !REGEX.EMAIL.test(contactsStore.contactInfo.email)
+          })} placeholder='Електронна пошта *' value={contactsStore.contactInfo.email} onChange={(e) => onChangeField('email', e.target.value)} />
         </div>
         <input className={classNames('contacts__input', {
-          'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.subject === ''
-        })} placeholder='Тема повідомлення *' value={contactsStore.subject} onChange={onSubjectChange} />
+          'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.contactInfo.subject === ''
+        })} placeholder='Тема повідомлення *' value={contactsStore.contactInfo.subject} onChange={(e) => onChangeField('subject', e.target.value)} />
         <textarea className={classNames('contacts__input contacts__input_large', {
-          'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.message === ''
-        })} placeholder='Текст повідомлення *' value={contactsStore.message} onChange={onMessageChange} />
+          'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.contactInfo.message === ''
+        })} placeholder='Текст повідомлення *' value={contactsStore.contactInfo.message} onChange={(e) => onChangeField('message', e.target.value)} />
       </div>
       {contactsStore.status !== ContactsStoreStatus.success ?
         <div className='contacts__form-btn ccc' onClick={trySendMessage}>

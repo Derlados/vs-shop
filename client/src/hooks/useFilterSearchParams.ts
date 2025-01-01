@@ -18,8 +18,8 @@ export default function useFilterSearchParams() {
     page: getParams('page', null),
     search: getParams('search', null),
     sort: getParams('sort', null),
-    minPrice: getParams('min_price', null),
-    maxPrice: getParams('max_price', null),
+    minPrice: getParams('minPrice', null),
+    maxPrice: getParams('maxPrice', null),
     attributeFilters: []
   });
 
@@ -46,6 +46,12 @@ export default function useFilterSearchParams() {
     const keys = Object.keys(params) as (keyof IFilterParams)[];
 
     keys.forEach(key => {
+      if (key === 'page' && params[key] === 1) return;
+      if (key === 'search' && !params[key]) return;
+      if (key === 'sort' && params[key] === SortType.NOT_SELECTED) return;
+      if (key === 'attributeFilters') return;
+
+
       const value = params[key];
       if (value) {
         url.searchParams.set(key, value.toString());
@@ -58,7 +64,8 @@ export default function useFilterSearchParams() {
       url.searchParams.set(filter.attributeCode, filter.values.join(','));
     });
 
-    window.history.pushState({}, '', url.toString());
+    // replace url
+    window.history.replaceState({}, '', url.toString());
   }
 
   const updateParams = (newParams: Partial<IFilterParams>) => {
@@ -72,9 +79,9 @@ export default function useFilterSearchParams() {
     initAttributeFilters();
   }, []);
 
-  // useEffect(() => {
-  //   setSearchParams();
-  // }, [params]);
+  useEffect(() => {
+    setSearchParams();
+  }, [params]);
 
   return [params, updateParams] as const;
 }
