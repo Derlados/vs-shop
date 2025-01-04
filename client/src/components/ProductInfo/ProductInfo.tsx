@@ -154,7 +154,7 @@ const ProductInfo: FC<ProductFullInfoProps> = observer(({ product, view = 'full'
             <span className={classNames('product__availability-status', {
               'product__availability-status_green': product.extension_attributes.stock_status === StockStatus.IN_STOCK,
               'product__availability-status_yellow': product.extension_attributes.stock_status === StockStatus.RUNNING_LOW,
-              'product__availability-status_gray': product.extension_attributes.stock_status === StockStatus.OUT_OF_STOCK,
+              'product__availability-status_red': product.extension_attributes.stock_status === StockStatus.OUT_OF_STOCK,
             })}>{productHelper.getStockStatusLabel(product)}</span>
           </span>
           <div className='product__share-actions rlc'>

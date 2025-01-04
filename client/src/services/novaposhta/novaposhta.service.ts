@@ -71,7 +71,6 @@ class NovaposhtaService extends Service {
 
     private parseSettlements(data: any[]): ISettlement[] {
         const settlements: ISettlement[] = data.map((d) => {
-            console.log(d);
             return {
                 ref: d.Ref,
                 name: d.Description,

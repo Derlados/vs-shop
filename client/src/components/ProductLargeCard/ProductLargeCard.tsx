@@ -69,7 +69,7 @@ const ProductLargeCard: FC<SimpleProductCardProps> = observer(({
           <div className={classNames('product-card__availability product-card-large__availability', {
             'product-card__availability_green': product.extension_attributes.stock_status === StockStatus.IN_STOCK,
             'product-card__availability_yellow': product.extension_attributes.stock_status === StockStatus.RUNNING_LOW,
-            'product-card__availability_gray': product.extension_attributes.stock_status === StockStatus.OUT_OF_STOCK,
+            'product-card__availability_red': product.extension_attributes.stock_status === StockStatus.OUT_OF_STOCK,
           })}>
             {productHelper.getStockStatusLabel(product)}
           </div>

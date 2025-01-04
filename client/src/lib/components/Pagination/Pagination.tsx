@@ -21,7 +21,7 @@ const Pagination: FC<PaginationProps> = observer(({ maxPageWindow = 9, maxPages,
 
     useEffect(() => {
         window.addEventListener("resize", () => {
-            if (window.innerWidth <= Resolutions.MOBILE_VERtICAL) {
+            if (window.innerWidth <= Resolutions.MOBILE_VERTICAL_LARGE) {
                 setPageWindow(MAX_MOBILE_VERTICAL);
             } else {
                 setPageWindow(maxPageWindow);

@@ -21,7 +21,7 @@ const Footer = observer(() => {
         <div className="footer__block">
           <div className="footer__block-title">Користувачам</div>
           <a href="/contacts">Контакти</a>
-          <a href="/payment_and_delivery">Оплата та доставка</a>
+          {/* <a href="/payment_and_delivery">Оплата та доставка</a> */}
           <a href="#catalogs">Всі каталоги</a>
           <a href="/shop/category">Вишивка</a>
         </div>

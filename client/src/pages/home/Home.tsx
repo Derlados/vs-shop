@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
 import './home.scss';
-import './home-2.scss';
 import Loader from '../../lib/components/Loader/Loader';
 import "aos/dist/aos.css";
 import CategoryList from '../../components/Category/CategoryList/CategoryList';
@@ -8,9 +7,31 @@ import catalogStore from '../../stores/catalog/catalog.store';
 import ContactForm from './components/ContactForm';
 import SliderProducts from '../../components/SliderProducts/SliderProducts';
 import homePageStore from '../../stores/pages/home-page/home-page.store';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import useIsMobile from '../../hooks/useIsMobile';
+import { Resolutions } from '../../values/resolutions';
 
 const Home = observer(() => {
+  const isMobile = useIsMobile(Resolutions.MOBILE_VERTICAL_LARGE);
+
+  const images = useMemo(() => {
+    const allImages = [
+      'https://single-workshop.weblium.site/res/646b6366738ad9000ffc36f7/6475e151a0b690000f0e9a7e_optimized_1395_c1395x930-0x0.webp',
+      'https://single-workshop.weblium.site/res/646b6366738ad9000ffc36f7/6475e187d0ea29000fbd8d3e_optimized_867_c867x1300-0x0.webp',
+      'https://single-workshop.weblium.site/res/646b6366738ad9000ffc36f7/6475e1edd0ea29000fbd8dd8_optimized_1300_c1300x866-0x0.webp',
+      'https://single-workshop.weblium.site/res/646b6366738ad9000ffc36f7/6475e1b5bd7589000fdbc2b3_optimized.webp',
+      'https://single-workshop.weblium.site/res/646b6366738ad9000ffc36f7/6475e292bd7589000fdbc3da_optimized_1300_c1300x866-0x0.webp',
+      'https://single-workshop.weblium.site/res/646b6366738ad9000ffc36f7/6475e262a0b690000f0e9baf_optimized_868_c868x1300-0x0.webp',
+    ]
+    const columns = isMobile ? 2 : 3;
+    const imagesPerColumn = Math.ceil(allImages.length / columns);
+    const result = [];
+    for (let i = 0; i < columns; i++) {
+      result.push(allImages.slice(i * imagesPerColumn, (i + 1) * imagesPerColumn));
+    }
+
+    return result;
+  }, [isMobile]);
 
   useEffect(() => {
     homePageStore.init();
@@ -23,21 +44,6 @@ const Home = observer(() => {
       </div>
     )
   }
-
-  const images = [
-    [
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzLZNa_Djvd2yjBTUQtybvQkLPWYOTItyurg&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5Horaki4ZAV1ga942kOnBfBgIFPjO7rdLrA&s'
-    ],
-    [
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeYPNjXNgm8TgcoavhxKPGqJKCcdQFylssAw&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSYEZJiaqb7uvW_VovYHsocPtngCbDTQzuE9ILlKr4k83JvdeoqINFq1-LU0wejoDqRlk&usqp=CAU'
-    ],
-    [
-      'https://tkani-atlas.com.ua/assets/images/blog/1503824130_1503824130.webp',
-      'https://i.pinimg.com/236x/3b/9b/31/3b9b316b6882a352a4dd6cb29240f7eb.jpg'
-    ]
-  ];
 
   return (
     <>
@@ -67,7 +73,7 @@ const Home = observer(() => {
             </div>
           </li>
           <li className='home__features-item rlc'>
-          <img className='home__features-img' alt='' src={require('../../assets/images/clock.png')} />
+            <img className='home__features-img' alt='' src={require('../../assets/images/clock.png')} />
             <div className='home__features-desc'>
               <div className='home__features-text'>Терміни замовлення</div>
               <div className='home__features-text-small'>7 днів</div>
@@ -91,6 +97,7 @@ const Home = observer(() => {
         <CategoryList categories={catalogStore.categoryList} />
       </div>
       <SliderProducts title="Для домашнього затишку" products={[...homePageStore.favoriteProducts.slice(0, 20)]} />
+      <SliderProducts title="Інші товари" products={[...homePageStore.favoriteProducts.slice(0, 20)]} />
       <div className="home__about">
         <img className="home__about-icon" src='' />
         <div className="home__subtitle">Про нас</div>
@@ -107,12 +114,11 @@ const Home = observer(() => {
           </div>
         ))}
       </div>
-      <div className="home__products">
-        <div className="home__subtitle">Оберіть товар і замовте!</div>
-        <CategoryList categories={catalogStore.categoryList} />
-      </div>
+      <SliderProducts title="Оберіть товар і замовте!" products={[...homePageStore.favoriteProducts.slice(0, 20)]} />
       <div className="home__contacts">
-        <div className="home__subtitle">Контакти</div>
+        <div className='home__contacts-head'>
+          Зацікавила ручна праця і хочете зробити свій дім більш затишним або з'явилися питання? Зв'яжіться з нами!
+        </div>
         <ContactForm />
       </div>
     </>

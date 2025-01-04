@@ -234,8 +234,13 @@
             color: rgb(255, 222, 73);
         }
 
-        &_gray {
-            color: rgb(192, 192, 192);
+        &_red {
+            color: #d53939;
+        }
+
+        @media (max-width: $mobile-vertical) {
+            padding: 4px 0;
+            font-size: 14px;
         }
     }
 }
