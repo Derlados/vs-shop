@@ -7,6 +7,7 @@ import { IProduct } from '../../../../types/magento/IProduct';
 import LoadingMask from '../LoadingMask/LoadingMask';
 import shopPageStore from '../../../../stores/pages/shop-page/shop-page.store';
 import ProductSmallCard from '../../../../components/ProductSmallCard/ProductSmallCard';
+import ProductLargeCard from '../../../../components/ProductLargeCard/ProductLargeCard';
 
 interface ProductGridProps {
   products: IProduct[];
@@ -32,10 +33,8 @@ const ProductGrid: FC<ProductGridProps> = observer(({
             'catalog__product-container_large': viewMode === ViewMode.LIST,
             'catalog__product-container_inactive-links': onSelectProduct !== undefined
           })} onClick={onSelectProduct ? () => onSelectProduct(product) : () => { }}>
-            <ProductSmallCard
-              product={product}
-              onOpenQuickView={onOpenQuickView}
-            /> 
+            {viewMode === ViewMode.GRID && <ProductSmallCard product={product} onOpenQuickView={onOpenQuickView} />}
+            {viewMode === ViewMode.LIST && <ProductLargeCard product={product} onOpenQuickView={onOpenQuickView} />}
           </div>
         )}
         {/* for normal view with flex-wrap and space between */}

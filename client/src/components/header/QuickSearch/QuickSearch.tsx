@@ -24,7 +24,7 @@ const ALL_CATEGORIES = 'Всі категорії';
 const QuickSearch: FC<QuickSearchProps> = observer(({ value, categoryList, onFocus: onFocusChange, onChange, onAccept, onSelectCategory }) => {
   const state = useLocalObservable<State>(() => ({
     isOpenCategories: false,
-    selectedCategory: ALL_CATEGORIES
+    selectedCategory: categoryList.children_data[0].name
   }))
 
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -67,12 +67,12 @@ const QuickSearch: FC<QuickSearchProps> = observer(({ value, categoryList, onFoc
           <ul className={classNames('quick-search__category-list', {
             'quick-search__category-list_open': state.isOpenCategories
           })}>
-            <li
+            {/* <li
               className='quick-search__category-item'
               onClick={() => onSelect(ALL_CATEGORIES, -1)}
             >
               {ALL_CATEGORIES}
-            </li>
+            </li> */}
             {categoryList.children_data.map(category => (
               <ul key={category.id} className='quick-search__catalog-categories-list'>
                 <li

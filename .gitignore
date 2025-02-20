@@ -67,3 +67,5 @@ templates.txt
 passwords.txt
 magento/
 server/static/
+
+temp/
