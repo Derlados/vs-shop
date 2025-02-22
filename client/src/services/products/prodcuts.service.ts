@@ -1,11 +1,11 @@
 import { axiosInstance } from "..";
-import { Service } from "../service";
+import { ApiService } from "../service";
 import { IManufacturer } from "../../types/magento/IManufacturer";
 import { IProduct } from "../../types/magento/IProduct";
 import { IGetProductsResDto } from "./dto/get-products-res.dto";
 import { IFilterGroup } from "../../types/magento/IFilterGroup";
 
-class ProductsService extends Service {
+class ProductsService extends ApiService {
   async getProductBySku(sku: string): Promise<IProduct> {
     return await this.execute(axiosInstance.get<IProduct>(`${this.apiUrl}/${sku}`));
   }

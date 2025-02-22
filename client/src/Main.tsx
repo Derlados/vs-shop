@@ -14,7 +14,7 @@ const Main = observer(() => {
   useEffect(() => {
     cartStore.init();
     catalogStore.init();
-  }, [])
+  }, []);
 
 
   if (!cartStore.isInit || !catalogStore.isInit) {

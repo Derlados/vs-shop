@@ -201,6 +201,10 @@
         color: white;
         background-color: $primary-green;
         font-size: 48px;
+
+        &_danger {
+            background-color: $primary-red;
+        }
     }
 
     &__modal-text {

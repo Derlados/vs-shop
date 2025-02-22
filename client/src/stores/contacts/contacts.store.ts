@@ -1,6 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { IMail } from "../../types/shop/IMail";
 import { REGEX } from "../../values/regex";
+import contactsService from "../../services/contacts/contacts.service";
+import { CreateContactEmailDto } from "../../services/contacts/dto/create-contact-email.dto";
 
 export enum ContactsStoreStatus {
   initial, sending, sentFailure, failure, success
@@ -8,7 +10,7 @@ export enum ContactsStoreStatus {
 
 class ContactsStore {
   public status: ContactsStoreStatus;
-  public contactInfo: IMail;
+  public contactInfo: CreateContactEmailDto;
 
   public isTriedToSend: boolean;
 
@@ -48,8 +50,7 @@ class ContactsStore {
     runInAction(() => this.status = ContactsStoreStatus.sending);
 
     try {
-      // await shopService.sendMail(mail);
-
+      await contactsService.sendContactForm(this.contactInfo);
       runInAction(() => this.status = ContactsStoreStatus.success);
     } catch (e) {
       runInAction(() => this.status = ContactsStoreStatus.sentFailure);

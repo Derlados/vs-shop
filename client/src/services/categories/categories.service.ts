@@ -1,10 +1,10 @@
 import axios from "axios";
 import { axiosInstance } from "..";
-import { Service } from "../service";
+import { ApiService } from "../service";
 import { ICategory } from "../../types/magento/ICategory";
 import { ICategoryList } from "../../types/magento/ICategoryList";
 
-class CategoriesService extends Service {
+class CategoriesService extends ApiService {
     async getCategoryList(): Promise<ICategory[]> {
         const categories = await this.execute(axiosInstance.get<ICategory[]>('/vs-shop/categories/all'));
 

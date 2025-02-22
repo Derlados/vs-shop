@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 
-export class Service {
+export class ApiService {
   protected readonly apiUrl: string;
   protected errorMessage: string;
   protected errorCode?: number;

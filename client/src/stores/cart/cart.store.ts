@@ -19,6 +19,7 @@ class CartStore {
   public isInit: boolean;
   public processingSku: string;
   public shippingInformation: IShippingInformation;
+  public isFinished: boolean;
 
 
   constructor() {
@@ -93,6 +94,8 @@ class CartStore {
   }
 
   async addProduct(sku: string, quantity: number) {
+    if (this.status === 'loading') return;
+
     runInAction(() => {
       this.status = 'loading';
       this.processingSku = sku;
@@ -114,6 +117,8 @@ class CartStore {
   }
 
   async updateProduct(itemId: number, quantity: number) {
+    if (this.status === 'loading') return;
+
     runInAction(() => {
       this.status = 'loading';
       this.processingSku = this.cart.items.find(item => item.item_id === itemId)?.sku || '';
@@ -135,6 +140,8 @@ class CartStore {
   }
 
   async removeProduct(itemId: number) {
+    if (this.status === 'loading') return;
+    
     runInAction(() => {
       this.status = 'loading';
       this.processingSku = this.cart.items.find(item => item.item_id === itemId)?.sku || '';
@@ -155,14 +162,18 @@ class CartStore {
   }
 
   async placeOrder(comment: string = '') {
+    const isLoading = this.status === 'loading' || this.status === 'placing' || this.status === 'placing-success';
+    if (isLoading || !this.isValidCheckout) return;
+
     runInAction(() => this.status = 'placing');
 
     try {
       await cartService.setShippingInformation(this.cartId, this.shippingInformation);
       await cartService.placeOrder(this.cartId, 'checkmo', comment);
+      runInAction(() => this.isFinished = true);
 
       this.clear();
-      this.init();
+      await this.init();
 
       runInAction(() => this.status = 'placing-success');
     } catch (error) {

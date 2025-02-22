@@ -1,3 +1,3 @@
-const formatMoney = (value: number): string => {
+export const formatMoney = (value: number): string => {
   return `${value.toFixed(2)} ₴`;
 }

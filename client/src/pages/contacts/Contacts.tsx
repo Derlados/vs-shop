@@ -22,7 +22,7 @@ const Contacts = observer(() => {
   return (
     <div className='contacts ccc'>
       <div className='contacts__title'>Зв'яжіться з нами</div>
-      <div className='contacts__subtitle'>Sample text. Click to select the text box. Click again or double click to start editing the text.</div>
+      <div className='contacts__subtitle'>Зацікавила ручна праця і хочете зробити свій дім більш затишним або з'явилися питання?</div>
       <div className='contacts__row rct'>
         <div className='contacts__row-item ccc'>
           <div className='contacts__icon-wrapper ccc'>
@@ -49,24 +49,36 @@ const Contacts = observer(() => {
       </div>
       <div className='contacts__form'>
         <div className='contacts__input-row rlc'>
-          <input 
+          <input
             className={classNames('contacts__input', {
               'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.contactInfo.name === ''
-            })} 
+            })}
             placeholder={'Ім\'я *'}
             value={contactsStore.contactInfo.name}
             onChange={(e) => onChangeField('name', e.target.value)}
           />
           <input className={classNames('contacts__input', {
             'contacts__input_invalid': contactsStore.isTriedToSend && !REGEX.EMAIL.test(contactsStore.contactInfo.email)
-          })} placeholder='Електронна пошта *' value={contactsStore.contactInfo.email} onChange={(e) => onChangeField('email', e.target.value)} />
+          })}
+            placeholder='Електронна пошта *'
+            value={contactsStore.contactInfo.email}
+            onChange={(e) => onChangeField('email', e.target.value)}
+          />
         </div>
         <input className={classNames('contacts__input', {
           'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.contactInfo.subject === ''
-        })} placeholder='Тема повідомлення *' value={contactsStore.contactInfo.subject} onChange={(e) => onChangeField('subject', e.target.value)} />
+        })}
+          placeholder='Тема повідомлення *'
+          value={contactsStore.contactInfo.subject}
+          onChange={(e) => onChangeField('subject', e.target.value)}
+        />
         <textarea className={classNames('contacts__input contacts__input_large', {
           'contacts__input_invalid': contactsStore.isTriedToSend && contactsStore.contactInfo.message === ''
-        })} placeholder='Текст повідомлення *' value={contactsStore.contactInfo.message} onChange={(e) => onChangeField('message', e.target.value)} />
+        })}
+          placeholder='Текст повідомлення *'
+          value={contactsStore.contactInfo.message}
+          onChange={(e) => onChangeField('message', e.target.value)}
+        />
       </div>
       {contactsStore.status !== ContactsStoreStatus.success ?
         <div className='contacts__form-btn ccc' onClick={trySendMessage}>

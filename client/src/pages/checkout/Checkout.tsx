@@ -12,6 +12,7 @@ import Loader from '../../lib/components/Loader/Loader';
 import { IShippingInformation } from '../../types/magento/IShippingInformation';
 import { IWarehouse } from '../../types/novaposhta/IWarehouse';
 import { ISettlement } from '../../types/novaposhta/ISettlement';
+import { formatMoney } from '../../helpers/formatter.helper';
 
 const phoneMask = '+38 999 999 99 99';
 
@@ -103,7 +104,11 @@ const Checkout = observer(() => {
     cartStore.setSettlement(selectedSettlement, warehouse);
   }
 
-  if (cartStore.cart.items.length === 0) {
+  const onCloseModal = () => {
+    cartStore.status = 'success';
+  }
+
+  if (cartStore.cart.items.length === 0 && !cartStore.isFinished) {
     return <Navigate to={'/home'} />
   }
 
@@ -151,7 +156,7 @@ const Checkout = observer(() => {
               && (!REGEX.EMAIL.test(cartStore.getAddressInfoByKey("email")) && cartStore.getAddressInfoByKey("email") != '')
           })}
             name="email"
-            hint="Електронна пошта (не обов'язково)"
+            hint="Електронна пошта"
             value={cartStore.getAddressInfoByKey("email")}
             onChange={onChangeField}
             error={cartStore.validErrors.email}
@@ -218,7 +223,7 @@ const Checkout = observer(() => {
         </div>
         <div className='checkout__order-accept ccc' onClick={onTryToPlace}>ОФОРМИТИ ЗАМОВЛЕННЯ</div>
       </div>
-      <Modal isActive={cartStore.status === "placing" || cartStore.status === "placing-success"} setActive={() => { }} >
+      <Modal isActive={['placing', 'error', 'placing-success'].includes(cartStore.status)} setActive={() => { }} >
         <div className='checkout__modal ccc'>
           {cartStore.status === "placing" && <Loader />}
           {cartStore.status === "placing-success" &&
@@ -228,6 +233,13 @@ const Checkout = observer(() => {
               <NavLink to={'/home'} className='checkout__modal-btn-back ccc'>До головної</NavLink>
             </div>
           }
+          {cartStore.status === 'error' && (
+            <div className='checkout__modal-success ccc'>
+              <div className='checkout__modal-icon checkout__modal-icon_danger ccc'>X</div>
+              <div className='checkout__modal-text'>Відбулася помилка !</div>
+              <div  className='checkout__modal-btn-back ccc' onClick={onCloseModal}>Ok</div>
+            </div>
+          )}
         </div>
       </Modal>
     </div>

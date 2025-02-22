@@ -1,11 +1,11 @@
 import { axiosInstance, headersAuthJson, headersJson } from "..";
-import { Service } from "../../services/service";
+import { ApiService } from "../../services/service";
 import { ICart } from "../../types/magento/ICart";
 import { IShippingInformation } from "../../types/magento/IShippingInformation";
 import { ITotals } from "../../types/magento/ITotals";
 import { IUpdateItemRes } from "./dto/update-item-res.dto";
 
-class CartService extends Service {
+class CartService extends ApiService {
 
   async createCartId(): Promise<string> {
     return await this.execute(axiosInstance.post<string>(this.apiUrl));

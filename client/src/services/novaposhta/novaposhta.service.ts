@@ -1,7 +1,7 @@
 import { axiosNVInstance } from "..";
 import { ISettlement } from "../../types/novaposhta/ISettlement";
 import { IWarehouse } from "../../types/novaposhta/IWarehouse";
-import { Service } from "../service";
+import { ApiService } from "../service";
 
 interface NVResData {
     success: boolean;
@@ -13,7 +13,7 @@ enum WarehouseType {
     CARGO = "9a68df70-0267-42a8-bb5c-37f427e36ee4"
 }
 
-class NovaposhtaService extends Service {
+class NovaposhtaService extends ApiService {
     private readonly API_KEY;
 
     constructor(apiUrl: string) {
