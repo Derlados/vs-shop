@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import InputMask from "react-input-mask";
 import './input.scss';
+import CustomInput from '../../../elements/CustomInput';
 
 
 interface InputProps {
@@ -8,7 +9,7 @@ interface InputProps {
   mask?: string;
   name: string;
   placeholder?: string;
-  hint: string;
+  hint?: string;
   value: string;
   error?: string;
   showErrors?: boolean;
@@ -19,7 +20,9 @@ const Input: FC<InputProps> = ({ className = '', name, mask, placeholder = '', v
 
   return (
     <div className={`${className} input clc`}>
-      <div className='input__hint'>{hint}</div>
+      {hint && (
+        <div className='input__hint'>{hint}</div>
+      )}
       {mask ?
         <InputMask
           name={name}
@@ -31,7 +34,13 @@ const Input: FC<InputProps> = ({ className = '', name, mask, placeholder = '', v
           onBlur={(e) => e.preventDefault()}
         />
         :
-        <input className='input__field' name={name} placeholder={placeholder} onChange={onChange} value={value} />
+        <CustomInput
+          className='input__field'
+          name={name}
+          placeholder={placeholder}
+          onChange={onChange}
+          value={value}
+        />
       }
       {(error && showErrors) && <div className='input__error'>{error}</div>}
     </div>

@@ -13,9 +13,7 @@ const CustomInput: FC<ICustomInputProps> = (props) => {
       className={classNames('custom-input', {
         'custom-input_invalid': props.invalid
       }, props.className)}
-      placeholder={props.placeholder}
-      value={props.value}
-      onChange={props.onChange}
+      {...props}
     />
   )
 }

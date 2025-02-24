@@ -2,10 +2,10 @@ import classNames from 'classnames';
 import React, { FC } from 'react';
 import './cart-button.scss';
 import { SpecSymbols } from '../../values/specSymbols';
-import SmallLoader from '../../lib/components/SmallLoader/SmallLoader';
 import { observer } from 'mobx-react-lite';
 import cartStore from '../../stores/cart/cart.store';
 import uiStore from '../../stores/ui/ui.store';
+import DobleBounceLoader from '../../lib/components/DobleBounceLoader/DobleBounceLoader';
 
 interface CartButtonProps {
   className?: string;
@@ -17,11 +17,11 @@ interface CartButtonProps {
 
 const CartButton: FC<CartButtonProps> = observer(({ className = '', sku, isActive, onClick, color = "gray" }) => {
 
-  if (cartStore.status == "loading" && cartStore.processingSku == sku) {
+  if (cartStore.status === "loading" && cartStore.processingSku === sku) {
     return (
       <div className={`${className} cart-button cart-button_inactive cart-button_added rlc`}>
         <div className='cart-button__loader-container ccc'>
-          <SmallLoader />
+          <DobleBounceLoader />
         </div>
       </div>
     )
@@ -30,7 +30,7 @@ const CartButton: FC<CartButtonProps> = observer(({ className = '', sku, isActiv
   if (isActive) {
     return (
       <div className={classNames(`${className} cart-button rlc`, {
-        'cart-button_primary': color == "primary"
+        'cart-button_primary': color === "primary"
       })} onClick={onClick}>
         <div className='cart-button__img' ></div>
         <span className='cart-button__btn'>Купити</span>

@@ -36,12 +36,13 @@ class ContactsStore {
     this.isTriedToSend = false;
   }
 
-  onChangeContactInfo(field: keyof IMail, value: string) {
+  onChangeContactInfo(field: keyof CreateContactEmailDto, value: string) {
     this.contactInfo[field] = value;
     this.isTriedToSend = false;
   }
 
-  async sendMail() {
+  async sendEmail() {
+    console.log('sendEmail');
     runInAction(() => this.isTriedToSend = true);
     if (!this.isValid || this.status === ContactsStoreStatus.sending || this.status === ContactsStoreStatus.success) {
       return;
@@ -51,7 +52,17 @@ class ContactsStore {
 
     try {
       await contactsService.sendContactForm(this.contactInfo);
-      runInAction(() => this.status = ContactsStoreStatus.success);
+      runInAction(() => {
+        this.status = ContactsStoreStatus.success;
+        this.contactInfo = {
+          name: '',
+          phone: '',
+          email: '',
+          subject: '',
+          message: ''
+        };
+        this.isTriedToSend = false;
+      });
     } catch (e) {
       runInAction(() => this.status = ContactsStoreStatus.sentFailure);
     }

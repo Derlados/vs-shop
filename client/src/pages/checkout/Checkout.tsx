@@ -8,13 +8,12 @@ import classNames from 'classnames';
 import { REGEX } from '../../values/regex';
 import settlementStore from '../../stores/settlement/settlement.store';
 import Modal from '../../lib/components/Modal/Modal';
-import Loader from '../../lib/components/Loader/Loader';
 import { IShippingInformation } from '../../types/magento/IShippingInformation';
 import { IWarehouse } from '../../types/novaposhta/IWarehouse';
 import { ISettlement } from '../../types/novaposhta/ISettlement';
-import { formatMoney } from '../../helpers/formatter.helper';
-
-const phoneMask = '+38 999 999 99 99';
+import DobleBounceLoader from '../../lib/components/DobleBounceLoader/DobleBounceLoader';
+import PhoneInput from '../../lib/components/PhoneInput/PhoneInput';
+import FormatHelper from '../../helpers/format.helper';
 
 interface CheckoutPageStore {
   isTriedToPlace: boolean;
@@ -122,6 +121,7 @@ const Checkout = observer(() => {
           })}
             name="firstname"
             hint="Ім'я"
+            placeholder="Введіть ім'я"
             value={cartStore.getAddressInfoByKey("firstname")}
             onChange={onChangeField}
             error={cartStore.validErrors.firstname}
@@ -132,6 +132,7 @@ const Checkout = observer(() => {
           })}
             name="lastname"
             hint="Прізвище"
+            placeholder='Введіть прізвище'
             value={cartStore.getAddressInfoByKey("lastname")}
             onChange={onChangeField}
             error={cartStore.validErrors.lastname}
@@ -139,13 +140,9 @@ const Checkout = observer(() => {
           />
         </div>
         <div className='checkout__inputs-row rlt'>
-          <Input className={classNames('checkout__input', {
-            'checkout__input_invalid': checkoutPageStore.isTriedToPlace && !REGEX.PHONE.test(cartStore.getAddressInfoByKey<string>("telephone"))
-          })}
-            name="telephone"
-            mask={phoneMask}
-            placeholder="+38 ___ ___ __ __"
-            hint='Номер телефону'
+          <PhoneInput
+            hint='Телефон'
+            invalid={checkoutPageStore.isTriedToPlace && !REGEX.PHONE.test(cartStore.getAddressInfoByKey<string>("telephone"))}
             value={cartStore.getAddressInfoByKey("telephone")}
             onChange={onChangeField}
             error={cartStore.validErrors.telephone}
@@ -157,6 +154,7 @@ const Checkout = observer(() => {
           })}
             name="email"
             hint="Електронна пошта"
+            placeholder='Введіть електронну пошту'
             value={cartStore.getAddressInfoByKey("email")}
             onChange={onChangeField}
             error={cartStore.validErrors.email}
@@ -190,7 +188,7 @@ const Checkout = observer(() => {
           <div className='checkout__additional-head'>Додаткова інформація</div>
           <textarea
             className='checkout__additional-area'
-            placeholder='Notes about your order, e.g. special notes for delivery'
+            placeholder='Коментар до замовлення'
             onChange={onAdditionalInfoChange}
           ></textarea>
         </div>
@@ -206,14 +204,14 @@ const Checkout = observer(() => {
             {cartStore.totals?.items.map(item => (
               <li key={item.item_id} className='checkout__order-product rlc'>
                 <div className='checkout__order-text'>{`${item.name} × ${item.qty}`}</div>
-                <div className='checkout__order-text'>{formatMoney(item.price * item.qty)}</div>
+                <div className='checkout__order-text'>{FormatHelper.formatCurrency(item.price * item.qty)}</div>
               </li>
             ))}
           </ul>
           <div className='checkout__line'></div>
           <div className='checkout__order-delivery rlc'>
-            <div className='checkout__order-text checkout__order-text_bold'>Delivery</div>
-            <div className='checkout__order-text'>Free shipping</div>
+            <div className='checkout__order-text checkout__order-text_bold'>Доставка</div>
+            <div className='checkout__order-text'>Безкоштовно</div>
           </div>
           <div className='checkout__line'></div>
           <div className='checkout__total rlc'>
@@ -225,7 +223,7 @@ const Checkout = observer(() => {
       </div>
       <Modal isActive={['placing', 'error', 'placing-success'].includes(cartStore.status)} setActive={() => { }} >
         <div className='checkout__modal ccc'>
-          {cartStore.status === "placing" && <Loader />}
+          {cartStore.status === "placing" && <DobleBounceLoader color='primary' size='large' />}
           {cartStore.status === "placing-success" &&
             <div className='checkout__modal-success ccc'>
               <div className='checkout__modal-icon ccc'>✓</div>
@@ -237,7 +235,7 @@ const Checkout = observer(() => {
             <div className='checkout__modal-success ccc'>
               <div className='checkout__modal-icon checkout__modal-icon_danger ccc'>X</div>
               <div className='checkout__modal-text'>Відбулася помилка !</div>
-              <div  className='checkout__modal-btn-back ccc' onClick={onCloseModal}>Ok</div>
+              <div className='checkout__modal-btn-back ccc' onClick={onCloseModal}>Ok</div>
             </div>
           )}
         </div>

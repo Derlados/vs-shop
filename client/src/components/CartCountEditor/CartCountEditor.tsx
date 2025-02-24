@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
-import SmallLoader from '../../lib/components/SmallLoader/SmallLoader';
 import cartStore from '../../stores/cart/cart.store';
 import './cart-count-editor.scss';
+import DobleBounceLoader from '../../lib/components/DobleBounceLoader/DobleBounceLoader';
 
 interface CartCountEditorProps {
   sku: string;
@@ -23,7 +23,7 @@ const CartCountEditor: FC<CartCountEditorProps> = observer(({ sku, onChange, sel
       <div className='cart-count-editor__btn ccc' onClick={() => onChange(selectedCount + 1)}>+</div>
       {cartStore.status === "loading" && cartStore.processingSku === sku && (
         <div className='cart-count-editor__loading-mask ccc'>
-          <SmallLoader />
+          <DobleBounceLoader />
         </div>
       )}
     </div>

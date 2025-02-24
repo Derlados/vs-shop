@@ -51,13 +51,13 @@ const CartQuickView: FC = observer(() => {
           <div className='cart-quick__head-text'>Кошик</div>
           <div className='cart-quick__close cart-quick__close_anim' onClick={() => uiStore.closeSidebarCart()}></div>
         </div>
-        {cartStore.cart?.items.length != 0
+        {cartStore.cart?.items.length !== 0
           ?
           <div className='cart-quick__content'>
             <ul className='cart-quick__product-list'>
               {cartStore.cart?.items.map(item => (
                 <li key={item.item_id} className='cart-quick__product rlt'>
-                  {/* <img className='cart-quick__product-img' alt='' src={item.product.images[0].url} onClick={() => openProductInfo(item.product)} /> */}
+                  <img className='cart-quick__product-img' alt='' src={item.extension_attributes.image_url} onClick={() => openProductInfo(item)} />
                   <div className='cart-quick__product-desc'>
                     <div className='cart-quick__product-head rct'>
                       <div className='cart-quick__product-title' onClick={() => openProductInfo(item)}>{item.name}</div>

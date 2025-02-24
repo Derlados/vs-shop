@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
 import './home.scss';
-import Loader from '../../lib/components/Loader/Loader';
 import "aos/dist/aos.css";
 import CategoryList from '../../components/Category/CategoryList/CategoryList';
 import catalogStore from '../../stores/catalog/catalog.store';
@@ -10,6 +9,7 @@ import homePageStore from '../../stores/pages/home-page/home-page.store';
 import { useEffect, useMemo } from 'react';
 import useIsMobile from '../../hooks/useIsMobile';
 import { Resolutions } from '../../values/resolutions';
+import DobleBounceLoader from '../../lib/components/DobleBounceLoader/DobleBounceLoader';
 
 const Home = observer(() => {
   const isMobile = useIsMobile(Resolutions.MOBILE_VERTICAL_LARGE);
@@ -40,7 +40,7 @@ const Home = observer(() => {
   if (catalogStore.status === "loading" || catalogStore.status === "initial") {
     return (
       <div className='home ccc'>
-        <Loader />
+        <DobleBounceLoader color='primary' size='huge' />
       </div>
     )
   }

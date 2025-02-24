@@ -1,7 +1,9 @@
 import { observer } from 'mobx-react-lite'
 import CustomInput from '../../../elements/CustomInput';
-import contactsStore from '../../../stores/contacts/contacts.store';
+import contactsStore, { ContactsStoreStatus } from '../../../stores/contacts/contacts.store';
 import { REGEX } from '../../../values/regex';
+import DobleBounceLoader from '../../../lib/components/DobleBounceLoader/DobleBounceLoader';
+import PhoneInput from '../../../lib/components/PhoneInput/PhoneInput';
 
 const ContactForm = observer(() => {
   return (
@@ -26,7 +28,7 @@ const ContactForm = observer(() => {
             <div className='home__icon home_icon_clock' />
             <div className="home__contacts-info-content">
               <div className="home__contacts-info-title">Години праці</div>
-              <div className="home__contacts-info-desc">Пн-Пт: 9:00-18:00<br/>Сб-Нд: 10:00-18:00</div>
+              <div className="home__contacts-info-desc">Пн-Пт: 9:00-18:00<br />Сб-Нд: 10:00-18:00</div>
             </div>
           </div>
           <div className="home__contacts-info-block">
@@ -39,34 +41,49 @@ const ContactForm = observer(() => {
         </div>
         <div className='home__contacts-form'>
           <CustomInput
+            name='name'
             placeholder={'Ім\'я'}
             value={contactsStore.contactInfo.name}
             invalid={contactsStore.isTriedToSend && contactsStore.contactInfo.name === ''}
+            onChange={(e) => contactsStore.onChangeContactInfo('name', e.target.value)}
           />
           <div className='home__contacts-form__row rlt'>
             <CustomInput
+              name='email'
               placeholder={'Email'}
-              value={contactsStore.contactInfo.name}
+              value={contactsStore.contactInfo.email}
               invalid={contactsStore.isTriedToSend && !REGEX.EMAIL.test(contactsStore.contactInfo.email)}
+              onChange={(e) => contactsStore.onChangeContactInfo('email', e.target.value)}
             />
-            <CustomInput
-              placeholder={'Номер телефону'}
-              value={contactsStore.contactInfo.name}
+            <PhoneInput
               invalid={contactsStore.isTriedToSend && !REGEX.PHONE.test(contactsStore.contactInfo.phone)}
+              value={contactsStore.contactInfo.phone}
+              onChange={(e) => contactsStore.onChangeContactInfo('phone', e.target.value)}
             />
           </div>
           <CustomInput
+            name='subject'
             placeholder={'Тема повідомлення'}
-            value={contactsStore.contactInfo.name}
+            value={contactsStore.contactInfo.subject}
             invalid={contactsStore.isTriedToSend && contactsStore.contactInfo.subject === ''}
+            onChange={(e) => contactsStore.onChangeContactInfo('subject', e.target.value)}
           />
           <CustomInput
+            name='message'
             placeholder={'Повідомлення'}
-            value={contactsStore.contactInfo.name}
+            value={contactsStore.contactInfo.message}
             invalid={contactsStore.isTriedToSend && contactsStore.contactInfo.message === ''}
+            onChange={(e) => contactsStore.onChangeContactInfo('message', e.target.value)}
           />
-          <div className="contacts__form-btn ccc">
-            <div className="contacts__form-btn-text">Відправити</div>
+          <div
+            className="contacts__form-btn ccc"
+            onClick={() => contactsStore.sendEmail()}
+          >
+            {contactsStore.status !== ContactsStoreStatus.sending ?
+              <div className='contacts__form-btn-text'>Відправити</div>
+              :
+              <DobleBounceLoader size='medium' />
+            }
           </div>
         </div>
       </div>

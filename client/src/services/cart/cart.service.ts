@@ -1,9 +1,9 @@
 import { axiosInstance, headersAuthJson, headersJson } from "..";
 import { ApiService } from "../../services/service";
 import { ICart } from "../../types/magento/ICart";
+import ICartItem from "../../types/magento/ICartItem";
 import { IShippingInformation } from "../../types/magento/IShippingInformation";
 import { ITotals } from "../../types/magento/ITotals";
-import { IUpdateItemRes } from "./dto/update-item-res.dto";
 
 class CartService extends ApiService {
 
@@ -19,14 +19,14 @@ class CartService extends ApiService {
     return await this.execute(axiosInstance.get(`${this.apiUrl}/${cartId}/totals`));
   }
 
-  async addItem(cartId: string, sku: string, qty: number): Promise<IUpdateItemRes> {
+  async addItem(cartId: string, sku: string, qty: number): Promise<ICartItem> {
     const body = {
       cartItem: { sku, qty }
     }
     return await this.execute(axiosInstance.post(`${this.apiUrl}/${cartId}/items`, body, { headers: headersJson }));
   }
 
-  async updateItem(cartId: string, itemId: number, qty: number): Promise<IUpdateItemRes> {
+  async updateItem(cartId: string, itemId: number, qty: number): Promise<ICartItem> {
     const body = {
       cartItem: { qty }
     }

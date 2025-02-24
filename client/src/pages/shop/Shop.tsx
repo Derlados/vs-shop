@@ -3,7 +3,6 @@ import './shop.scss';
 import CatalogNav from '../../components/Category/CatalogNav/CatalogNav';
 import { observer } from 'mobx-react-lite';
 import { Navigate, useParams } from 'react-router-dom';
-import Loader from '../../lib/components/Loader/Loader';
 import { FC, useEffect } from 'react';
 import { ROUTES } from '../../values/routes';
 import filtersStore from '../../stores/filters/filters.store';
@@ -12,6 +11,7 @@ import Filters from './ui/Filters/Filters';
 import shopPageStore from '../../stores/pages/shop-page/shop-page.store';
 import FilterCategories from './ui/Filters/FilterCategories/FilterCategories';
 import useFilterSearchParams from '../../hooks/useFilterSearchParams';
+import DobleBounceLoader from '../../lib/components/DobleBounceLoader/DobleBounceLoader';
 
 interface ShopProps {
   isGlobalSearch?: boolean;
@@ -45,7 +45,7 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
     if (filtersStore.status === 'success' && shopPageStore.currentCategoryId !== 0) {
       shopPageStore.updateProducts(filtersStore.filterGroups);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     filtersStore.status,
     filtersStore.filterGroups,
@@ -74,13 +74,13 @@ const Shop: FC<ShopProps> = observer(({ isGlobalSearch }) => {
   if (shopPageStore.status === "initial") {
     return (
       <div className='shop__loader ccc'>
-        <Loader />
+        <DobleBounceLoader color='primary' size='large' />
       </div>
     )
   }
 
 
-  if (!shopPageStore.isValidCategory || !shopPageStore.category || shopPageStore.status === "error" ) {
+  if (!shopPageStore.isValidCategory || !shopPageStore.category || shopPageStore.status === "error") {
     return <Navigate to={'/404_not_found'} replace />
   }
 

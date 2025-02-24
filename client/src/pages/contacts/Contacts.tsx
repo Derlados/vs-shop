@@ -1,18 +1,18 @@
 
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import SmallLoader from '../../lib/components/SmallLoader/SmallLoader';
 import contactsStore, { ContactsStoreStatus } from '../../stores/contacts/contacts.store';
 import { REGEX } from '../../values/regex';
 import './contacts.scss';
 import { IMail } from '../../types/shop/IMail';
+import DobleBounceLoader from '../../lib/components/DobleBounceLoader/DobleBounceLoader';
 
 const Contacts = observer(() => {
   const phones = ['0(1234) 567 89012', '0(987) 567 890']
   const emails = ['info@demo.com', 'yourname@domain.com']
 
   const trySendMessage = () => {
-    contactsStore.sendMail();
+    contactsStore.sendEmail();
   }
 
   const onChangeField = (field: keyof IMail, value: string) => {
@@ -85,7 +85,7 @@ const Contacts = observer(() => {
           {contactsStore.status !== ContactsStoreStatus.sending ?
             <div className='contacts__form-btn-text'>Відправити</div>
             :
-            <SmallLoader className='contacts__loader' />
+            <DobleBounceLoader />
           }
         </div>
         :
